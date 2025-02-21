@@ -1,0 +1,383 @@
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/Montserrat.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Rajdhani';
+    src: url(../fonts/Rajdhani.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Rajdhani-b';
+    src: url(../fonts/Rajdhani-Bold.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+header {
+    font-family: 'Montserrat';
+}
+
+.container{
+    background-color: #D9D9D9;
+    display: flex;
+    justify-content: space-between;
+}
+
+.marca{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    color: #011F27;
+    font-size: 24px;
+    font-weight: 900;
+    width: 70%;
+}
+
+.marca img{
+    width: 30%;
+}
+
+.menu{
+    display: flex;
+    align-items: center;
+    width: 15%;
+}
+
+.nav-links{
+    display: flex;
+    align-items: center;
+}
+
+.nav-links li:hover{
+    border-radius: 50px;
+    background-color: rgba(210, 216, 221, 0.829);
+    cursor: pointer;
+}
+
+.nav-links li{
+    margin: 0 20px;
+    font-size: 24px;
+    color: #011F27;
+    height: 56.9px;
+    padding: 10px;
+    font-weight: 900;
+}
+
+.nav-burger{
+    display: none;
+    cursor: pointer;
+}
+
+.nav-burger div{
+    height: 1vw;
+    width: 6vw;
+    border-radius: 5px;
+    background-color: black;
+    margin: 4px;
+    transition: 0.7s;
+}
+
+.nav-active{
+    transform: translateX(0%);
+    transition: 1s;
+           
+}
+/*  */
+.linha1-active{
+    transform: translateY(3.5px) rotate(225deg);
+    transition: 0.7s;  
+    cursor: pointer;
+}
+
+.linha3-active{
+    transform: rotate(45deg);
+    transition: 0s;
+    opacity: 0%;
+    cursor: pointer;
+}
+
+.linha2-active{
+    transform:rotate(-60deg);
+    transition: 0.7s;
+    transform: translateY(-3.5px) rotate(-225deg);
+    cursor: pointer;
+}
+/*  */
+/* NAV - BURGER ativa*/
+@media (max-width:1189px)
+    {
+        .nav-links {
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 60%;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            background-color: rgba(255, 255, 255, 0.83);
+            box-shadow: -5px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+    
+        .nav-links li {
+            width: 100%;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            border-bottom: 1px solid #ccc;
+        }
+    
+        .nav-links li:last-child {
+            border-bottom: none;
+        }
+    
+        .nav-burger {
+            display: block;
+            top: 5vw;
+            right: 5vw;
+            z-index: 1100;
+        }
+
+        .nav-active {
+            transform: translateX(0);
+            margin: 0;
+        }
+
+    }
+/* NAV - BURGER ativa*/
+/* INICIO SLOGAN */
+section {
+    font-family: 'Rajdhani';
+}
+
+.video-container{
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.video-container video{
+    width: 100%;
+    height: 80vh;
+    object-fit: cover;
+    position: absolute;
+    z-index: -1;
+}
+
+.overlay{
+    background-color: #011f2767;
+    height: 80vh;
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+}
+
+.slogan{
+    color: white;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.slogan p{
+    font-size: 35px;
+}
+
+.slogan span{
+    font-size: 55px;
+    color: #011F27;
+    font-weight: 900;
+    align-items: center;
+}
+
+.slogan b{
+    font-size: 20px;
+}
+
+button {
+    font-size: 5vh;
+    font-family: 'Rajdhani';
+    color: white;
+    z-index: 3;
+    background-color: rgba(255, 255, 255, 0);
+    border: 2px solid;
+    padding: 1%;
+}
+/* FIM SLOGAN */
+/* INICIO INTRODUCAO */
+.introducao{
+    padding: 1vh;
+    background-color: #D9D9D9;
+}
+
+.introducao h1{
+    font-size: 50px;
+    padding: 4vh 0 2vh 0;
+    font-family: 'Rajdhani-b';
+}
+
+.introducao h3{
+    font-size: 24px;
+    padding: 2vh 0 4vh 1vh;
+
+}
+
+.introducao h3 span{
+    color: #007BFF;
+}
+
+.btn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3vh;
+}
+
+.btn button{
+    width: 40vh;
+    padding: 1vh;
+    font-weight: 500;
+}
+
+.btn :nth-child(1){
+    background-color: #007BFF;
+}
+
+.btn :nth-child(2){
+    color: #007BFF;
+}
+/* FIM INTRODUCAO */
+/* INICIO PRINCIPIOS */
+.principios{
+    background-color: #011F27;
+    padding: 1vh;
+
+}
+
+.principios h6 {
+    color: white;
+    font-size: 50px;
+    padding: 2vh 0 4vh 0;
+}
+
+.container-box{
+    display: flex;
+    flex-direction: column;
+    gap: 15vw;
+    padding: 0 0 5vh 0;
+}
+
+.box{
+    border: 2px white solid;
+    width: 80vw;
+    height: 80vw;
+    margin: auto;
+    border-radius: 12px;
+    display: grid;
+}
+
+.box img{
+    width: 22%;
+    padding: 5%;
+}
+
+.box p{
+    color: white;
+    font-size: 24px;
+}
+
+.box div{
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+/* FIM PRINCIPIOS */
+/* INICIO FUNCAO */
+.funcao{
+    background-color: #D9D9D9;
+}
+
+.funcao p{
+    font-family: 'Rajdhani-b';
+    font-size: 48px;
+    text-align: center;
+}
+
+.funcao img{
+    width: 100vw;
+}
+
+.funcao h3{
+    padding: 2vh;
+    font-size: 24px;
+    font-family: 'Montserrat';
+}
+
+.funcao h3 span{
+    color: #007BFF;
+}
+
+.beneficios{
+    padding: 2vh;
+    display: flex;
+    flex-direction: column;
+    gap: 8vw;
+}
+
+.beneficios div{
+    display: flex;
+    gap: 5vw;
+}
+
+.beneficios i{
+    font-size: 15vw;
+}
+
+.beneficios p{
+    font-size: 16px;
+}
+/* FIM FUNCAO */
+/* INICIO NEGOCIO */
+.negocio{
+    background-color: #000;
+}
+
+.negocio p{
+    font-family: 'Rajdhani-b';
+    font-size: 48px;
+    text-align: center;
+    color: #FFF;
+}
+
+.box-slider{
+    width: 800px;
+    max-width: 540px;
+    overflow: auto;
+    scroll-behavior: smooth;
+    transition:  0.5s ease;
+}
+
+.slider {
+    display: flex;
+    transition: 0.6s ease-in-out;
+}
+
+.slider
