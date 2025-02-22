@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opticar - Home</title>
     <link rel="stylesheet" href="assets/styles/index.css">
-    <script src="assets/Scripts/index.js" defer></script>
+    <!-- Script inicializado no final do body para funcionar o Swiper -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
 </head>
+
 <body>
     <!-- Cabeçalho -->
     <header>
@@ -26,7 +30,7 @@
                 </ul>
                 <div class="nav-burger">
                     <div id="linha1"></div>
-                        <div id="linha2"></div>
+                    <div id="linha2"></div>
                     <div id="linha3"></div>
                 </div>
             </div>
@@ -55,7 +59,7 @@
         <div class="introducao">
             <h1><b>Sobre Opticar</b></h1>
             <h3>
-                Somos uma empresa com uma equipe que acredita em manutenção preditiva 
+                Somos uma empresa com uma equipe que acredita em manutenção preditiva
                 como uma forma de alavancar seu negócio, garantindo a <span>produção contínua</span>.
                 Prezamos pela qualidade de nossos sistemas, além de buscar <span>inovações</span>
                 relevantes para garantir <span>vantagens competitivas</span> para empresas parceiras.
@@ -67,17 +71,17 @@
 
             <h1><b>Segmento</b></h1>
             <h3>
-                Atuamos no segmento de monitoramento de sistemas <span>SCADA(Supervisory 
-                Control and Data Acquisition)</span> na linha de produção da indústria 
-                automobilística, utilizados para garantir que a linha de produção 
-                esteja em condições para o trabalho. Garantir que o monitoramento 
+                Atuamos no segmento de monitoramento de sistemas <span>SCADA(Supervisory
+                    Control and Data Acquisition)</span> na linha de produção da indústria
+                automobilística, utilizados para garantir que a linha de produção
+                esteja em condições para o trabalho. Garantir que o monitoramento
                 seja feito de forma eficaz e sem interrupções é nosso objetivo.
             </h3>
         </div>
     </section>
     <!-- Introducao -->
     <!-- Princícios -->
-     <section>
+    <section>
         <div class="principios">
             <h6>Princípios</h6>
             <div class="container-box">
@@ -87,52 +91,52 @@
                         <p>Missão</p>
                     </div>
                     <div>
-                        Atuamos no segmento de monitoramento de sistemas SCADA(Supervisory 
-                            Control and Data Acquisition)na linha de produção da indústria 
-                            automobilística, utilizados para garantir que a linha de produção 
-                            esteja em condições para o trabalho. Garantir que o monitoramento 
-                            seja feito de forma eficaz e sem interrupções é nosso objetivo.
+                        Atuamos no segmento de monitoramento de sistemas SCADA(Supervisory
+                        Control and Data Acquisition)na linha de produção da indústria
+                        automobilística, utilizados para garantir que a linha de produção
+                        esteja em condições para o trabalho. Garantir que o monitoramento
+                        seja feito de forma eficaz e sem interrupções é nosso objetivo.
                     </div>
                 </div>
-    
+
                 <div class="box">
                     <div>
                         <img src="assets/images/Target.svg" alt="">
                         <p>Visão</p>
                     </div>
                     <div>
-                        Atuamos no segmento de monitoramento de sistemas SCADA(Supervisory 
-                            Control and Data Acquisition)na linha de produção da indústria 
-                            automobilística, utilizados para garantir que a linha de produção 
-                            esteja em condições para o trabalho. Garantir que o monitoramento 
-                            seja feito de forma eficaz e sem interrupções é nosso objetivo.
+                        Atuamos no segmento de monitoramento de sistemas SCADA(Supervisory
+                        Control and Data Acquisition)na linha de produção da indústria
+                        automobilística, utilizados para garantir que a linha de produção
+                        esteja em condições para o trabalho. Garantir que o monitoramento
+                        seja feito de forma eficaz e sem interrupções é nosso objetivo.
                     </div>
                 </div>
-    
+
                 <div class="box">
                     <div>
                         <img src="assets/images/Target.svg" alt="">
                         <p>Valores</p>
                     </div>
                     <div>
-                        Atuamos no segmento de monitoramento de sistemas SCADA(Supervisory 
-                            Control and Data Acquisition)na linha de produção da indústria 
-                            automobilística, utilizados para garantir que a linha de produção 
-                            esteja em condições para o trabalho. Garantir que o monitoramento 
-                            seja feito de forma eficaz e sem interrupções é nosso objetivo.
+                        Atuamos no segmento de monitoramento de sistemas SCADA(Supervisory
+                        Control and Data Acquisition)na linha de produção da indústria
+                        automobilística, utilizados para garantir que a linha de produção
+                        esteja em condições para o trabalho. Garantir que o monitoramento
+                        seja feito de forma eficaz e sem interrupções é nosso objetivo.
                     </div>
                 </div>
             </div>
         </div>
-     </section>
+    </section>
     <!-- Princícios -->
     <!-- Funcao -->
-     <section>
+    <section>
         <div class="funcao">
             <p>O Que Oferecemos</p>
             <img src="assets/images/Arquitetura.png" alt="">
             <h3>
-                Mantenha a integridade do seu sistema <span>SCADA</span> 
+                Mantenha a integridade do seu sistema <span>SCADA</span>
                 na linha de produção.
             </h3>
             <div class="beneficios">
@@ -146,7 +150,7 @@
                 <div>
                     <i class='bx bxs-badge-check'></i>
                     <p>
-                        Permanência de dados, como alertas registrados para 
+                        Permanência de dados, como alertas registrados para
                         uma análise mais profunda.
                     </p>
                 </div>
@@ -154,34 +158,69 @@
                 <div>
                     <i class='bx bxs-badge-check'></i>
                     <p>
-                        Análise de comportamentos para auxiliar na tomada de 
+                        Análise de comportamentos para auxiliar na tomada de
                         decisão para manutenções preditivas.
                     </p>
                 </div>
             </div>
         </div>
-     </section>
+    </section>
     <!-- Funcao -->
     <!-- Negocio -->
-     <section>
+    <section>
         <div class="negocio">
             <p>Sobre o Negócio</p>
 
-            <div class="box-slider">
-                <div class="slider">
-                    <div>
-                        <p>SCADA instalado</p>
+            <!-- Slider main container -->
+            <div class="swiper">
+                <!-- Additional required wrapper -->
+                <div class="swiper-wrapper">
+                    <!-- Slides -->
+                    <div class="swiper-slide">
+                        <div>
+                            <h1>SCADA instalado</h1>
+                            <i class='bx bx-server' style='color:#f6f3f3'  ></i>
+                            <p>
+                                Ter o sistema SCADA instalado, com seus controladores e 
+                                sensores se comunicando com o servicdor central
+                            </p>
+                        </div>
                     </div>
-                    <div>
-
+                    <div class="swiper-slide">
+                        <div>
+                            <h1>Implementar Optcar</h1>
+                            <i class='bx bx-server' style='color:#f6f3f3'  ></i>
+                            <p>
+                                Ter o sistema SCADA instalado, com seus controladores e 
+                                sensores se comunicando com o servicdor central
+                            </p>
+                        </div>
                     </div>
-                    <div>
-
+                    <div class="swiper-slide">
+                        <div>
+                            <h1>SCADA instalado</h1>
+                            <i class='bx bx-server' style='color:#f6f3f3'  ></i>
+                            <p>
+                                Ter o sistema SCADA instalado, com seus controladores e 
+                                sensores se comunicando com o servicdor central
+                            </p>
+                        </div>
                     </div>
+                    ...
                 </div>
+                <!-- If we need pagination -->
+                <div class="swiper-pagination"></div>
+
+                <!-- If we need navigation buttons -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+
             </div>
+
         </div>
-     </section>
+    </section>
+
+    <script src="assets/Scripts/index.js" defer></script>
 </body>
 
 </html>

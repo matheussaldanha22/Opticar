@@ -367,17 +367,57 @@ button {
     color: #FFF;
 }
 
-.box-slider{
-    width: 800px;
-    max-width: 540px;
-    overflow: auto;
-    scroll-behavior: smooth;
-    transition:  0.5s ease;
-}
-
-.slider {
+.swiper{
+    height: 100vw;
+    align-items: center;
     display: flex;
-    transition: 0.6s ease-in-out;
+    
 }
 
-.slider
+.swiper-slide{
+    padding: 12vw;
+    margin: 0;
+}
+
+.swiper-slide div{
+    display: flex;
+    border: solid white 2px;
+    border-radius: 12px;
+    flex-direction: column;
+    text-align: center;
+    justify-content: space-around;
+    height: 80vw;
+    justify-content: space-evenly;
+    padding: 4vw 0 0;
+}
+
+.swiper-slide div h1{
+    font-size: 8vw;
+    color: white;
+}
+
+.swiper-slide div i{
+    font-size: 20vw;
+}
+
+.swiper-slide div p{
+    font-size: 5vw;
+    font-family: 'Rajdhani';
+    padding: 5vw;
+    font-weight: 100;
+}
+
+.swiper-button-prev::after{
+    color: white;
+    font-weight: 900;
+}
+
+.swiper-button-next::after{
+    color: white;
+    font-weight: 900;
+}
+
+.swiper-wrapper{
+    margin: 0px;
+    padding: 0;
+}
