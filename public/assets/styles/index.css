@@ -5,6 +5,12 @@
     font-style: normal;
 }
 @font-face {
+    font-family: 'Montserrat-b';
+    src: url(../fonts/Montserrat-ExtraBold.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
     font-family: 'Rajdhani';
     src: url(../fonts/Rajdhani.ttf) format('truetype');
     font-weight: normal;
@@ -38,7 +44,8 @@ header {
     justify-content: flex-start;
     align-items: center;
     color: #011F27;
-    font-size: 24px;
+    font-size: 6vw;
+    font-family: 'Montserrat-b';
     font-weight: 900;
     width: 70%;
 }
@@ -59,7 +66,7 @@ header {
 }
 
 .nav-links li:hover{
-    border-radius: 50px;
+    border-radius: 12vw;
     background-color: rgba(210, 216, 221, 0.829);
     cursor: pointer;
 }
@@ -81,9 +88,9 @@ header {
 .nav-burger div{
     height: 1vw;
     width: 6vw;
-    border-radius: 5px;
+    border-radius: 5vw;
     background-color: black;
-    margin: 4px;
+    margin: 1vw;
     transition: 0.7s;
 }
 
@@ -94,7 +101,7 @@ header {
 }
 /*  */
 .linha1-active{
-    transform: translateY(3.5px) rotate(225deg);
+    transform: translateY(1vw) rotate(225deg);
     transition: 0.7s;  
     cursor: pointer;
 }
@@ -109,7 +116,7 @@ header {
 .linha2-active{
     transform:rotate(-60deg);
     transition: 0.7s;
-    transform: translateY(-3.5px) rotate(-225deg);
+    transform: translateY(-1vw) rotate(-225deg);
     cursor: pointer;
 }
 /*  */
@@ -135,8 +142,8 @@ header {
         .nav-links li {
             width: 100%;
             text-align: center;
-            padding: 20px;
-            font-size: 24px;
+            justify-content: center;
+            font-size: 6vw;
             border-bottom: 1px solid #ccc;
         }
     
@@ -197,18 +204,18 @@ section {
 }
 
 .slogan p{
-    font-size: 35px;
+    font-size: 10vw;
 }
 
 .slogan span{
-    font-size: 55px;
+    font-size: 14vw;
     color: #011F27;
     font-weight: 900;
     align-items: center;
 }
 
 .slogan b{
-    font-size: 20px;
+    font-size: 5.5vw;
 }
 
 button {
@@ -228,13 +235,13 @@ button {
 }
 
 .introducao h1{
-    font-size: 50px;
+    font-size: 12vw;
     padding: 4vh 0 2vh 0;
     font-family: 'Rajdhani-b';
 }
 
 .introducao h3{
-    font-size: 24px;
+    font-size: 6vw;
     padding: 2vh 0 4vh 1vh;
 
 }
@@ -273,7 +280,7 @@ button {
 
 .principios h6 {
     color: white;
-    font-size: 50px;
+    font-size: 12vw;
     padding: 2vh 0 4vh 0;
 }
 
@@ -300,7 +307,7 @@ button {
 
 .box p{
     color: white;
-    font-size: 24px;
+    font-size: 6vw;
 }
 
 .box div{
@@ -317,8 +324,8 @@ button {
 
 .funcao p{
     font-family: 'Rajdhani-b';
-    font-size: 48px;
-    text-align: center;
+    font-size: 12vw;
+    padding: 0 0 0 1vh;
 }
 
 .funcao img{
@@ -327,7 +334,7 @@ button {
 
 .funcao h3{
     padding: 2vh;
-    font-size: 24px;
+    font-size: 6vw;
     font-family: 'Montserrat';
 }
 
@@ -352,19 +359,20 @@ button {
 }
 
 .beneficios p{
-    font-size: 16px;
+    font-size: 4vw;
 }
 /* FIM FUNCAO */
 /* INICIO NEGOCIO */
 .negocio{
     background-color: #000;
+    padding: 1vh;
 }
 
 .negocio p{
     font-family: 'Rajdhani-b';
-    font-size: 48px;
-    text-align: center;
+    font-size: 12vw;
     color: #FFF;
+    padding: 4vw 0 0 0vw;
 }
 
 .swiper{
@@ -375,7 +383,7 @@ button {
 }
 
 .swiper-slide{
-    padding: 12vw;
+    padding: 10vw;
     margin: 0;
 }
 
@@ -420,4 +428,45 @@ button {
 .swiper-wrapper{
     margin: 0px;
     padding: 0;
+}
+/* FIM NEGOCIO */
+/* INICIO IMPACTO */
+.impacto{
+    background-color: #D9D9D9;
+}
+
+.impacto p {
+    font-family: 'Rajdhani-b';
+    font-size: 12vw;
+    color: #000000;
+    padding: 4vw 0 0 1vh;
+}
+
+.impacto span{
+    color: #011F27;
+}
+
+.container-impacto{
+    padding: 5vw;
+    font-family: 'Rajdhani-b';
+    display: flex;
+    flex-direction: column;
+    gap: 5vw;
+}
+
+.container-impacto div{ 
+    background-color: white;
+    padding: 5vw;
+    display: flex;
+    border-radius: 12px;
+    color: #011F27;
+    font-size: 5vw;
+}
+
+.container-impacto div h1:nth-child(1){
+    width: 15vw;
+}
+
+.container-impacto div h1:nth-child(1){
+    width: 15vw;
 }
