@@ -48,10 +48,12 @@ header {
     font-family: 'Montserrat-b';
     font-weight: 900;
     width: 70%;
+    padding: 4vw;
+    gap: 1vw;
 }
 
 .marca img{
-    width: 30%;
+    width: 20%;
 }
 
 .menu{
@@ -439,7 +441,7 @@ button {
     font-family: 'Rajdhani-b';
     font-size: 13vw;
     color: #000000;
-    padding: 4vw 0 0 1vh;
+    padding: 10vw 0 0 1vh;
 }
 
 .impacto span{
@@ -527,4 +529,154 @@ b .green{
     border: solid 2px black;
     border-radius: 12px;
     font-family: 'Rajdhani-b';
+}
+/* FIM IMPACTO */
+/* INICIO CONTATO */
+.contato{
+    background-color: #011F27;
+}
+
+.contato p{
+    font-family: 'Rajdhani-b';
+    font-size: 13vw;
+    color: #ffffff;
+    padding: 10vw 0 0 1vh;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 5vw;
+    gap: 5vw;
+    align-items: end;
+}
+.input-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.2em;
+    border: none;
+    border-bottom: 5px solid #f0ffff;
+    border-radius: 8px;
+    background: transparent;
+    outline: none;
+    color: #f0ffff;
+    resize: none;
+}
+
+label {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 8vw;
+    font-weight: 900;
+    color: #f0ffff;
+    background: #011F27;
+    padding: 0 5px;
+    transition: 0.3s ease;
+}
+
+input:focus, input:valid, textarea:focus, textarea:valid {
+    border: 2px solid #ffffff;
+    color: #ffffff;
+    border: none;
+    border-bottom: 5px solid #f0ffff;
+}
+
+input:focus + label, input:valid + label, textarea:focus + label, textarea:valid + label {
+    top: 0;
+    left: 10px;
+    font-size: 1em;
+    color: #ffffff;
+    padding: 0 8px;
+    transform: translateY(-50%) scale(0.9);
+}
+
+form button{
+    width: 60%;
+}
+/* FIM CONTATO */
+/* INICIO FOOTER */
+.footer{
+    background-color: #2C3E50;
+    display: flex;
+    flex-direction: column;
+    gap: 5vw;
+}
+
+.cima{
+    display: flex;
+    color: #FFF;
+    padding-top: 3vw;
+}
+
+.logo{
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    align-items: center;
+}
+
+.logo img{
+    width: 80%;
+}
+
+.logo span{
+    font-size: 6vw;
+    color: #c8c8c8;
+    font-family: 'Montserrat-b';
+    font-weight: 900;
+    text-align: center;
+}
+
+.empresa{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    gap: 2vw;
+    justify-content: end;
+}
+
+.empresa span{
+    color: #c8c8c8;
+    font-family: 'Montserrat-b';
+    font-size: 3vw;
+}
+
+.empresa h6{
+    text-decoration: underline;
+    font-size: 4vw;
+}
+
+.baixo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 5vw;
+}
+
+.baixo div{
+    display: flex;
+    flex-direction: column;
+    gap: 3vw;
+}
+
+.baixo span{
+    font-family: 'Montserrat-b';
+    color: #c8c8c8;
+    font-size: 4vw;
+}
+
+.baixo h6{
+    font-family: 'Montserrat-b';
+    color: #c8c8c8;
+    font-size: 4vw;
+    text-decoration: underline;
 }
