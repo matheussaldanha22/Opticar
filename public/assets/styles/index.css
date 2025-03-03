@@ -123,7 +123,7 @@ header {
 }
 /*  */
 /* NAV - BURGER ativa*/
-@media (max-width:1189px)
+@media (max-width:702px)
     {
         .nav-links {
             flex-direction: column;
@@ -238,7 +238,7 @@ button {
 
 .introducao h1{
     font-size: 13vw;
-    padding: 4vh 0 2vh 0;
+    padding: 4vw 0 2vh 0;
     font-family: 'Rajdhani-b';
 }
 
@@ -327,7 +327,7 @@ button {
 .funcao p{
     font-family: 'Rajdhani-b';
     font-size: 13vw;
-    padding: 0 0 0 1vh;
+    padding: 4vw 0 0 1vw;
 }
 
 .funcao img{
@@ -374,7 +374,7 @@ button {
     font-family: 'Rajdhani-b';
     font-size: 13vw;
     color: #FFF;
-    padding: 4vw 0 0 0vw;
+    padding: 4vw 0 0 1vw;
 }
 
 .swiper{
@@ -435,13 +435,14 @@ button {
 /* INICIO IMPACTO */
 .impacto{
     background-color: #D9D9D9;
+    padding: 1vh;
 }
 
 .impacto p {
     font-family: 'Rajdhani-b';
     font-size: 13vw;
     color: #000000;
-    padding: 10vw 0 0 1vh;
+    padding: 4vw 0 0 1vh;
 }
 
 .impacto span{
@@ -531,6 +532,23 @@ b .green{
     font-family: 'Rajdhani-b';
 }
 /* FIM IMPACTO */
+/* INICIO SIMULADOR */
+.simulador{
+    background-color: #D9D9D9;
+    padding: 1vh;
+}
+
+.simulador p{
+    font-family: 'Rajdhani-b';
+    font-size: 13vw;
+    color: #000000;
+    padding: 0 0 0 1vh;
+}
+
+.simulador h6{
+
+}
+/* FIM SIMULADOR */
 /* INICIO CONTATO */
 .contato{
     background-color: #011F27;
@@ -679,4 +697,30 @@ form button{
     color: #c8c8c8;
     font-size: 4vw;
     text-decoration: underline;
+}
+
+@media (min-width:702px){
+    .marca{
+        font-size: 2vw;
+        font-weight: 900;
+        padding: 1vw 4vw 1vw ;
+        width: auto;
+    }
+    .marca img{
+        width: 15%;
+    }
+    .menu{
+        width: 100%;
+    }
+    .nav-links{
+        justify-content: space-around;
+        width: 100%;
+        
+    }
+    .nav-links li{
+        font-size: 2.3vw;
+        color: #2C3E50;
+        margin: auto;
+        height: auto;
+    }
 }
