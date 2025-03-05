@@ -40,6 +40,7 @@
         align-content: center;
         align-self: center;
         align-items: center;
+        justify-content: center;
     }
 
     .container-login {
@@ -47,14 +48,15 @@
         flex-direction: column;
         flex-wrap: wrap;
         width: 90vw;
-        height: 100vh;
+        height: 90vh;
         align-content: space-evenly; 
         align-self: center;  
+        justify-self: center;
     }
 
     .header-login {
         display: flex;
-        height: 20vh;
+        height: 10vh;
         flex-direction: row;
         align-self: center;
     }
@@ -71,8 +73,8 @@
     .upper-box {
         display: flex;
         flex-direction: column;
-        height: 50vh;
-        align-content: space-evenly;
+        height: 45vh;
+        width: 90vw;
     }
 
     .span-label_login {
@@ -81,55 +83,74 @@
         font-weight: normal;
         color: white;
     }
-
+    
     .div-input {
         display: flex;
         flex-direction: column;
-        height: 50vh;
+        height: 45vh;
         align-content: space-evenly;
-        
+    }
+
+    .box-email, .box-senha {
+        display: flex;
+        flex-direction: column;
+        justify-self: center;
+        height: 40vh;
+        justify-content: center;
     }
     
     .div-input input {
         border: none;
         border-bottom: solid white;
         background-color: #011F27;
+        font-family: 'Montserrat';
+        font-size: 6vw;
+        font-weight: lighter;
+        color: white;
     }
     
     .bottom-box {
-        height: 30vh;
+        display: flex;
+        flex-direction: column;
+        height: 35vh;
     }
     
     .bottom{
         display: flex;
-        height: 15vh;
+        height: 100vh;
+        width: 90vw;
         flex-direction: column;
         align-self: center;
-        align-content: space-evenly;
+        align-items: center;
+        justify-content: space-evenly;
     }
-    
 
     .div-texto {
-        height: 10vh;
+        height: 5vh;
         font-family: 'Rajdhani';
-        font-size: 6vw;
+        font-size: 7vw;
         font-weight: bold;
         color: white;
         align-self: center;
     }
 
+    .box-spanContato {
+        text-align: center;
+    }
+
     .span-contatoLogin {
         font-family: 'Montserrat-b';
-        font-size: 4vw;
+        font-size: 4.5vw;
         color: white;
         width: fit-content;
         height: fit-content;
+        justify-self: center;
         align-self: center;
         text-align: center;
     }
 
     .btn-entrar {
-        height: 10vh;
+        height: 8vh;
         width: 35vw;
         font-family: 'Montserrat-b';
         font-size: 10vw;
@@ -137,6 +158,5 @@
         border-radius: 30vw;
         align-self: center;
     }
-
 
 }
