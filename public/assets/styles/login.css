@@ -1,0 +1,142 @@
+@font-face {
+    font-family: 'Montserrat';
+    src: url('../fonts/Montserrat.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Montserrat-b';
+    src: url(../fonts/Montserrat-ExtraBold.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Rajdhani';
+    src: url(../fonts/Rajdhani.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Rajdhani-b';
+    src: url(../fonts/Rajdhani-Bold.ttf) format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+}
+
+@media (max-width:702px){
+
+    .main-login {
+        background-color: #011F27;
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        height: 100vh;
+        align-content: center;
+        align-self: center;
+        align-items: center;
+    }
+
+    .container-login {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        width: 90vw;
+        height: 100vh;
+        align-content: space-evenly; 
+        align-self: center;  
+    }
+
+    .header-login {
+        display: flex;
+        height: 20vh;
+        flex-direction: row;
+        align-self: center;
+    }
+
+    .span-login {
+        font-family: 'Montserrat-b';
+        font-size: 12vw;
+        color: white;
+        width: fit-content;
+        height: fit-content;
+        align-self: center;
+    }
+
+    .upper-box {
+        display: flex;
+        flex-direction: column;
+        height: 50vh;
+        align-content: space-evenly;
+    }
+
+    .span-label_login {
+        font-family: 'Rajdhani';
+        font-size: 10vw;
+        font-weight: normal;
+        color: white;
+    }
+
+    .div-input {
+        display: flex;
+        flex-direction: column;
+        height: 50vh;
+        align-content: space-evenly;
+        
+    }
+    
+    .div-input input {
+        border: none;
+        border-bottom: solid white;
+        background-color: #011F27;
+    }
+    
+    .bottom-box {
+        height: 30vh;
+    }
+    
+    .bottom{
+        display: flex;
+        height: 15vh;
+        flex-direction: column;
+        align-self: center;
+        align-content: space-evenly;
+    }
+    
+
+    .div-texto {
+        height: 10vh;
+        font-family: 'Rajdhani';
+        font-size: 6vw;
+        font-weight: bold;
+        color: white;
+        align-self: center;
+    }
+
+    .span-contatoLogin {
+        font-family: 'Montserrat-b';
+        font-size: 4vw;
+        color: white;
+        width: fit-content;
+        height: fit-content;
+        align-self: center;
+        text-align: center;
+    }
+
+    .btn-entrar {
+        height: 10vh;
+        width: 35vw;
+        font-family: 'Montserrat-b';
+        font-size: 10vw;
+        color: #011F27;
+        border-radius: 30vw;
+        align-self: center;
+    }
+
+
+}
