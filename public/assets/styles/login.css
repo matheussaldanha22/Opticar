@@ -149,6 +149,10 @@
         text-align: center;
     }
 
+    .palavraContato {
+        color: #007BFF;
+    }
+
     .btn-entrar {
         height: 8vh;
         width: 35vw;
