@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opticar - Monitoramento Diário</title>
+    <link rel="stylesheet" href="assets/styles/monitoramento.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
+    <script src="./assets/Scripts/cpu.js" defer></script>
+    <script src="./assets/Scripts/ram.js" defer></script>
+    <script src="./assets/Scripts/rede_esc.js" defer></script>
+    <script src="./assets/Scripts/rede_ler.js" defer></script>
+</head>
+
+<body>
+    <!-- Grid A -->
+
+        <div class="menu">
+            <div class="nav-burger">
+                <div id="linha1"></div>
+                <div id="linha2"></div>
+                <div id="linha3"></div>
+            </div>
+
+            <ul class="nav-links">
+                <li><i class='bx bx-desktop' style='color:#ffffff' ></i></li>
+                <li><i class='bx bxs-bell-ring' style='color:#ffffff' ></i></li>
+                <li><i class='bx bx-server' style='color:#ffffff' ></i></li>
+            </ul>
+        </div>
+
+    <!-- Grid A -->
+    <!-- Grid B -->
+
+    <div class="contain">
+        <div class="cabeca">
+            <div class="empresa">
+                <i class='bx bx-circle-three-quarter' undefined ></i>
+                <div class="lugar">
+                    <h3>Volkwagen</h3>
+                    <!-- <h3>São Paulo, AV Paulista 2590</h3> -->
+                </div>
+            </div>
+            <div class="persona">
+                <i class='bx bxs-user-circle'></i>
+                <h3>Luciano Alves</h3>
+                <!-- <h3>luciano@empresa.com</h3> -->
+                <div>
+                    <i class='bx bx-chevron-down'></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid B -->
+    <!-- Grid C -->
+
+    <div class="dash">
+        <div class="box">
+            <div class="tempoReal">
+
+                <div class="texto">
+                    <h1>Dashboard Monitoramento</h1>
+                    <p>Acompanhe seu servidor em tempo real</p>
+                </div>
+                <div class="servidor">
+                    <i class='bx bx-info-circle' style='color:#ffffff; background-color: #2C3E50; border-radius: 100%; padding: 0.5vw;'></i>
+                    <select name="" id="">
+                        <option value="">Servidor: SP-01</option>
+                        <option value="">Servidor: SP-02</option>
+                        <option value="">Servidor: SP-03</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="monitoramento">
+
+                <div class="chart-container-cpu">
+                    <h2><i class='bx bx-chip' style="border: solid 1px white; border-radius: 8px;"></i> CPU</h2>
+                    <canvas id="cpuChart"></canvas>
+                </div>
+
+                <div class="chart-container-ram">
+                    <h2><i class='bx bxs-memory-card' style="border: solid 1px black; border-radius: 8px;"></i> RAM</h2>
+                    <canvas id="ramChart"></canvas>
+                </div>
+
+                
+                <div class="chart-container-rede">
+                    <h2><i class='bx bx-wifi' style="border: solid 1px black; border-radius: 8px;"></i> Rede</h2>
+                    <div class="chart-wrapper">
+                        <div>
+                            <canvas id="redeChart-ler"></canvas>
+                            <div id="id_valor"></div>
+                        </div>
+                        <div>
+                            <canvas id="redeChart-esc"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- Grid C -->
+</body>
+
+</html>
