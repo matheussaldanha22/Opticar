@@ -170,7 +170,7 @@
 @media (min-width:702px) {
 
     .main-login {
-        background-color: #011F27;
+        background-color: #2C3E50;
         display: flex;
         flex-direction: column;
         width: 100vw;
@@ -193,7 +193,7 @@
     }
 
     .left-container {
-        /* background-color: aqua; */
+        background-color: #011F27;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -230,7 +230,7 @@
 
     .span-login {
         font-family: 'Montserrat-b';
-        font-size: 4vw;
+        font-size: 3.5vw;
         color: white;
         width: fit-content;
         height: fit-content;
@@ -259,7 +259,7 @@
 
     .span-label_login {
         font-family: 'Rajdhani';
-        font-size: 3vw;
+        font-size: 2.5vw;
         font-weight: normal;
         color: white;
     }
@@ -303,7 +303,7 @@
     .div-texto {
         height: 3vh;
         font-family: 'Rajdhani';
-        font-size: 2vw;
+        font-size: 1.5vw;
         font-weight: bold;
         color: white;
         align-self: center;
@@ -313,7 +313,7 @@
         height: 6vh;
         width: 8vw;
         font-family: 'Montserrat-b';
-        font-size: 2.5vw;
+        font-size: 2vw;
         color: #2C3E50;
         border-radius: 30vw;
         align-self: center;
