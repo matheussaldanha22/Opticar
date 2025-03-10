@@ -59,6 +59,7 @@
         height: 10vh;
         flex-direction: row;
         align-self: center;
+        justify-content: center;
     }
 
     .span-login {
@@ -68,6 +69,7 @@
         width: fit-content;
         height: fit-content;
         align-self: center;
+        text-align: center;
     }
 
     .upper-box {
@@ -158,9 +160,179 @@
         width: 35vw;
         font-family: 'Montserrat-b';
         font-size: 10vw;
-        color: #011F27;
+        color: #2C3E50;
         border-radius: 30vw;
         align-self: center;
     }
+
+}
+
+@media (min-width:702px) {
+
+    .main-login {
+        background-color: #011F27;
+        display: flex;
+        flex-direction: column;
+        width: 100vw;
+        height: 100vh;
+        align-content: center;
+        align-self: center;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .container-login {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 90vw;
+        height: 75vh;
+        align-content: space-evenly; 
+        align-self: center;  
+        justify-self: center;
+    }
+
+    .left-container {
+        /* background-color: aqua; */
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        width: 40vw;
+        height: 75vh;
+        align-content: space-evenly; 
+        align-self: center;  
+        justify-self: center;
+    }
+
+    .left-box {
+        /* background-color: aliceblue; */
+        width: 38vw;
+        height: 75vh;
+        
+    }
+
+    .right-container {
+        background-color: gold;
+        display: flex;
+        flex-direction: column;
+        width: 50vw;
+        height: 75vh;
+    }
+
+    .header-login {
+        display: flex;
+        height: 15vh;
+        width: 38vw;
+        flex-direction: row;
+        align-self: center;
+        justify-content: center;
+    }
+
+    .span-login {
+        font-family: 'Montserrat-b';
+        font-size: 4vw;
+        color: white;
+        width: fit-content;
+        height: fit-content;
+        align-self: center;
+        text-align: center;
+    }
+
+    .upper-box {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        height: 30vh;
+        width: 35vw;
+        align-self: center;  
+        justify-self: center;
+    }
+
+    .box-email, .box-senha {
+        display: flex;
+        flex-direction: column;
+        justify-self: center;
+        height: 10vh;
+        width: 35vw;
+        justify-content: center;
+    }
+
+    .span-label_login {
+        font-family: 'Rajdhani';
+        font-size: 3vw;
+        font-weight: normal;
+        color: white;
+    }
+
+    .div-input {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        height: 30vh;
+        width: 35vw;
+        justify-content: space-evenly; 
+
+    }
+    
+    .div-input input {
+        border: none;
+        border-bottom: solid white;
+        background-color: #011F27;
+        font-family: 'Montserrat';
+        font-size: 1.5vw;
+        font-weight: lighter;
+        color: white;
+    }
+
+    .bottom-box {
+        display: flex;
+        flex-direction: column;
+        height: 30vh;
+    }
+    
+    .bottom{
+        display: flex;
+        height: 100vh;
+        width: 35vw;
+        flex-direction: column;
+        align-self: center;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .div-texto {
+        height: 3vh;
+        font-family: 'Rajdhani';
+        font-size: 2vw;
+        font-weight: bold;
+        color: white;
+        align-self: center;
+    }
+    
+    .btn-entrar {
+        height: 6vh;
+        width: 8vw;
+        font-family: 'Montserrat-b';
+        font-size: 2.5vw;
+        color: #2C3E50;
+        border-radius: 30vw;
+        align-self: center;
+    }
+
+    .span-contatoLogin {
+        font-family: 'Montserrat-b';
+        font-size: 1vw;
+        color: white;
+        width: fit-content;
+        height: fit-content;
+        justify-self: center;
+        align-self: center;
+        text-align: center;
+    }
+
+    .palavraContato {
+        color: #007BFF;
+    }
+
 
 }
