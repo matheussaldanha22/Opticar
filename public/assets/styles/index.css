@@ -533,20 +533,14 @@ b .green{
 }
 /* FIM IMPACTO */
 /* INICIO SIMULADOR */
-/* Estilos Gerais */
-.simulador {
-    background-color: #D9D9D9;
-    padding: 1vh;
-}
 
-.simulador p {
+.calculadora p {
     font-family: 'Rajdhani-b';
-    font-size: 13vw;
     color: #000000;
-    padding: 0 0 0 1vh;
 }
 
 .calculadora {
+    background-color: #D9D9D9;
     background: #E5E5E5;
     padding: 20px;
     border-radius: 5px;
@@ -559,10 +553,12 @@ b .green{
 }
 
 .calculadora label {
-    display: block;
+    position: relative;
     font-size: 16px;
     margin-top: 10px;
     font-weight: normal;
+    background-color: #E5E5E5;
+    color: #000;
 }
 
 .calculadora input {
@@ -598,8 +594,8 @@ b .green{
     padding: 15px; 
 }
 
-.beneficios { 
-    display: none; 
+#div_comparativo{
+    width: 100%;
 }
 
 .economia { 
@@ -609,7 +605,7 @@ b .green{
 
 table { 
     width: 100%; 
-    border-collapse: collapse; 
+    border-collapse: collapse;
     margin-top: 10px; 
     background-color: #2C3E50;
     color: #FFFFFF;
@@ -643,39 +639,20 @@ th {
         font-size: 24px;
     }
 
-    .calculadora input, .calculadora button {
+    .calculadora input {
         font-size: 14px;
         padding: 10px;
+        color: #000 !important;
     }
 
     .calculadora button {
         font-size: 16px;
+        padding: 10px;
+        color: #ffffff;
     }
 
     table {
         font-size: 12px;
-    }
-
-    .beneficios {
-        display: block;
-    }
-}
-
-@media (min-width: 601px) and (max-width: 1024px) {
-    .simulador p {
-        font-size: 10vw;
-    }
-
-    .calculadora h1 {
-        font-size: 26px;
-    }
-
-    .calculadora input, .calculadora button {
-        font-size: 16px;
-    }
-
-    table {
-        font-size: 14px;
     }
 }
 
@@ -688,8 +665,16 @@ th {
         font-size: 32px;
     }
 
-    .calculadora input, .calculadora button {
-        font-size: 18px;
+    .calculadora input {
+        font-size: 14px;
+        padding: 10px;
+        color: #000 !important;
+    }
+
+    .calculadora button {
+        font-size: 16px;
+        padding: 10px;
+        color: #ffffff;
     }
 
     table {

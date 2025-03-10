@@ -282,31 +282,32 @@
     <section>
         <div class="calculadora">
             <h2>Simulador</h2>
-            <label>Downtime médio por mês (horas):</label>
+            <label class="simulador">Qual seu tempo médio de downtime(tempo de inatividade) por mês?(horas):</label>
             <input type="number" id="ipt_downtime" placeholder="Ex: 10">
             <br>
-            <label>Custo por hora com Downtimes (R$):</label>
+            <label class="simulador">Para cada hora de downtime(tempo de inatividade) qual é seu custo médio?(Reais R$):</label>
             <input type="number" id="ipt_custoHoraDownTime" placeholder="Ex: 5000">
             <br>
-            <label>Gasto anual com substituição de hardware (R$) - Manutenções Corretivas:</label>
+            <label class="simulador">Por último, qual é o seu gasto anual com substituições de hardware?(Manutenção Corretiva, em Reais R$)</label>
             <input type="number" id="ipt_custoManutencaoCorretiva" placeholder="Ex: 20000">
             <br>
             <button onclick="calcular()">Calcular</button>
     
             <div class="resultados" id="div_resultado"></div>
             <div class="comparativo" id="div_comparativo" style="display: none;"></div>
-            <div class="beneficios" id="div_beneficios">
+            <div class="beneficios" id="div_beneficios" style="display: none;">
                 <h3>Benefícios do Monitoramento</h3>
                 <ul>
-                    <li>🌡️ Evita superaquecimento dos recursos, aumentando a vida útil de cada um</li>
-                    <li>⏩ Otimiza o consumo de CPU, RAM e disco, evitando lentidão e garantindo a eficiência do servidor</li>
-                    <li>🔧 Torna a manutenção mais eficiente e reduz custos inesperados.</li>
-                    <li>🦠 Detecta anomalias antes que se tornem problemas graves.</li>
-                    <li>📈 Mantém a linha de produção ativa, reduzindo perdas operacionais.</li>
-                    <li>💲 Reduz custos de manutenção em até <strong>40%</strong> e aumenta a produtividade em <strong>6%</strong> (The True Cost of Downtime 2022).</li>
-                    <li>🔋 Melhora a eficiência energética do servidor.</li>
-                    <li>💾 Se a manutenção planejada for inferior a 85%, pelo menos <strong>15% do tempo</strong> é gasto com manutenção corretiva, aumentando os custos e riscos operacionais.</li>
-                    <li>🛡️ Protege contra ataques hackers, monitorando acessos suspeitos e prevenindo invasões.</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M9 16a3.001 3.001 0 0 0 6 0c0-.353-.072-.686-.184-1H9.184A2.962 2.962 0 0 0 9 16z"></path><path d="M18 6V4h-3.185A2.995 2.995 0 0 0 12 2c-1.654 0-3 1.346-3 3v5.8A6.027 6.027 0 0 0 6 16c0 3.309 2.691 6 6 6s6-2.691 6-6a6.027 6.027 0 0 0-3-5.2V10h3V8h-3V6h3zm-4.405 6.324A4.033 4.033 0 0 1 16 16c0 2.206-1.794 4-4 4s-4-1.794-4-4c0-1.585.944-3.027 2.405-3.676l.595-.263V5a1 1 0 0 1 2 0v7.061l.595.263z"></path></svg> Evita superaquecimento dos recursos, aumentando a vida útil de cada um</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M12 4C6.486 4 2 8.486 2 14a9.89 9.89 0 0 0 1.051 4.445c.17.34.516.555.895.555h16.107c.379 0 .726-.215.896-.555A9.89 9.89 0 0 0 22 14c0-5.514-4.486-10-10-10zm7.41 13H4.59A7.875 7.875 0 0 1 4 14c0-4.411 3.589-8 8-8s8 3.589 8 8a7.875 7.875 0 0 1-.59 3z"></path><path d="M10.939 12.939a1.53 1.53 0 0 0 0 2.561 1.53 1.53 0 0 0 2.121-.44l3.962-6.038a.034.034 0 0 0 0-.035.033.033 0 0 0-.045-.01l-6.038 3.962z"></path></svg> Otimiza o consumo de CPU, RAM e disco, evitando lentidão e garantindo a eficiência do servidor</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M5.122 21c.378.378.88.586 1.414.586S7.572 21.378 7.95 21l4.336-4.336a7.495 7.495 0 0 0 2.217.333 7.446 7.446 0 0 0 5.302-2.195 7.484 7.484 0 0 0 1.632-8.158l-.57-1.388-4.244 4.243-2.121-2.122 4.243-4.243-1.389-.571A7.478 7.478 0 0 0 14.499 2c-2.003 0-3.886.78-5.301 2.196a7.479 7.479 0 0 0-1.862 7.518L3 16.05a2.001 2.001 0 0 0 0 2.828L5.122 21zm4.548-8.791-.254-.616a5.486 5.486 0 0 1 1.196-5.983 5.46 5.46 0 0 1 4.413-1.585l-3.353 3.353 4.949 4.95 3.355-3.355a5.49 5.49 0 0 1-1.587 4.416c-1.55 1.55-3.964 2.027-5.984 1.196l-.615-.255-5.254 5.256h.001l-.001 1v-1l-2.122-2.122 5.256-5.255z"></path></svg> Torna a manutenção mais eficiente e reduz custos inesperados.</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="m18 5.414 1.707-1.707-1.414-1.414-1.563 1.562C15.483 2.708 13.824 2 12 2s-3.483.708-4.73 1.855L5.707 2.293 4.293 3.707 6 5.414A6.937 6.937 0 0 0 5 9H3v2h2v2H3v2h2c0 3.86 3.141 7 7 7s7-3.14 7-7h2v-2h-2v-2h2V9h-2a6.937 6.937 0 0 0-1-3.586zM15 15H9v-2h6v2zm0-4H9V9h6v2z"></path></svg></i> Detecta anomalias antes que se tornem problemas graves.</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);
+                    "><path d="m10 10.414 4 4 5.707-5.707L22 11V5h-6l2.293 2.293L14 11.586l-4-4-7.707 7.707 1.414 1.414z"></path></svg> Mantém a linha de produção ativa, reduzindo perdas operacionais.</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M15.999 8.5h2c0-2.837-2.755-4.131-5-4.429V2h-2v2.071c-2.245.298-5 1.592-5 4.429 0 2.706 2.666 4.113 5 4.43v4.97c-1.448-.251-3-1.024-3-2.4h-2c0 2.589 2.425 4.119 5 4.436V22h2v-2.07c2.245-.298 5-1.593 5-4.43s-2.755-4.131-5-4.429V6.1c1.33.239 3 .941 3 2.4zm-8 0c0-1.459 1.67-2.161 3-2.4v4.799c-1.371-.253-3-1.002-3-2.399zm8 7c0 1.459-1.67 2.161-3 2.4v-4.8c1.33.239 3 .941 3 2.4z"></path></svg> Reduz custos de manutenção em até <strong>40%</strong> e aumenta a produtividade em <strong>6%</strong> (The True Cost of Downtime 2022).</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M20 10V8a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2h2v-4h-2zM9 17l2-3.89L7 12l6-5-1 3.89L16 12l-7 5z"></path></svg> Melhora a eficiência energética do servidor.</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M9 9h6v6H9z"></path><path d="M20 6c0-1.103-.897-2-2-2h-2V2h-2v2h-4V2H8v2H6c-1.103 0-2 .897-2 2v2H2v2h2v4H2v2h2v2c0 1.103.897 2 2 2h2v2h2v-2h4v2h2v-2h2c1.103 0 2-.897 2-2v-2h2v-2h-2v-4h2V8h-2V6zM6 18V6h12l.002 12H6z"></path></svg> Se a manutenção planejada for inferior a 85%, pelo menos <strong>15% do tempo</strong> é gasto com manutenção corretiva, aumentando os custos e riscos operacionais.</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(0, 0, 0, 1);"><path d="M11.488 21.754c.294.157.663.156.957-.001 8.012-4.304 8.581-12.713 8.574-15.104a.988.988 0 0 0-.596-.903l-8.05-3.566a1.005 1.005 0 0 0-.813.001L3.566 5.747a.99.99 0 0 0-.592.892c-.034 2.379.445 10.806 8.514 15.115zM8.674 10.293l2.293 2.293 4.293-4.293 1.414 1.414-5.707 5.707-3.707-3.707 1.414-1.414z"></path></svg> Protege contra ataques hackers, monitorando acessos suspeitos e prevenindo invasões.</li>
                 </ul>
             </div>
         </div>
