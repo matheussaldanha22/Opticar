@@ -25,9 +25,10 @@ body{
     display: flex;
     grid-area: a;
     align-items: center;
-    gap: 5vw;
+    gap: 2vw;
     background-color: #011F27;
     flex-direction: column;
+    justify-content: flex-start;
 }
 
 .nav-burger{
@@ -88,6 +89,11 @@ body{
     display: flex;
     flex-direction: column;
     gap: 5vw;
+
+    & span{
+        display: none;
+    }
+    
 }
 
 .nav-links li i{
@@ -234,4 +240,129 @@ div .servidor select{
     width: 30vw;
     height: 30vw;
     background-color: #04708D;
+}
+
+@media only screen and (min-width: 1024px) { 
+
+    .menu{
+        
+        width: 5%;
+        height: 100vh;
+        position: fixed;
+        left: 0;
+    }
+    body{
+        grid-template-columns: 5% 95% ;
+    }
+
+    .nav-links{
+        gap: 4vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        /* transition: all 1s; */
+        & li i{
+            font-size: 40px;
+        }
+        & span{
+            display: none;
+        }
+
+        & ul{
+            width: 100%;
+        }
+
+        & li{
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        
+    }
+
+    .nav-links-expanded .li-active::after{
+        /* display: none; */
+        width: 90% !important;
+        left: 0 !important;
+    }
+
+    .nav-links .li-active::after{
+        width: 70%;
+        position: absolute;
+        content: "";
+        bottom: -20%;
+        left: 15%;
+        border-radius: 2px;
+        
+        
+        background-color: #007BFF;
+        height: 3.5px;
+    }
+
+    .nav-burger div{
+        height: 0.49vw;
+        width: 2.9vw;
+        background-color: rgb(255, 255, 255);
+        margin: 0.5vw;
+        transition: 0.7s;
+    }
+
+    .nav-burger{
+        margin-top: 2vh;
+    }
+
+    .nav-links-expanded{
+        /* animation: expandir 10s linear; */
+        margin-left: 5px;
+        & li{
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 1em;
+
+            & span{
+                color: #fff;
+                font-family: 'Montserrat';
+                font-size: 1.5vw;
+                font-weight: 550;
+                display: flex;
+            }
+        }
+    }
+
+    .menu-expand{
+        width: 20%;
+        display: flex;
+        align-items: flex-start;
+        /* padding: 20px; */
+
+    }
+
+
+
+    .oculta{
+        display: none;
+    }
+
+
+}
+
+@keyframes expandir{
+    from{
+        width: 5%
+    }to{
+        width: 20%;
+    }
+}
+
+@keyframes diminui{
+    from{
+        width: 20%
+    }to{
+        width: 5%;
+    }
 }

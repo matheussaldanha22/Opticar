@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Analise</title>
+    <link rel="stylesheet" href="assets/styles/monitoramento.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+</head>
+<body>
+    <div id="div_menu" class="menu ">
+        <div class="nav-burger" onclick="expand()">
+            <div id="linha1"></div>
+            <div id="linha2"></div>
+            <div id="linha3"></div>
+        </div>
+
+        <!-- <ul class="nav-links oculta">
+            <li><i class='bx bx-desktop' style='color:#ffffff' ></i></li>
+            <li><i class='bx bxs-bell-ring' style='color:#ffffff' ></i></li>
+            <li><i class='bx bx-server' style='color:#ffffff' ></i></li>
+        </ul> -->
+        <ul id="ul_links" class="nav-links ">
+            
+            <li class="li-active">
+                <i class='bx bx-desktop' style='color:#ffffff' ></i>
+                <span>Monitoramento</span>
+            </li>
+            <li>
+                <i class='bx bxs-bell-ring' style='color:#ffffff' ></i>
+                <span>Alertas</span>
+            </li>
+            <li>
+                <i class='bx bx-server' style='color:#ffffff' ></i>
+                <span>Servidores</span>
+            </li>
+        </ul>
+    </div>
+    <div class="main">
+        
+    </div>
+</body>
+</html>
+
+<script>
+    function expand(){
+        if(div_menu.classList.contains('menu-expand')){
+            div_menu.style.animation = 'diminui 0.2s linear';
+
+        }else{
+            div_menu.style.animation = 'expandir 0.2s linear';
+
+        }
+        div_menu.classList.toggle('menu-expand')
+        ul_links.classList.toggle('nav-links-expanded')
+    }
+</script>
