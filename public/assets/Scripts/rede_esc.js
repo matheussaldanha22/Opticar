@@ -1,5 +1,5 @@
 const ctxRede_Esc = document.getElementById('redeChart-esc').getContext('2d');
-
+const valor_esc = document.getElementById('id_valor-esc');
 
 const dataRede_Esc = {
     value: 79,
@@ -31,4 +31,5 @@ const configRede_Esc = {
     }
 };
 
+valor_esc.innerHTML= "<span>" + dataRede_Esc.value + "</span>" +" MB/s" + "<br>Taxa de Escrita";
 new Chart(ctxRede_Esc, configRede_Esc);
