@@ -239,6 +239,7 @@ div .servidor select{
 .chart-container-ram h2, .chart-container-disco h2{
     color: black;
     font-weight: 100;
+    width: 100%;
 }
 
 .chart-container-rede {
@@ -261,6 +262,21 @@ div .servidor select{
 }
 
 .chart-wrapper div{
+    width: 30vw;
+    height: 30vw;
+    background: #012027;
+    background: linear-gradient(270deg, #012027, #04708D);
+    border-radius: 12px;
+}
+
+.chart-wrapper-disco {
+    display: flex;
+    flex-direction: row;
+    padding: 3vw;
+    justify-content: space-between;
+}
+
+.chart-wrapper-disco div{
     width: 30vw;
     height: 30vw;
     background: #012027;
@@ -460,7 +476,7 @@ div .servidor select{
         display: flex;
         flex-direction: row;
         align-items: center;
-        font-size: 2vw;
+        font-size: 1.5vw;
     }
 
     .desktop-local,
@@ -470,6 +486,7 @@ div .servidor select{
 
     .lugar h3{
         display: flex;
+        font-size: 1.5vw;
     }
 
     .persona{
@@ -479,8 +496,13 @@ div .servidor select{
         font-size: 1vw;
     }
 
+    .persona div h3{
+        width: 15vw;
+        margin-left: 1vw;
+    }
+
     .cabeca div i{
-        font-size: 6vw;
+        font-size: 4vw;
     }    
 
     .dash{
@@ -495,11 +517,11 @@ div .servidor select{
     }
 
     .box div .texto h1{
-        font-size: 4vw;
+        font-size: 2vw;
     }
 
     .box .tempoReal .texto p{
-        font-size: 2vw;
+        font-size: 1vw;
     }
 
     .box .tempoReal{
@@ -507,25 +529,28 @@ div .servidor select{
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
+        padding-top: 1.5vw;
     }
 
     .servidor{
         gap: 2vw;
     }
 
-    .servidor select{
-        padding: 0 5vw 0 5vw;
+    div .servidor select{
+        padding: 0 6vw 0 6vw;
+        font-size: 1.5vw;
     }
 
     #i{
         padding: 0.2vw;
-        font-size: larger;
+        font-size: 2vw;
     }
 
     .monitoramento{
         flex-direction: row;
         gap: 2vw;
         padding-right: 2vw;
+        padding-top: 5vw;
     }
 
     .esquerda{
@@ -544,10 +569,25 @@ div .servidor select{
         width: 10vw;
     }
 
+    .chart-wrapper-disco {
+        padding: 1vw;
+        width: 40vw;
+    }
+
     .chart-wrapper {
         padding: 1vw;
     }
+
     .chart-wrapper div {
+        width: 45%;
+        height: 15vw;
+        background: #012027;
+        background: linear-gradient(270deg, #012027, #04708D);
+        border-radius: 12px;
+        background-color: white;
+    }
+
+    .chart-wrapper-disco div {
         width: 45%;
         height: 15vw;
         background: #012027;
@@ -570,7 +610,8 @@ div .servidor select{
     }
 
     #id_valor-disc {
-        bottom: 25vw;
+        bottom: 21vw;
+        height: 0;
     }
 
     .tempo_atividade{
@@ -580,4 +621,22 @@ div .servidor select{
     .tempo_atividade h1{
         font-size: 2vw;
     }
+
+    .chart-container-disco{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #discoChart {
+        max-width: 25vw !important;
+        height: 36vw !important;
+    }
+
+    #id_valor-disc span {
+        font-weight: 900;
+        font-size: 5vw;
+    }
+    
+    
 }

@@ -33,6 +33,6 @@ type: 'doughnut',
     }
 }
 
-valor.innerHTML = "<span>"+dataDisco.value+"</span>" + "%";
+valor.innerHTML = "<span>"+dataDisco.value + "%" +"</span>" ;
 
 new Chart(ctxDisco, configDisco);
