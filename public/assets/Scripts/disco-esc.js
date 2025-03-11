@@ -2,7 +2,7 @@ const ctxDisco_Esc = document.getElementById('discoChart-esc').getContext('2d');
 const valor_esc_disco = document.getElementById('id_valor-esc-disco');
 
 const dataDisco_Esc = {
-    value: 79,
+    value: 20,
     max: 100,
     label: "Taxa de Leitura"
 };

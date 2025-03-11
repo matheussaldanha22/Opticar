@@ -2,7 +2,7 @@ const ctxRede_Esc = document.getElementById('redeChart-esc').getContext('2d');
 const valor_esc = document.getElementById('id_valor-esc');
 
 const dataRede_Esc = {
-    value: 79,
+    value: 63,
     max: 100,
     label: "Taxa de Leitura"
 };

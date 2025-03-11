@@ -2,7 +2,7 @@ const ctxDisco_Ler = document.getElementById('discoChart-ler').getContext('2d');
 const valor_ler_disco = document.getElementById('id_valor-ler-disco');
 
 const dataDisco_Ler = {
-    value: 79,
+    value: 50,
     max: 100,
     label: "Taxa de Leitura"
 };

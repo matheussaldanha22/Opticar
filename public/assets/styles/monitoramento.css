@@ -130,11 +130,19 @@ body{
     font-size: 3vw;
 }
 
+.desktop-local{
+    display: none;
+}
+
 .persona{
     display: flex;
     flex-direction: row;
     align-items: center;
     font-size: 2vw;
+}
+
+.desktop-email{
+    display: none;
 }
 /* Grid B */
 /* Grid C */
@@ -260,7 +268,7 @@ div .servidor select{
     border-radius: 12px;
 }
 /* Menu que se expande */
-@media only screen and (min-width: 1024px) { 
+@media only screen and (min-width:702px) { 
 
     .menu{
         
@@ -436,11 +444,11 @@ div .servidor select{
     font-size: 6vw;
 }
 
-/* Continuar responsividade para PC */
+
 @media (min-width:702px){
 
     .contain{
-        padding: 1vw;
+        padding: 1vw 2vw 0 2vw;
     }
 
     .cabeca {
@@ -454,7 +462,12 @@ div .servidor select{
         align-items: center;
         font-size: 2vw;
     }
-    
+
+    .desktop-local,
+    .desktop-email {
+        display: flex !important;
+    }
+
     .lugar h3{
         display: flex;
     }
@@ -465,9 +478,106 @@ div .servidor select{
         align-items: center;
         font-size: 1vw;
     }
-    
+
     .cabeca div i{
         font-size: 6vw;
     }    
 
+    .dash{
+        bottom: 0vw;
+        margin: 0;
+        padding: 1vw 2vw 0 2vw;
+    }
+
+    .box{
+        display: block;
+        padding-top: 0vw;
+    }
+
+    .box div .texto h1{
+        font-size: 4vw;
+    }
+
+    .box .tempoReal .texto p{
+        font-size: 2vw;
+    }
+
+    .box .tempoReal{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .servidor{
+        gap: 2vw;
+    }
+
+    .servidor select{
+        padding: 0 5vw 0 5vw;
+    }
+
+    #i{
+        padding: 0.2vw;
+        font-size: larger;
+    }
+
+    .monitoramento{
+        flex-direction: row;
+        gap: 2vw;
+        padding-right: 2vw;
+    }
+
+    .esquerda{
+        width: 50%;
+        gap: 2vw;
+    }
+
+    #id_valor-ler, #id_valor-esc, #id_valor-esc-disco, #id_valor-ler-disco {
+        font-size: 1vw;
+        text-align: center;
+        position: relative;
+        bottom: 8vw;
+        height: 0vw;
+        color: white;
+        left: 49px;
+        width: 10vw;
+    }
+
+    .chart-wrapper {
+        padding: 1vw;
+    }
+    .chart-wrapper div {
+        width: 45%;
+        height: 15vw;
+        background: #012027;
+        background: linear-gradient(270deg, #012027, #04708D);
+        border-radius: 12px;
+        background-color: white;
+    }
+
+    .chart-container-rede {
+        height: auto;
+    }
+
+    #redeChart-ler, #discoChart-ler, #redeChart-esc, #discoChart-esc {
+        bottom: 3vw;
+    }
+
+    .direita{
+        width: 50%;
+        gap: 1vw;
+    }
+
+    #id_valor-disc {
+        bottom: 25vw;
+    }
+
+    .tempo_atividade{
+        padding: 2vw;
+    }
+
+    .tempo_atividade h1{
+        font-size: 2vw;
+    }
 }

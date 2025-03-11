@@ -83,7 +83,7 @@
                 </div>
                 <div class="servidor">
                     <i class='bx bx-info-circle'
-                        style='color:#ffffff; background-color: #2C3E50; border-radius: 100%; padding: 0.5vw;'></i>
+                        style='color:#ffffff; background-color: #2C3E50; border-radius: 100%; padding: 0.2vw;' id="i"></i>
                     <select name="" id="">
                         <option value="">Servidor: SP-01</option>
                         <option value="">Servidor: SP-02</option>
@@ -146,6 +146,7 @@
 
                     <div class="tempo_atividade">
                         <h3>Tempo de Atividade</h3>
+                        <br>
                         <h1>87 Dias 22:50:21</h1>
                     </div>
 
@@ -189,21 +190,21 @@ menu.classList.toggle('nav-active');
 
 });
 
-    function aparecer(){
-        const larguraTela = window.innerWidth;
-        const desk_local = document.querySelector('.desktop-local');
-        const desk_email = document.querySelector('.desktop-email');
-        if(larguraTela > 702){
-            desk_local.style.display = "flex";
-            desk_email.style.display = "flex";
-        }else{
-            desk_local.style.display = "none";
-            desk_email.style.display = "none";
-        }
+    // function aparecer(){
+    //     const larguraTela = window.innerWidth;
+    //     const desk_local = document.querySelector('.desktop-local');
+    //     const desk_email = document.querySelector('.desktop-email');
+    //     if(larguraTela > 702){
+    //         desk_local.style.display = "flex";
+    //         desk_email.style.display = "flex";
+    //     }else{
+    //         desk_local.style.display = "none";
+    //         desk_email.style.display = "none";
+    //     }
 
-    }
+    // }
 
-    aparecer();
+    // aparecer();
         
-    window.addEventListener("resize", aparecer);
+    // window.addEventListener("resize", aparecer);
 </script>
