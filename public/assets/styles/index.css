@@ -480,6 +480,9 @@ button {
 }
 /* FIM NEGOCIO */
 /* INICIO IMPACTO */
+.section-impacto{
+    background-color: #D9D9D9;
+}
 .impacto{
     background-color: #D9D9D9;
     padding: 1vh;
@@ -712,6 +715,37 @@ th {
         padding: 10px;
         font-weight: 900;
     }
+    
+    .calculadora label{
+        margin-top: 7vh;
+    }
+
+    .calculadora .alinhar{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 2vh;
+        & p{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap:2vw;
+            font-size: 2vw;
+
+            & svg{
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+    }
+    .comparativo  h3{
+        font-size: 3.1vw;
+    }
+
+    .calculadora .economia{
+        font-size: 4.1vw;
+    }
 
     .simulador p {
         font-size: 3vw;
@@ -728,9 +762,39 @@ th {
     }
 
     .calculadora button {
-        font-size: 16px;
+        font-size: 2.8vw;
         padding: 10px;
+        margin-top: 4vh;
         color: #ffffff;
+    }
+
+    .beneficios h3{
+        font-size: 2.8vw;
+        margin-bottom: 4vh;
+    }
+
+    .beneficios ul {
+        display: flex;
+        flex-direction: column;
+        max-height: 100vh;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap:2vw;
+        font-size: 2vw;
+        & li{
+            display: flex;
+            flex-direction: row;
+            font-size: 2vw;
+            justify-content: flex-start;
+            text-align: left;
+            align-items: flex-start;
+            width: 50%;
+        }
+        & svg{
+            width: 80px;
+            height: 80px;
+        }
     }
 
     table {
@@ -745,7 +809,7 @@ th {
 /* FIM SIMULADOR */
 /* INICIO CONTATO */
 .contato{
-    background-color: #011F27;
+    background-color: #011F27 !important;
 }
 
 .contato p{
@@ -1111,7 +1175,7 @@ form button{
             }
 
             & p{
-                font-size: 2.5vw;
+                font-size: 1.9vw;
                 width: 100%;
                 padding: 3px;
             }
@@ -1132,6 +1196,155 @@ form button{
         /* right:-10% !important; */
         
     }
+    .section-impacto{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .impacto{
+        width: 80%;
+
+        & p {
+            font-size: 8vw;
+        }
+    }
+    .container-impacto{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        padding: 0;
+        margin-bottom: 10vh;
+        gap: 2vw;
+        & div{
+            display: flex;
+            flex-direction: column;
+            /* height:500px !important; */
+            width: 10%;
+            background-color: #fff;
+            gap:1.6vh;
+            & h1{
+                font-size: 2.9vw;
+                display: none !important;
+                /* transform: rotate(90deg);
+                 */
+                writing-mode: vertical-rl;
+                /* height: fit-content; */
+            }
+
+            & .div_numeral_titulo{
+                display: flex !important;
+            } 
+
+            & .div_numeral_titulo h1{
+                font-size: 2.9vw;
+
+                display: flex !important;
+                /* transform: rotate(90deg);
+                 */
+                writing-mode: vertical-rl;
+                /* height: fit-content; */
+            }
+
+            & .num{
+                transform: none;
+                writing-mode: horizontal-tb !important;
+            }
+        }
+    }
+   
+
+    .expandir_desktop{
+        width: 80% !important;
+        flex-direction: row !important;
+        position: relative;
+        & #invisivel{
+            flex-direction: row;
+            padding: 0;
+            transform: none;
+            
+        }
+        & #invisivel b, #invisivel span{
+            font-size: 1.3vw;
+            width: fit-content;
+        } 
+
+        & #invisivel b button{
+            font-size: 2.4vw;
+            cursor: pointer;
+        }
+
+        & #invisivel hr{
+            width: 0.6vw;
+        }
+
+        & .div_numeral_titulo{
+            flex-direction: row;
+            background-color: transparent;
+            position: absolute;
+            top: 2%;
+            left: 4.2%;
+            gap: 3vw;
+            width: fit-content;
+            & h1{
+                color: #fff;
+                writing-mode: horizontal-tb !important;
+            }
+
+           
+        }
+    }
+
+    div #invisivel{
+        gap: 5vw;
+        /* width: 80%; */
+        width: fit-content;
+        display: none; /* Esconde o elemento inicialmente */
+        opacity: 0;
+        transform: none;
+        transition: none;
+    }
+
+     #invisivel{
+        flex-direction: row;
+        padding: 0;
+        transform: none;
+        
+    }
+     #invisivel b, #invisivel span{
+        font-size: 1.3vw;
+        width: fit-content;
+    } 
+
+     #invisivel b button{
+        font-size: 2.4vw;
+        cursor: pointer;
+    }
+
+     #invisivel hr{
+        width: 0.6vw;
+    }
+
+    .section-calculadora{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .calculadora{
+        width: 80%;
+        background-color: transparent;
+        
+        & h2{
+            font-size: 8vw;
+        }
+        & label, .simulador{
+            position:unset !important;
+            background-color: transparent;
+            font-size: 2.3vw;
+            margin-top: 100px !important;
+        }
+    }
+
 }
 .negocio{
     position: relative;
@@ -1153,4 +1366,13 @@ form button{
 .swiper-pagination-bullet-active{
     background-color: #fff !important;
 }
+.div_numeral_titulo{
+    padding: 0 !important;
+    display: none !important;
+}
+
+.section-calculadora{
+    background-color: #D9D9D9;
+}
+
 

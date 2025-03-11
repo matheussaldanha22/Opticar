@@ -46,31 +46,33 @@ var swiper = new Swiper(".swiper", {
   });
 // SLIDER
 // IMPACTO SHOW
-function aparecer() {
+function aparecer(element) {
 
-  var info = document.getElementById('box-info');
-  var invisivel = document.getElementById('invisivel');
-  var cor = document.getElementById('cor');
-  var botao = document.getElementById('btn');
-  var hr = document.getElementById('linha');
+  var info = element;
+  var invisivel = element.querySelector('#invisivel');
+  var cor = invisivel.querySelector('b');
+  var botao = cor.querySelector('#btn');
+  console.log(cor)
+  var hr = invisivel.querySelector('hr');
 
   if (invisivel.classList.contains('mostrar')) {
       // Esconder suavemente
       invisivel.style.opacity = "0";
       invisivel.style.transform = "translateY(-10px)";
-      
-      setTimeout(() => {
+      element.classList.remove('expandir_desktop')
+
+      // setTimeout(() => {
           invisivel.style.display = "none";
           info.style.backgroundColor = "#FFF";
           info.style.color = "#011F27";
           invisivel.classList.remove('mostrar');
-      }, 500); // Tempo da transição
+      // }, 500); // Tempo da transição
   } else {
       // Mostrar suavemente
       invisivel.style.display = "flex"; 
-      
+      element.classList.add('expandir_desktop')
       // Pequeno delay para permitir a transição
-      setTimeout(() => {
+      // setTimeout(() => {
           invisivel.classList.add('mostrar');
           invisivel.style.opacity = "1";
           invisivel.style.transform = "translateY(0)";
@@ -83,7 +85,18 @@ function aparecer() {
           hr.style.backgroundColor = "#FFF";
           info.style.backgroundColor = "#011F27";
           info.style.color = "#FFF";
-      }, 10);
+        const elementos = document.querySelectorAll('.boxes-infos')
+        console.log(elementos)
+        elementos.forEach((box)=> {
+            if(box != element){
+              // info = box;
+              if(box.classList.contains('expandir_desktop')){
+                console.log('asss')
+                aparecer(box)
+              }
+            }
+        })
+      // }, 10);
   }
 }
 
