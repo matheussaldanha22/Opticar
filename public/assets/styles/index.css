@@ -39,6 +39,14 @@ header {
     justify-content: space-between;
 }
 
+.header-element{
+    background-color: #D9D9D9;
+}
+
+body{
+    background-color: #D9D9D9;
+}
+
 .marca{
     display: flex;
     justify-content: flex-start;
@@ -218,6 +226,17 @@ section {
 
 .slogan b{
     font-size: 5.5vw;
+    margin-left: 5px;
+    width: 90%;
+    text-align: center;
+}
+
+.btn_mobile{
+    display: flex;
+}
+
+.div_btn{
+    display: none;
 }
 
 button {
@@ -233,6 +252,14 @@ button {
 /* INICIO INTRODUCAO */
 .introducao{
     padding: 1vh;
+    background-color: #D9D9D9;
+
+    & .div_img{
+        display: none;
+    }
+}
+
+.section_introducao{
     background-color: #D9D9D9;
 }
 
@@ -274,6 +301,10 @@ button {
 }
 /* FIM INTRODUCAO */
 /* INICIO PRINCIPIOS */
+
+.section-principios{
+    background-color: #011F27;
+}
 .principios{
     background-color: #011F27;
     padding: 1vh;
@@ -295,32 +326,42 @@ button {
 
 .box{
     border: 2px white solid;
-    width: 80vw;
-    height: 80vw;
+    /* width: 80vw; */
+    /* height: 80vw; */
     margin: auto;
     border-radius: 12px;
     display: grid;
 }
 
-.box img{
+/* .box img{
     width: 22%;
     padding: 5%;
-}
+} */
 
-.box p{
+.box p, i{
     color: white;
-    font-size: 6vw;
+    font-size: 16vw;
+    text-align: center;
+    margin-top: 3vh;
 }
 
 .box div{
+    padding: 5px;
+    justify-content: center;
     display: flex;
     align-items: center;
     text-align: center;
     color: white;
+    font-size: 6vw;
 }
 /* FIM PRINCIPIOS */
 /* INICIO FUNCAO */
 .funcao{
+    background-color: #D9D9D9;
+    margin-bottom: 10vh;
+}
+
+.section-funcao{
     background-color: #D9D9D9;
 }
 
@@ -349,6 +390,7 @@ button {
     display: flex;
     flex-direction: column;
     gap: 8vw;
+    /* margin-bottom: 10vh; */
 }
 
 .beneficios div{
@@ -358,16 +400,21 @@ button {
 
 .beneficios i{
     font-size: 15vw;
+    color: #000;
 }
 
 .beneficios p{
-    font-size: 4vw;
+    font-size: 6.4vw;
 }
 /* FIM FUNCAO */
 /* INICIO NEGOCIO */
 .negocio{
     background-color: #000;
     padding: 1vh;
+}
+
+.section-negocio{
+    background-color: #000;
 }
 
 .negocio p{
@@ -656,6 +703,16 @@ th {
 }
 
 @media (min-width: 1025px) {
+
+    .nav-links li{
+        margin: 0 20px;
+        font-size: 18px;
+        color: #011F27;
+        height: 56.9px;
+        padding: 10px;
+        font-weight: 900;
+    }
+
     .simulador p {
         font-size: 3vw;
     }
@@ -837,10 +894,116 @@ form button{
 }
 
 @media (min-width:702px){
+    .header-element{
+        display: flex;
+        justify-content: center;
+    }
+    .container{
+        width: 80%;
+    }
+    .section-principios{
+        width: 100%;
+        
+        display: flex;
+        justify-content: center;
+    }
+    .principios{
+        width: 80%;
+        /* border: 1px solid black; */
+        & h6{
+            font-size: 8vw;
+        }
+    }
+
+    .container-box{
+        flex-direction: row;
+        width: 100%;
+        gap: 0;
+        /* border: 1px solid; */
+        justify-content: space-between;
+    }
+    .box{
+        min-width: 25% ;
+        max-width: 30%;
+        height: auto;
+        margin: 0;
+        display: flex !important;
+        flex-direction: column;
+        & div{
+            font-size: 20px;
+            padding: 5px;
+            display: flex;
+            justify-content: center;
+        }
+        & div p, i{
+            font-size: 4.5vw;
+            text-align: center;
+        }
+
+    }
+    .slogan{
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        width: 80%;
+        & p {
+            font-size: 7vw;
+        }
+
+        & span{
+            font-size: 8vw;
+        }
+
+        & b{
+            font-size: 2.5vw;
+            width: 50%;
+            text-align: left;
+        }
+    }
+
+    .section_introducao{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .introducao{
+        width: 80%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        & h1{
+            font-size: 8vw;
+        }
+
+        & h3{
+            font-size: 2.1vw;
+        }
+        & .btn{
+            align-self: flex-end;
+            margin-bottom: 5%;
+        }
+
+        & .div_img img{
+            width: 25vw;
+        }
+    }
+
+    .btn_mobile{
+        display: none;
+    }
+
+    .div_btn{
+        width: 80%;
+        display: flex;
+        justify-content: flex-start;
+    }
+
     .marca{
         font-size: 2vw;
         font-weight: 900;
-        padding: 1vw 4vw 1vw ;
+        padding: 1vw 0vw 1vw ;
         width: auto;
     }
     .marca img{
@@ -850,14 +1013,139 @@ form button{
         width: 100%;
     }
     .nav-links{
-        justify-content: space-around;
+        justify-content: center;
         width: 100%;
+        gap: 2vw;
         
     }
     .nav-links li{
-        font-size: 2.3vw;
+        font-size: 1.4vw;
         color: #2C3E50;
-        margin: auto;
+        /* margin: auto; */
         height: auto;
     }
+
+    .section-funcao{
+        width: 100%;
+        border: 1px solid;
+        display: flex;
+        justify-content: center;
+    }
+    .div_img_beneficios{
+        display: flex;
+        margin-top: 5%;
+        & .div_img img{
+            width: 50vw;
+            
+            background-color: #fff;
+            border-radius: 7px;
+        }
+
+        & .div_textos{
+            display: flex;
+            max-width: 50%;
+            flex-direction: column;
+            gap: 0;
+            & h3{
+                font-size: 2vw;
+            }
+            & .beneficios div i{
+                font-size: 5vw;
+                color: #000;
+            }
+            & .beneficios div p{
+                font-size: 18px;
+                width: 100%;
+                padding: 5px;
+            }
+            & .beneficios div{
+                gap: 10px;
+                justify-content: center;
+                align-items: center;
+            }
+
+            & .beneficios{
+                gap: 0.9vh;
+                margin-top: 0;
+            }
+        }
+    }
+    .funcao{
+        width: 80%;
+        
+        & p{
+            font-size: 8vw;
+        }
+    }
+
+    .section-negocio{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .negocio{
+        width: 80%;
+
+        & p {
+            font-size: 8vw;
+        }
+    }
+
+    .swiper{
+        height: auto;
+        margin-bottom: 10vh;
+    }
+
+    .swiper-slide{
+        padding: 0;
+        & div{
+            padding: 0;
+            height: auto;
+            & h1{
+                font-size: 4.27vw;
+            }
+
+            & p{
+                font-size: 2.5vw;
+                width: 100%;
+                padding: 3px;
+            }
+            & i{
+                font-size: 8vw;
+            }
+        }
+    }
+    .swiper-button-next{
+        right: -5% !important;
+    }
+    .swiper-button-prev{
+        position: absolute;
+        left: -5% !important;
+    }
+    .swiper-button-next:after{
+        position: absolute;
+        /* right:-10% !important; */
+        
+    }
 }
+.negocio{
+    position: relative;
+}
+.div_pagination{
+    position: absolute;
+    bottom: 0%;
+    display: flex;
+    width: 100%;
+}
+
+.swiper-pagination-clickable .swiper-pagination-bullet {
+    width: 15px;
+    height: 15px;
+    border: 1px solid;
+    border-color: rgba(255, 255, 255, 1);
+}
+
+.swiper-pagination-bullet-active{
+    background-color: #fff !important;
+}
+

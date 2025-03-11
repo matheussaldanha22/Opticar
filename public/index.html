@@ -23,7 +23,7 @@
 
   <body>
     <!-- Cabeçalho -->
-    <header>
+    <header class="header-element">
       <div class="container">
         <div class="marca">
           <img src="assets/images/logoOpticar.png" alt="" />
@@ -56,16 +56,20 @@
         <div class="slogan">
           <p>Monitoramento</p>
           <span>SCADA SYSTEM</span>
-          <b>O monitoramento que seu negócio precisa</b>
+          <b>O monitoramento para manter o seu Sistema Scada eficiente, seguro e confiável.</b>
         </div>
+        <div class="div_btn">
+            <button>Saiba Mais</button>
+        </div>
+        <button class="btn_mobile">Saiba Mais</button>
 
-        <button>Saiba Mais</button>
       </div>
     </section>
     <!-- Slogan -->
     <!-- Introducao -->
-    <section>
+    <section class="section_introducao">
       <div class="introducao">
+        <div class="div_texto_introducao">
         <h1><b>Sobre Opticar</b></h1>
         <h3>
           Somos uma empresa com uma equipe que acredita em manutenção preditiva
@@ -74,11 +78,14 @@
           sistemas, além de buscar <span>inovações</span> relevantes para
           garantir <span>vantagens competitivas</span> para empresas parceiras.
         </h3>
+        </div>
         <div class="btn">
           <button>Contato</button>
           <button>Simular</button>
         </div>
-
+        </div>
+        <div class="introducao">
+          <div class="div_text_introducao">
         <h1><b>Segmento</b></h1>
         <h3>
           Atuamos no segmento de monitoramento de sistemas
@@ -88,17 +95,22 @@
           o monitoramento seja feito de forma eficaz e sem interrupções é nosso
           objetivo.
         </h3>
+        </div>
+        <div class="div_img">
+          <img src="./assets/images/arte.png" alt="">
+        </div>
+        </div>
       </div>
     </section>
     <!-- Introducao -->
     <!-- Princícios -->
-    <section>
+    <section class="section-principios">
       <div class="principios">
         <h6>Princípios</h6>
         <div class="container-box">
           <div class="box">
             <div>
-              <img src="assets/images/Target.svg" alt="" />
+              <i class='bx bx-target-lock'></i>
               <p>Missão</p>
             </div>
             <div>
@@ -112,8 +124,8 @@
 
           <div class="box">
             <div>
-              <img src="assets/images/Target.svg" alt="" />
-              <p>Visão</p>
+              <i class='bx bx-show-alt'></i>
+                            <p>Visão</p>
             </div>
             <div>
               Atuamos no segmento de monitoramento de sistemas SCADA(Supervisory
@@ -126,7 +138,7 @@
 
           <div class="box">
             <div>
-              <img src="assets/images/Target.svg" alt="" />
+              <i class='bx bx-anchor'></i>
               <p>Valores</p>
             </div>
             <div>
@@ -142,11 +154,15 @@
     </section>
     <!-- Princícios -->
     <!-- Funcao -->
-    <section>
+    <section class="section-funcao">
       <div class="funcao">
         <p>O Que Oferecemos</p>
-        <img src="assets/images/Arquitetura.png" alt="" />
-        <h3>
+        <div class="div_img_beneficios">
+          <div class="div_img">
+            <img src="assets/images/Arquitetura.png" alt="" />
+          </div>
+        <div class="div_textos">
+          <h3>
           Mantenha a integridade do seu sistema <span>SCADA</span>
           na linha de produção.
         </h3>
@@ -174,11 +190,14 @@
             </p>
           </div>
         </div>
+        </div>
+        </div>
+
       </div>
     </section>
     <!-- Funcao -->
     <!-- Negocio -->
-    <section>
+    <section class="section-negocio">
       <div class="negocio">
         <p>Sobre o Negócio</p>
 
@@ -187,6 +206,16 @@
           <!-- Additional required wrapper -->
           <div class="swiper-wrapper">
             <!-- Slides -->
+            <div class="swiper-slide">
+              <div>
+                <h1>SCADA instalado</h1>
+                <i class="bx bx-server" style="color: #f6f3f3"></i>
+                <p>
+                  Ter o sistema SCADA instalado, com seus controladores e
+                  sensores se comunicando com o servicdor central
+                </p>
+              </div>
+            </div>
             <div class="swiper-slide">
               <div>
                 <h1>SCADA instalado</h1>
@@ -220,12 +249,15 @@
             ...
           </div>
           <!-- If we need pagination -->
-          <div class="swiper-pagination"></div>
+          
 
           <!-- If we need navigation buttons -->
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-button-next"></div>
         </div>
+        <div class="div_pagination">
+          <div class="swiper-pagination"></div>
+        </div>
+        <div class="swiper-button-prev"></div>
+        <div class="swiper-button-next"></div>
       </div>
     </section>
     <!-- Negocio -->
