@@ -985,8 +985,13 @@ form button{
             margin-bottom: 5%;
         }
 
+        & .div_img{
+            display: flex;
+        }
+
         & .div_img img{
             width: 25vw;
+            display: flex;
         }
     }
 
