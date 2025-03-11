@@ -31,6 +31,10 @@
 
 @media (max-width:702px){
 
+    .right-container {
+        display: none;
+    }
+
     .main-login {
         background-color: #011F27;
         display: flex;
@@ -212,11 +216,13 @@
     }
 
     .right-container {
-        background-color: gold;
+        background-color: white;
         display: flex;
         flex-direction: column;
         width: 50vw;
         height: 75vh;
+        justify-content: center;
+        align-items: center;
     }
 
     .header-login {
@@ -333,6 +339,42 @@
     .palavraContato {
         color: #007BFF;
     }
+    
+    .container-imagem{
+        /* background-color: #007BFF; */
+        height: 65vh;
+        width: 45vw;
+        align-content: center;
+        justify-content: center;
+    }
 
+    .box-logo {
+        /* background-color: deeppink; */
+        display: flex;
+        height: 45vh;
+        width: 35vw;
+        justify-self: center;
+        align-items: center;
+        justify-content: center;
+        /* background-image: url("../images/logoOpticar.png");
+        background-repeat: no-repeat;
+        background-size: contain; */
+    }
+
+    .box-logo img {
+        height: 300px;
+        width: 300px;
+    }
+
+    .box-nomeEmpresa {
+        /* background-color: gold; */
+        height: 10vh;
+        width: 35vw;
+        justify-self: center;
+        font-family: 'Montserrat-b';
+        font-size: 4.5vw;
+        color: #011F27;
+        text-align: center;
+    }
 
 }
