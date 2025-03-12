@@ -101,3 +101,6 @@ function aparecer(element) {
 }
 
 
+const elementosNow = document.querySelectorAll('.boxes-infos')[0]
+
+aparecer(elementosNow)

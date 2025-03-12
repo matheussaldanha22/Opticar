@@ -587,6 +587,21 @@ b .green{
 .calculadora p {
     font-family: 'Rajdhani-b';
     color: #000000;
+    font-size: 5vw;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2vh;
+    gap: 1vw;
+    & svg{
+        width: 50px;
+        height: 50px;
+    }
+}
+
+.calculadora .economia{
+    font-size: 6vw;
 }
 
 .calculadora {
@@ -602,9 +617,17 @@ b .green{
     margin-bottom: 15px;
 }
 
+.calculadora h3{
+    font-size: 5vw;
+}
+
+
+
 .calculadora label {
-    position: relative;
-    font-size: 16px;
+    position: initial !important;
+    left: auto;
+    padding: 0;
+    font-size: 6vw;
     margin-top: 10px;
     font-weight: normal;
     background-color: #E5E5E5;
@@ -617,7 +640,8 @@ b .green{
     margin-top: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 6vw;
+    /* font-size: 16px; */
     background-color: #F0F0F0;
     color: #000;
 }
@@ -627,12 +651,16 @@ b .green{
     color: white;
     border: none;
     padding: 12px;
-    font-size: 18px;
+    font-size: 6vw;
     cursor: pointer;
     border-radius: 5px;
     width: 100%;
     margin-top: 15px;
     align-items: center;
+}
+
+.calculadora h2 {
+    font-size: 13vw;
 }
 
 .calculadora button:hover {
@@ -695,13 +723,24 @@ th {
     }
 
     .calculadora button {
-        font-size: 16px;
+        font-size: 6vw;
         padding: 10px;
         color: #ffffff;
     }
 
     table {
         font-size: 12px;
+    }
+
+    .beneficios ul li{
+        display: flex;
+        margin-bottom: 2vh;
+        flex-direction: row;
+        font-size: 4.3vw;
+        justify-content: flex-start;
+        text-align: left;
+        align-items: center;
+        gap: 4px;
     }
 }
 
@@ -728,7 +767,7 @@ th {
         & p{
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             gap:2vw;
             font-size: 2vw;
 
@@ -748,7 +787,7 @@ th {
     }
 
     .simulador p {
-        font-size: 3vw;
+        font-size: 10vw;
     }
 
     .calculadora h1 {
@@ -791,10 +830,17 @@ th {
             align-items: flex-start;
             width: 50%;
         }
+        
+        & i{
+            font-size: 5vw;
+            align-self: flex-start !important;
+        }
         & svg{
             width: 80px;
             height: 80px;
         }
+
+        
     }
 
     table {
@@ -839,7 +885,7 @@ input, textarea {
     font-size: 1.2em;
     border: none;
     border-bottom: 5px solid #f0ffff;
-    border-radius: 8px;
+    /* border-radius: 8px; */
     background: transparent;
     outline: none;
     color: #f0ffff;
@@ -885,6 +931,10 @@ form button{
     display: flex;
     flex-direction: column;
     gap: 5vw;
+}
+
+.section-footer{
+    background-color: #2C3E50;
 }
 
 .cima{
@@ -1345,6 +1395,110 @@ form button{
         }
     }
 
+    .section-contato{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .contato{
+        width: 80%;
+        margin-bottom: 10vh;
+        & p {
+            font-size: 6vw;
+            margin-bottom: 8vh;
+        }
+
+        & form{
+            padding: 0;
+            
+            & .input-box{
+                display: flex;
+                margin-top: 4vh;
+                flex-direction: column-reverse;
+                & label{
+                    font-size: 2.2vw;
+                    position: initial;
+                }
+
+                & input{
+                    position: initial;
+                    font-size: 2.2vw;
+                    width: 50%;
+                    border-radius: 0;
+                }
+
+                & textarea{
+                    height: fit-content;
+                    font-size: 2.2vw;
+                    border-radius: 0;
+
+                }
+            }
+        }
+    }
+    .contato form input:focus + label, input:valid + label, textarea:focus + label, textarea:valid + label {
+        transform: none;
+    }
+
+    .section-footer{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .footer{
+        margin-bottom: 10vh;
+        width: 80%;
+        flex-direction: row;
+        justify-content: space-between;
+        & .cima .empresa span, .cima .empresa h6{
+            font-size: 1.4vw;
+        }
+        & .cima{
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            gap: 3vw;
+            width: 45%;
+            & .logo{
+                width: auto;
+
+                & img{
+                    width: 150px;
+                    height: 150px;
+                    animation: rodando 60s linear infinite;
+
+                }
+
+                & span{
+                    font-size: 3.2vw;
+                }
+
+            }
+            & .empresa .rights {
+                font-size: 0.75vw;
+            }
+        }
+
+        & .baixo{
+            justify-content: space-between;
+            display: flex;
+            width: 70%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        & .baixo span{
+            font-size: 1.4vw;
+            cursor: pointer;
+        }
+
+        & .baixo a{
+            font-size: 1.4vw;
+        }
+    }
+
 }
 .negocio{
     position: relative;
@@ -1376,3 +1530,30 @@ form button{
 }
 
 
+.beneficios h3{
+    font-size: 7vw;
+    margin-bottom: 2vh;
+}
+
+
+.section-contato{
+    background-color: #011F27;
+}
+
+.baixo a{
+    color: #fff;
+    font-family: 'Montserrat';
+    font-weight: 700;
+}
+
+
+
+@keyframes rodando {
+    0% {
+        transform: rotate(0)
+    }
+
+    100% {
+        transform: rotate(-360deg)
+    }
+}
