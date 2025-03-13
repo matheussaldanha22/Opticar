@@ -167,6 +167,8 @@
         color: #2C3E50;
         border-radius: 30vw;
         align-self: center;
+        border: none;
+        cursor: pointer;
     }
 
 }
@@ -324,6 +326,8 @@
         color: #2C3E50;
         border-radius: 30vw;
         align-self: center;
+        border: none;
+        cursor: pointer;
     }
 
     .span-contatoLogin {
@@ -379,3 +383,16 @@
     }
 
 }
+
+
+.div-input input {
+    outline: none;
+    padding: 8px;
+    font-size: 22px;
+    /* margin-bottom: 5px; */
+}
+
+.box-email{
+    margin-bottom: 29px;
+}
+

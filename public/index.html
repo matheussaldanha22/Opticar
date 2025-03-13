@@ -32,10 +32,10 @@
 
         <div class="menu">
           <ul class="nav-links">
-            <li>Home</li>
-            <li>Serviços</li>
-            <li>Sobre Nós</li>
-            <li>Simular</li>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#servicos">Serviços</a></li>
+            <li><a href="#negocio">Sobre o Negócio</a></li>
+            <li><a href="#simular">Simular</a></li>
           </ul>
           <div class="nav-burger">
             <div id="linha1"></div>
@@ -47,7 +47,7 @@
     </header>
     <!-- Cabeçalho -->
     <!-- Slogan -->
-    <section>
+    <section id="home">
       <div class="video-container">
         <video autoplay loop muted>
           <source src="assets/images/dados.mp4" type="video/mp4" />
@@ -59,7 +59,7 @@
           <b>O monitoramento para manter o seu Sistema Scada eficiente, seguro e confiável.</b>
         </div>
         <div class="div_btn">
-            <button>Saiba Mais</button>
+            <button onclick="descerParaSegmento()">Saiba Mais</button>
         </div>
         <button class="btn_mobile">Saiba Mais</button>
 
@@ -67,7 +67,7 @@
     </section>
     <!-- Slogan -->
     <!-- Introducao -->
-    <section class="section_introducao">
+    <section id="segmento" class="section_introducao">
       <div class="introducao">
         <div class="div_texto_introducao">
         <h1><b>Sobre Opticar</b></h1>
@@ -80,8 +80,8 @@
         </h3>
         </div>
         <div class="btn">
-          <button>Contato</button>
-          <button>Simular</button>
+          <button onclick="descerParaContato()">Contato</button>
+          <button onclick="descerParaSimular()">Simular</button>
         </div>
         </div>
         <div class="introducao">
@@ -104,7 +104,7 @@
     </section>
     <!-- Introducao -->
     <!-- Princícios -->
-    <section class="section-principios">
+    <section id="principios" class="section-principios">
       <div class="principios">
         <h6>Princípios</h6>
         <div class="container-box">
@@ -154,7 +154,7 @@
     </section>
     <!-- Princícios -->
     <!-- Funcao -->
-    <section class="section-funcao">
+    <section id="servicos" class="section-funcao">
       <div class="funcao">
         <p>O Que Oferecemos</p>
         <div class="div_img_beneficios">
@@ -197,7 +197,7 @@
     </section>
     <!-- Funcao -->
     <!-- Negocio -->
-    <section class="section-negocio">
+    <section id="negocio" class="section-negocio">
       <div class="negocio">
         <p>Sobre o Negócio</p>
 
@@ -262,7 +262,7 @@
     </section>
     <!-- Negocio -->
     <!-- Impactos -->
-    <section class="section-impacto">
+    <section id="impactos" class="section-impacto">
       <div class="impacto">
         <p>Impactos de Falhas no <span>SCADA</span></p>
 
@@ -300,7 +300,7 @@
                 Reduzir o tempo de inatividade em até
                 <span class="green">50%</span> <br /><br />
 
-                <button id="btn">Simular</button>
+                <button onclick="descerParaSimular()" id="btn">Simular</button>
               </b>
             </div>
           </div>
@@ -383,7 +383,7 @@
     </section>
     <!-- Impactos -->
     <!-- Simulador -->
-    <section class="section-calculadora">
+    <section id="simular" class="section-calculadora">
         <div class="calculadora">
             <h2>Simulador</h2>
             <label class="simulador">Qual seu tempo médio de downtime(tempo de inatividade) por mês?(horas):</label>
@@ -417,7 +417,7 @@
     </section>
     <!-- Simulador -->
     <!-- Contato -->
-    <section class="section-contato">
+    <section id="contato" class="section-contato">
       <div class="contato">
         <p>Juntos, criamos possibilidades, entre em contato:</p>
 
@@ -456,19 +456,19 @@
         </div>
         <div class="baixo">
           <div>
-            <span>Home</span>
-            <span>Segmento</span>
-            <span>Princípios</span>
+            <span><a href="#home">Home</a></span>
+            <span><a href="#segmento">Segmento</a></span>
+            <span><a href="#principios">Princípios</a></span>
           </div>
           <div>
-            <span>Negócio</span>
-            <span>Impactos</span>
-            <span>Simulador</span>
+            <span><a href="#negocio">Negócio</a></span>
+            <span><a href="#impactos">Impactos</a></span>
+            <span><a href="#simular">Simulador</a></span>
           </div>
           <div>
-            <span>Contato</span>
-            <span>Sistema</span>
-            <a href="#">Aplicação</a>
+            <span><a href="#contato">Contato</a></span>
+            <span><a href="#servicos">Sistema</a></span>
+            <a href="./login.html">Aplicação</a>
           </div>
         </div>
       </div>

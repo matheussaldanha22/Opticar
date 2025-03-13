@@ -100,6 +100,21 @@ function aparecer(element) {
   }
 }
 
+function descerParaSegmento(){
+  const ele = document.getElementById('segmento');   
+  window.scrollTo(ele.offsetLeft,ele.offsetTop);
+}
+
+function descerParaContato(){
+  const ele = document.getElementById('contato');   
+  window.scrollTo(ele.offsetLeft,ele.offsetTop);
+}
+
+function descerParaSimular(){
+  const ele = document.getElementById('simular');   
+  window.scrollTo(ele.offsetLeft,ele.offsetTop);
+}
+
 
 const elementosNow = document.querySelectorAll('.boxes-infos')[0]
 
