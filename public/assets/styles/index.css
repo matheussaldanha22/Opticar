@@ -113,7 +113,6 @@ body{
 .nav-active{
     transform: translateX(0%);
     transition: 1s;
-           
 }
 /*  */
 .linha1-active{
