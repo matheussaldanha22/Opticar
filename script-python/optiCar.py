@@ -41,7 +41,7 @@ def dados_rede():
         for addr in addresses:
             if addr.family == psutil.AF_LINK:  # Verifica se é um endereço MAC
                 # Verifica se a interface é somente Ethernet
-                if  "Ethernet" in interface and "Ethernet 2" not in interface:
+                if  "Ethernet 2" in interface:
                     # Atribue o endereço mac a variável mac_address
                     mac_address = addr.address
                     print(f"Interface: {interface} - MAC Address: {addr.address}")
@@ -53,7 +53,7 @@ def dados_rede():
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="root",
+    password="senha",
     database="mydb"
 )
 

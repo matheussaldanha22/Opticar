@@ -1,3 +1,7 @@
+CREATE DATABASE mydb;
+use mydb;
+select * from capturaMaq1;
+
 CREATE TABLE capturaMaq1(
 	idCapturaMaq1 INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     mac_address VARCHAR(45) NULL,
