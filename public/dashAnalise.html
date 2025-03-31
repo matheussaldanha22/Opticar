@@ -3,43 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Analise</title>
-    <link rel="stylesheet" href="assets/styles/monitoramento.css">
+    <title>Opticar - Análise de Dados</title>
+    <link rel="stylesheet" href="assets/styles/analiseDados.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
+
 
 </head>
 <body>
-    <div id="div_menu" class="menu ">
-        <div class="nav-burger" onclick="expand()">
-            <div id="linha1"></div>
-            <div id="linha2"></div>
-            <div id="linha3"></div>
-        </div>
+    <div class="dashHistorica">
+        <div id="div_menu" class="menu ">
+            <div class="nav-burger" onclick="expand()">
+                <div id="linha1"></div>
+                <div id="linha2"></div>
+                <div id="linha3"></div>
+            </div>
 
-        <!-- <ul class="nav-links oculta">
-            <li><i class='bx bx-desktop' style='color:#ffffff' ></i></li>
-            <li><i class='bx bxs-bell-ring' style='color:#ffffff' ></i></li>
-            <li><i class='bx bx-server' style='color:#ffffff' ></i></li>
-        </ul> -->
-        <ul id="ul_links" class="nav-links ">
-            
-            <li class="li-active">
-                <i class='bx bx-desktop' style='color:#ffffff' ></i>
-                <span>Monitoramento</span>
-            </li>
-            <li>
-                <i class='bx bxs-bell-ring' style='color:#ffffff' ></i>
-                <span>Alertas</span>
-            </li>
-            <li>
-                <i class='bx bx-server' style='color:#ffffff' ></i>
-                <span>Servidores</span>
-            </li>
-        </ul>
+            <!-- <ul class="nav-links oculta">
+                <li><i class='bx bx-desktop' style='color:#ffffff' ></i></li>
+                <li><i class='bx bxs-bell-ring' style='color:#ffffff' ></i></li>
+                <li><i class='bx bx-server' style='color:#ffffff' ></i></li>
+            </ul> -->
+            <ul id="ul_links" class="nav-links ">
+                
+                <li class="li-active">
+                    <i class='bx bx-desktop' style='color:#ffffff' ></i>
+                    <span>Monitoramento</span>
+                </li>
+                <li>
+                    <i class='bx bxs-bell-ring' style='color:#ffffff' ></i>
+                    <span>Alertas</span>
+                </li>
+                <li>
+                    <i class='bx bx-server' style='color:#ffffff' ></i>
+                    <span>Servidores</span>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="main">
-        
+
+    <div class="dashHistorica">
+        <!-- cabecalho -->
+        <div class="cabecalho">
+            <div class="empresa">
+                <div class="circuloEmp">
+                    <i class='bx bxs-business'></i>
+                </div>
+                <div class="txtInfo">
+                    <p id="empresaNome">Nissan</p>
+                    <p class="endereco"> Rua Haddock Lobo, 595</p>
+                </div>
+            </div>
+
+            <div class="perfil">
+                <i class='bx bxs-user-circle' style="font-size: 4vw;"></i>
+                <div class="txtInfo">
+                    <div class="txt">
+                        <p id="empresaNome">Jose</p>
+                        <p class="endereco"> jose@gmail.com</p>
+                    </div>
+                    <i class='bx bx-chevron-down' style="font-size: 3vw;"></i>
+                </div>
+            </div>
+        </div>
+        <!-- charts -->
+
+        <div class="painelDash">
+            <div class="cabecalhoDash">
+                <div class="texto">
+                    <p id="titulo">Dashboard Análise Histórica</p>
+                    <p class="descricao"> Acompanhe registros históricos capturados do seu servidor</p>
+                </div>
+            </div>
+        </div>
     </div>
+
 </body>
 </html>
 
@@ -56,3 +94,8 @@
         ul_links.classList.toggle('nav-links-expanded')
     }
 </script>
+
+<style>
+
+    
+</style>
