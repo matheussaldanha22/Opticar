@@ -1,7 +1,6 @@
 CREATE DATABASE mydb;
 use mydb;
-select * from capturaMaq1;
-
+select * from processos;
 CREATE TABLE capturaMaq1(
 	idCapturaMaq1 INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     mac_address VARCHAR(45) NULL,
@@ -15,7 +14,18 @@ CREATE TABLE capturaMaq1(
     upload DECIMAL(5,2),
 );
 
+CREATE TABLE processos(
+    idProcesso INT PRIMARY KEY AUTO_INCREMENT,
+    pid INT,
+    nomeProcessos VARCHAR(45),
+    fkcapturaMaq1 INT,
+    constraint FOREIGN KEY (fkcapturaMaq1) REFERENCES capturaMaq1 (idCapturaMaq1)
+);
 
+
+INSERT INTO(pid, nomeProcessos,nomeProcessos, fkCapturaMaq1) VALUES()
+ALTER TABLE capturaMaq1 
+ADD COLUMN hostName VARCHAR(45);
 
 ALTER TABLE capturaMaq1
 ADD COLUMN data_hora DATETIME DEFAULT CURRENT_TIMESTAMP;

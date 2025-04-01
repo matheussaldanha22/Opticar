@@ -1,6 +1,7 @@
 import mysql.connector  # Biblioteca para conexão com o mysql
 import time  # Biblioteca para contar o tempo
 import psutil  # Biblioteca para captura dos recursos computacionais
+import socket
 
 def obter_dados():
     cpuPercent = psutil.cpu_percent(interval=1)  # Porcentagem em uso do CPU
@@ -11,8 +12,7 @@ def obter_dados():
     diskUsageTotal = round(diskUsage.total / (1024**3), 2)  # Total do disco em GB
     diskPercent = psutil.disk_usage('/').percent # Trocar para discol local C: caso o SO seja windows
     diskByte = psutil.disk_usage('/').used
-
-
+  
     memory = psutil.virtual_memory()
 
     memoryTotal = round(memory.total / (1024**3), 2)  # Total de memória RAM
@@ -78,12 +78,20 @@ while True:
     upload_mbs = dadosRede[1]
     mac_address = dadosRede[2]
 
+    for processos in psutil.process_iter():
+        valProcessos = (processos.ppid(),processos.name(),1)
+        sqlProcessos = "INSERT INTO processos (pid,nomeProcessos, fkCapturaMaq1) VALUES (%s,%s,%s);"
+        mycursor.execute(sqlProcessos, valProcessos)
+        mydb.commit()
+
     sql1 = "INSERT INTO capturaMaq1 (mac_address, cpu_percent, cpu_freq, ram_percent, ram_byte, disk_percent, disk_byte, download, upload) VALUES(%s ,%s, %s, %s, %s, %s, %s, %s, %s);"
     val1 = (mac_address ,cpu_percent, cpu_freq, memory_percent, memory_byte, disk_percent, disk_byte, download_mbs, upload_mbs)
     mycursor.execute(sql1, val1)
 
     mydb.commit()
     time.sleep(0.1)
+
+    
 
     print(f"CPU Uso (%): {cpu_percent}")
     print(f"CPU Uso (Bytes): {cpu_freq}")

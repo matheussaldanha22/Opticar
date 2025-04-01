@@ -21,6 +21,7 @@ mean(dadosCpuFreq)
 dadosRamPercentagem <- capturaMaq$ram_percent
 dadosRamPercentagem
 
+
 dadosRamByte <- capturaMaq$ram_byte
 mean(dadosRamByte)
 
@@ -65,28 +66,54 @@ mediaRam
 mediaDisco <- mean(dadosDiscoPorcentagem)
 mediaDisco
 
+
+
+
 #PORCENTAGEM MAQ2
 dadosCpuPorcentagem2 <- capturaMaq2$cpu_percent
 dadosCpuPorcentagem2
 
-#MEDIA MAQ2
+dadosRamPorcentagem2 <- capturaMaq2$ram_percent
+mediaRam2 <- mean(dadosRamPorcentagem2)
+mediaRam2
+
+dadosDiscoPorcentagem2 <- capturaMaq2$disk_percent
+mediaDisco2 <- mean(dadosDiscoPorcentagem2)
+mediaDisco2
+
+#MEDIA MAQ2 - CPU
 media2 <-mean(dadosCpuPorcentagem2)
 media2
+
+
+
+media<-mean(dadosCpuPorcentagem)
+media
 
 #COMPARAÇÃO DE MEDIAS ENTRE (MAQ1, MAQ2)
 medias <- c(media, media2)
 names(medias) <- c("MediaCpu1", "MediaCpu2")
 pie(medias,col = rainbow(2),main = "Comparação de Cpu entre maquinas")
 
+
+#COMPARACAO DE MEDIAS ENTRE (MAQ1,MAQ2) - COMPONENTES
+mediaComponentes <- c(media,mediaRam,mediaDisco,media2,mediaRam2,mediaDisco2)
+names(mediaComponentes) <- c("cpu1", "ram1", "disco1", "cpu2", "ram2", "disco2")
+pie(mediaComponentes, col = rainbow(6), main = "Comparação de Componentes entre Máquinas")
+
 graficoCpuPorcentagem2 <- abs(round(rnorm(dadosCpuPorcentagem2, media2, 2),2))
 graficoCpuPorcentagem2
+
+graficoCpuPorcentagem <- abs(round(rnorm(dadosCpuPorcentagem, media, 2),2))
+graficoCpuPorcentagem
+
 
 graficos <- c(graficoCpuPorcentagem, graficoCpuPorcentagem2)
 
 #COMPARACÃO ENTRE MEDIAS POR HISTOGRAMA (MAQ1, MAQ2)
 hist(
   graficos,
-  main = "Dados porcentagem Total",
+  main = "Dados porcentagem Total de Máquinas",
   ylab = "Quantidade", 
   xlab= "Porcentagem",
   col = "pink"
@@ -228,3 +255,4 @@ barplot(
   border= "black"
   
 )
+
