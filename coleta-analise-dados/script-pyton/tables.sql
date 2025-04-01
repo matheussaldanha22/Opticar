@@ -12,5 +12,11 @@ CREATE TABLE capturaMaq1(
 	  disk_percent DECIMAL(5,2),
     disk_byte BIGINT,
     download DECIMAL(5,2),
-    upload DECIMAL(5,2)
+    upload DECIMAL(5,2),
 );
+
+
+
+ALTER TABLE capturaMaq1
+ADD COLUMN data_hora DATETIME DEFAULT CURRENT_TIMESTAMP;
+

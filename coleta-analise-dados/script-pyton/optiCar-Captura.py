@@ -23,7 +23,7 @@ def obter_dados():
 
 def dados_rede():
     netBefore = psutil.net_io_counters()
-    time.sleep(1)
+    time.sleep(0.1)
     netAfter = psutil.net_io_counters()
 
     download = netAfter.bytes_recv - netBefore.bytes_recv
@@ -45,7 +45,7 @@ def dados_rede():
                     # Atribue o endereço mac a variável mac_address
                     mac_address = addr.address
                     print(f"Interface: {interface} - MAC Address: {addr.address}")
-                    # O Ethernet é usado para conexões físicas
+                    # O Ethernet é usado para conexões física
     return round(downloadMBs, 1), round(uploadMBs, 1), mac_address 
 
 
@@ -53,7 +53,7 @@ def dados_rede():
 mydb = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="senha",
+    password="110645",
     database="mydb"
 )
 
@@ -83,7 +83,7 @@ while True:
     mycursor.execute(sql1, val1)
 
     mydb.commit()
-    time.sleep(2)
+    time.sleep(0.1)
 
     print(f"CPU Uso (%): {cpu_percent}")
     print(f"CPU Uso (Bytes): {cpu_freq}")
