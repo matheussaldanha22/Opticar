@@ -168,7 +168,7 @@
 .painelDash{
     background-color: #F5F1F1;
     width: 90vw;
-    padding: 10px;
+    padding: 15px;
     border-radius: 10px;
     height: 77vh;
     box-shadow: 5px 2px 10px rgb(161, 160, 160);
@@ -188,8 +188,117 @@
 }
 
 #titulo{
-    font-size: 30px;
+    font-size: 25px;
     font-weight: bold;
+}
+
+/* GRAFS */
+.grafSuperior{
+    display: flex;
+    gap: 2vw;
+}
+
+.chart-container-blue{
+    background: #012027;
+    background: linear-gradient(270deg, #012027, #04708D);
+    border-radius: 12px;
+    padding: 1vw;
+    width: 25vw;
+    height: 30vh;
+}
+
+.chartCabecalho{
+    display: flex;
+    justify-content: space-between;
+}
+
+.filtrar{
+    display: flex;
+    align-items: center;
+    color: white;
+    gap: 10px;
+}
+
+.filtrar h3{
+    font-size: 14px;
+    font-weight: 200;
+}
+
+.iconeFiltro{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2C3E50;
+    border-radius: 5px;
+    padding: 5px;
+    transition: 0.3s;
+}
+
+.iconeFiltro:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: 0.3s;
+    background-color: #3d5268;
+
+}
+
+.chart-container-blue h2{
+    color: white;
+    font-weight: 100;
+}
+
+.chart-container-ram, .chart-container-disco{
+    background-color: #D9D9D9;
+    border-radius: 12px;
+    padding: 2vw;
+}
+
+.chart-container-ram h2, .chart-container-disco h2{
+    color: black;
+    font-weight: 100;
+    width: 100%;
+}
+
+.chart-container-rede {
+    background-color: #D9D9D9;
+    border-radius: 12px;
+    padding: 2vw;
+    height: 50vw;
+}
+
+.chart-container-rede h2{
+    color: black;
+    font-weight: 100;
+}
+
+.chart-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding: 3vw;
+    justify-content: space-between;
+}
+
+.chart-wrapper div{
+    width: 30vw;
+    height: 30vw;
+    background: #012027;
+    background: linear-gradient(270deg, #012027, #04708D);
+    border-radius: 12px;
+}
+
+.chart-wrapper-disco {
+    display: flex;
+    flex-direction: row;
+    padding: 3vw;
+    justify-content: space-between;
+}
+
+.chart-wrapper-disco div{
+    width: 30vw;
+    height: 30vw;
+    background: #012027;
+    background: linear-gradient(270deg, #012027, #04708D);
+    border-radius: 12px;
 }
 
 

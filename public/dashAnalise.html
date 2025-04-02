@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="assets/styles/analiseDados.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    
 
 
 </head>
@@ -69,12 +72,47 @@
         <!-- charts -->
 
         <div class="painelDash">
+
             <div class="cabecalhoDash">
                 <div class="texto">
                     <p id="titulo">Dashboard Análise Histórica</p>
                     <p class="descricao"> Acompanhe registros históricos capturados do seu servidor</p>
                 </div>
             </div>
+
+            <div class="grafSuperior">
+                <div class="chart-container-blue">
+                    <div class="chartCabecalho">
+                        <h2><i class='bx bx-chip' style="border: solid 1px white; border-radius: 8px;"></i> CPU</h2>
+                        
+                        <div class="filtrar">
+                            <h3>Filtrar:</h3>
+                            <div class="iconeFiltro">
+                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <canvas id="cpuChart"></canvas>
+                </div>
+
+                <div class="chart-container-blue">
+                    <div class="chartCabecalho">
+                        <h2><i class='bx bxs-save' style="border: solid 1px white; border-radius: 8px;"></i> DISCO:</h2>
+                        
+                        <div class="filtrar">
+                            <h3>Filtrar:</h3>
+                            <div class="iconeFiltro">
+                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <canvas id="discoChart"></canvas>
+                </div>
+            </div>
+            
+
         </div>
     </div>
 
@@ -82,6 +120,7 @@
 </html>
 
 <script>
+    // BARRA LATERAL
     function expand(){
         if(div_menu.classList.contains('menu-expand')){
             div_menu.style.animation = 'diminui 0.2s linear';
@@ -93,9 +132,10 @@
         div_menu.classList.toggle('menu-expand')
         ul_links.classList.toggle('nav-links-expanded')
     }
-</script>
 
-<style>
 
     
-</style>
+</script>
+
+<script src="assets/Scripts/graficosAnaliseDados.js"></script>
+
