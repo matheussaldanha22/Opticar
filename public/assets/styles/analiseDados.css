@@ -163,6 +163,20 @@
     width: 20vw;
 }
 
+#serv{
+    color:#ffffff; 
+    background-color: #2C3E50;
+    border-radius: 100%;
+    padding: 0.2vw;
+    transition: 0.3s;
+}
+
+#serv:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
 /* Painel dashs */
 
 .painelDash{
@@ -215,6 +229,10 @@ div .servidor select{
     border: none;
     border-radius: 12px;
     padding: 0 4vw 0 4vw;
+}
+
+div .servidor select:hover{
+    cursor: pointer;
 }
 
 /* GRAFS */

@@ -167,4 +167,58 @@ const configRede = {
 new Chart(ctxRede, configRede);
 
 //PLOTAR GRAF ALERTAS
+const ctx2 = document.getElementById('alertasChart');
 
+const data2 = {
+    labels: ["CPU", "RAM", "DISCO", "REDE"],
+    datasets: [{
+        label: "Quantidade de alertas",
+        data: [90, 70, 50, 40],
+        backgroundColor: ["#012027", "#04708D", "#D9D9D9", "#0084FF"],
+        borderRadius: 8,
+        barPercentage: 1,
+        categoryPercentage: 0.5
+    }]
+};
+
+const config2 = {
+    type: "bar",
+    data: data2,
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false 
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: "#000", 
+                    font: {
+                        size: 14
+                    }
+                },
+                grid: {
+                    color: "#ddd" 
+                }
+            },
+            x: {
+                ticks: {
+                    color: "#000",
+                    font: {
+                        size: 14,
+                        weight: 'bold'
+                    }
+                },
+                grid: {
+                    display: false // remove linhas verticais (opcional)
+                }
+            }
+        }
+    }
+};
+
+new Chart(ctx2, config2);
