@@ -287,10 +287,6 @@
     
 }
 
-.tabelaContainer th, td{
-    /* border: 1px solid black; */
-}
-
 .tabelaContainer th{
     font-size: 25px;
 }
