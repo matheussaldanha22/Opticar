@@ -2,10 +2,10 @@
 const ctxCPU = document.getElementById('cpuChart').getContext('2d');
 
 const dataCPU = {
-    labels: ['18:35', '18:35', '18:35', '18:35', '18:35', '18:35'],
+    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho','Julho','Agosto','Setembro','Novembro','Dezembro'],
     datasets: [{
         label: 'Uso da CPU',
-        data: [50, 60, 60, 45, 100, 80],
+        data: [50, 60, 60, 45, 100, 80,50,60,23,55,12,55],
         borderColor: '#FFFFFF',
         borderWidth: 2,
         fill: false,
@@ -44,10 +44,10 @@ new Chart(ctxCPU, configCPU);
 const ctxDisco = document.getElementById('discoChart').getContext('2d');
 
 const dataDisco = {
-    labels: ['18:35', '18:35', '18:35', '18:35', '18:35', '18:35'],
+    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho','Julho','Agosto','Setembro','Novembro','Dezembro'],
     datasets: [{
         label: 'Uso do Disco',
-        data: [50, 60, 60, 45, 100, 80],
+        data: [50, 60, 60, 45, 100, 80,50,60,23,55,12,55],
         borderColor: '#FFFFFF',
         borderWidth: 2,
         fill: false,
@@ -81,3 +81,90 @@ const configDisco = {
 };
 
 new Chart(ctxDisco, configDisco);
+
+//PLOTAR GRAF RAM
+const ctxRAM = document.getElementById('ramChart').getContext('2d');
+
+const dataRAM = {
+    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho','Julho','Agosto','Setembro','Novembro','Dezembro'],
+    datasets: [{
+        label: 'Uso da RAM',
+        data: [50, 60, 60, 45, 100, 80,50,60,23,55,12,55],
+        borderColor: '#000000',
+        borderWidth: 2,
+        fill: false,
+        pointBackgroundColor: '#000000',
+        pointRadius: 5,
+        tension: 0.3
+    }]
+};
+
+const configRAM = {
+    type: 'line',
+    data: dataRAM,
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+        },
+        scales: {
+            y: {
+                beginAtZero: false,
+                suggestedMin: 30,
+                suggestedMax: 100,
+                ticks: { color: 'black', font: { size: 12 } }
+            },
+            x: {
+                ticks: { color: 'black', font: { size: 12 } }
+            }
+        }
+    }
+};
+
+new Chart(ctxRAM, configRAM);
+
+//PLOTAR GRAF REDE
+const ctxRede = document.getElementById('redeChart').getContext('2d');
+
+const dataRede = {
+    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho','Julho','Agosto','Setembro','Novembro','Dezembro'],
+    datasets: [{
+        label: 'Uso da Rede',
+        data: [50, 60, 60, 45, 100, 80,50,60,23,55,12,55],
+        borderColor: '#000000',
+        borderWidth: 2,
+        fill: false,
+        pointBackgroundColor: '#000000',
+        pointRadius: 5,
+        tension: 0.3
+    }]
+};
+
+const configRede = {
+    type: 'line',
+    data: dataRede,
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false },
+            tooltip: { enabled: true }
+        },
+        scales: {
+            y: {
+                beginAtZero: false,
+                suggestedMin: 30,
+                suggestedMax: 100,
+                ticks: { color: 'black', font: { size: 12 } }
+            },
+            x: {
+                ticks: { color: 'black', font: { size: 12 } }
+            }
+        }
+    }
+};
+
+new Chart(ctxRede, configRede);
+
+//PLOTAR GRAF ALERTAS
+

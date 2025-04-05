@@ -78,6 +78,15 @@
                     <p id="titulo">Dashboard Análise Histórica</p>
                     <p class="descricao"> Acompanhe registros históricos capturados do seu servidor</p>
                 </div>
+                <div class="servidor">
+                    <i class='bx bx-info-circle'
+                        style='color:#ffffff; background-color: #2C3E50; border-radius: 100%; padding: 0.2vw;' id="i"></i>
+                    <select name="" id="sltServidor">
+                        <option value="">Servidor: SP-01</option>
+                        <option value="">Servidor: SP-02</option>
+                        <option value="">Servidor: SP-03</option>
+                    </select>
+                </div>
             </div>
 
             <div class="grafSuperior">
@@ -98,7 +107,7 @@
 
                 <div class="chart-container-blue">
                     <div class="chartCabecalho">
-                        <h2><i class='bx bxs-save' style="border: solid 1px white; border-radius: 8px;"></i> DISCO:</h2>
+                        <h2><i class='bx bxs-save' style="border: solid 1px white; border-radius: 8px;"></i> Disco</h2>
                         
                         <div class="filtrar">
                             <h3>Filtrar:</h3>
@@ -109,8 +118,73 @@
                     </div>
     
                     <canvas id="discoChart"></canvas>
+
+                </div>
+                <div class="kpisTempo">
+                    <div class="kpiTempo branco">
+                        <h2>Tempo do servidor LIGADO</h2>
+                        <span class="txtKpi"><p id="diasOcioso">87</p>Dias </span>
+                    </div>
+                    
+                    <div class="kpiTempo">
+                        <h2>Tempo do servidor OCIOSO</h2>
+                        <span class="txtKpi"><p id="diasOcioso">13</p>Dias </span>
+                    </div>
                 </div>
             </div>
+            <div class="grafInferior">
+
+                <!-- ram -->
+                <div class="chart-container-white">
+                    <div class="chartCabecalho">
+                        <h2><i class='bx bxs-memory-card' style="border: solid 1px black; border-radius: 8px;"></i> RAM</h2>
+                        
+                        <div class="filtrar">
+                            <h3>Filtrar:</h3>
+                            <div class="iconeFiltro">
+                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <canvas id="ramChart"></canvas>
+
+                </div>
+
+                <!-- rede -->
+                <div class="chart-container-white">
+                    <div class="chartCabecalho">
+                        <h2><i class='bx bx-wifi' style="border: solid 1px black; border-radius: 8px;"></i> Rede</h2>
+                        
+                        <div class="filtrar">
+                            <h3>Filtrar:</h3>
+                            <div class="iconeFiltro">
+                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <canvas id="redeChart"></canvas>
+
+                </div>
+
+                <!-- alertas p comp -->
+                <div class="chart-container-alert">
+                    <div class="chartCabecalho">
+                        <h2><i class='bx bxs-bell-ring' style="border: solid 1px black; border-radius: 8px; font-size: 25px;"></i> Alertas por componente</h2>
+                        <div class="filtrar">
+                            <h3>Filtrar:</h3>
+                            <div class="iconeFiltro">
+                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <canvas id="discoChart"></canvas>
+
+                </div>
+            </div>
+            
             
 
         </div>
