@@ -8,6 +8,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 
     
 
@@ -95,7 +96,7 @@
                         
                         <div class="filtrar">
                             <h3>Filtrar:</h3>
-                            <div class="iconeFiltro">
+                            <div class="iconeFiltro" onclick="abrirModal('CPU')">
                                 <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
                             </div>
                         </div>
@@ -110,7 +111,7 @@
                         
                         <div class="filtrar">
                             <h3>Filtrar:</h3>
-                            <div class="iconeFiltro">
+                            <div class="iconeFiltro" onclick="abrirModal('Disco')">
                                 <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
                             </div>
                         </div>
@@ -140,7 +141,7 @@
                         
                         <div class="filtrar">
                             <h3>Filtrar:</h3>
-                            <div class="iconeFiltro">
+                            <div class="iconeFiltro" onclick="abrirModal('RAM')">
                                 <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
                             </div>
                         </div>
@@ -157,7 +158,7 @@
                         
                         <div class="filtrar">
                             <h3>Filtrar:</h3>
-                            <div class="iconeFiltro">
+                            <div class="iconeFiltro" onclick="abrirModal('Rede')">
                                 <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
                             </div>
                         </div>
@@ -180,7 +181,7 @@
                     </div>
     
                     <canvas id="alertasChart"></canvas>
-
+                    
                 </div>
             </div>
             
@@ -193,18 +194,7 @@
 </html>
 
 <script>
-    // BARRA LATERAL
-    function expand(){
-        if(div_menu.classList.contains('menu-expand')){
-            div_menu.style.animation = 'diminui 0.2s linear';
-
-        }else{
-            div_menu.style.animation = 'expandir 0.2s linear';
-
-        }
-        div_menu.classList.toggle('menu-expand')
-        ul_links.classList.toggle('nav-links-expanded')
-    }
+    
 
 
     

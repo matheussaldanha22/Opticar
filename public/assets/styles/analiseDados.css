@@ -398,6 +398,79 @@ canvas {
 }
 
 
+/* MODAL */
+.modal-test {
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+  
+.containerPeriodo {
+    margin: 2.5% 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: start;
+    gap: 5px;
+}
+  
+.containerVisualizacao {
+    margin: 2.5% 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-align: start;
+    line-height: 30px;
+    gap: 5px;
+}
+  
+.alertaModal {
+    background-color: #d9d9d9;
+    border-radius: 10px;
+    padding: 0;
+    color: black;
+}
+
+.labelSlt{
+    display: flex;
+    gap: 10px;
+}
+
+#sltFiltrar{
+    text-align: center;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    background-color: #2C3E50;
+    color: #FFFF;
+    border: none;
+    border-radius: 12px;
+    width: 12vw;
+    height: 3vh;
+}
+
+#sltFiltrar:hover{
+    cursor: pointer;
+}
+
+.labelSlt{
+    display: flex;
+}
+
+.iptFiltrar{
+    text-align: center;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    background-color: white;
+    border: none;
+    border-radius: 7px;
+    width: 15vw;
+    height: 3vh;
+}
+
 
 
 /* MEDIA MENU LATERAL FUNCIONAR */

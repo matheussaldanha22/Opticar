@@ -1,3 +1,48 @@
+// BARRA LATERAL
+function expand(){
+    if(div_menu.classList.contains('menu-expand')){
+        div_menu.style.animation = 'diminui 0.2s linear';
+
+    }else{
+        div_menu.style.animation = 'expandir 0.2s linear';
+
+    }
+    div_menu.classList.toggle('menu-expand')
+    ul_links.classList.toggle('nav-links-expanded')
+}
+
+//MODAL FILTRAR
+function abrirModal(componente){
+    Swal.fire({
+title: `Filtrar gráfico <u style="color:#2C3E50;">${componente}</u>`,
+html: `
+    <div class="modal-test">
+        <div class="containerPeriodo">
+            <h3>Escolha o período especifico:</h3>
+            <p class="labelSlt"><b>De:</b> <input type="text" class="iptFiltrar" placeholder="Ex:10/10/2023"></p>
+            <p class="labelSlt"><b>Até:</b><input type="text" class="iptFiltrar" placeholder="Ex:10/10/2023"></p>
+           
+        </div>
+
+        <div class="containerVisualizacao">
+            <h3>Mudar visualização</h3>
+            <p class="labelSlt"><b>Visualização em:
+                <select name="" id="sltFiltrar">
+                    <option value="">Geral (Média aos anos)</option>
+                    <option value="">Anual (Média aos meses)</option>
+                </select></b>
+            </p>
+
+        </div>
+  </div>
+`,
+showCancelButton: true,
+cancelButtonText: "Fechar",
+customClass: "alertaModal",
+confirmButtonColor: '#2C3E50',
+})
+}
+
 //PLOTAR GRAF CPU
 const ctxCPU = document.getElementById('cpuChart').getContext('2d');
 
