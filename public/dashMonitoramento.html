@@ -29,7 +29,6 @@
         </div>
 
         <ul id="ul_links" class="nav-links ">
-            
             <li class="li-active">
                 <i class='bx bx-desktop' style='color:#ffffff' ></i>
                 <span>Monitoramento</span>
@@ -91,66 +90,131 @@
                     </select>
                 </div>
 
+               
+
+                
+
             </div>
-            <div class="monitoramento">
+
+            <div class="tempoReal">
+                <div class="tempo_atividade">
+                    <h3 id="alerta">Alertas em aberto:</h3>
+                    <br>
+                    <h1 id="alerta">13 </h1>
+                </div>
+                <div class="tempo_atividade">
+                    <h3>Componente + Utilizado</h3>
+                    <br>
+                    <h1>CPU </h1>
+                </div>
+                
+                <div class="tempo_atividade">
+                    <h3>Servidor mais utilizado</h3>
+                    <br>
+                    <h1>hostname </h1>
+                </div>
+                <div class="tempo_atividade">
+                    <h3>Tempo de Atividade</h3>
+                    <br>
+                    <h1>87 dias 22:50:21 </h1>
+                </div>
+
+               
+
+            </div>
+        <div class="monitoramento">
+            
                 <div class="esquerda">
-                    <div class="chart-container-cpu">
-                        <h2><i class='bx bx-chip' style="border: solid 1px white; border-radius: 8px;"></i> CPU</h2>
-                        <canvas id="cpuChart"></canvas>
-                    </div>
-
-                    <div class="chart-container-ram">
-                        <h2><i class='bx bxs-memory-card' style="border: solid 1px black; border-radius: 8px;"></i> RAM
-                        </h2>
-                        <canvas id="ramChart"></canvas>
-                    </div>
-
-
-                    <div class="chart-container-rede">
-                        <h2><i class='bx bx-wifi' style="border: solid 1px black; border-radius: 8px;"></i> Rede</h2>
-                        <div class="chart-wrapper">
-                            <div>
-                                <canvas id="redeChart-ler"></canvas>
-                                <div id="id_valor-ler"></div>
-
+                    <div class="container-dash">
+                        <div class="container-kpi">
+                            <h2>
+                                <i class='bx bx-chip' style="border: solid 0.1vw rgb(0, 0, 0); border-radius: 0.5vw; padding: 0.3vw;"></i> CPU
+                            </h2>
+                            
+                            <div class="info">
+                                <h3>Utilização</h3>
+                                <h1>100%</h1>
                             </div>
-                            <div>
-                                <canvas id="redeChart-esc"></canvas>
-                                <div id="id_valor-esc"></div>
-
-                            </div>
+                            <!-- <div class="info">
+                                <h3>Processos</h3>
+                                <h1>67555</h1>
+                            </div> -->
+                        </div>
+                        <div class="chart-container-cpu">
+                            <canvas id="cpuChart"></canvas>
                         </div>
                     </div>
+
+                    <div class="container-dash">
+                        <div class="container-kpi">
+                        <h2><i class='bx bxs-save'style="border: solid 1px black; border-radius: 8px;"></i> Disco
+                        <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                        </h2>
+
+                        <div class="info">
+                            <h3>Utilização</h3>
+                            <h1>76.5%</h1>
+                            <span>11,81 /<span></span>16,44 GB</span>
+                        </div>
+                        
+                    </div>
+                    
+                        <div class="chart-container-disco">
+                            <canvas id="discoChart"></canvas>
+                        </div>    
+                    </div>
+                    
                 </div>
 
                 <div class="direita">
-
-                    <div class="chart-container-disco">
-                        <h2><i class='bx bxs-save'style="border: solid 1px black; border-radius: 8px;"></i> Disco Em Uso</h2>
-                        <canvas id="discoChart"></canvas>
-                        <div id="id_valor-disc"></div>
-
-                        <div class="chart-wrapper-disco">
-                            <div>
-                                <canvas id="discoChart-ler"></canvas>
-                                <div id="id_valor-ler-disco"></div>
-                                
-                            </div>
-                            <div>
-                                <canvas id="discoChart-esc"></canvas>
-                                <div id="id_valor-esc-disco"></div>
-                                
-                            </div>
+                    <div class="container-dash">
+                        <div class="container-kpi">
+                        <h2><i class='bx bxs-memory-card' style="border: solid 1px black; border-radius: 8px;"></i> RAM</h2>
+                        <div class="info">
+                            <h3>Utilização</h3>
+                            <h1>76.5%</h1>
+                            <span>11,81 /<span></span>16,44 GB</span>
                         </div>
+                        </div>
+                        <div class="chart-container-cpu">
+                        <canvas id="ramChart"></canvas>
+                        </div>
+                    
                     </div>
 
-                    <div class="tempo_atividade">
-                        <h3>Tempo de Atividade</h3>
-                        <br>
-                        <h1>87 Dias 22:50:21</h1>
+                    <div class="container-dash-rede">
+                        <div class="container-kpi-rede">
+                            <h2><i class='bx bx-wifi' style="border: solid 0.1vw black; border-radius: 0.8vw; padding: 0.1vw;"></i> Rede
+                            </h2>  
                     </div>
-
+                <div class="container-rede">
+                    <div class="info-rede">
+                        <h3>Internet Recebida</h3>
+                        <h1>100%</h1>
+                  
+                        <h3>Utilização</h3>
+                        <h1>6348 MB/S</h1>
+                    </div>
+                        <div class="chart-container-rede">
+                            <div class="taxa">
+                                <h3>Taxa de Upload</h3>
+                                <h1><img src="assets/images/setaRede1.svg" class="seta">18 MB/S</h1>
+                              </div>
+                          
+                              <div class="taxa">
+                                <h3>Taxa de Download</h3>
+                                <h1><img src="assets/images/setaRede2.svg" class="seta">30 MB/S</h1>
+                              </div>
+                            </div>
+                          
+                        </div>  
+                    </div>  
                 </div>
+
+                    
+                  
+                    
+                  
 
 
             </div>
@@ -175,6 +239,8 @@
         ul_links.classList.toggle('nav-links-expanded')
     }
 
+const alerta = document.getElementById('alerta');
+alerta.addEventListener('click', () => window.location.href = './alertas.html') 
 const menu = document.querySelector('.nav-links');
 const burger= document.querySelector('.nav-burger');
 const linha1 = document.querySelector('#linha1');

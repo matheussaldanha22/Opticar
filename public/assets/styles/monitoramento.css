@@ -106,6 +106,7 @@ body{
 /* Grid B */
 .contain{
     padding: 3vw;
+   
     font-family: 'Montserrat';
     grid-area: b;
 }
@@ -168,10 +169,37 @@ body{
     border-radius: 12px;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     padding: 2vw;
+    
 }
 
+.container-kpi span{
+    font-family: "Montserrat" ;
+    color: #70A0AD;
+    font-size: 95%;
+}
+
+.iconeFiltro{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2C3E50;
+    border-radius: 5px;
+    width: 40%;
+    height: auto;
+    transition: 0.3s;
+}
+
+.iconeFiltro:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+    transition: 0.3s;
+    background-color: #3d5268;
+
+}
+
+
 .box .tempoReal{
-    padding: 1vw;
+    padding: 0.7vw 0 ;
     display: flex;
     flex-direction: column;
 }
@@ -181,7 +209,7 @@ body{
 }
 
 .box .tempoReal .texto p{
-    font-size: 3vw;
+    font-size: 1vw;
 }
 
 div .servidor{
@@ -209,18 +237,18 @@ div .servidor select{
 /* Lado esquerdo das dash (referencia do figma) */
 .esquerda{
     display: flex;
-    gap: 5vw;
+    gap: 1vw;
     flex-direction: column;
 }
 /* Lado direito das dash (referencia do figma) */
 .direita{
     display: flex;
-    gap: 5vw;
+    gap: 1vw;
     flex-direction: column;
 }
 
 /* Estilo dos gráficos */
-.chart-container-cpu{
+.chart-container-cpu, chart-container-ram{
     background: #012027;
     background: linear-gradient(270deg, #012027, #04708D);
     border-radius: 12px;
@@ -232,59 +260,23 @@ div .servidor select{
     font-weight: 100;
 }
 
-.chart-container-ram, .chart-container-disco{
+.container-dash{
     background-color: #D9D9D9;
     border-radius: 12px;
-    padding: 2vw;
+
 }
 
-.chart-container-ram h2, .chart-container-disco h2{
-    color: black;
-    font-weight: 100;
-    width: 100%;
-}
-
-.chart-container-rede {
+.container-dash-rede{
     background-color: #D9D9D9;
     border-radius: 12px;
-    padding: 2vw;
-    height: 50vw;
 }
 
-.chart-container-rede h2{
-    color: black;
-    font-weight: 100;
+#alerta{
+    cursor: pointer;
 }
 
-.chart-wrapper {
-    display: flex;
-    flex-direction: row;
-    padding: 3vw;
-    justify-content: space-between;
-}
 
-.chart-wrapper div{
-    width: 30vw;
-    height: 30vw;
-    background: #012027;
-    background: linear-gradient(270deg, #012027, #04708D);
-    border-radius: 12px;
-}
 
-.chart-wrapper-disco {
-    display: flex;
-    flex-direction: row;
-    padding: 3vw;
-    justify-content: space-between;
-}
-
-.chart-wrapper-disco div{
-    width: 30vw;
-    height: 30vw;
-    background: #012027;
-    background: linear-gradient(270deg, #012027, #04708D);
-    border-radius: 12px;
-}
 /* Menu que se expande */
 @media only screen and (min-width:702px) { 
 
@@ -412,54 +404,24 @@ div .servidor select{
 }
 
 
-#id_valor-ler, #id_valor-esc,
-#id_valor-esc-disco, #id_valor-ler-disco{
-    font-size: 3vw;
-    text-align: center;
-    position: relative;
-    bottom: 15vw;
-    height: 10vw;
-    color: white;
-}
-
-#id_valor-ler span, #id_valor-esc span,
-#id_valor-ler-disco span, #id_valor-esc-disco span{
-    font-weight: 900;
-    font-size: 4vw;
-}
-
-#redeChart-ler, #discoChart-ler
-,#redeChart-esc, #discoChart-esc{
-    position: relative;
-    bottom: 5vw;
-    padding: 2vw;
-    z-index: 999;
-}
-
-#id_valor-disc{
-    text-align: center;
-    position: relative;
-    bottom: 40vw;
-    height: 10vw;
-    color: rgb(0, 0, 0);
-}
-
-#id_valor-disc span{
-    font-weight: 900;
-    font-size: 10vw;
-}
 
 .tempo_atividade{
     background: #012027;
     background: linear-gradient(270deg, #012027, #04708D);
     color: white;
-    padding: 5vw;
+    padding: 1vw;
     border-radius: 12px;
     text-align: center;
+    height: 20%;
+    width: 20%;
 }
 
 .tempo_atividade h1{
-    font-size: 6vw;
+    font-size: 1vw;
+}
+
+.tempo_atividade h3{
+    font-size: 1vw;
 }
 
 
@@ -467,6 +429,7 @@ div .servidor select{
 
     .contain{
         padding: 1vw 2vw 0 2vw;
+        margin-bottom: 20vw;
     }
 
     .cabeca {
@@ -516,6 +479,7 @@ div .servidor select{
     .box{
         display: block;
         padding-top: 0vw;
+        gap: 5vh;
     }
 
     .box div .texto h1{
@@ -545,100 +509,169 @@ div .servidor select{
 
     #i{
         padding: 0.2vw;
-        font-size: 2vw;
+        font-size: 0.8vw;
     }
 
     .monitoramento{
         flex-direction: row;
         gap: 2vw;
-        padding-right: 2vw;
-        padding-top: 5vw;
     }
 
     .esquerda{
-        width: 50%;
+        width: 48%;
+    }
+    
+    .container-dash {
+        display: flex;
+        align-items: center;
+        padding: 2vw;
         gap: 2vw;
+        align-items: center; 
+        justify-content: center; 
+        width: 100%;
+        height: 45%;
     }
 
-    #id_valor-ler, #id_valor-esc, #id_valor-esc-disco, #id_valor-ler-disco {
-        font-size: 1vw;
-        text-align: center;
-        position: relative;
-        bottom: 8vw;
-        height: 0vw;
-        color: white;
-        left: 49px;
-        width: 10vw;
+    .container-dash-rede {
+        display: flex;
+        flex-direction: column;
+        padding: 2vw;
+        gap: 1vw;
+        width: 100%;
+        height: 45%;
+    }
+    
+    .container-kpi {
+        display: flex;
+        flex-direction: column;
+        gap: 1vw;
+        width: 11vw;
+        height: 96%;
+    }
+    
+    .container-kpi-rede{
+        display: flex;
+        flex-direction: column;
+        gap: 1vw;
+        width: 11vw;
+        height: fit-content;
     }
 
-    .chart-wrapper-disco {
-        padding: 1vw;
-        width: 40vw;
+    .container-kpi h2 {
+        font-size: 1.5vw;
+        color: #2C3E50;
+        margin: 0;
     }
-
-    .chart-wrapper {
-        padding: 1vw;
+    .container-kpi  h1 {
+        font-size: 3vw;
+        color: #04708D;
+        margin: 0;
     }
-
-    .chart-wrapper div {
-        width: 45%;
+    
+    .container-kpi h3 {
+        margin: 0;
+        font-size: 1.2vw;
+        color: #2C3E50;
+    }
+    
+    .chart-container-cpu, .chart-container-ram{
+        width: 30vw;
         height: 15vw;
-        background: #012027;
-        background: linear-gradient(270deg, #012027, #04708D);
-        border-radius: 12px;
-        background-color: white;
+        padding: 1vw;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
-    .chart-wrapper-disco div {
-        width: 45%;
+    
+    .chart-container-disco{
+        width: 30vw;
         height: 15vw;
-        background: #012027;
-        background: linear-gradient(270deg, #012027, #04708D);
-        border-radius: 12px;
-        background-color: white;
+    }
+    
+    .container-rede{
+        display: flex;
+        width: 100%;
+        justify-content: center;
     }
 
-    .chart-container-rede {
-        height: auto;
+    .chart-container-rede{
+        width: 50%;
     }
 
-    #redeChart-ler, #discoChart-ler, #redeChart-esc, #discoChart-esc {
-        bottom: 3vw;
+    .info{
+        width: 100%;
     }
+    .info h3{
+        color: #2C3E50;
+    }
+
+    .info h1{
+        color: #04708D;
+        font-size: 2vw;
+    }
+
+    .info-rede{
+        width: 50%;
+    }
+    .info-rede h3{
+        color: #2C3E50;
+        font-size: 1.7vw;
+    }
+
+    .info-rede h1{
+        color: #04708D;
+        font-size: 2.2vw;
+    }
+
 
     .direita{
         width: 50%;
-        gap: 1vw;
     }
 
-    #id_valor-disc {
-        bottom: 21vw;
-        height: 0;
-    }
-
+ 
     .tempo_atividade{
-        padding: 2vw;
+        padding: 1vw;
+        
     }
 
     .tempo_atividade h1{
-        font-size: 2vw;
+        font-size: 22px;
+    }
+    .tempo_atividade h3{
+        font-size: 18px;
     }
 
     .chart-container-disco{
         display: flex;
         flex-direction: column;
-        align-items: center;
     }
 
-    #discoChart {
-        max-width: 25vw !important;
-        height: 36vw !important;
+    .taxa {
+    font-size: 1.2vw;
+    color: #6aa3a3;
+    margin-bottom: 0.5vw;
     }
 
-    #id_valor-disc span {
-        font-weight: 900;
-        font-size: 5vw;
+    .info h3{
+        font-size: 2vw;
     }
+
+    .taxa h1 {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    font-size: 2vw;
+    color: #1c2e3f;
+    margin: 0;
+    }
+
+    .seta {
+    width: 2vw;
+    height: auto;
+    }
+
+  
     
     
 }

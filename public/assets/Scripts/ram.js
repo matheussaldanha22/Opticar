@@ -5,10 +5,10 @@ const dataRAM = {
     datasets: [{
         label: 'Uso da RAM',
         data: [50, 60, 60, 45, 100, 80],
-        borderColor: '#000000',
+        borderColor: '#ffffff',
         borderWidth: 2,
         fill: false,
-        pointBackgroundColor: '#000000',
+        pointBackgroundColor: '#ffffff',
         pointRadius: 5,
         tension: 0.3
     }]
@@ -28,10 +28,10 @@ const configRAM = {
                 beginAtZero: false,
                 suggestedMin: 30,
                 suggestedMax: 100,
-                ticks: { color: 'black', font: { size: 12 } }
+                ticks: { color: 'white', font: { size: 12 } }
             },
             x: {
-                ticks: { color: 'black', font: { size: 12 } }
+                ticks: { color: 'white', font: { size: 12 } }
             }
         }
     }

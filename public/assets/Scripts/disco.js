@@ -1,5 +1,4 @@
 const ctxDisco = document.getElementById('discoChart').getContext('2d');
-const valor = document.getElementById('id_valor-disc');
 
 const gradient_blue = ctxDisco.createLinearGradient(0, 0, 0, 300);
 gradient_blue.addColorStop(0, "#012027");
@@ -33,6 +32,6 @@ type: 'doughnut',
     }
 }
 
-valor.innerHTML = "<span>"+dataDisco.value + "%" +"</span>" ;
+
 
 new Chart(ctxDisco, configDisco);
