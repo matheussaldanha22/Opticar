@@ -50,6 +50,10 @@ function entrar() {
           sessionStorage.ID_USUARIO = json.id
           sessionStorage.SERVIDORES = JSON.stringify(json.servidores)
           sessionStorage.EMPRESA = json.empresaId
+          sessionStorage.EMPRESA_NOME = json.empresaNome
+          sessionStorage.CARGO = json.cargo
+          sessionStorage.FABRICA_ID = json.fabricaId
+          sessionStorage.FABRICA_NOME = json.fabricaNome
           console.log(`ID Empresa: ${json.empresaId}`)
 
           setTimeout(function () {

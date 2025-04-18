@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- <link rel="stylesheet" href="assets/styles/monitoramento.css"> -->
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="./assets/Scripts/sessao.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
     <link rel="stylesheet" href="./assets/styles/componentes.css">
@@ -53,7 +54,7 @@
                         <p class="endereco"> Rua Haddock Lobo, 595</p>
                     </div>
                 </div>
-    
+
                 <div class="perfil">
                     <i class='bx bxs-user-circle' style="font-size: 4vw;"></i>
                     <div class="txtInfo">
@@ -67,10 +68,12 @@
             </div>
 
             <div class="titleContainer">
-                <h1>Lista de Componentes - <p>SV001</p></h1>
+                <h1>Lista de Componentes - <p>SV001</p>
+                </h1>
             </div>
 
-            <button class="btn-add" onclick="abrirModalAdd()">Adicionar componente<i class='bx bx-add-to-queue' style="color: white; font-size: 15px;"></i></button>
+            <button class="btn-add" onclick="abrirModalAdd()">Adicionar componente<i class='bx bx-add-to-queue'
+                    style="color: white; font-size: 15px;"></i></button>
 
             <div class="componentesContainer">
                 <table class="tabelaContainer">
@@ -113,9 +116,9 @@
                             <button class="btn-purple">Excluir</button>
                         </td>
                     </tr>
-                    
+
                 </table>
-                
+
                 <div class="pagination" id="paginacao"></div>
             </div>
         </div>
@@ -153,7 +156,7 @@
 
     });
 
-    
+
 </script>
 
 </html>

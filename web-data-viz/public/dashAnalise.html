@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Opticar - Análise de Dados</title>
     <link rel="stylesheet" href="assets/styles/analiseDados.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="./assets/Scripts/sessao.js" defer></script>
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
 
-    
+
 
 
 </head>
+
 <body>
     <div class="dashHistorica">
         <div id="div_menu" class="menu ">
@@ -29,17 +32,17 @@
                 <li><i class='bx bx-server' style='color:#ffffff' ></i></li>
             </ul> -->
             <ul id="ul_links" class="nav-links ">
-                
+
                 <li class="li-active">
-                    <i class='bx bx-desktop' style='color:#ffffff' ></i>
+                    <i class='bx bx-desktop' style='color:#ffffff'></i>
                     <span>Monitoramento</span>
                 </li>
                 <li>
-                    <i class='bx bxs-bell-ring' style='color:#ffffff' ></i>
+                    <i class='bx bxs-bell-ring' style='color:#ffffff'></i>
                     <span>Alertas</span>
                 </li>
                 <li>
-                    <i class='bx bx-server' style='color:#ffffff' ></i>
+                    <i class='bx bx-server' style='color:#ffffff'></i>
                     <span>Servidores</span>
                 </li>
             </ul>
@@ -93,7 +96,7 @@
                 <div class="chart-container-blue">
                     <div class="chartCabecalho">
                         <h2><i class='bx bx-chip' style="border: solid 1px white; border-radius: 8px;"></i> CPU</h2>
-                        
+
                         <div class="filtrar">
                             <h3>Filtrar:</h3>
                             <div class="iconeFiltro" onclick="abrirModal('CPU')">
@@ -101,14 +104,14 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <canvas id="cpuChart"></canvas>
                 </div>
 
                 <div class="chart-container-blue">
                     <div class="chartCabecalho">
                         <h2><i class='bx bxs-save' style="border: solid 1px white; border-radius: 8px;"></i> Disco</h2>
-                        
+
                         <div class="filtrar">
                             <h3>Filtrar:</h3>
                             <div class="iconeFiltro" onclick="abrirModal('Disco')">
@@ -116,19 +119,23 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <canvas id="discoChart"></canvas>
 
                 </div>
                 <div class="kpisTempo">
                     <div class="kpiTempo branco">
                         <h2>Tempo do servidor LIGADO</h2>
-                        <span class="txtKpi"><p id="diasOcioso">87</p>Dias </span>
+                        <span class="txtKpi">
+                            <p id="diasOcioso">87</p>Dias
+                        </span>
                     </div>
-                    
+
                     <div class="kpiTempo">
                         <h2>Tempo do servidor OCIOSO</h2>
-                        <span class="txtKpi"><p id="diasOcioso">13</p>Dias </span>
+                        <span class="txtKpi">
+                            <p id="diasOcioso">13</p>Dias
+                        </span>
                     </div>
                 </div>
             </div>
@@ -137,8 +144,9 @@
                 <!-- ram -->
                 <div class="chart-container-white">
                     <div class="chartCabecalho">
-                        <h2><i class='bx bxs-memory-card' style="border: solid 1px black; border-radius: 8px;"></i> RAM</h2>
-                        
+                        <h2><i class='bx bxs-memory-card' style="border: solid 1px black; border-radius: 8px;"></i> RAM
+                        </h2>
+
                         <div class="filtrar">
                             <h3>Filtrar:</h3>
                             <div class="iconeFiltro" onclick="abrirModal('RAM')">
@@ -146,7 +154,7 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <canvas id="ramChart"></canvas>
 
                 </div>
@@ -155,7 +163,7 @@
                 <div class="chart-container-white">
                     <div class="chartCabecalho">
                         <h2><i class='bx bx-wifi' style="border: solid 1px black; border-radius: 8px;"></i> Rede</h2>
-                        
+
                         <div class="filtrar">
                             <h3>Filtrar:</h3>
                             <div class="iconeFiltro" onclick="abrirModal('Rede')">
@@ -163,7 +171,7 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <canvas id="redeChart"></canvas>
 
                 </div>
@@ -171,7 +179,9 @@
                 <!-- alertas p comp -->
                 <div class="chart-container-alert">
                     <div class="chartCabecalho">
-                        <h2><i class='bx bxs-bell-ring' style="border: solid 1px black; border-radius: 8px; font-size: 25px;"></i> Alertas por componente</h2>
+                        <h2><i class='bx bxs-bell-ring'
+                                style="border: solid 1px black; border-radius: 8px; font-size: 25px;"></i> Alertas por
+                            componente</h2>
                         <div class="filtrar">
                             <h3>Filtrar:</h3>
                             <div class="iconeFiltro">
@@ -179,26 +189,26 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <canvas id="alertasChart"></canvas>
-                    
+
                 </div>
             </div>
-            
-            
+
+
 
         </div>
     </div>
 
 </body>
+
 </html>
 
 <script>
-    
 
 
-    
+
+
 </script>
 
 <script src="assets/Scripts/graficosAnaliseDados.js"></script>
-
