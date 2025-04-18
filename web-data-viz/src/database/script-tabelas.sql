@@ -1,3 +1,11 @@
+-- Arquivo de apoio, caso você queira criar tabelas como as aqui criadas para a API funcionar.
+-- Você precisa executar os comandos no banco de dados para criar as tabelas,
+-- ter este arquivo aqui não significa que a tabela em seu BD estará como abaixo!
+
+/*
+comandos para mysql server
+*/
+
 DROP database opticar;
 create database opticar;
 use opticar;
@@ -36,7 +44,7 @@ CREATE TABLE usuario (
     nome VARCHAR(45),
     email VARCHAR(45),
     senha VARCHAR(45),
-    cargo ENUM('Gestor', 'GestorEmpresa', 'Funcionario'),
+    cargo ENUM('GestorEmpresa', 'GestorFabrica', 'AnalistaSuporte', 'EngenheiroManutenção'),
     cpf VARCHAR(45),
     fkFabrica INT,
     FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica)
@@ -110,9 +118,9 @@ INSERT INTO endereco (
 (4, 'Rua das Indústrias', 400, 'Belo Horizonte', 'Industrial', 'MG', 'Minas Gerais', '31000000', NULL, 3);
 
 INSERT INTO usuario (idusuario, nome, email, senha, cargo, cpf, fkFabrica) VALUES
-(1, 'Ana Silva', 'ana@techagro.com', 'senha123', 'Engenheira', '12345678900', 1),
-(2, 'Carlos Souza', 'carlos@techagro.com', 'senha123', 'Técnico', '98765432100', 1),
-(3, 'Beatriz Lima', 'beatriz@agrodata.com', 'senha123', 'Supervisor', '11122233344', 3);
+(1, 'Ana Silva', 'ana@techagro.com', 'senha123', 'GestorEmpresa', '12345678900', 1),
+(2, 'Carlos Souza', 'carlos@techagro.com', 'senha123', 'GestorFabrica', '98765432100', 1),
+(3, 'Beatriz Lima', 'beatriz@agrodata.com', 'senha123', 'AnalistaSuporte', '11122233344', 3);
 
 -- insert Configuração dos Componentes
 
