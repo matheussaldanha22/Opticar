@@ -22,7 +22,7 @@ function autenticar(req, res) {
           servidorModel
             .buscarServidorPorEmpresa(resultadoAutenticar[0].empresaId)
             .then((resultadoServidores) => {
-              if (resultadoServidores.length > 0) {
+              if (resultadoServidores.length >= 0) {
                 res.json({
                   id: resultadoAutenticar[0].id,
                   email: resultadoAutenticar[0].email,
@@ -30,6 +30,10 @@ function autenticar(req, res) {
                   senha: resultadoAutenticar[0].senha,
                   servidores: resultadoServidores,
                   empresaId: resultadoAutenticar[0].empresaId,
+                  empresaNome: resultadoAutenticar[0].empresaNome,
+                  cargo: resultadoAutenticar[0].cargo,
+                  fabricaId: resultadoAutenticar[0].idFabrica,
+                  fabricaNome: resultadoAutenticar[0].nomeFabrica,
                 })
               } else {
                 res.status(204).json({ servidores: [] })
@@ -86,7 +90,31 @@ function cadastrar(req, res) {
   }
 }
 
+function listarPorId(req, res) {
+  // Recebendo parametro da URL
+  var idUsuario = req.params.idUsuario
+
+  if (idUsuario == undefined) {
+    res.status(400).send("ID do usuário indefinido")
+  } else {
+    usuarioModel
+      .listarPorId(idUsuario)
+      .then(function (resultado) {
+        res.status(200).json(resultado)
+      })
+      .catch(function (erro) {
+        console.log(erro)
+        console.log(
+          "\nHouve um erro ao realizar a listagem do usuário Erro: ",
+          erro.sqlMessage
+        )
+        res.status(500).json(erro.sqlMessage)
+      })
+  }
+}
+
 module.exports = {
   autenticar,
   cadastrar,
+  listarPorId,
 }

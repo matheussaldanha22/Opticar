@@ -16,7 +16,7 @@ function autenticar(email, senha) {
     senha
   )
   var instrucaoSql = `
-        SELECT usuario.idusuario AS id, usuario.nome, usuario.email, empresa.idempresa AS empresaId
+        SELECT usuario.idusuario AS id, usuario.nome, usuario.email, usuario.cargo, empresa.idempresa AS empresaId, empresa.nome AS empresaNome, usuario.fkFabrica AS idFabrica, fabrica.nome AS nomeFabrica
             FROM 
                 usuario
             JOIN 
@@ -50,7 +50,16 @@ function cadastrar(nome, email, senha, fkEmpresa) {
   return database.executar(instrucaoSql)
 }
 
+function listarPorId(idUsuario) {
+  var instrucaoSql = `
+  SELECT usuario.nome, usuario.cargo FROM usuario WHERE idUsuario = ${idUsuario};
+  `
+  console.log("Executando a instrução SQL: \n" + instrucaoSql)
+  return database.executar(instrucaoSql)
+}
+
 module.exports = {
   autenticar,
   cadastrar,
+  listarPorId,
 }
