@@ -100,7 +100,7 @@
 .dashHistorica{
     display: flex;
     flex-direction: column;
-    width: 95vw;
+    width: 94vw;
     margin-left: 5vw;
     align-items: center;
     gap: 12px;
@@ -187,7 +187,7 @@
     width: 90vw;
     padding: 10px;
     border-radius: 10px;
-    height: 82vh;
+    height: 107vh;
     box-shadow: 5px 2px 10px rgb(161, 160, 160);
 }
 
@@ -241,10 +241,55 @@ canvas {
     height: 100% !important;
 }
 
+.kpisUso{
+    margin-top: 2vh;
+    display: flex;
+    justify-content: center;
+    gap: 4vw;
+}
+
+.kpiUso{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #012027;
+    background: linear-gradient(270deg, #012027, #04708D);
+    border-radius: 12px;
+    padding: 1vw;
+    width: 25vw;
+    height: 14vh;
+    font-size: 18px;
+    color: #fffafa;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    gap: 5px;
+}
+
+.tituloKpi{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.kpiUso h2{
+    font-size: 17px;
+}
+.kpiUso h3{
+    font-size: 13px;
+    font-weight: bolder;
+    display: flex;
+    gap: 5px;
+}
+
+.dadoKpi{
+    font-size: 35px;
+}
 
 .grafSuperior{
     display: flex;
     gap: 2vw;
+    margin-top: 2vh
 }
 
 .chartCabecalho{

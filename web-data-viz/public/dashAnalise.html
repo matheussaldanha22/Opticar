@@ -73,10 +73,11 @@
                 </div>
             </div>
         </div>
-        <!-- charts -->
-
+        
+        <!-- painel grafs -->
         <div class="painelDash">
 
+            <!-- cabecalho -->
             <div class="cabecalhoDash">
                 <div class="texto">
                     <p id="titulo">Dashboard Análise Histórica</p>
@@ -91,7 +92,50 @@
                     </select>
                 </div>
             </div>
+            
+            <!-- kpis -->
+            <div class="kpisUso">
 
+                <!-- USO CPU -->
+                <div class="kpiUso">
+                    <div class="tituloKpi">
+                        <h2>Média de utilização CPU (%)</h2>
+                        <h3>Últimos 30 dias:</h3>
+                    </div>
+                    <span class="txtKpi">
+                        <p class="dadoKpi" id="usoCpu" style="color: red;">87%</p>
+                    </span>
+                    <h3>Parâmetro de alerta<b id="parametroCpu" style="color: red; font-size: 14px;">70%</b></h3>
+                </div>
+
+                <!-- USO RAM -->
+                <div class="kpiUso">
+                    <div class="tituloKpi">
+                        <h2>Média de utilização RAM (%)</h2>
+                        <h3>Últimos 30 dias:</h3>
+                    </div>
+                    <span class="txtKpi">
+                        <p class="dadoKpi" id="usoRam">60%</p>
+                    </span>
+                    <h3>Parâmetro de alerta<b id="parametroRam" style="color: red; font-size: 14px;">80%</b></h3>
+                </div>
+
+                <!-- USO DISCO -->
+                <div class="kpiUso">
+                    <div class="tituloKpi">
+                        <h2>Média de utilização Disco (%)</h2>
+                        <h3>Últimos 30 dias:</h3>
+                    </div>
+                    <span class="txtKpi">
+                        <p class="dadoKpi" id="usoDisco">55%</p>
+                    </span>
+                    <h3>Parâmetro de alerta<b id="parametroDisco" style="color: red; font-size: 14px;">90%</b></h3>
+                </div>
+
+            </div>
+            
+
+            <!-- charts -->
             <div class="grafSuperior">
                 <div class="chart-container-blue">
                     <div class="chartCabecalho">
