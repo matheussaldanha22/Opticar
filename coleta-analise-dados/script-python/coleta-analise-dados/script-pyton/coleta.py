@@ -168,13 +168,13 @@ def monitorar():
 
             cursor.close()
             conexao.close()
-            time.sleep(10)
+            time.sleep(0)
             # enviarS3(mac_address, dados_json)
             
 
         except Exception as e:
             print("Erro:", e)
-            time.sleep(10)
+            time.sleep(0)
 #Inicia tudo
 monitorar()
 
