@@ -169,6 +169,7 @@ function listarComponente() {
         tabela.innerHTML = `<tr>
                               <th>ID Componente</th>
                               <th>Tipo do componente</th>
+                              <th>Modelo</th>
                               <th>Tipo de medida</th>
                               <th>Limite grave</th>
                               <th>Limite atenção</th>
@@ -181,6 +182,7 @@ function listarComponente() {
             linha.innerHTML += `
                 <th>${componente.idcomponenteServidor}</th>
                 <td>${componente.tipo}</td>
+                <td>${componente.modelo}</td>
                 <td>${componente.medida}</td>
                 <td>${componente.limiteCritico}</td>
                 <td>${componente.limiteAtencao}</td>

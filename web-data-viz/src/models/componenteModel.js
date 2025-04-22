@@ -23,7 +23,7 @@ function cadastrar(codigo, modelo, limiteA, limiteG) {
 }
 
 function listarComponentes() {
-    var instrucaoSql = `SELECT cs.idcomponenteServidor, cs.fkMaquina, c.tipo, c.medida, cs.limiteCritico, cs.limiteAtencao 
+    var instrucaoSql = `SELECT cs.idcomponenteServidor, cs.fkMaquina, c.tipo, c.medida, cs.modelo, cs.limiteCritico, cs.limiteAtencao 
                         FROM componenteServidor AS cs JOIN componente AS c ON cs.fkComponente = c.idcomponente;`
     
     return database.executar(instrucaoSql);
