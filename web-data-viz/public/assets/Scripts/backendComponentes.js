@@ -162,12 +162,23 @@ function listarComponente() {
         }
     }).then(resposta => resposta.json())
       .then(componentes => {
+        lista_componente = [];
         lista_componente.push(componentes);
         const tabela = document.querySelector(".componentesContainer table");
+        tabela.innerHTML = "";
+        tabela.innerHTML = `<tr>
+                              <th>ID Componente</th>
+                              <th>Tipo do componente</th>
+                              <th>Tipo de medida</th>
+                              <th>Limite grave</th>
+                              <th>Limite atenção</th>
+                              <th></th>
+                           </tr>`;
 
         componentes.forEach(componente => {
             const linha = document.createElement("tr");
-            linha.innerHTML = `
+            linha.innerHTML = ""; 
+            linha.innerHTML += `
                 <th>${componente.idcomponenteServidor}</th>
                 <td>${componente.tipo}</td>
                 <td>${componente.medida}</td>
