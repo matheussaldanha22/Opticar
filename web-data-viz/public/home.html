@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opticar - Home</title>
+  <link rel="stylesheet" href="assets/styles/index.css" />
+  <!-- Script inicializado no final do body para funcionar o Swiper -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+  <link rel="icon" type="image/png" href="assets/images/logoOpticar.png" />
+</head>
+
+<body>
+  <!-- Cabeçalho -->
+  <header class="header-element">
+    <div class="container">
+      <div class="marca">
+        <img src="assets/images/logoOpticar.png" alt="" />
+        <span>OPTICAR</span>
+      </div>
+
+      <div class="menu">
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#negocio">Sobre o Negócio</a></li>
+          <li><a href="#simular">Simular</a></li>
+          <li><a href="./login.html">Login</a></li>
+        </ul>
+        <div class="nav-burger">
+          <div id="linha1"></div>
+          <div id="linha2"></div>
+          <div id="linha3"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <!-- Cabeçalho -->
+  <!-- Slogan -->
+  <section id="home">
+    <div class="video-container">
+      <video autoplay loop muted>
+        <source src="assets/images/dados.mp4" type="video/mp4" />
+      </video>
+      <div class="overlay"></div>
+      <div class="slogan">
+        <p>Monitoramento</p>
+        <span>SCADA SYSTEM</span>
+        <b>O monitoramento para manter o seu Sistema Scada eficiente, seguro e confiável.</b>
+      </div>
+      <div class="div_btn">
+        <button onclick="descerParaSegmento()">Saiba Mais</button>
+      </div>
+      <button class="btn_mobile">Saiba Mais</button>
+
+    </div>
+  </section>
+  <!-- Slogan -->
+  <!-- Introducao -->
+  <section id="segmento" class="section_introducao">
+    <div class="introducao">
+      <div class="div_texto_introducao">
+        <h1><b>Sobre Opticar</b></h1>
+        <h3>
+          Somos uma empresa com uma equipe que acredita em manutenção preditiva
+          como uma forma de alavancar seu negócio, garantindo a
+          <span>produção contínua</span>. Prezamos pela qualidade de nossos
+          sistemas, além de buscar <span>inovações</span> relevantes para
+          garantir <span>vantagens competitivas</span> para empresas parceiras.
+        </h3>
+      </div>
+      <div class="btn">
+        <button onclick="descerParaContato()">Contato</button>
+        <button onclick="descerParaSimular()">Simular</button>
+      </div>
+    </div>
+    <div class="introducao">
+      <div class="div_text_introducao">
+        <h1><b>Segmento</b></h1>
+        <h3>
+          Atuamos no segmento de monitoramento de sistemas
+          <span>SCADA(Supervisory Control and Data Acquisition)</span> na linha
+          de produção da indústria automobilística, utilizados para garantir que
+          a linha de produção esteja em condições para o trabalho. Garantir que
+          o monitoramento seja feito de forma eficaz e sem interrupções é nosso
+          objetivo.
+        </h3>
+      </div>
+      <div class="div_img">
+        <img src="./assets/images/arte.png" alt="">
+      </div>
+    </div>
+    </div>
+  </section>
+  <!-- Introducao -->
+  <!-- Princícios -->
+  <section id="principios" class="section-principios">
+    <div class="principios">
+      <h6>Princípios</h6>
+      <div class="container-box">
+        <div class="box">
+          <div>
+            <i class='bx bx-target-lock'></i>
+            <p>Missão</p>
+          </div>
+          <div>
+            Garantir a continuidade operacional através do monitoramento preciso dos sistemas SCADA, transformando dados
+            em ações preventivas, antecipando falhas e maximizando a produtividade da indústria automotiva.
+          </div>
+        </div>
+
+        <div class="box">
+          <div>
+            <i class='bx bx-show-alt'></i>
+            <p>Visão</p>
+          </div>
+          <div>
+            Ser reconhecida como líder global em soluções de monitoramento preventivo para sistemas industriais,
+            redefinindo os padrões de eficiência operacional e
+            criando um futuro onde toda fábrica automotiva opere com previsibilidade total,
+            antecipando qualquer falha.
+          </div>
+        </div>
+
+        <div class="box">
+          <div>
+            <i class='bx bx-anchor'></i>
+            <p>Valores</p>
+          </div>
+          <div>
+            • Confiabilidade <br>
+            • Inovação <br>
+            • Excelência <br>
+            • Segurança <br>
+            • Melhoria Contínua
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Princícios -->
+  <!-- Funcao -->
+  <section id="servicos" class="section-funcao">
+    <div class="funcao">
+      <p>O Que Oferecemos</p>
+      <div class="div_img_beneficios">
+        <div class="div_img">
+          <img src="assets/images/Arquitetura.png" alt="" />
+        </div>
+        <div class="div_textos">
+          <h3>
+            Mantenha a integridade do seu sistema <span>SCADA</span>
+            na linha de produção.
+          </h3>
+          <div class="beneficios">
+            <div>
+              <i class="bx bxs-badge-check"></i>
+              <p>
+                Monitore o funcionamento do servidor em tempo real por dashboards.
+              </p>
+            </div>
+
+            <div>
+              <i class="bx bxs-badge-check"></i>
+              <p>
+                Permanência de dados, como alertas registrados para uma análise
+                mais profunda.
+              </p>
+            </div>
+
+            <div>
+              <i class="bx bxs-badge-check"></i>
+              <p>
+                Análise de comportamentos para auxiliar na tomada de decisão para
+                manutenções preditivas.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <!-- Funcao -->
+  <!-- Negocio -->
+  <section id="negocio" class="section-negocio">
+    <div class="negocio">
+      <p>Sobre o Negócio</p>
+
+      <!-- Slider main container -->
+      <div class="swiper">
+        <!-- Additional required wrapper -->
+        <div class="swiper-wrapper">
+          <!-- Slides -->
+          <div class="swiper-slide">
+            <div>
+              <h1>SCADA monitora</h1>
+              <i class="bx bxs-factory" style="color: #f6f3f3"></i>
+              <p>
+                O sistema SCADA já instalado monitora a linha de produção de uma fábrica de automóveis.
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div>
+              <h1>Servidor SCADA</h1>
+              <i class="bx bx-server" style="color: #f6f3f3"></i>
+              <p>
+                Sistema SCADA possui um servidor onde centraliza e processa os dados.
+              </p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div>
+              <h1>Opticar Monitora</h1>
+              <i class="bx bx-analyse" style="color: #f6f3f3"></i>
+              <p>
+                Nosso sistema irá monitorar o sevidor para prevenir falhas e garantir seu funcionamento.
+              </p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div>
+              <h1>Sistema Alerta</h1>
+              <i class="bx bx-error-alt" style="color: #f6f3f3"></i>
+              <p>
+                Caso o nosso sistema encontre uma falha ou mal uso do hardware no servidor.
+              </p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div>
+              <h1>Sistema <br>Notifica</h1>
+              <i class="bx bxs-bell-ring" style="color: #f6f3f3"></i>
+              <p>
+                É emitido um alarme como alerta para o o funcionário responsável!
+              </p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div>
+              <h1>Relatório Detalhado</h1>
+              <i class="bx bx-chip" style="color: #f6f3f3"></i>
+              <p>
+                Descrevemos qual é o hardware com defeito com o maior detalhamento possível!
+              </p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div>
+              <h1>Funcionário Preparado</h1>
+              <i class="bx bx-hard-hat" style="color: #f6f3f3"></i>
+              <p>
+                Para que a empresa garanta a manutenção do sistema com eficiência e sucesso!
+              </p>
+            </div>
+          </div>
+          <div class="swiper-slide">
+            <div>
+              <h1>Dashboard Personalizada</h1>
+              <i class="bx bx-bar-chart-square" style="color: #f6f3f3"></i>
+              <p>
+                Base centralizada com histórico de incidentes para evitar falhas repetidas e futuras.
+              </p>
+            </div>
+          </div>
+          ...
+        </div>
+        <!-- If we need pagination -->
+
+
+        <!-- If we need navigation buttons -->
+      </div>
+      <div class="div_pagination">
+        <div class="swiper-pagination"></div>
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+    </div>
+  </section>
+  <!-- Negocio -->
+  <!-- Impactos -->
+  <section id="impactos" class="section-impacto">
+    <div class="impacto">
+      <p>Impactos de Falhas no <span>SCADA</span></p>
+
+      <div class="container-impacto">
+        <div onclick="aparecer(this)" id="box-info" class="boxes-infos">
+
+          <h1 class="num">01</h1>
+          <h1>Perdas Financeiras</h1>
+
+          <div class="div_numeral_titulo">
+            <h1 class="num">01</h1>
+            <h1>Perdas Financeiras</h1>
+          </div>
+          <div id="invisivel">
+            <hr id="linha" />
+            <b id="cor">
+              Interrupções na produção podem custar
+              <span class="red">milhões de dólares</span> por dia.
+
+              <br /><br />
+              Em 2022, uma falha no SCADA em uma fábrica de automóveis nos EUA
+              resultou em perdas de <span class="red">$1,5 milhão</span> em
+              apenas 8 horas
+
+              <br /><br />
+              Estudos indicam que o custo médio de downtime na indústria
+              automotiva é de
+              <span class="red">$22.000</span> por minuto
+
+              <br /><br />
+              A implementação de um sistema dedicado ao monitoramento contínuo
+              de recursos como CPU, disco e RAM nos servidores SCADA pode:
+
+              <br /><br />
+              Reduzir o tempo de inatividade em até
+              <span class="green">50%</span> <br /><br />
+
+              <button onclick="descerParaSimular()" id="btn">Simular</button>
+            </b>
+          </div>
+        </div>
+        <div onclick="aparecer(this)" id="box-info" class="boxes-infos">
+
+          <h1 class="num">02</h1>
+          <h1>Danos a Reputação</h1>
+
+          <div class="div_numeral_titulo">
+            <h1 class="num">02</h1>
+            <h1>Danos a Reputação</h1>
+          </div>
+          <div id="invisivel">
+            <hr id="linha" />
+            <b id="cor">
+              Inconsistências na qualidade dos veículos, resultando em recalls e <span class="red">deterioração da
+                confiança do consumidor</span>.
+
+              <br /><br />
+              <span class="red">Quedas nas ações da empresa</span> após anúncios de interrupções significativas na
+              produção sinalizam para investidores e o mercado uma vulnerabilidade operacional.
+
+              <br /><br />
+              <span class="red"> Brechas de segurança e vazamento de propriedade intelectual</span> ou dados de
+              produção, prejudicando a credibilidade da empresa quanto à proteção de informações.
+
+              <br /><br />
+              Fornecedores e parceiros podem <span class="red">reconsiderar relacionamentos comerciais</span> se
+              percebem riscos operacionais constantes devido a falhas em sistemas críticos.
+
+              <br /><br />
+              <button id="btn">Simular</button>
+            </b>
+          </div>
+        </div>
+        <div onclick="aparecer(this)" id="box-info" class="boxes-infos">
+
+          <h1 class="num">03</h1>
+          <h1>Riscos a Segurança</h1>
+
+          <div class="div_numeral_titulo">
+            <h1 class="num">03</h1>
+            <h1>Riscos a Segurança</h1>
+          </div>
+          <div id="invisivel">
+            <hr id="linha" />
+            <b id="cor">
+              Hackers podem <span class="red">explorar vulnerabilidades infiltrar os sistemas</span>, comprometendo
+              processos críticos de produção ou extraindo dados confidenciais.
+
+              <br /><br />
+              Falhas no controle de equipamentos robóticos ou de processos automatizados podem resultar em acidentes de
+              trabalho, colocando em <span class="red">risco a integridade física dos funcionários</span>.
+
+              <br /><br />
+              Alterações sutis nos sistemas de controle de qualidade podem resultar em veículos com <span
+                class="red">falhas de segurança não detectadas</span> que só serão descobertas quando já estiverem em
+              circulação.
+
+              <br /><br />
+              Comprometimento dos sistemas que monitoram componentes pode <span class="red">dificultar a identificação
+                da origem de problemas</span> em caso de recalls.
+
+              <br /><br />
+
+              <button id="btn">Simular</button>
+            </b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Impactos -->
+  <!-- Simulador -->
+  <section id="simular" class="section-calculadora">
+    <div class="calculadora">
+      <h2>Simulador</h2>
+      <label class="simulador">Qual seu tempo médio de downtime(tempo de inatividade) por mês?(horas):</label>
+      <input type="number" id="ipt_downtime" placeholder="Ex: 10">
+      <br>
+      <label class="simulador">Para cada hora de downtime(tempo de inatividade) qual é seu custo médio?(Reais
+        R$):</label>
+      <input type="number" id="ipt_custoHoraDownTime" placeholder="Ex: 5000">
+      <br>
+      <label class="simulador">Por último, qual é o seu gasto anual com substituições de hardware?(Manutenção Corretiva,
+        em Reais R$)</label>
+      <input type="number" id="ipt_custoManutencaoCorretiva" placeholder="Ex: 20000">
+      <br>
+      <button onclick="calcular()">Calcular</button>
+
+      <div class="resultados" id="div_resultado"></div>
+      <div class="comparativo" id="div_comparativo" style="display: none;"></div>
+      <div class="beneficios" id="div_beneficios" style="display: none;">
+        <h3>Benefícios do Monitoramento</h3>
+        <ul>
+          <li><i class='bx bxs-thermometer'></i> Evita superaquecimento dos recursos, aumentando a vida útil de cada um
+          </li>
+          <li><i class='bx bx-tachometer'></i> Otimiza o consumo de CPU, RAM e disco, evitando lentidão e garantindo a
+            eficiência do servidor</li>
+          <li><i class='bx bx-wrench'></i>Torna a manutenção mais eficiente e reduz custos inesperados.</li>
+          <li><i class='bx bxs-bug-alt'></i> Detecta anomalias antes que se tornem problemas graves.</li>
+          <li><i class='bx bx-trending-up'></i> Mantém a linha de produção ativa, reduzindo perdas operacionais.</li>
+          <li><i class='bx bx-dollar'></i><span> Reduz custos de manutenção em até <strong>40%</strong> e aumenta a
+              produtividade em <strong>6%</strong> (The True Cost of Downtime 2022).</span></li>
+          <li><i class='bx bxs-battery-charging'></i> Melhora a eficiência energética do servidor.</li>
+          <li><i class='bx bx-chip'></i><span> Se a manutenção planejada for inferior a 85%, pelo menos <strong>15% do
+                tempo</strong> é gasto com manutenção corretiva, aumentando os custos e riscos operacionais.</span></li>
+          <li><i class='bx bxs-check-shield'></i> Protege contra ataques hackers, monitorando acessos suspeitos e
+            prevenindo invasões.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+  <!-- Simulador -->
+  <!-- Contato -->
+  <section id="contato" class="section-contato">
+    <div class="contato">
+      <p>Juntos, criamos possibilidades, entre em contato:</p>
+
+      <form action="">
+        <div class="input-box">
+          <input type="text" required />
+          <label>Nome:</label>
+        </div>
+        <div class="input-box">
+          <input type="text" required />
+          <label>Email:</label>
+        </div>
+        <div class="input-box">
+          <textarea required></textarea>
+          <label>Mensagem:</label>
+        </div>
+        <button>Enviar</button>
+      </form>
+    </div>
+  </section>
+  <!-- contato -->
+  <!-- footer -->
+  <section class="section-footer">
+    <div class="footer">
+      <div class="cima">
+        <div class="logo">
+          <img src="assets/images/logoOpticar.png" alt="" />
+          <span>OPTICAR</span>
+        </div>
+        <div class="empresa">
+          <span>Contatos:</span>
+          <h6>opticar@contato.com</h6>
+          <span>(11)94002-8922</span>
+          <span class="rights">Todos os Direitos Reservados</span>
+        </div>
+      </div>
+      <div class="baixo">
+        <div>
+          <span><a href="#home">Home</a></span>
+          <span><a href="#segmento">Segmento</a></span>
+          <span><a href="#principios">Princípios</a></span>
+        </div>
+        <div>
+          <span><a href="#negocio">Negócio</a></span>
+          <span><a href="#impactos">Impactos</a></span>
+          <span><a href="#simular">Simulador</a></span>
+        </div>
+        <div>
+          <span><a href="#contato">Contato</a></span>
+          <span><a href="#servicos">Sistema</a></span>
+          <a href="./login.html">Aplicação</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- footer -->
+  <script src="assets/Scripts/index.js" defer></script>
+  <script src="assets/Scripts/simulador.js"></script>
+</body>
+
+</html>

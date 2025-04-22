@@ -21,6 +21,7 @@ var avisosRouter = require("./src/routes/avisos")
 var medidasRouter = require("./src/routes/medidas")
 var servidoresRouter = require("./src/routes/servidores")
 var empresasRouter = require("./src/routes/empresas")
+var componenteRouter = require("./src/routes/componentes")
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -34,6 +35,7 @@ app.use("/avisos", avisosRouter)
 app.use("/medidas", medidasRouter)
 app.use("/servidores", servidoresRouter)
 app.use("/empresas", empresasRouter)
+app.use("/componentes", componenteRouter)
 
 app.listen(PORTA_APP, function () {
   console.log(`
