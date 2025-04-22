@@ -134,7 +134,7 @@ SELECT * FROM componenteServidor JOIN servidor_maquina ON componenteServidor.fkM
                 
 select * from capturaDados;
 
-SELECT * FROM servidor_maquina WHERE Mac_Address = 251776438657434;
+SELECT * FROM servidor_maquina WHERE Mac_Address = 132243600390200;
 
 SELECT * FROM componenteServidor WHERE fkMaquina = (SELECT idMaquina FROM servidor_maquina WHERE Mac_Address = 251776438657434);
 

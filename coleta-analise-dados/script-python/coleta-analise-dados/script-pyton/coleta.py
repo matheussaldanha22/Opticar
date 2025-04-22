@@ -5,8 +5,29 @@ import mysql.connector
 import json
 import datetime
 import boto3
+<<<<<<< Updated upstream
+=======
+import os
+import tempfile 
+>>>>>>> Stashed changes
 
 #Aqui a gente pega o mac Adress para comparar depois
+def enviarS3(mac_address,dados_json):
+
+    s3=boto3.client("s3",region_name='us-east-1') 
+
+    nome_arquivo = os.path.join(tempfile.gettempdir(), 'dados.json')
+    with open(nome_arquivo, mode='wt') as file:
+        json.dump(dados_json, file)
+
+    s3.upload_file(
+            Filename=nome_arquivo,
+            Bucket='s3-python-32',
+            Key= f'{mac_address}/dados.json',     
+    )
+
+
+
 
 def pegando_mac_address():
     return uuid.getnode()
@@ -54,7 +75,7 @@ def conectar():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="@Zaqueuchavier123",
+        password="110645",
         database="opticar"
     )
 
@@ -78,11 +99,18 @@ def monitorar():
             """, (mac_address,))
             pedidos_clientes = cursor.fetchall()
 
+<<<<<<< Updated upstream
             # Vamos guardar os dados aqui pra mandar pro bucket
             dados_json = {
                 "mac_address": mac_address,
                 "timestamp": datetime.now().isoformat(),
                 "leituras": []
+=======
+            dados_json= {
+                "macAdress": mac_address,
+                "dataAtual": datetime.datetime.now().isoformat(),
+                "leitura": []
+>>>>>>> Stashed changes
             }
 
             for pedido_cliente in pedidos_clientes:
@@ -91,25 +119,42 @@ def monitorar():
 
                 if chama_funcao:
                     valor = chama_funcao()
+<<<<<<< Updated upstream
                     dados_json["leituras"].append({
+=======
+                    dados_json["leitura"].append({
+>>>>>>> Stashed changes
                         "componente": pedido_cliente['tipo'],
                         "medida": pedido_cliente['medida'],
                         "valor": valor
                     })
 
+<<<<<<< Updated upstream
                     # Também salva no banco local
+=======
+
+>>>>>>> Stashed changes
                     cursor.execute("""
                         INSERT INTO capturaDados (fkComponenteServidor, valor, data)
                         VALUES (%s, %s, NOW())
                     """, (pedido_cliente['idcomponenteServidor'], valor)) 
+                    
                     conexao.commit()
 
+<<<<<<< Updated upstream
             # Envia os dados pro bucket
             enviar_para_s3(mac_address, dados_json)
+=======
+>>>>>>> Stashed changes
 
             cursor.close()
             conexao.close()
             time.sleep(10)
+<<<<<<< Updated upstream
+=======
+            enviarS3(mac_address, dados_json)
+            
+>>>>>>> Stashed changes
 
         except Exception as e:
             print("Erro:", e)
