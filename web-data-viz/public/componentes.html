@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="assets/styles/monitoramento.css"> -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="./assets/Scripts/sessao.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
+    <link rel="stylesheet" href="./assets/styles/componentes.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script src="./assets/Scripts/backendComponentes.js"></script>
+    <title>Lista de Componentes</title>
+</head>
+
+<body onload="listarComponente()">
+    <!-- NavBar -->
+    <div class="mainContainer">
+        <div id="div_menu" class="menu ">
+            <div class="nav-burger" onclick="expand()">
+                <div id="linha1"></div>
+                <div id="linha2"></div>
+                <div id="linha3"></div>
+            </div>
+
+            <ul id="ul_links" class="nav-links ">
+
+                <li class="li-active">
+                    <i class='bx bx-desktop' style='color:#ffffff'></i>
+                    <span>Monitoramento</span>
+                </li>
+                <li>
+                    <i class='bx bxs-bell-ring' style='color:#ffffff'></i>
+                    <span>Alertas</span>
+                </li>
+                <li>
+                    <i class='bx bx-server' style='color:#ffffff'></i>
+                    <span>Servidores</span>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="contentContainer">
+            <div class="cabecalho">
+                <div class="empresa">
+                    <div class="circuloEmp">
+                        <i class='bx bxs-business'></i>
+                    </div>
+                    <div class="txtInfo">
+                        <p id="empresaNome">Nissan</p>
+                        <p class="endereco"> Rua Haddock Lobo, 595</p>
+                    </div>
+                </div>
+
+                <div class="perfil">
+                    <i class='bx bxs-user-circle' style="font-size: 4vw;"></i>
+                    <div class="txtInfo">
+                        <div class="txt">
+                            <p id="empresaNome">Shelly Douglas</p>
+                            <p class="endereco"> shelly@gmail.com</p>
+                        </div>
+                        <i class='bx bx-chevron-down' style="font-size: 3vw;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="titleContainer">
+                <h1>Lista de Componentes - <p>SV001</p>
+                </h1>
+            </div>
+
+            <button class="btn-add" onclick="abrirModalAdd()">Adicionar componente<i class='bx bx-add-to-queue'
+                    style="color: white; font-size: 15px;"></i></button>
+
+            <div class="componentesContainer">
+                <table class="tabelaContainer">
+                    <tr>
+                        <th>ID Componente</th>
+                        <th>Tipo do componente</th>
+                        <th>Tipo de medida</th>
+                        <th>Limite grave</th>
+                        <th>Limite atenção</th>
+                        <th></th>
+                        <!-- excluir -->
+                    </tr>
+                </table>
+                <div class="pagination" id="paginacao"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+
+<script>
+    // SCRIPT NAV-BAR
+    function expand() {
+        if (div_menu.classList.contains('menu-expand')) {
+            div_menu.style.animation = 'diminui 0.2s linear'
+
+        } else {
+            div_menu.style.animation = 'expandir 0.2s linear'
+
+        }
+        div_menu.classList.toggle('menu-expand')
+        ul_links.classList.toggle('nav-links-expanded')
+    }
+
+    const menu = document.querySelector('.nav-links')
+    const burger = document.querySelector('.nav-burger')
+    const linha1 = document.querySelector('#linha1')
+    const linha2 = document.querySelector('#linha2')
+    const linha3 = document.querySelector('#linha3')
+    burger.addEventListener('click', () => {
+
+        linha1.classList.toggle('linha1-active')
+        linha2.classList.toggle('linha2-active')
+        linha3.classList.toggle('linha3-active')
+        menu.classList.toggle('nav-active')
+
+    });
+
+    //MODAL ADD
+    function abrirModalAdd() {
+        Swal.fire({
+            html: `
+        <div style="display: flex;flex-direction:column; align-items: center;border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); height:5vw;background-color:rgb(235, 234, 234);padding:5px;">
+            
+            <div style="margin-left: 15px; text-align: left;">
+                <h2 style="color:black;margin: 0; font-size: 22px; font-weight: bold;"><i class='bx bx-add-to-queue' style="color: #646363; font-size: 30px; border: 3px solid rgb(138, 136, 136);border-radius: 5px;"></i> Cadastro de componentes</h2>
+                <p style="margin: 4px 0 0 0; font-size: 17px;color:black">Cadastre um novo componente que deseja monitorar.</p>
+            </div>
+        
+        </div>
+
+        <div class="modal-content">
+        
+            <div class="infosCadastro">
+                <p class="label">Tipo:</p><select id="sltTipo" class="sltsCad" onchange="listarMedida()"><option value="#" selected>Selecione o Componente</option></select>
+            </div>
+            <div class="infosCadastro">
+                <p class="label">Medida:</p><select id="sltMedida" class="sltsCad"> <option value="#" selected>Selecione a Medida</option> </select>
+            </div>
+            <div class="infosCadastro">
+                <p class="label">Modelo</p><input class="iptsCad" id="iptModelo" placeholder="Ex: intel core, amd">
+            </div>
+            <div class="infosCadastro">
+                <p class="label">Limite atenção:</p><input class="iptsCad" id="iptLimiteAtencao" placeholder="Ex: 30%, 30.5, 11.5Mbps">
+            </div>
+            <div class="infosCadastro" id="infoUltimo">
+                <p class="label">Limite grave:</p><input class="iptsCad" id="iptLimiteGrave" placeholder="Ex: 30%, 30.5, 11.5Mbps">
+            </div>
+
+        </div>
+    
+    `,
+            showCancelButton: true,
+            cancelButtonText: "Fechar",
+            background: '#fff',
+            confirmButtonColor: '#2C3E50',
+            customClass: 'addModal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            verificaPedido();
+        }
+        });
+        listarTipo()
+    }
+
+
+    const itensPorPagina = 10
+    let paginaAtual = 1
+    let componentesList = [] // Armazenamento dos dados recebidos do backend
+
+
+
+    //PARTE DE RENDERIZAR E PAGINAR CASO HAJA MUITOS ELEMENTOS DO VITAO alertas.js, PODE SER UTIL(PRECISA IMPLEMENTAR)
+    function renderTabela(pagina) {
+        const tabela = document.getElementById("tabela-alertas")
+        tabela.innerHTML = ` <tr>
+                            <th>Servidor</th>
+                            <th>Componente</th>
+                            <th>Data</th>
+                            <th>Gravidade</th>
+                            <th>Status</th>
+                            <th>Visualizar</th>
+                        </tr>`
+    
+        const inicio = (pagina - 1) * itensPorPagina
+        const fim = inicio + itensPorPagina
+        const paginaDados = componentesList.slice(inicio, fim)
+    
+        paginaDados.forEach((alerta) => {
+        const tr = document.createElement("tr")
+        tr.innerHTML = `
+            <td>${alerta.servidor}</td>
+            <td>${alerta.componente}</td>
+            <td>${alerta.dtAlerta}</td>
+            <td>${alerta.gravidade}</td>
+            <td>${alerta.status}</td>
+            <td><i class='bx bx-arrow-from-left btn' onclick="abrirModal(${alerta.id})"></i></td>
+        `
+        tabela.appendChild(tr)
+        })
+    }
+
+    function renderPaginacao() {
+    const paginacao = document.getElementById("paginacao")
+    paginacao.innerHTML = ""
+
+    const totalPaginas = Math.ceil(componentesList.length / itensPorPagina)
+
+    for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement("button")
+        btn.textContent = i
+        if (i === paginaAtual) btn.classList.add("active")
+        btn.addEventListener("click", () => {
+        paginaAtual = i
+        renderTabela(paginaAtual)
+        renderPaginacao()
+        })
+        paginacao.appendChild(btn)
+    }
+    }
+</script>
+</html>

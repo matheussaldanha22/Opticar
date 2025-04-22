@@ -1,4 +1,4 @@
-// var idUsuario = sessionStorage.getItem("ID_USUARIO")
+
 
 function deslogar() {
   sessionStorage.clear()
