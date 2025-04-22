@@ -23,9 +23,6 @@ def enviarS3(mac_address,dados_json):
             Key= f'{mac_address}/dados.json',     
     )
 
-
-
-
 def pegando_mac_address():
     return uuid.getnode()
 
@@ -43,20 +40,6 @@ def memory_used():
 def disk_percent(): 
     return psutil.disk_usage('/').percent
 
-def enviar_para_s3(mac_address, dados_json):
-    s3 = boto3.client('s3',
-        aws_access_key_id='SUA_ACCESS_KEY',
-        aws_secret_access_key='SUA_SECRET_KEY',
-        region_name='us-east-1'  # Região do seu bucket
-    )
-
-    nome_arquivo = f"monitoramento/{mac_address}_{datetime.now().isoformat()}.json"
-    s3.put_object(
-        Bucket='meu-bucket-monitoramento',
-        Key=nome_arquivo,
-        Body=json.dumps(dados_json)
-    )
-    print(f"Arquivo enviado para S3: {nome_arquivo}")
 #Aqui a gente monta um dict que recebe como palavras chaves o componente e a medida para então chamar a função
 
 pedido_coleta = {
