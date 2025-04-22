@@ -8,7 +8,7 @@ import boto3
 import os
 import tempfile 
 
-#Aqui a gente pega o mac Adress para comparar depois
+#Aqui a gente pega o mac Adress para comparar depois de tudo
 def enviarS3(mac_address,dados_json):
 
     s3=boto3.client("s3",region_name='us-east-1') 
