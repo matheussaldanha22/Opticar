@@ -9,9 +9,10 @@
     <script src="./assets/Scripts/sessao.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
+    <script src="./assets/Scripts/funcionarios.js"></script>
     <link rel="stylesheet" href="./assets/styles/funcionarios.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-    <script src="./assets/Scripts/alertas.js" defer></script>
+    <!-- <script src="./assets/Scripts/alertas.js" defer></script> -->
     <title>Funcionarios</title>
 </head>
 
@@ -57,7 +58,8 @@
 
             <div class="titleContainer">
                 <h1>Funcionários</h1>
-                <button class="btnCadastro">Cadastrar <i class='bx bx-plus-medical'></i></button>
+
+                <button class="btnCadastro" onclick="abrirModalCriar()">Cadastrar <i class='bx bx-plus-medical'></i></button>
             </div>
 
             <div class="funcionariosContainer">
