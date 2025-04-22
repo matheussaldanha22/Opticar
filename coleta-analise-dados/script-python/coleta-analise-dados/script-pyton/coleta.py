@@ -5,11 +5,8 @@ import mysql.connector
 import json
 import datetime
 import boto3
-<<<<<<< Updated upstream
-=======
 import os
 import tempfile 
->>>>>>> Stashed changes
 
 #Aqui a gente pega o mac Adress para comparar depois
 def enviarS3(mac_address,dados_json):
@@ -99,18 +96,10 @@ def monitorar():
             """, (mac_address,))
             pedidos_clientes = cursor.fetchall()
 
-<<<<<<< Updated upstream
-            # Vamos guardar os dados aqui pra mandar pro bucket
-            dados_json = {
-                "mac_address": mac_address,
-                "timestamp": datetime.now().isoformat(),
-                "leituras": []
-=======
             dados_json= {
                 "macAdress": mac_address,
                 "dataAtual": datetime.datetime.now().isoformat(),
                 "leitura": []
->>>>>>> Stashed changes
             }
 
             for pedido_cliente in pedidos_clientes:
@@ -119,21 +108,12 @@ def monitorar():
 
                 if chama_funcao:
                     valor = chama_funcao()
-<<<<<<< Updated upstream
-                    dados_json["leituras"].append({
-=======
                     dados_json["leitura"].append({
->>>>>>> Stashed changes
                         "componente": pedido_cliente['tipo'],
                         "medida": pedido_cliente['medida'],
                         "valor": valor
                     })
 
-<<<<<<< Updated upstream
-                    # Também salva no banco local
-=======
-
->>>>>>> Stashed changes
                     cursor.execute("""
                         INSERT INTO capturaDados (fkComponenteServidor, valor, data)
                         VALUES (%s, %s, NOW())
@@ -141,20 +121,12 @@ def monitorar():
                     
                     conexao.commit()
 
-<<<<<<< Updated upstream
-            # Envia os dados pro bucket
-            enviar_para_s3(mac_address, dados_json)
-=======
->>>>>>> Stashed changes
 
             cursor.close()
             conexao.close()
             time.sleep(10)
-<<<<<<< Updated upstream
-=======
             enviarS3(mac_address, dados_json)
             
->>>>>>> Stashed changes
 
         except Exception as e:
             print("Erro:", e)
