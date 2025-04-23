@@ -1,5 +1,3 @@
-
-
 function deslogar() {
   sessionStorage.clear()
   window.location.href = "./index.html"
@@ -11,6 +9,18 @@ function funcionarios() {
 
 function componentes() {
   window.location.href = "./componentes.html"
+}
+
+function monitoramento() {
+  window.location.href = "./dashMonitoramento.html"
+}
+
+function alertas() {
+  window.location.href = "./alertas.html"
+}
+
+function analise() {
+  window.location.href = "./dashAnalise.html"
 }
 
 const nomeUsuario = sessionStorage.getItem("NOME_USUARIO")
@@ -45,12 +55,13 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
           ul_links.innerHTML = `
 
             <li class="li-active">
-              <i class='bx bx-desktop' style='color:#ffffff'></i>
-              <span>Monitoramento</span>
+              <i class='bx bx-desktop' style='color:#ffffff' onclick="monitoramento()"></i>
+              <span onclick="monitoramento()">Dashboard monitoramento</span>
+
             </li>
             <li>
-              <i class='bx bxs-bell-ring' style='color:#ffffff'></i>
-              <span>Alertas</span>
+              <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertas()"></i>
+              <span onclick="alertas()">Alertas</span>
             </li>
             <li>
               <i class='bx bx-server' style='color:#ffffff'></i>
@@ -58,11 +69,11 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
             </li>
             <li>
                 <i class='bx bx-user' style='color:#ffffff' onclick="funcionarios()"></i>
-                <span><a href="./funcionarios.html">Funcionários</a></span>
+                <span onclick="funcionarios()">Funcionários</span>
             </li>
             <li>
                 <i class='bx bx-memory-card' style='color:#ffffff' onclick="componentes()"></i>
-                <span><a href="./componentes.html">Componentes</a></span>
+                <span onclick="componentes()">Componentes</span>
             </li>
             <li>
             <i class='bx bx-exit' style='color:#ffffff' onclick="deslogar()"></i>
@@ -70,15 +81,15 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
             </li>
 
             `
-        } else if (cargoUsuario === "AnalistaSuporte") {
+        } else if (cargoUsuario === "AnalistaDados") {
           ul_links.innerHTML = `
             <li class="li-active">
-              <i class='bx bx-desktop' style='color:#ffffff'></i>
-              <span>Monitoramento</span>
+              <i class='bx bx-desktop' style='color:#ffffff' onclick="analise()"></i>
+              <span onclick="analise()">Dashboard analise</span>
             </li>
             <li>
-              <i class='bx bxs-bell-ring' style='color:#ffffff'></i>
-              <span>Alertas</span>
+              <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertas()"></i>
+              <span onclick="alertas()">Alertas</span>
             </li>
             <li>
               <i class='bx bx-server' style='color:#ffffff'></i>

@@ -119,8 +119,54 @@ function listarPorId(req, res) {
   }
 }
 
+function listarPorEmpresa(req, res) {
+  var idEmpresa = req.params.idEmpresa
+
+  if (idEmpresa == undefined) {
+    res.status(400).send("ID da empresa indefinido")
+  } else {
+    usuarioModel
+      .listarPorEmpresa(idEmpresa)
+      .then(function (resultado) {
+        res.status(200).json(resultado)
+      })
+      .catch(function (erro) {
+        console.log(erro)
+        console.log(
+          "\nHouve um erro ao realizar a listagem do usuário Erro: ",
+          erro.sqlMessage
+        )
+        res.status(500).json(erro.sqlMessage)
+      })
+  }
+}
+
+function listarPorFabrica(req, res) {
+  var idFabrica = req.params.idFabrica
+
+  if (idFabrica == undefined) {
+    res.status(400).send("ID da fabrica indefinido")
+  } else {
+    usuarioModel
+      .listarPorFabrica(idFabrica)
+      .then(function (resultado) {
+        res.status(200).json(resultado)
+      })
+      .catch(function (erro) {
+        console.log(erro)
+        console.log(
+          "\nHouve um erro ao realizar a listagem do usuário Erro: ",
+          erro.sqlMessage
+        )
+        res.status(500).json(erro.sqlMessage)
+      })
+  }
+}
+
 module.exports = {
   autenticar,
   cadastrar,
   listarPorId,
+  listarPorEmpresa,
+  listarPorFabrica,
 }

@@ -44,7 +44,7 @@ CREATE TABLE usuario (
     nome VARCHAR(45),
     email VARCHAR(45),
     senha VARCHAR(45),
-    cargo ENUM('GestorEmpresa', 'GestorFabrica', 'AnalistaSuporte', 'EngenheiroManutenção'),
+    cargo ENUM('GestorEmpresa', 'GestorFabrica', 'AnalistaDados', 'EngenheiroManutencao', 'OperadorMaquina'),
     cpf VARCHAR(45),
     fkFabrica INT,
     FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica)

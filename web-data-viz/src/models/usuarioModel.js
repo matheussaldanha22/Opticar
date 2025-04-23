@@ -60,8 +60,32 @@ function listarPorId(idUsuario) {
   return database.executar(instrucaoSql)
 }
 
+function listarPorEmpresa(idEmpresa) {
+  var instrucaoSql = `
+    SELECT usuario.idusuario, usuario.nome, usuario.email, usuario.cpf,  usuario.cargo, empresa.nome AS nomeEmpresa from usuario
+      JOIN fabrica on usuario.fkFabrica = idFabrica
+      JOIN empresa on fabrica.fkEmpresa = empresa.idempresa
+    WHERE empresa.idempresa = ${idEmpresa} AND usuario.cargo = 'GestorFabrica';
+  `
+  console.log("Executando a instrução SQL: \n" + instrucaoSql)
+  return database.executar(instrucaoSql)
+}
+
+function listarPorFabrica(idFabrica) {
+  var instrucaoSql = `
+    SELECT usuario.idusuario, usuario.nome, usuario.email, usuario.cpf,  usuario.cargo, fabrica.nome AS nomeFabrica from usuario
+      JOIN fabrica on usuario.fkFabrica = idFabrica
+      JOIN empresa on fabrica.fkEmpresa = empresa.idempresa
+    WHERE fabrica.idFabrica = ${idFabrica} AND usuario.cargo != 'GestorFabrica' AND usuario.cargo != 'GestorEmpresa';
+  `
+  console.log("Executando a instrução SQL: \n" + instrucaoSql)
+  return database.executar(instrucaoSql)
+}
+
 module.exports = {
   autenticar,
   cadastrar,
   listarPorId,
+  listarPorEmpresa,
+  listarPorFabrica,
 }

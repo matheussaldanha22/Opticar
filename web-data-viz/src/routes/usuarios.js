@@ -16,4 +16,12 @@ router.get("/listarPorId/:idUsuario", (req, res) => {
   usuarioController.listarPorId(req, res)
 })
 
+router.get("/listarPorEmpresa/:idEmpresa", (req, res) => {
+  usuarioController.listarPorEmpresa(req, res)
+})
+
+router.get("/listarPorFabrica/:idFabrica", (req, res) => {
+  usuarioController.listarPorFabrica(req, res)
+})
+
 module.exports = router
