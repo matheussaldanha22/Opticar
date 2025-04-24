@@ -16,16 +16,27 @@ function autenticar(email, senha) {
     senha
   )
   var instrucaoSql = `
-        SELECT usuario.idusuario AS id, usuario.nome, usuario.email, usuario.cargo, empresa.idempresa AS empresaId, empresa.nome AS empresaNome, usuario.fkFabrica AS idFabrica, fabrica.nome AS nomeFabrica
-            FROM 
-                usuario
-            JOIN 
-                fabrica ON usuario.fkFabrica = fabrica.idfabrica
-            JOIN 
-                empresa ON fabrica.fkEmpresa = empresa.idempresa
-            WHERE 
-                usuario.email = '${email}' 
-                AND usuario.senha = '${senha}';
+          SELECT 
+            usuario.idusuario AS id,
+            usuario.nome,
+            usuario.email,
+            usuario.cargo,
+            empresa.idempresa AS empresaId,
+            empresa.nome AS empresaNome,
+            usuario.fkFabrica AS idFabrica,
+            fabrica.nome AS nomeFabrica
+          FROM 
+            usuario
+          LEFT JOIN 
+            fabrica ON usuario.fkFabrica = fabrica.idfabrica
+          LEFT JOIN 
+            empresa ON (
+              fabrica.fkEmpresa = empresa.idempresa
+              OR empresa.fkGestorEmpresa = usuario.idusuario
+            )
+          WHERE 
+            usuario.email = '${email}'
+            AND usuario.senha = '${senha}';
     `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executar(instrucaoSql)
@@ -62,7 +73,7 @@ function listarPorId(idUsuario) {
 
 function listarPorEmpresa(idEmpresa) {
   var instrucaoSql = `
-    SELECT usuario.idusuario, usuario.nome, usuario.email, usuario.cpf,  usuario.cargo, empresa.nome AS nomeEmpresa from usuario
+    SELECT usuario.idusuario, usuario.nome, usuario.email, usuario.cpf,  usuario.cargo, empresa.nome AS nomeEmpresa, fabrica.nome AS nomeFabrica from usuario
       JOIN fabrica on usuario.fkFabrica = idFabrica
       JOIN empresa on fabrica.fkEmpresa = empresa.idempresa
     WHERE empresa.idempresa = ${idEmpresa} AND usuario.cargo = 'GestorFabrica';

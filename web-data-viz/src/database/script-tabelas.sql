@@ -9,20 +9,41 @@ comandos para mysql server
 DROP database opticar;
 create database opticar;
 use opticar;
--- Tabelas de Relacionamento do Cliente
-CREATE TABLE empresa (
-    idempresa INT PRIMARY KEY auto_increment,
+-- 1. 
+CREATE TABLE usuario (
+    idusuario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45),
-    cnpj CHAR(14)
+    email VARCHAR(45),
+    senha VARCHAR(45),
+    cargo ENUM('GestorEmpresa', 'GestorFabrica', 'AnalistaDados', 'EngenheiroManutencao', 'OperadorMaquina'),
+    cpf VARCHAR(45),
+    fkFabrica INT  -- pode ser nulo inicialmente
 );
 
+-- 2. 
+CREATE TABLE empresa (
+    idempresa INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(45),
+    cnpj CHAR(14),
+    fkGestorEmpresa INT UNIQUE,
+ FOREIGN KEY (fkGestorEmpresa) REFERENCES usuario(idusuario)
+);
+
+-- 3. 
 CREATE TABLE fabrica (
-    idfabrica INT PRIMARY KEY auto_increment,
+    idfabrica INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45),
     funcao VARCHAR(45),
     fkEmpresa INT,
-    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idempresa)
+    fkGestorFabrica INT UNIQUE,
+    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idempresa),
+ FOREIGN KEY (fkGestorFabrica) REFERENCES usuario(idusuario)
 );
+
+-- 4. 
+ALTER TABLE usuario
+ADD CONSTRAINT fk_usuario_fabrica FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica);
+
 
 CREATE TABLE endereco (
     idendereco INT PRIMARY KEY auto_increment,
@@ -39,16 +60,6 @@ CREATE TABLE endereco (
     FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica)
 );
 
-CREATE TABLE usuario (
-    idusuario INT PRIMARY KEY auto_increment,
-    nome VARCHAR(45),
-    email VARCHAR(45),
-    senha VARCHAR(45),
-    cargo ENUM('GestorEmpresa', 'GestorFabrica', 'AnalistaDados', 'EngenheiroManutencao', 'OperadorMaquina'),
-    cpf VARCHAR(45),
-    fkFabrica INT,
-    FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica)
-);
 
 -- Configuração dos Componentes
 
@@ -100,14 +111,6 @@ CREATE TABLE alerta (
 
 -- Inserts relacionamento cliente
 
-INSERT INTO empresa (idempresa, nome, cnpj) VALUES
-(1, 'TechAgro S.A.', '12345678000199'),
-(2, 'AgroData Ltda', '98765432000111');
-
-INSERT INTO fabrica (idfabrica, nome, funcao, fkEmpresa) VALUES
-(1, 'Fábrica Norte', 'Montagem de sensores', 1),
-(2, 'Fábrica Sul', 'Montagem de placas', 1),
-(3, 'Fábrica Centro', 'Montagem geral', 2);
 
 INSERT INTO endereco (
   idendereco, logradouro, numLogradouro, cidade, bairro, uf, estado, cep, fkEmpresa, fkFabrica
@@ -118,10 +121,27 @@ INSERT INTO endereco (
 (4, 'Rua das Indústrias', 400, 'Belo Horizonte', 'Industrial', 'MG', 'Minas Gerais', '31000000', NULL, 3);
 
 INSERT INTO usuario (idusuario, nome, email, senha, cargo, cpf, fkFabrica) VALUES
-(1, 'Ana Silva', 'ana@techagro.com', 'senha123', 'GestorEmpresa', '12345678900', 1),
-(2, 'Carlos Souza', 'carlos@techagro.com', 'senha123', 'GestorFabrica', '98765432100', 1),
-(3, 'Beatriz Lima', 'beatriz@agrodata.com', 'senha123', 'AnalistaSuporte', '11122233344', 3);
+(1, 'Ana Silva', 'ana@techagro.com', '123', 'GestorEmpresa', '12345678900', NULL), -- gestora da empresa 1
+(5, 'Vitor Almeida', 'vitor@teste.com', '123', 'GestorEmpresa', '12222233344', NULL); -- gestora da empresa 3
 
+INSERT INTO empresa (idempresa, nome, cnpj, fkGestorEmpresa) VALUES
+(1, 'TechAgro S.A.', '12345678000199', 1),
+(2, 'AgroData Ltda', '98765432000111', NULL), -- Ainda sem gestor
+(3, 'TechVitor Ltda', '22765432102111', 5);
+
+INSERT INTO fabrica (idfabrica, nome, funcao, fkEmpresa, fkGestorFabrica) VALUES
+(1, 'Fábrica Norte', 'Montagem de sensores', 1, NULL),
+(2, 'Fábrica Sul', 'Montagem de placas', 1, NULL),
+(3, 'Fábrica Centro', 'Montagem geral', 2, NULL),
+(4, 'Fábrica Oeste', 'Montagem Carros', 3, NULL);
+
+INSERT INTO usuario (idusuario, nome, email, senha, cargo, cpf, fkFabrica) VALUES
+(2, 'Carlos Souza', 'carlos@techagro.com', '123', 'GestorFabrica', '98765432100', 1), -- gestor da Fábrica 1
+(3, 'Beatriz Lima', 'beatriz@agrodata.com', '123', 'AnalistaDados', '11122233344', 3),
+(4, 'Mario Almeida', 'mario@teste.com', '123', 'GestorFabrica', '12222233322', 3); -- gestor da Fábrica 3
+
+UPDATE fabrica SET fkGestorFabrica = 2 WHERE idfabrica = 1;
+UPDATE fabrica SET fkGestorFabrica = 4 WHERE idfabrica = 3;
 -- insert Configuração dos Componentes
 
 insert into componente (tipo, medida) values

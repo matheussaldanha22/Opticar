@@ -33,6 +33,7 @@ function renderTabela(pagina) {
                         <th>Email</th>
                         <th>CPF</th>
                         <th>Cargo</th>    
+                        <th>Fabrica</th>    
                         <th>Editar</th>
                     </tr>`
 
@@ -48,6 +49,7 @@ function renderTabela(pagina) {
       <td>${funcionario.email}</td>
       <td>${funcionario.cpf}</td>
       <td>${funcionario.cargo}</td>
+      <td>${funcionario.nomeFabrica}</td>
       <td><i class='bx bx-arrow-from-left btn' onclick="abrirModal(${funcionario.idusuario})"></i></td>
     `
     tabela.appendChild(tr)
@@ -81,7 +83,7 @@ function abrirModal(id) {
   }
 
   Swal.fire({
-    title: `Usuario ${funcionarios.idusuario}`,
+    title: ` ${funcionarios.nome}`,
     html: `
       <div class="modal-test">
         <div class="containerCadastroFunc">
@@ -91,6 +93,11 @@ function abrirModal(id) {
             <label>CPF <input value="${funcionarios.cpf}"></label>
             <label>Cargo
               <select name="cargo" id="sltCargo">
+              </select>
+            </label>
+              <label>Fabrica
+                <select name="fabrica" id="sltFabrica">
+                <option value="0">Selecione a fábrica</option>
               </select>
             </label>
         </div>
@@ -105,10 +112,34 @@ function abrirModal(id) {
       const cargo = sessionStorage.getItem("CARGO")
       if (cargo === "GestorEmpresa") {
         const selectCargo = document.getElementById("sltCargo")
+        const selectFabrica = document.getElementById("sltFabrica")
         selectCargo.innerHTML = `
           <option value="0">Selecione o cargo</option>
           <option value="GestorFabrica">Gestor fábrica</option>
         `
+        document.querySelector(
+          'select[name="cargo"]'
+        ).value = `${funcionarios.cargo}`
+
+        const idEmpresa = sessionStorage.getItem("EMPRESA")
+        fetch(
+          `http://localhost:3333/fabricas/listarFabricasEmpresa/${idEmpresa}`,
+          { method: "GET" }
+        ).then((resposta) => {
+          if (resposta.ok) {
+            resposta.json().then((resultado) => {
+              console.log(resultado)
+              resultado.forEach((fabrica) => {
+                selectFabrica.innerHTML += `
+                <option value="${fabrica.nome}">${fabrica.nome}</option>
+              `
+                document.querySelector(
+                  'select[name="fabrica"]'
+                ).value = `${funcionarios.nomeFabrica}`
+              })
+            })
+          }
+        })
       } else if (cargo === "GestorFabrica") {
         const selectCargo = document.getElementById("sltCargo")
 
