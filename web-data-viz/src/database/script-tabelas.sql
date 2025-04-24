@@ -112,13 +112,7 @@ CREATE TABLE alerta (
 -- Inserts relacionamento cliente
 
 
-INSERT INTO endereco (
-  idendereco, logradouro, numLogradouro, cidade, bairro, uf, estado, cep, fkEmpresa, fkFabrica
-) VALUES
-(1, 'Av. das Nações', 1000, 'São Paulo', 'Centro', 'SP', 'São Paulo', '01001000', 1, NULL),
-(2, 'Rua das Palmeiras', 200, 'Campinas', 'Jardim', 'SP', 'São Paulo', '13000000', NULL, 1),
-(3, 'Av. Brasil', 1500, 'Rio de Janeiro', 'Copacabana', 'RJ', 'Rio de Janeiro', '22000000', 2, NULL),
-(4, 'Rua das Indústrias', 400, 'Belo Horizonte', 'Industrial', 'MG', 'Minas Gerais', '31000000', NULL, 3);
+
 
 INSERT INTO usuario (idusuario, nome, email, senha, cargo, cpf, fkFabrica) VALUES
 (1, 'Ana Silva', 'ana@techagro.com', '123', 'GestorEmpresa', '12345678900', NULL), -- gestora da empresa 1
@@ -142,6 +136,17 @@ INSERT INTO usuario (idusuario, nome, email, senha, cargo, cpf, fkFabrica) VALUE
 
 UPDATE fabrica SET fkGestorFabrica = 2 WHERE idfabrica = 1;
 UPDATE fabrica SET fkGestorFabrica = 4 WHERE idfabrica = 3;
+
+INSERT INTO endereco (
+  idendereco, logradouro, numLogradouro, cidade, bairro, uf, estado, cep, fkEmpresa, fkFabrica
+) VALUES
+(1, 'Av. das Nações', 1000, 'São Paulo', 'Centro', 'SP', 'São Paulo', '01001000', 1, NULL),
+(2, 'Rua das Palmeiras', 200, 'Campinas', 'Jardim', 'SP', 'São Paulo', '13000000', NULL, 1),
+(3, 'Av. Brasil', 1500, 'Rio de Janeiro', 'Copacabana', 'RJ', 'Rio de Janeiro', '22000000', 2, NULL),
+(4, 'Rua das Indústrias', 400, 'Belo Horizonte', 'Industrial', 'MG', 'Minas Gerais', '31000000', NULL, 3);
+
+
+
 -- insert Configuração dos Componentes
 
 INSERT INTO componente (tipo, medida, indicador) VALUES
