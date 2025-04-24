@@ -10,7 +10,6 @@ import tempfile
 
 #Aqui a gente pega o mac Adress para comparar depois de tudo
 def enviarS3(mac_address,dados_json):
-
     s3=boto3.client("s3",region_name='us-east-1') 
 
     nome_arquivo = os.path.join(tempfile.gettempdir(), 'dados.json')
@@ -68,7 +67,11 @@ def cpu_freq():
     return round(psutil.cpu_freq().current, 2)
 
 def tempo_ligado():
-    return str(datetime.datetime.now() - datetime.datetime.fromtimestamp(psutil.boot_time())).split('.')[0]
+    uptime_seconds = (datetime.datetime.now() - datetime.datetime.fromtimestamp(psutil.boot_time())).total_seconds()
+    uptime_hours = int(uptime_seconds // 3600) 
+    return uptime_hours
+
+# Calcula as horas desde o último boot do sistema
 
 def qtd_processos_ativos():
     return len(psutil.pids())
@@ -84,17 +87,7 @@ def temperatura_cpu():
         pass
     return None
 
-def top_processos(limit=5):
-    cpu_valores = []
-    for processo in psutil.process_iter(['cpu_percent']):
-        try:
-            cpu_valores.append(processo.info['cpu_percent'])
-        except:
-            pass
-    if not cpu_valores:
-        return 0.0
-    media = sum(cpu_valores[:limit]) / min(limit, len(cpu_valores))
-    return round(media, 2)
+
 
 pedido_coleta = {
     ("Cpu", "Porcentagem"): cpu_percent,
@@ -112,7 +105,6 @@ pedido_coleta = {
     ("Rede", "Rede Envio"): get_sent_percent,
     ("Sistema", "Tempo Ligado"): tempo_ligado,
     ("Sistema", "Qtd Processos Ativos"): qtd_processos_ativos,
-    ("Sistema", "Top Processos CPU Média"): top_processos,
 }
 
 #Aqui conecta com o banco de dados
@@ -121,7 +113,7 @@ def conectar():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="@Zaqueuchavier123",
+        password="110645",
         database="opticar"
     )
 
@@ -130,7 +122,7 @@ def conectar():
 def monitorar():
     mac_address = pegando_mac_address()
     print(f"Iniciando monitoramento nesse mac_address: {mac_address}")
-    intervalo_envio_s3 = 3600  # isso em segundos é 1h
+    intervalo_envio_s3 = 10 # isso em segundos é 1h
     ultimo_envio_s3 = datetime.datetime.now()
 
     while True:
@@ -155,11 +147,13 @@ def monitorar():
 
             for pedido_cliente in pedidos_clientes:
                 chave_dict = (pedido_cliente['tipo'], pedido_cliente['medida'])
+                print(chave_dict)
                 chama_funcao = pedido_coleta.get(chave_dict)
                 print(chama_funcao)
 
                 if chama_funcao:
                     valor = chama_funcao()
+                    print(valor)
                     dados_json["leitura"].append({
                         "componente": pedido_cliente['tipo'],
                         "medida": pedido_cliente['medida'],

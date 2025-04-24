@@ -1,0 +1,96 @@
+{
+    "macAdress": 132243600390200,
+    "dataAtual": "2025-04-24T16:00:50.355322",
+    "leitura": [
+        {
+            "componente": "Cpu",
+            "medida": "Porcentagem",
+            "valor": 5.8
+        },
+        {
+            "componente": "Cpu",
+            "medida": "Porcentagem",
+            "valor": 14.6
+        },
+        {
+            "componente": "Cpu",
+            "medida": "Fr\u00eaquencia",
+            "valor": 1300.0
+        },
+        {
+            "componente": "Cpu",
+            "medida": "Fr\u00eaquencia",
+            "valor": 1300.0
+        },
+        {
+            "componente": "Cpu",
+            "medida": "Temperatura",
+            "valor": null
+        },
+        {
+            "componente": "Cpu",
+            "medida": "Temperatura",
+            "valor": null
+        },
+        {
+            "componente": "Ram",
+            "medida": "Porcentagem",
+            "valor": 90.5
+        },
+        {
+            "componente": "Ram",
+            "medida": "Usada",
+            "valor": 6.96
+        },
+        {
+            "componente": "Ram",
+            "medida": "Total",
+            "valor": 7.69
+        },
+        {
+            "componente": "Disco",
+            "medida": "Usado",
+            "valor": 179.18
+        },
+        {
+            "componente": "Disco",
+            "medida": "Porcentagem",
+            "valor": 39.2
+        },
+        {
+            "componente": "Rede",
+            "medida": "Recebida",
+            "valor": 8.39
+        },
+        {
+            "componente": "Rede",
+            "medida": "Enviada",
+            "valor": 13.48
+        },
+        {
+            "componente": "Rede",
+            "medida": "Upload",
+            "valor": 13.48
+        },
+        {
+            "componente": "Rede",
+            "medida": "Download",
+            "valor": 8.39
+        },
+        {
+            "componente": "Rede",
+            "medida": "Rede Envio",
+            "valor": 61.64
+        },
+        {
+            "componente": "Sistema",
+            "medida": "Tempo Ligado",
+            "valor": 16
+        },
+        {
+            "componente": "Sistema",
+            "medida": "Qtd Processos Ativos",
+            "valor": 268
+        }
+    ]
+}

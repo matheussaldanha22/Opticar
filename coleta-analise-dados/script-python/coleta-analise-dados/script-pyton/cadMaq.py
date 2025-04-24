@@ -6,7 +6,7 @@ import uuid
 conexao = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="@Zaqueuchavier123",
+    password="110645",
     database="opticar"
 )
 
