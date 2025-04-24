@@ -24,4 +24,8 @@ router.get("/listarPorFabrica/:idFabrica", (req, res) => {
   usuarioController.listarPorFabrica(req, res)
 })
 
+router.put("/atualizarUsuario", (req, res) => {
+  usuarioController.atualizarUsuario(req, res)
+})
+
 module.exports = router

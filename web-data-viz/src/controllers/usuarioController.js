@@ -163,10 +163,38 @@ function listarPorFabrica(req, res) {
   }
 }
 
+function atualizarUsuario(req, res) {
+  var idUsuario = req.body.idUsuario
+  var nome = req.body.nome
+  var email = req.body.email
+  var cpf = req.body.cpf
+  var cargo = req.body.cargo
+  var idFabrica = req.body.idFabrica
+
+  if (idUsuario == undefined) {
+    res.status(400).send("ID do usuario indefinido")
+  } else {
+    usuarioModel
+      .atualizarUsuario(idUsuario, nome, email, cpf, cargo, idFabrica)
+      .then(function (resultado) {
+        res.status(200).json(resultado)
+      })
+      .catch(function (erro) {
+        console.log(erro)
+        console.log(
+          "\nHouve um erro ao atualizar o usuário Erro: ",
+          erro.sqlMessage
+        )
+        res.status(500).json(erro.sqlMessage)
+      })
+  }
+}
+
 module.exports = {
   autenticar,
   cadastrar,
   listarPorId,
   listarPorEmpresa,
   listarPorFabrica,
+  atualizarUsuario,
 }

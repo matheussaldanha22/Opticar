@@ -88,9 +88,9 @@ function abrirModal(id) {
       <div class="modal-test">
         <div class="containerCadastroFunc">
             <h3>Editar funcionário</h3>
-            <label>Nome <input value="${funcionarios.nome}"></label>
-            <label>Email <input value="${funcionarios.email}"></label>
-            <label>CPF <input value="${funcionarios.cpf}"></label>
+            <label>Nome <input value="${funcionarios.nome}" id="inpNomeAtt"></label>
+            <label>Email <input value="${funcionarios.email}" id="inpEmailAtt"></label>
+            <label>CPF <input value="${funcionarios.cpf}" id="inpCpfAtt"></label>
             <label>Cargo
               <select name="cargo" id="sltCargo">
               </select>
@@ -131,7 +131,7 @@ function abrirModal(id) {
               console.log(resultado)
               resultado.forEach((fabrica) => {
                 selectFabrica.innerHTML += `
-                <option value="${fabrica.nome}">${fabrica.nome}</option>
+                <option value="${fabrica.idFabrica}">${fabrica.nome}</option>
               `
                 document.querySelector(
                   'select[name="fabrica"]'
@@ -142,7 +142,7 @@ function abrirModal(id) {
         })
       } else if (cargo === "GestorFabrica") {
         const selectCargo = document.getElementById("sltCargo")
-
+        const selectFabrica = document.getElementById("sltFabrica")
         selectCargo.innerHTML = `
           <option value="0">Selecione o cargo</option>
           <option value="EngenheiroManutencao">Engenheiro de Manutenção</option>
@@ -153,8 +153,89 @@ function abrirModal(id) {
         document.querySelector(
           'select[name="cargo"]'
         ).value = `${funcionarios.cargo}`
+
+        const idEmpresa = sessionStorage.getItem("EMPRESA")
+        fetch(
+          `http://localhost:3333/fabricas/listarFabricasEmpresa/${idEmpresa}`,
+          { method: "GET" }
+        ).then((resposta) => {
+          if (resposta.ok) {
+            resposta.json().then((resultado) => {
+              console.log(resultado)
+              resultado.forEach((fabrica) => {
+                selectFabrica.innerHTML += `
+                <option value="${fabrica.idfabrica}">${fabrica.nome}</option>
+                
+              `
+                document.querySelector(
+                  'select[name="fabrica"]'
+                ).value = `${fabrica.idfabrica}`
+              })
+            })
+          }
+        })
       }
     },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const idUsuario = id
+      const nome = document.getElementById("inpNomeAtt").value
+      const email = document.getElementById("inpEmailAtt").value
+      const cpf = document.getElementById("inpCpfAtt").value
+      const cargo = document.getElementById("sltCargo").value
+      const fabrica = document.getElementById("sltFabrica").value
+      console.log(idUsuario)
+      console.log(nome)
+      console.log(email)
+      console.log(cpf)
+      console.log(cargo)
+      console.log(fabrica)
+
+      if (
+        nome == "" ||
+        email == "" ||
+        cpf == "" ||
+        cargo == "" ||
+        fabrica == ""
+      ) {
+        return Swal.fire("Erro", "Preencha todos os campos!", "error")
+      }
+
+      fetch(`http://localhost:3333/usuarios/atualizarUsuario`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idUsuario: idUsuario,
+          nome: nome,
+          email: email,
+          cpf: cpf,
+          cargo: cargo,
+          idFabrica: fabrica,
+        }),
+      })
+        .then((res) => {
+          if (res.ok) {
+            return res.json()
+          } else {
+            console.log(result)
+            // throw new Error("Erro ao cadastrar funcionário")
+          }
+        })
+        .then((res) => {
+          if (res) {
+            console.log("Funcionário atualizado com sucesso!")
+            Swal.fire({
+              title: "Sucesso",
+              text: "Funcionário atualizado com sucesso!",
+              icon: "success",
+              confirmButtonText: "OK",
+            })
+            listarFuncionariosFabrica()
+          }
+        })
+    }
   })
 }
 
