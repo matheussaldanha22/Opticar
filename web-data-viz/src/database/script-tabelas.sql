@@ -76,7 +76,8 @@ CREATE TABLE servidor_maquina (
 CREATE TABLE componente (
     idcomponente INT PRIMARY KEY auto_increment,
     tipo VARCHAR(45),
-    medida VARCHAR(45)
+    medida VARCHAR(45),
+    indicador VARCHAR(45)
 );
 
 CREATE TABLE componenteServidor (
@@ -84,7 +85,6 @@ CREATE TABLE componenteServidor (
     fkComponente INT,
     fkMaquina INT,
     modelo VARCHAR(45),
-    identificador VARCHAR(45),
     limiteCritico VARCHAR(45),
     limiteAtencao VARCHAR(45),
     FOREIGN KEY (fkComponente) REFERENCES componente(idcomponente),
@@ -144,15 +144,47 @@ UPDATE fabrica SET fkGestorFabrica = 2 WHERE idfabrica = 1;
 UPDATE fabrica SET fkGestorFabrica = 4 WHERE idfabrica = 3;
 -- insert Configuração dos Componentes
 
-insert into componente (tipo, medida) values
-('cpu', 'porcentagem'),
-('ram', 'porcentagem'),
-('disco', 'porcentagem');
+INSERT INTO componente (tipo, medida, indicador) VALUES
+('Cpu', 'Porcentagem', '%'),
+('Cpu', 'Frêquencia', 'MHz'),
+('Cpu', 'Temperatura', '°C'),
+('Ram', 'Porcentagem', '%'),
+('Ram', 'Usada', 'GB'),
+('Ram', 'Total', 'GB'),
+('Disco', 'Usado', 'GB'),
+('Disco', 'Porcentagem', '%'),
+('Rede', 'Recebida', 'MB'),
+('Rede', 'Enviada', 'MB'),
+('Rede', 'Upload', 'MB'),
+('Rede', 'Download', 'MB'),
+('Rede', 'Rede Envio', '%'),
+('Sistema', 'Tempo Ligado', 'Tempo'),
+('Sistema', 'Qtd Processos Ativos', 'Qtd'),
+('Sistema', 'Top Processos CPU Média', '%');
 
-insert into componenteservidor (fkcomponente, fkmaquina, modelo, identificador, limitecritico, limiteatencao) values
-(1, 1, 'intel core i7', 'cpu-001', '90', '75'),
-(2, 1, 'corsair 16gb', 'ram-001', '90', '75'),
-(3, 1, 'ssd kingston 480gb', 'disco-001', '95', '80');
+insert into componenteservidor (fkcomponente, fkmaquina, modelo, limitecritico, limiteatencao) values
+(1, 1, 'intel core i7', '90', '75'),
+(2, 1, 'corsair 16gb', '90', '75'),
+(3, 1, 'ssd kingston 480gb', '95', '80');
+
+insert into componenteservidor values
+(default, 1, 1, "intel", "45", "59"),
+(default, 2, 1, "intel", "45", "59"),
+(default, 3, 1, "intel", "45", "59"),
+(default, 4, 1, "intel", "45", "59"),
+(default, 5, 1, "intel", "45", "59"),
+(default, 6, 1, "intel", "45", "59"),
+(default, 7, 1, "intel", "45", "59"),
+(default, 8, 1, "intel", "45", "59"),
+(default, 9, 1, "intel", "45", "59"),
+(default, 10, 1, "intel", "45", "59"),
+(default, 11, 1, "intel", "45", "59"),
+(default, 12, 1, "intel", "45", "59"),
+(default, 13, 1, "intel", "45", "59"),
+(default, 14, 1, "intel", "45", "59"),
+(default, 15, 1, "intel", "45", "59"),
+(default, 16, 1, "intel", "45", "59");
+
 
 select * from servidor_Maquina;
 
