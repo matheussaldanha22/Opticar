@@ -141,6 +141,49 @@ function cadastrarPedido(codigoPedido) {
           var mensagem = await resposta.text();
           if (resposta.ok) {
             listarComponente()
+            cadastrarPedidoFrio(codigoPedido)
+            Swal.fire('Sucesso!', 'Componente cadastrado com sucesso!', 'success');
+          } else if (mensagem.includes("Duplicate entry")) {
+            Swal.fire('Erro!', 'Componente já cadastrado para essa máquina!', 'error');
+          } else {
+            Swal.fire('Erro!', 'Falha ao cadastrar o componente.', 'error');
+          }
+        })
+        .catch(function (erro) {
+          console.error("Erro ao enviar dados:", erro);
+        });
+        return false;
+}
+
+function cadastrarPedidoFrio(codigoPedido) {
+    var codigoVar = codigoPedido[0]
+    var modeloVar = iptModelo.value
+    var limiteAVar = iptLimiteAtencao.value
+    var limiteGVar = iptLimiteGrave.value
+
+    console.log(codigoVar)
+
+    if (codigoVar == '' || !modeloVar || !limiteAVar || !limiteGVar) {
+        Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
+        return;
+    }
+
+    fetch("/componentes/cadastrarFrio", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+        codigoServer : codigoVar,
+        modeloServer: modeloVar,
+        limiteAServer: limiteAVar,
+        limiteGServer: limiteGVar
+      }),
+      })
+        .then(async function (resposta) {
+          console.log("resposta: ", resposta);
+          var mensagem = await resposta.text();
+          if (resposta.ok) {
             Swal.fire('Sucesso!', 'Componente cadastrado com sucesso!', 'success');
           } else if (mensagem.includes("Duplicate entry")) {
             Swal.fire('Erro!', 'Componente já cadastrado para essa máquina!', 'error');
@@ -237,119 +280,3 @@ function excluirComponente(botaoExcluir) {
         });
         
 }
-// function usuarios() {
-//     fetch("/maquina/usuarios", {
-//         method: "GET",
-//         headers: {
-//             "Content-Type": "application/json"
-//         }
-//     }).then(resposta => resposta.json()).then(usuarios => {
-//         lista_usuarios.push(usuarios)
-//         const tabela = document.querySelector(".usuarios table");
-//         tabela.innerHTML = `
-//             <tr>
-//                 <th>ID USUARIO</th>
-//                 <th>Nome usuário</th>
-//                 <th>Nome Empresa</th>
-//                 <th>Data Cadastro</th>
-//                 <th>Cargo/Editar</th>
-//             </tr>
-//         `;
-//         usuarios.forEach(usuario => {
-//             if (usuario.cargo == null) {
-//             const linha = document.createElement("tr");
-//             linha.innerHTML = `
-//                 <th>${usuario.idUsuarios}</th>
-//                 <td>${usuario.nome}</td>
-//                 <td>${usuario.empresa_nome}</td>
-//                 <td>${usuario.dataRegistro}</td>
-//                 <td class='ativarDados' data-user="${usuario.idUsuarios}" style="cursor: pointer">✏️ Cadastre Aqui</td>
-//             `;
-//             tabela.appendChild(linha);
-//             } else {
-//                 if(usuario.cargo == "analista") {
-//                     const linha = document.createElement("tr");
-//                     linha.innerHTML = `
-//                         <th>${usuario.idUsuarios}</th>
-//                         <td>${usuario.nome}</td>
-//                         <td>${usuario.empresa_nome}</td>
-//                         <td>${usuario.dataRegistro}</td>
-//                         <td class='ativarDados' style="cursor: pointer; color: #41448C;" data-user="${usuario.idUsuarios}">${usuario.cargo.toUpperCase()}</td>
-//                     `
-//                     tabela.appendChild(linha);
-//                 } else {
-//                     const linha = document.createElement("tr");
-//                     linha.innerHTML = `
-//                         <th>${usuario.idUsuarios}</th>
-//                         <td>${usuario.nome}</td>
-//                         <td>${usuario.empresa_nome}</td>
-//                         <td>${usuario.dataRegistro}</td>
-//                         <td class='ativarDados' data-user="${usuario.idUsuarios}" style="cursor: pointer; color: #88418C;">${usuario.cargo.toUpperCase()}</td>
-//                     `
-//                     tabela.appendChild(linha);
-//                 }
-//             }
-//         });
-//         const telaDados = document.querySelector('.telaDados');
-
-//         document.querySelectorAll('.ativarDados').forEach(classe => {
-//         classe.addEventListener('click', (e) => {
-//             userId = e.target.getAttribute("data-user");
-        
-//             telaDados.classList.add('ativadoDados');
-            
-//             btnCadastrar = telaDados.querySelector("#btn_cargo");
-
-//             btnCadastrar.setAttribute("data-user", userId)
-
-//         })}); 
-        
-//     })
-//     .catch(erro => {
-//         console.error("Erro ao buscar usuários:", erro);
-//     });
-// }
-// function listarComponente() {
-//     var fkEmpresa = sessionStorage.FK_EMPRESA;
-
-//     fetch("/pla/listarPlant", {
-//       method: "POST",
-//       headers: {
-//         "Content-type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         fkEmpresa: fkEmpresa,
-//       }),
-//     })
-//       .then(function (resposta) {
-//         resposta.json().then((plant) => {
-//           plant.forEach((plant) => {
-//             lista_plant.push(plant);
-
-//             console.log("listaPlantasCadastradas");
-//           });
-//           atualizarSelectPlantacoes();
-//         });
-//       })
-//       .catch(function (resposta) {
-//         console.log(`#ERRO: ${resposta}`);
-//       });
-//   }
-
-//   function atualizarSelectPlantacoes() {
-//     var listaPlantElement = document.getElementById("listaPlant");
-
-//     if (lista_plant.length > 0) {
-//       lista_plant.forEach((plant) => {
-//         var option = document.createElement("option");
-//         option.value = plant.idPLANTACAO;
-//         option.textContent = plant.nome;
-//         listaPlantElement.appendChild(option);
-//       });
-//     } else {
-//       var option = document.createElement("option");
-//       option.value = "";
-//       option.textContent = "Nenhuma plantação disponível";
-//       listaPlantElement.appendChild(option);
-//     }
-//   }

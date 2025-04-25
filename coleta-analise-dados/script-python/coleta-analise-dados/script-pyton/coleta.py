@@ -6,11 +6,11 @@ import json
 import datetime
 import boto3
 import os
-import tempfile 
+import tempfile
 
 #Aqui a gente pega o mac Adress para comparar depois de tudo
 def enviarS3(mac_address,dados_json):
-    s3=boto3.client("s3",region_name='us-east-1') 
+    s3=boto3.client("s3",region_name='us-east-1')
 
     nome_arquivo = os.path.join(tempfile.gettempdir(), 'dados.json')
     with open(nome_arquivo, mode='wt') as file:
@@ -19,16 +19,16 @@ def enviarS3(mac_address,dados_json):
     s3.upload_file(
             Filename=nome_arquivo,
             Bucket='s3-python-32',
-            Key= f'{mac_address}/dados.json',     
+            Key= f'{mac_address}/dados.json',    
 )
-    
+   
 
 def pegando_mac_address():
     return uuid.getnode()
 
 #Aqui a gente pega os dados
 
-def cpu_percent(): 
+def cpu_percent():
     return round(psutil.cpu_percent(interval=1), 2)
 
 def ram_percent():
@@ -40,7 +40,7 @@ def ram_usada_gb():
 def ram_total_gb():
     return round(psutil.virtual_memory().total / (1024 ** 3), 2)
 
-def disk_percent(): 
+def disk_percent():
     return round(psutil.disk_usage('/').percent, 2)
 
 def disk_usado_gb():
@@ -63,12 +63,12 @@ def get_sent_percent():
     total = net.bytes_sent + net.bytes_recv
     return round((net.bytes_sent / total) * 100, 2) if total > 0 else 0.0
 
-def cpu_freq(): 
+def cpu_freq():
     return round(psutil.cpu_freq().current, 2)
 
 def tempo_ligado():
     uptime_seconds = (datetime.datetime.now() - datetime.datetime.fromtimestamp(psutil.boot_time())).total_seconds()
-    uptime_hours = int(uptime_seconds // 3600) 
+    uptime_hours = int(uptime_seconds // 3600)
     return uptime_hours
 
 # Calcula as horas desde o último boot do sistema
@@ -113,8 +113,16 @@ def conectar():
     return mysql.connector.connect(
         host="localhost",
         user="root",
-        password="110645",
+        password="@Zaqueuchavier123",
         database="opticar"
+    )
+
+def conectarFrio():
+    return mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="@Zaqueuchavier123",
+        database="opticarFrio"
     )
 
 #Aqui é afunção principal que vai realizar as validações e os inserts
@@ -128,14 +136,16 @@ def monitorar():
     while True:
         try:
             conexao = conectar()
+            conexaoFrio = conectarFrio()
             cursor = conexao.cursor(dictionary=True)
+            cursorFrio = conexaoFrio.cursor(dictionary=True)
 
             # Busca no banco os componentes que devem ser monitorados para esse MAC
             cursor.execute("""
-                SELECT * FROM componenteServidor 
-                JOIN servidor_maquina ON componenteServidor.fkMaquina = servidor_maquina.idMaquina
-                JOIN componente ON componenteServidor.fkComponente = componente.idComponente
-                WHERE servidor_maquina.Mac_Address = %s;
+                SELECT * FROM opticar.componenteServidor 
+                JOIN opticar.servidor_maquina ON opticar.componenteServidor.fkMaquina = opticar.servidor_maquina.idMaquina
+                JOIN opticar.componente ON opticar.componenteServidor.fkComponente = opticar.componente.idcomponente
+                WHERE opticar.servidor_maquina.Mac_Address = %s;
             """, (mac_address,))
             pedidos_clientes = cursor.fetchall()
 
@@ -159,16 +169,29 @@ def monitorar():
                         "medida": pedido_cliente['medida'],
                         "valor": valor
                     })
+                    print(pedido_cliente['idcomponenteServidor'])
 
-                    cursor.execute("""
-                        INSERT INTO capturaDados (fkComponenteServidor, valor, data)
-                        VALUES (%s, %s, NOW())
-                    """, (pedido_cliente['idcomponenteServidor'], valor)) 
-                    
-                    conexao.commit()
+                    cursorFrio.execute("""
+                    SELECT opticarFrio.componenteServidor.idcomponenteServidor FROM opticarFrio.componenteservidor
+                    WHERE fkComponente = %s AND fkMaquina = %s
+                    """, (pedido_cliente['fkComponente'], pedido_cliente['fkMaquina']))
+
+                    resultado_frio = cursorFrio.fetchone()
+
+                    if resultado_frio:
+                        id_frio = resultado_frio['idcomponenteServidor']
+                        cursorFrio.execute("""
+                        INSERT INTO opticarFrio.capturaDados (fkComponenteServidor, valor, data)
+                        VALUES (%s, %s, NOW());
+                        """, (id_frio, valor))
+                        conexaoFrio.commit()
+                    else:
+                        print(f"Componente não encontrado no opticarFrio para fkComponente={pedido_cliente['fkComponente']} e fkMaquina={pedido_cliente['fkMaquina']}")
 
             cursor.close()
             conexao.close()
+            cursorFrio.close()
+            conexaoFrio.close()
 
             tempo_passado = (datetime.datetime.now() - ultimo_envio_s3).total_seconds()
             if tempo_passado >= intervalo_envio_s3:
@@ -176,7 +199,7 @@ def monitorar():
                 ultimo_envio_s3 = datetime.datetime.now()
 
             time.sleep(10)
-            
+           
 
         except Exception as e:
             print("Erro:", e)

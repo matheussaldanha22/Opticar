@@ -22,6 +22,13 @@ function cadastrar(codigo, modelo, limiteA, limiteG) {
     return database.executar(instrucaoSql);
 }
 
+function cadastrarFrio(codigo, modelo, limiteA, limiteG) {
+    var instrucaoSql = `insert into componenteservidor (fkcomponente, fkmaquina, modelo, limitecritico, limiteatencao) values
+    (${codigo}, 1, '${modelo}', '${limiteG}', '${limiteA}')`;
+
+    return database.executarFRIO(instrucaoSql);
+}
+
 function listarComponentes() {
     var instrucaoSql = `SELECT cs.idcomponenteServidor, cs.fkMaquina, c.tipo, c.medida, cs.modelo, cs.limiteCritico, cs.limiteAtencao 
                         FROM componenteServidor AS cs JOIN componente AS c ON cs.fkComponente = c.idcomponente;`
@@ -39,6 +46,7 @@ module.exports ={
     listarMedida,
     verificar,
     cadastrar,
+    cadastrarFrio,
     listarComponentes,
     excluirComponente
  };

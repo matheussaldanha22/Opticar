@@ -19,6 +19,10 @@ router.post("/cadastrar", function (req, res) {
     componenteController.cadastrar(req,res);
 })
 
+router.post("/cadastrarFrio", function (req, res) {
+    componenteController.cadastrarFrio(req,res);
+})
+
 router.post("/verificar", function (req, res) {
     componenteController.verificar(req,res);
 })

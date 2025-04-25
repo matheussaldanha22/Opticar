@@ -6,11 +6,19 @@ import uuid
 conexao = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="110645",
+    password="@Zaqueuchavier123",
     database="opticar"
 )
 
+conexao2 = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="@Zaqueuchavier123",
+    database="opticarFrio"
+)
+
 cursor = conexao.cursor()
+cursor2 = conexao2.cursor()
 so = platform.system()
 ip = socket.gethostbyname(socket.gethostname())
 hostname = socket.gethostname()
@@ -24,8 +32,17 @@ cursor.execute("""
     VALUES (%s, %s, %s, %s, %s)
 """, (so, ip, fabrica, mac, hostname))
 
+cursor2.execute("""
+    INSERT INTO servidor_maquina (sistema_operacional, ip, fkFabrica, Mac_Address, hostname)
+    VALUES (%s, %s, %s, %s, %s)
+""", (so, ip, fabrica, mac, hostname))
+
+
 conexao.commit()
+conexao2.commit()
 print("Máquina cadastrada")
 
 cursor.close()
 conexao.close()
+cursor2.close()
+conexao2.close()

@@ -5,7 +5,6 @@
 /*
 comandos para mysql server
 */
-
 DROP database opticar;
 create database opticar;
 use opticar;
@@ -20,16 +19,14 @@ CREATE TABLE usuario (
     fkFabrica INT  -- pode ser nulo inicialmente
 );
 
--- 2. 
 CREATE TABLE empresa (
     idempresa INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45),
     cnpj CHAR(14),
     fkGestorEmpresa INT UNIQUE,
- FOREIGN KEY (fkGestorEmpresa) REFERENCES usuario(idusuario)
+	FOREIGN KEY (fkGestorEmpresa) REFERENCES usuario(idusuario)
 );
 
--- 3. 
 CREATE TABLE fabrica (
     idfabrica INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45),
@@ -37,13 +34,11 @@ CREATE TABLE fabrica (
     fkEmpresa INT,
     fkGestorFabrica INT UNIQUE,
     FOREIGN KEY (fkEmpresa) REFERENCES empresa(idempresa),
- FOREIGN KEY (fkGestorFabrica) REFERENCES usuario(idusuario)
+    FOREIGN KEY (fkGestorFabrica) REFERENCES usuario(idusuario)
 );
 
--- 4. 
 ALTER TABLE usuario
 ADD CONSTRAINT fk_usuario_fabrica FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica);
-
 
 CREATE TABLE endereco (
     idendereco INT PRIMARY KEY auto_increment,
@@ -60,8 +55,6 @@ CREATE TABLE endereco (
     FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica)
 );
 
-
--- Configuração dos Componentes
 
 CREATE TABLE servidor_maquina (
     idMaquina INT PRIMARY KEY auto_increment,
@@ -91,28 +84,7 @@ CREATE TABLE componenteServidor (
     FOREIGN KEY (fkMaquina) REFERENCES servidor_maquina(idMaquina)
 );
 
--- Configuração Alerta
-
-CREATE TABLE capturaDados (
-    idCapturaDados INT PRIMARY KEY auto_increment,
-    fkComponenteServidor INT,
-    valor FLOAT,
-    data DATETIME,
-    FOREIGN KEY (fkComponenteServidor) REFERENCES componenteServidor(idcomponenteServidor)
-);
-
-CREATE TABLE alerta (
-    idAlerta INT PRIMARY KEY auto_increment,
-    dataHora DATETIME,
-    valor FLOAT,
-    fkCapturaDados INT,
-    FOREIGN KEY (fkCapturaDados) REFERENCES capturaDados(idCapturaDados)
-);
-
 -- Inserts relacionamento cliente
-
-
-
 
 INSERT INTO usuario (idusuario, nome, email, senha, cargo, cpf, fkFabrica) VALUES
 (1, 'Ana Silva', 'ana@techagro.com', '123', 'GestorEmpresa', '12345678900', NULL), -- gestora da empresa 1
@@ -145,8 +117,6 @@ INSERT INTO endereco (
 (3, 'Av. Brasil', 1500, 'Rio de Janeiro', 'Copacabana', 'RJ', 'Rio de Janeiro', '22000000', 2, NULL),
 (4, 'Rua das Indústrias', 400, 'Belo Horizonte', 'Industrial', 'MG', 'Minas Gerais', '31000000', NULL, 3);
 
-
-
 -- insert Configuração dos Componentes
 
 INSERT INTO componente (tipo, medida, indicador) VALUES
@@ -167,11 +137,6 @@ INSERT INTO componente (tipo, medida, indicador) VALUES
 ('Sistema', 'Qtd Processos Ativos', 'Qtd'),
 ('Sistema', 'Top Processos CPU Média', '%');
 
-insert into componentServidor (fkcomponente, fkmaquina, modelo, limitecritico, limiteatencao) values
-(1, 1, 'intel core i7', '90', '75'),
-(2, 1, 'corsair 16gb', '90', '75'),
-(3, 1, 'ssd kingston 480gb', '95', '80');
-
 insert into componenteServidor values
 (default, 1, 1, "intel", "45", "59"),
 (default, 2, 1, "intel", "45", "59"),
@@ -187,9 +152,7 @@ insert into componenteServidor values
 (default, 12, 1, "intel", "45", "59"),
 (default, 13, 1, "intel", "45", "59"),
 (default, 14, 1, "intel", "45", "59"),
-(default, 15, 1, "intel", "45", "59"),
-(default, 16, 1, "intel", "45", "59");
-
+(default, 15, 1, "intel", "45", "59");
 
 select * from servidor_Maquina;
 
@@ -206,5 +169,4 @@ SELECT * FROM componenteServidor WHERE fkMaquina = (SELECT idMaquina FROM servid
 SELECT * FROM componenteServidor JOIN servidor_maquina ON componenteServidor.fkMaquina = servidor_maquina.idMaquina
 				JOIN componente ON componenteServidor.fkComponente = componente.idComponente
                 WHERE servidor_maquina.Mac_Address = 251776438657434;
-
 

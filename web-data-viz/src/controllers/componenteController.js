@@ -96,6 +96,31 @@ function cadastrar(req, res) {
     }
 }
 
+function cadastrarFrio(req, res) {
+    var codigo = req.body.codigoServer;
+    var modelo = req.body.modeloServer;
+    var limiteA = req.body.limiteAServer;
+    var limiteG = req.body.limiteGServer;
+
+    if (modelo == undefined || limiteA == undefined || limiteG == undefined) {
+        res.status(400).send("undefined cadastrar");
+    } else {
+        componenteModel.cadastrarFrio(codigo, modelo, limiteA, limiteG).then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(function (erro) {
+            console.log(erro);
+            console.log(
+                "\nHouve um erro ao realizar o cadastro",
+                erro.sqlMessage
+            );
+            res.status(500).json(erro.sqlMessage);
+        });
+        
+    }
+}
+
 function listarComponentes(req, res) {
     componenteModel.listarComponentes()
         .then(
@@ -138,6 +163,7 @@ function excluirComponente(req, res) {
     listarTipo,
     listarMedida,
     cadastrar,
+    cadastrarFrio,
     verificar,
     listarComponentes,
     excluirComponente
