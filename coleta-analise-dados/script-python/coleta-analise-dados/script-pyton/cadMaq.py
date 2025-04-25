@@ -11,7 +11,6 @@ conexao = mysql.connector.connect(
 )
 
 cursor = conexao.cursor()
-
 so = platform.system()
 ip = socket.gethostbyname(socket.gethostname())
 hostname = socket.gethostname()
