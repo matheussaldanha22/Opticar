@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opticar - Análise de Dados</title>
+    <link rel="stylesheet" href="assets/styles/monitoramentoGestao Fabrica.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    
+
+
+</head>
+<body>
+    <div class="dashHistorica">
+        <div id="div_menu" class="menu ">
+            <div class="nav-burger" onclick="expand()">
+                <div id="linha1"></div>
+                <div id="linha2"></div>
+                <div id="linha3"></div>
+            </div>
+
+            <!-- <ul class="nav-links oculta">
+                <li><i class='bx bx-desktop' style='color:#ffffff' ></i></li>
+                <li><i class='bx bxs-bell-ring' style='color:#ffffff' ></i></li>
+                <li><i class='bx bx-server' style='color:#ffffff' ></i></li>
+            </ul> -->
+            <ul id="ul_links" class="nav-links ">
+                
+                <li class="li-active">
+                    <i class='bx bx-desktop' style='color:#ffffff' ></i>
+                    <span>Monitoramento</span>
+                </li>
+                <li>
+                    <i class='bx bxs-bell-ring' style='color:#ffffff' ></i>
+                    <span>Alertas</span>
+                </li>
+                <li>
+                    <i class='bx bx-server' style='color:#ffffff' ></i>
+                    <span>Servidores</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="dashgestao">
+        <!-- cabecalho -->
+        <div class="cabecalho">
+            <div class="empresa">
+                
+                    <i class='bx bxs-business'></i>
+
+                <div class="txtInfo">
+                    <p id="empresaNome">Nissan</p>
+                    <p class="endereco"> Rua Haddock Lobo, 595</p>
+                </div>
+            </div>
+
+            <div class="perfil">
+                <i class='bx bxs-user-circle' style="font-size: 4vw;"></i>
+                <div class="txtInfo">
+                    <div class="txt">
+                        <p id="empresaNome">Jonhis Bringous</p>
+                        <p class="endereco"> jonhis@gmail.com</p>
+                    </div>
+                    <i class='bx bx-chevron-down' style="font-size: 3vw;"></i>
+                </div>
+            </div>
+        </div>
+        <!-- charts -->
+
+        <div class="painelDash">
+
+            <div class="cabecalhoDash">
+                <div class="texto">
+                    <p id="titulo">Dashboards Gestão da Fábrica</p>
+                    <p class="descricao"> Acompanhe o que há de mais importante na sua fábrica</p>
+                </div>
+            </div>
+
+            <div class="grafSuperior">
+
+                <!--kpi de servidores inicio-->
+                <div class="chart-container-blue">
+                    <div class="chartCabecalho">
+                        <h2><i class='bx bx-server' style="border: solid 1px white; border-radius: 8px;"></i> Servidores:</h2>
+                        <div class="filtrar" onclick="adicionar">
+                            <h3>Visualizar:</h3>
+                            <div class="iconeFiltro" onclick="window.location.href='listadeservidores.html'">
+                                    <i class='bx bx-show'></i>   
+                            </div>
+
+                        </div>
+                        
+                    </div>
+                    <div class="server-container">
+                        <div class="server-box">
+                            <span class="server-label">Ativos</span>
+                            <span id="qtd-servidores" class="server-value" style="color: rgb(3, 116, 7);">0</span>
+                            
+
+
+                        </div>
+                        
+                    </div>
+                
+                   <!-- <canvas id="serverChart"></canvas>-->
+                </div>
+
+                <script></script>
+                 <!--kpi de servidores fim-->
+
+
+
+
+                 <!--kpi de efetividade de alertas inicio -->
+                 <div class="chart-container-blue">
+                    <div class="chartCabecalho">
+                        <h2>
+                            <i class='bx bxs-save' style="border: solid 1px white; border-radius: 8px;"></i>
+                            Efetividade na resolução de alertas:
+                        </h2>
+                        
+                    </div>
+                
+                    <div class="kpi-box">
+                        <div class="kpi-valores" id="eficienciaGeral">--%</div>
+                        <div class="kpi-detalhes">
+                            <p> nos graves: <span id="eficienciaGraves">--%</span></p>
+                            <p> nos moderados: <span id="eficienciaModerados">--%</span></p>
+
+
+                        </div>
+                    </div>
+                </div>
+                
+                <!--kpi de efetividade de alertas fim -->
+
+
+
+
+
+
+                <!--grafico de funcionarios inicio-->
+                <div class="chart-container-bluefuncionarios">
+                    <div class="chartCabecalho">
+                        <h2><i class='bx bx-user-circle' style="color:#ffffff"></i> Funcionários:</h2>
+                        
+                        
+                        <div class="filtrar" onclick="adicionar">
+                            <h3>Adicionar:</h3>
+                            <div class="iconeFiltro">
+                                <i class='bx bx-plus-circle' style="color: #ffffff;" onclick="window.location.href='funcionarios.html'"></i>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="cargos">
+                        <span id="totalCargos"></span>
+                        <canvas id="graficoCargos" width="900" height="600"></canvas>
+
+                    </div>
+                </div>
+                <!--grafico de funcionarios fim-->
+
+            </div>
+
+
+
+
+            
+            <div class="graficos-inferior">
+                <div class="pesquisa">
+                <!-- KPI 1: Seletor de Componente -->
+                <div class="kpi-seletor-componente">
+                    <label for="seletorComponente">Selecione o Componente:</label>
+                    <select id="seletorComponente">
+                        <option value="cpu">escolher</option>
+                        <option value="cpu">CPU</option>
+                        <option value="ram">RAM</option>
+                        <option value="disco">Disco</option>
+                    </select>
+                </div>
+            
+                <!-- KPI 2: Quantidade de servidores com problema -->
+                <div class="kpi-problema-componente">
+                    <h3>Servidores com componente<br>Debilitado</h3>
+                    <span id="quantidadeProblemas">--</span>
+                    <button class="botao-olho" title="Ver detalhes">
+                        <i class='bx bx-show'></i>
+                    </button>
+
+                </div>
+            </div>
+        
+                <script src="/assets/Scripts/dashsEstaticasFabrica/compdebili.js"></script>
+            
+            </div>
+            
+
+
+            
+            
+
+        </div>
+    </div>
+    <script src="../public/assets/Scripts/backlistadeservidores.js"></script>
+</body>
+</html>
+
+<script>
+    // BARRA LATERAL
+    function expand(){
+        if(div_menu.classList.contains('menu-expand')){
+            div_menu.style.animation = 'diminui 0.2s linear';
+
+        }else{
+            div_menu.style.animation = 'expandir 0.2s linear';
+
+        }
+        div_menu.classList.toggle('menu-expand')
+        ul_links.classList.toggle('nav-links-expanded')
+    }
+
+function verServidores(){
+    window.location.href = "lista de servidores.html";
+    
+}
+    
+</script>
+
+<script src="../public/assets/Scripts/backlistadeservidores.js"></script>
+<script src="assets/Scripts/dashsEstaticasFabrica/funcionarioscontagem.js"></script>
+<script src="/assets/Scripts/dashsEstaticasFabrica/eficiencia.js"></script>

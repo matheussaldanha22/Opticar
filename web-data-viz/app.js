@@ -22,6 +22,7 @@ var fabricasRouter = require("./src/routes/fabricas")
 var servidoresRouter = require("./src/routes/servidores")
 var empresasRouter = require("./src/routes/empresas")
 var componenteRouter = require("./src/routes/componentes")
+var listaservidoresRouter = require("./src/routes/listadeservidores")
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -36,6 +37,7 @@ app.use("/fabricas", fabricasRouter)
 app.use("/servidores", servidoresRouter)
 app.use("/empresas", empresasRouter)
 app.use("/componentes", componenteRouter)
+app.use("/listadeservidores", listaservidoresRouter)
 
 app.listen(PORTA_APP, function () {
   console.log(`
