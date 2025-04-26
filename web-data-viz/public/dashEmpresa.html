@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="./assets/styles/empresa.css">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./assets/Scripts/sessao.js" defer></script>
 </head>
 <body>
     <div id="div_menu" class="menu ">
@@ -29,22 +30,20 @@
         </ul>
     </div>
 
-    <!-- Grid A -->
-    <!-- Grid B -->
     <div class="container">
         <div class="contain">
             <div class="cabeca">
                 <div class="empresa">
                     <i class='bx bxs-business' undefined></i>
                     <div class="lugar">
-                        <h3>Volkwagen</h3>
+                        <h3 id="empresaNome">Volkwagen</h3>
                     </div>
                 </div>
                 <div class="persona">
                     <i class='bx bxs-user-circle'></i>
                     <div>
-                        <h3>Luciano Alves</h3>
-                        <h3 class="desktop-email" style="display: none;">luciano@empresa.com</h3>
+                        <h3 id="usuarioNome">Luciano Alves</h3>
+                        <h3 class="desktop-email" style="display: none;" id="usuarioEmail">luciano@empresa.com</h3>
                     </div>
                     <div>
                         <i class='bx bx-chevron-down'></i>

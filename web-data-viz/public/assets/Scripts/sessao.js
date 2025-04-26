@@ -3,33 +3,61 @@ function deslogar() {
   window.location.href = "./index.html"
 }
 
+let pagina = 0
+
+
+
 function funcionarios() {
+  pagina = 1
   window.location.href = "./funcionarios.html"
+  document.getElementById('funcionarios').className = 'li-active'
 }
+
+
 
 function componentes() {
+  pagina = 2
   window.location.href = "./componentes.html"
+  document.getElementById('componentes').className = 'li-active'
+
 }
 
-function monitoramento() {
+function dashMonitoramento() {
+  pagina = 3
   window.location.href = "./dashMonitoramento.html"
+  document.getElementById('dashMonitoramento').className = 'li-active'
+
 }
 
 function alertas() {
+  pagina = 4
   window.location.href = "./alertas.html"
+  document.getElementById('alertas').className = 'li-active'
+
 }
 
-function analise() {
+function dashAnalise() {
+  pagina = 5
   window.location.href = "./dashAnalise.html"
+  document.getElementById('dashAnalise').className = 'li-active'
+
+}
+
+function dashEmpresa() {
+  pagina = 6
+  window.location.href = "./dashEmpresa.html"
+  document.getElementById('dashEmpresa').className = 'li-active'
 }
 
 const nomeUsuario = sessionStorage.getItem("NOME_USUARIO")
 const aquarios = JSON.parse(sessionStorage.getItem("AQUARIOS"))
 const idUsuario = sessionStorage.getItem("ID_USUARIO")
 const emailUsuario = sessionStorage.getItem("EMAIL_USUARIO")
+const empresaUsuario = sessionStorage.getItem("EMPRESA_NOME")
 
 const nomeElement = document.getElementById("usuarioNome")
 const emailElement = document.getElementById("usuarioEmail")
+const empresaElement = document.getElementById("empresaNome")
 
 if (nomeElement) {
   nomeElement.textContent = nomeUsuario
@@ -37,6 +65,12 @@ if (nomeElement) {
 if (emailElement) {
   emailElement.textContent = emailUsuario
 }
+
+if(empresaElement){
+  empresaElement.textContent = empresaUsuario
+}
+
+
 
 fetch(`/usuarios/listarPorId/${idUsuario}`, {
   method: "GET",
@@ -49,29 +83,44 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
 
         let ul_links = document.getElementById("ul_links")
         if (
-          cargoUsuario === "GestorEmpresa" ||
-          cargoUsuario === "GestorFabrica"
-        ) {
+          cargoUsuario === "GestorEmpresa") {
           ul_links.innerHTML = `
 
-            <li class="li-active">
-              <i class='bx bx-desktop' style='color:#ffffff' onclick="monitoramento()"></i>
-              <span onclick="monitoramento()">Dashboard monitoramento</span>
-
+            <li id="dashEmpresa">
+              <i class='bx bx-desktop' style='color:#ffffff' onclick="dashEmpresa()"></i>
+              <span onclick="dashEmpresa()">Dashboard empresa</span>
             </li>
-            <li>
-              <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertas()"></i>
-              <span onclick="alertas()">Alertas</span>
-            </li>
-            <li>
-              <i class='bx bx-server' style='color:#ffffff'></i>
-              <span>Servidores</span>
-            </li>
-            <li>
+            <li id="funcionarios">
                 <i class='bx bx-user' style='color:#ffffff' onclick="funcionarios()"></i>
                 <span onclick="funcionarios()">Funcionários</span>
             </li>
             <li>
+            <i class='bx bx-exit' style='color:#ffffff' onclick="deslogar()"></i>
+              <span onclick="deslogar()">Sair</span>
+            </li>
+
+            `
+        } else if(cargoUsuario == 'GestorFabrica'){
+
+          ul_links.innerHTML = `
+
+            <li id="dashMonitoramento">
+              <i class='bx bx-desktop' style='color:#ffffff' onclick="dashMonitoramento()"></i>
+              <span onclick="dashMonitoramento()">Dashboard monitoramento</span>
+            </li>
+            <li id="alertas">
+              <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertas()"></i>
+              <span onclick="alertas()">Alertas</span>
+            </li>
+            <li id="servidores">
+              <i class='bx bx-server' style='color:#ffffff'></i>
+              <span>Servidores</span>
+            </li>
+            <li id="funcionarios">
+                <i class='bx bx-user' style='color:#ffffff' onclick="funcionarios()"></i>
+                <span onclick="funcionarios()">Funcionários</span>
+            </li>
+            <li id="componentes">
                 <i class='bx bx-memory-card' style='color:#ffffff' onclick="componentes()"></i>
                 <span onclick="componentes()">Componentes</span>
             </li>
@@ -81,25 +130,70 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
             </li>
 
             `
-        } else if (cargoUsuario === "AnalistaDados") {
+        }else if (cargoUsuario === "AnalistaDados") {
           ul_links.innerHTML = `
-            <li class="li-active">
-              <i class='bx bx-desktop' style='color:#ffffff' onclick="analise()"></i>
-              <span onclick="analise()">Dashboard analise</span>
+
+            <li id="dashMonitoramento">
+              <i class='bx bx-desktop' style='color:#ffffff' onclick="dashMonitoramento()"></i>
+              <span onclick="dashMonitoramento()">Dashboard monitoramento</span>
             </li>
-            <li>
+            <li id="dashEmpresa">
+              <i class='bx bx-desktop' style='color:#ffffff' onclick="dashEmpresa()"></i>
+              <span onclick="dashEmpresa()">Dashboard empresa</span>
+            </li>
+            <li id="alertas">
               <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertas()"></i>
               <span onclick="alertas()">Alertas</span>
             </li>
-            <li>
+            <li id="servidores">
               <i class='bx bx-server' style='color:#ffffff'></i>
               <span>Servidores</span>
             </li>
+            <li id="funcionarios">
+                <i class='bx bx-user' style='color:#ffffff' onclick="funcionarios()"></i>
+                <span onclick="funcionarios()">Funcionários</span>
+            </li>
+            <li id="componentes">
+                <i class='bx bx-memory-card' style='color:#ffffff' onclick="componentes()"></i>
+                <span onclick="componentes()">Componentes</span>
+            </li>
             <li>
-            <i class='bx bx-exit' style='color:#ffffff'></i>
+            <i class='bx bx-exit' style='color:#ffffff' onclick="deslogar()"></i>
               <span onclick="deslogar()">Sair</span>
             </li>
-          `
+
+            `
+        }else if(cargoUsuario === 'EngenheiroManutencao'){
+          ul_links.innerHTML = `
+            <li id="dashMonitoramento">
+              <i class='bx bx-desktop' style='color:#ffffff' onclick="dashMonitoramento()"></i>
+              <span onclick="dashMonitoramento()">Dashboard monitoramento</span>
+            </li>
+            <li id="dashEmpresa">
+              <i class='bx bx-desktop' style='color:#ffffff' onclick="dashEmpresa()"></i>
+              <span onclick="dashEmpresa()">Dashboard empresa</span>
+            </li>
+            <li id="alertas">
+              <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertas()"></i>
+              <span onclick="alertas()">Alertas</span>
+            </li>
+            <li id="servidores">
+              <i class='bx bx-server' style='color:#ffffff'></i>
+              <span>Servidores</span>
+            </li>
+            <li id="funcionarios">
+                <i class='bx bx-user' style='color:#ffffff' onclick="funcionarios()"></i>
+                <span onclick="funcionarios()">Funcionários</span>
+            </li>
+            <li id="componentes">
+                <i class='bx bx-memory-card' style='color:#ffffff' onclick="componentes()"></i>
+                <span onclick="componentes()">Componentes</span>
+            </li>
+            <li>
+            <i class='bx bx-exit' style='color:#ffffff' onclick="deslogar()"></i>
+              <span onclick="deslogar()">Sair</span>
+            </li>
+            `
         }
 
         // nomeFuncionario.innerHTML = resultado[0].nome
@@ -111,3 +205,4 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
   .catch((erro) => {
     console.log(erro)
   })
+

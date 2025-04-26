@@ -5,6 +5,10 @@ let listaFuncionarios = [] // Armazenamento dos dados recebidos do backend
 document.addEventListener("DOMContentLoaded", () => {
   const cargo = sessionStorage.getItem("CARGO")
 
+  
+    
+
+
   if (cargo === "GestorEmpresa") {
     listarFuncionariosEmpresa()
   } else if (cargo === "GestorFabrica") {
