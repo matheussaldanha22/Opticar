@@ -35,7 +35,9 @@ function carregarServidores() {
         listadeservidores = [];
         listadeservidores.push(servidores);
         
-        
+    
+        const quantidade = servidores.length;
+        sessionStorage.setItem("quantidadeServidores", quantidade);    
 
         const tabela = document.querySelector(".componentesContainer table");
         tabela.innerHTML = "";
@@ -52,7 +54,7 @@ function carregarServidores() {
             linha.innerHTML = ""; 
             linha.innerHTML += `
                 <th>SV00${servidor.idMaquina}</th>
-                <td>${servidor.componentes}<button class='bx bx-plus' style="cursor:pointer; background:linear-gradient(270deg, #012027, #04708D); border-radius:10px; margin-left: 8px;">
+                <td>${servidor.componentes}<button class='bx bx-plus' data-id="${servidor.idMaquina}" style="cursor:pointer; background:linear-gradient(270deg, #012027, #04708D); border-radius:10px; margin-left: 8px;">
             </button></td>
                 <td>${servidor.ip}</td>
                 <td><button class="btn-purple" data-id="${servidor.idMaquina}">Excluir</button></td>
@@ -77,10 +79,27 @@ function carregarServidores() {
                     }
                 });
             });
+
+            const botaoComponente = linha.querySelector(".bx-plus");
+
+botaoComponente.addEventListener("click", () => {
+    const idservidorlinha = botaoComponente.getAttribute("data-id");
+    sessionStorage.setItem("idMaquinaSelecionada", idservidorlinha);//salva o id do serverpra puxar la 
+
+    window.location.href = "/componentes.html";
+    
+    
+
+});
+
+
+
         });
     }).catch(erro => {
         console.error("Erro ao buscar servidor:", erro);
     });
+
+    
 }
 
 
