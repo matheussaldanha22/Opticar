@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="assets/styles/monitoramentoGestao Fabrica.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
+    <script src="./assets/Scripts/sessao.js" defer></script>
+    <script src="/assets/Scripts/backlistadeservidores.js" defer></script>
+    <script src="/assets/Scripts/dashsEstaticasFabrica/compdebili.js" defer></script>
+    <script src="/assets/Scripts/dashsEstaticasFabrica/funcionarioscontagem.js" defer></script>
+    <script src="/assets/Scripts/dashsEstaticasFabrica/eficiencia.js" defer></script>
 
     <!-- Bibliotecas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -23,12 +28,6 @@
                 <div id="linha2"></div>
                 <div id="linha3"></div>
             </div>
-
-            <!-- <ul class="nav-links oculta">
-                <li><i class='bx bx-desktop' style='color:#ffffff' ></i></li>
-                <li><i class='bx bxs-bell-ring' style='color:#ffffff' ></i></li>
-                <li><i class='bx bx-server' style='color:#ffffff' ></i></li>
-            </ul> -->
             <ul id="ul_links" class="nav-links ">
 
             </ul>
@@ -156,43 +155,58 @@
     </div>
 
     <!-- Scripts locais -->
-    <script src="/assets/Scripts/backlistadeservidores.js"></script>
-    <script src="/assets/Scripts/dashsEstaticasFabrica/compdebili.js"></script>
-    <script src="/assets/Scripts/dashsEstaticasFabrica/funcionarioscontagem.js"></script>
-    <script src="/assets/Scripts/dashsEstaticasFabrica/eficiencia.js"></script>
+
 
     <!-- Scripts da própria página -->
-    <script>
-        // Barra lateral
-        function expand() {
-            if (div_menu.classList.contains('menu-expand')) {
-                div_menu.style.animation = 'diminui 0.2s linear'
-            } else {
-                div_menu.style.animation = 'expandir 0.2s linear'
-            }
-            div_menu.classList.toggle('menu-expand')
-            ul_links.classList.toggle('nav-links-expanded')
-        }
 
-        // Visualizar os servidores (não está sendo usado no HTML mas deixei aqui)
-        function verServidores() {
-            window.location.href = "listadeservidores.html"
-        }
-
-        // Preencher a quantidade de servidores
-        document.addEventListener("DOMContentLoaded", () => {
-            const quantidadeServidores = sessionStorage.getItem("quantidadeServidores")
-            if (quantidadeServidores !== null) {
-                document.getElementById("qtd-servidores").innerText = quantidadeServidores
-            }
-        });
-    </script>
 
 </body>
 
 </html>
 
 <script>
+    // Barra lateral
+    function expand() {
+        if (div_menu.classList.contains('menu-expand')) {
+            div_menu.style.animation = 'diminui 0.2s linear'
+
+        } else {
+            div_menu.style.animation = 'expandir 0.2s linear'
+
+        }
+        div_menu.classList.toggle('menu-expand')
+        ul_links.classList.toggle('nav-links-expanded')
+    }
+
+    const menu = document.querySelector('.nav-links')
+    const burger = document.querySelector('.nav-burger')
+    const linha1 = document.querySelector('#linha1')
+    const linha2 = document.querySelector('#linha2')
+    const linha3 = document.querySelector('#linha3')
+    burger.addEventListener('click', () => {
+
+        linha1.classList.toggle('linha1-active')
+        linha2.classList.toggle('linha2-active')
+        linha3.classList.toggle('linha3-active')
+        menu.classList.toggle('nav-active')
+
+    })
+
+    // Visualizar os servidores (não está sendo usado no HTML mas deixei aqui)
+    function verServidores() {
+        window.location.href = "listadeservidores.html"
+    }
+
+    // Preencher a quantidade de servidores
+    document.addEventListener("DOMContentLoaded", () => {
+        const quantidadeServidores = sessionStorage.getItem("quantidadeServidores")
+        if (quantidadeServidores !== null) {
+            document.getElementById("qtd-servidores").innerText = quantidadeServidores
+        }
+    });
+</script>
+
+<!-- <script>
     // BARRA LATERAL
     function expand() {
         if (div_menu.classList.contains('menu-expand')) {
@@ -211,4 +225,4 @@
 
     }
 
-</script>
+</script> -->
