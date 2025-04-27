@@ -1,11 +1,11 @@
-FROM node:22
+FROM node:22.11.0
 
-COPY  package*.json
+COPY package*.json ./
 
 RUN npm install
 
 COPY . .
 
-ENTRYPOINT ["npm", "run", "dev"]
-
 EXPOSE 80
+
+ENTRYPOINT ["npm", "start"]

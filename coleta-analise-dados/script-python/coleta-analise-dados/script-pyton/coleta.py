@@ -10,11 +10,7 @@ import tempfile
 
 #Aqui a gente pega o mac Adress para comparar depois de tudo
 # def enviarS3(mac_address,dados_json):
-<<<<<<< Updated upstream
 #     s3=boto3.client("s3",region_name='us-east-1')
-=======
-#     s3=boto3.client("s3",region_name='us-east-1') 
->>>>>>> Stashed changes
 
 #     nome_arquivo = os.path.join(tempfile.gettempdir(), 'dados.json')
 #     with open(nome_arquivo, mode='wt') as file:
@@ -23,15 +19,9 @@ import tempfile
 #     s3.upload_file(
 #             Filename=nome_arquivo,
 #             Bucket='s3-python-32',
-<<<<<<< Updated upstream
 #             Key= f'{mac_address}/dados.json',    
 # )
    
-=======
-#             Key= f'{mac_address}/dados.json',     
-# )
-    
->>>>>>> Stashed changes
 
 def pegando_mac_address():
     return uuid.getnode()
@@ -203,11 +193,7 @@ def monitorar():
             cursorFrio.close()
             conexaoFrio.close()
 
-<<<<<<< Updated upstream
             # tempo_passado = (datetime.datetime.now() - ultimo_envio_s3).total_seconds()
-=======
-            tempo_passado = (datetime.datetime.now() - ultimo_envio_s3).total_seconds()
->>>>>>> Stashed changes
             # if tempo_passado >= intervalo_envio_s3:
             #     enviarS3(mac_address, dados_json)
             #     ultimo_envio_s3 = datetime.datetime.now()
