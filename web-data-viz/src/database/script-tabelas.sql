@@ -8,7 +8,7 @@ comandos para mysql server
 DROP database opticar;
 create database opticar;
 use opticar;
--- 1. 
+
 CREATE TABLE usuario (
     idusuario INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45),
@@ -24,7 +24,7 @@ CREATE TABLE empresa (
     nome VARCHAR(45),
     cnpj CHAR(14),
     fkGestorEmpresa INT UNIQUE,
-	FOREIGN KEY (fkGestorEmpresa) REFERENCES usuario(idusuario)
+	FOREIGN KEY (fkGestorEmpresa) REFERENCES usuario(idusuario) ON DELETE CASCADE
 );
 
 CREATE TABLE fabrica (
@@ -33,12 +33,12 @@ CREATE TABLE fabrica (
     funcao VARCHAR(45),
     fkEmpresa INT,
     fkGestorFabrica INT UNIQUE,
-    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idempresa),
-    FOREIGN KEY (fkGestorFabrica) REFERENCES usuario(idusuario)
+    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idempresa) ON DELETE CASCADE,
+    FOREIGN KEY (fkGestorFabrica) REFERENCES usuario(idusuario) ON DELETE CASCADE
 );
 
 ALTER TABLE usuario
-ADD CONSTRAINT fk_usuario_fabrica FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica);
+ADD CONSTRAINT fk_usuario_fabrica FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica) ON DELETE CASCADE;
 
 CREATE TABLE endereco (
     idendereco INT PRIMARY KEY auto_increment,
@@ -51,8 +51,8 @@ CREATE TABLE endereco (
     cep CHAR(8),
     fkEmpresa INT,
     fkFabrica INT,
-    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idempresa),
-    FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica)
+    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idempresa) ON DELETE CASCADE,
+    FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica) ON DELETE CASCADE
 );
 
 
@@ -63,7 +63,7 @@ CREATE TABLE servidor_maquina (
     fkFabrica INT,
     Mac_Address BIGINT unique,
     hostname VARCHAR(45),
-    FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica)
+    FOREIGN KEY (fkFabrica) REFERENCES fabrica(idfabrica) ON DELETE CASCADE
 );
 
 CREATE TABLE componente (
@@ -80,8 +80,8 @@ CREATE TABLE componenteServidor (
     modelo VARCHAR(45),
     limiteCritico VARCHAR(45),
     limiteAtencao VARCHAR(45),
-    FOREIGN KEY (fkComponente) REFERENCES componente(idcomponente),
-    FOREIGN KEY (fkMaquina) REFERENCES servidor_maquina(idMaquina)
+    FOREIGN KEY (fkComponente) REFERENCES componente(idcomponente) ON DELETE CASCADE, 
+    FOREIGN KEY (fkMaquina) REFERENCES servidor_maquina(idMaquina) ON DELETE CASCADE 
 );
 
 -- Inserts relacionamento cliente
@@ -137,14 +137,9 @@ INSERT INTO componente (tipo, medida, indicador) VALUES
 ('Sistema', 'Qtd Processos Ativos', 'Qtd'),
 ('Sistema', 'Top Processos CPU Média', '%');
 
-<<<<<<< Updated upstream
-=======
-insert into componenteServidor (fkcomponente, fkmaquina, modelo, limitecritico, limiteatencao) values
-(1, 1, 'intel core i7', '90', '75'),
-(2, 1, 'corsair 16gb', '90', '75'),
-(3, 1, 'ssd kingston 480gb', '95', '80');
+insert into servidor_maquina values
+(1,	'Windows', '192.168.56.1', 1, 251776438657434, 'DESKTOP-KHH0UBD');
 
->>>>>>> Stashed changes
 insert into componenteServidor values
 (default, 1, 1, "intel", "45", "59"),
 (default, 2, 1, "intel", "45", "59"),
@@ -161,6 +156,8 @@ insert into componenteServidor values
 (default, 13, 1, "intel", "45", "59"),
 (default, 14, 1, "intel", "45", "59"),
 (default, 15, 1, "intel", "45", "59");
+
+select * from componenteservidor;
 
 select * from servidor_Maquina;
 

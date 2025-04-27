@@ -10,7 +10,28 @@ function excluirServidor(botao) {
     .then(res => {
         if (res.ok) {
             Swal.fire("Excluído!", "O servidor foi excluído com sucesso.", "success");
+            excluirServidorFrio(id)
             carregarServidores(); 
+        } else {
+            Swal.fire("Erro!", "Erro ao excluir o servidor.", "error");
+        }
+    })
+    .catch(err => {
+        console.error("Erro ao excluir servidor:", err);
+        Swal.fire("Erro!", "Erro inesperado ao excluir.", "error");
+    });
+}
+
+function excluirServidorFrio(id) {
+    fetch(`/listadeservidores/excluirServidorFrio/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(res => {
+        if (res.ok) {
+            Swal.fire("Excluído!", "O servidor foi excluído com sucesso.", "success");
         } else {
             Swal.fire("Erro!", "Erro ao excluir o servidor.", "error");
         }
@@ -25,11 +46,15 @@ function excluirServidor(botao) {
 
 
 function carregarServidores() {
+    var idFabricaVar = sessionStorage.FABRICA_ID
     fetch("/listadeservidores/carregarServidores", {
-        method: "GET",
+        method: "POST",
         headers: {
             "Content-Type": "application/json"
-        }
+        },
+        body: JSON.stringify({
+        idFabricaServer: idFabricaVar,
+    }),
     }).then(resposta => resposta.json())
       .then(servidores => {
         listadeservidores = [];

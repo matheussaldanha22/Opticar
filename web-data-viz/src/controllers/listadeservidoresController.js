@@ -2,7 +2,8 @@ var listadeservidoresModel = require('../models/listadeservidoresModel');
 
 
 function carregarServidores(req, res) {
-    listadeservidoresModel.carregarServidores()
+    var idFabrica = req.body.idFabricaServer;
+    listadeservidoresModel.carregarServidores(idFabrica)
               .then(
                   function (resultado) {
                       res.json(resultado);
@@ -30,8 +31,22 @@ function carregarServidores(req, res) {
             res.status(500).json(erro.sqlMessage);
         });
 }
+
+function excluirServidorFrio(req, res) {
+    var idMaquina = req.params.id;
+
+    listadeservidoresModel.excluirServidorFrio(idMaquina)
+        .then(() => {
+            res.status(200).send("Servidor excluído com sucesso");
+        })
+        .catch(erro => {
+            console.error("Erro ao excluir servidor:", erro.sqlMessage);
+            res.status(500).json(erro.sqlMessage);
+        });
+}
   
   module.exports = {
     carregarServidores,
-    excluirServidor
+    excluirServidor,
+    excluirServidorFrio
   };
