@@ -3,10 +3,6 @@ var router = express.Router();
 
 var componenteController = require("../controllers/componenteController");
 
-router.post("/listarComponente", function (req, res) {
-    componenteController.listar(req, res);
-})
-
 router.get("/listarTipo", function (req, res) {
     componenteController.listarTipo(req, res);
 });
@@ -27,12 +23,16 @@ router.post("/verificar", function (req, res) {
     componenteController.verificar(req,res);
 })
 
-router.get("/listarComponentes", function (req, res) {
+router.post("/listarComponentes", function (req, res) {
     componenteController.listarComponentes(req,res);
 })
 
 router.post("/excluirComponente", function (req, res) {
     componenteController.excluirComponente(req, res)
+})
+
+router.post("/excluirComponenteFrio", function (req, res) {
+    componenteController.excluirComponenteFrio(req, res)
 })
 
 

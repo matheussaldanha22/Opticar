@@ -1,18 +1,5 @@
 var componenteModel = require("../models/componenteModel");
 
-function listarComponente(req, res) {
-    var fkEmpresa = req.body.fkEmpresa;
-    if (fkEmpresa == undefined) {
-        res.status(400).send("Algum parametro está undefined!");
-      } else {
-    plantModel.listarPlant(fkEmpresa).then((resultado) => {
-      res.status(200).json(resultado);
-    });
-    
-    console.log('TO NO CONTROLLER');
-  }
-}
-
 function listarTipo(req, res) {
     componenteModel.listarTipo().then(function (resultado) {
         if (resultado.length > 0) {
@@ -72,15 +59,16 @@ function verificar(req, res) {
 }
 
 function cadastrar(req, res) {
+    var idMaquina = req.body.idMaquinaServer;
     var codigo = req.body.codigoServer;
     var modelo = req.body.modeloServer;
     var limiteA = req.body.limiteAServer;
     var limiteG = req.body.limiteGServer;
 
-    if (modelo == undefined || limiteA == undefined || limiteG == undefined) {
+    if (modelo == undefined || limiteA == undefined || limiteG == undefined || idMaquina == undefined) {
         res.status(400).send("undefined cadastrar");
     } else {
-        componenteModel.cadastrar(codigo, modelo, limiteA, limiteG).then(
+        componenteModel.cadastrar(codigo, modelo, limiteA, limiteG, idMaquina).then(
             function (resultado) {
                 res.json(resultado);
             }
@@ -97,15 +85,16 @@ function cadastrar(req, res) {
 }
 
 function cadastrarFrio(req, res) {
+    var idMaquina = req.body.idMaquinaServer;
     var codigo = req.body.codigoServer;
     var modelo = req.body.modeloServer;
     var limiteA = req.body.limiteAServer;
     var limiteG = req.body.limiteGServer;
 
-    if (modelo == undefined || limiteA == undefined || limiteG == undefined) {
+    if (modelo == undefined || limiteA == undefined || limiteG == undefined || idMaquina == undefined) {
         res.status(400).send("undefined cadastrar");
     } else {
-        componenteModel.cadastrarFrio(codigo, modelo, limiteA, limiteG).then(
+        componenteModel.cadastrarFrio(codigo, modelo, limiteA, limiteG, idMaquina).then(
             function (resultado) {
                 res.json(resultado);
             }
@@ -122,7 +111,8 @@ function cadastrarFrio(req, res) {
 }
 
 function listarComponentes(req, res) {
-    componenteModel.listarComponentes()
+    var idMaquina = req.body.idMaquinaServer
+    componenteModel.listarComponentes(idMaquina)
         .then(
             function (resultado) {
                 res.json(resultado);
@@ -158,8 +148,28 @@ function excluirComponente(req, res) {
     }
 }
 
+function excluirComponenteFrio(req, res) {
+    var id = req.body.idServer;
+
+    if (id == undefined) {
+        res.status(400).send("undefined excluir");
+    } else {
+        componenteModel.excluirComponenteFrio(id).then(
+            function (resultado) {
+                res.json(resultado);
+            }
+        ).catch(function (erro) {
+            console.log(erro);
+            console.log(
+                "\nHouve um erro ao excluir",
+                erro.sqlMessage
+            );
+            res.status(500).json(erro.sqlMessage);
+        });
+    }
+}
+
   module.exports = {
-    listarComponente,
     listarTipo,
     listarMedida,
     cadastrar,

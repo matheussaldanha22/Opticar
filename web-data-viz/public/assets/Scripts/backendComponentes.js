@@ -1,3 +1,5 @@
+const { excluirComponenteFrio } = require("../../../src/models/componenteModel");
+
 var lista_componente = [];
 var lista_tipo = [];
 var lista_medida = [];
@@ -113,6 +115,7 @@ function verificaPedido() {
 
 function cadastrarPedido(codigoPedido) {
     var codigoVar = codigoPedido[0]
+    var idMaquinaVar = sessionStorage.idMaquinaSelecionada
     var modeloVar = iptModelo.value
     var limiteAVar = iptLimiteAtencao.value
     var limiteGVar = iptLimiteGrave.value
@@ -130,7 +133,8 @@ function cadastrarPedido(codigoPedido) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-        codigoServer : codigoVar,
+        idMaquinaServer: idMaquinaVar,
+        codigoServer: codigoVar,
         modeloServer: modeloVar,
         limiteAServer: limiteAVar,
         limiteGServer: limiteGVar
@@ -156,6 +160,7 @@ function cadastrarPedido(codigoPedido) {
 }
 
 function cadastrarPedidoFrio(codigoPedido) {
+    var idMaquinaVar = sessionStorage.idMaquinaSelecionada
     var codigoVar = codigoPedido[0]
     var modeloVar = iptModelo.value
     var limiteAVar = iptLimiteAtencao.value
@@ -174,6 +179,7 @@ function cadastrarPedidoFrio(codigoPedido) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+        idMaquinaServer: idMaquinaVar,
         codigoServer : codigoVar,
         modeloServer: modeloVar,
         limiteAServer: limiteAVar,
@@ -198,58 +204,62 @@ function cadastrarPedidoFrio(codigoPedido) {
 }
 
 function listarComponente() {
+    var idMaquinaVar = sessionStorage.idMaquinaSelecionada
     fetch("/componentes/listarComponentes", {
-        method: "GET",
+        method: "POST",
         headers: {
             "Content-Type": "application/json"
-        }
-    }).then(resposta => resposta.json())
-      .then(componentes => {
-        lista_componente = [];
-        lista_componente.push(componentes);
-        const tabela = document.querySelector(".componentesContainer table");
-        tabela.innerHTML = "";
-        tabela.innerHTML = `<tr>
-                              <th>ID Componente</th>
-                              <th>Tipo do componente</th>
-                              <th>Modelo</th>
-                              <th>Tipo de medida</th>
-                              <th>Limite grave</th>
-                              <th>Limite atenção</th>
-                              <th></th>
-                           </tr>`;
+        },
+        body: JSON.stringify({
+          idMaquinaServer: idMaquinaVar
+        }),
+        }).then(resposta => resposta.json())
+          .then(componentes => {
+            lista_componente = [];
+            lista_componente.push(componentes);
+            const tabela = document.querySelector(".componentesContainer table");
+            tabela.innerHTML = "";
+            tabela.innerHTML = `<tr>
+                                  <th>ID Componente</th>
+                                  <th>Tipo do componente</th>
+                                  <th>Modelo</th>
+                                  <th>Tipo de medida</th>
+                                  <th>Limite grave</th>
+                                  <th>Limite atenção</th>
+                                  <th></th>
+                              </tr>`;
 
-        componentes.forEach(componente => {
-            const linha = document.createElement("tr");
-            linha.innerHTML = ""; 
-            linha.innerHTML += `
-                <th>${componente.idcomponenteServidor}</th>
-                <td>${componente.tipo}</td>
-                <td>${componente.modelo}</td>
-                <td>${componente.medida}</td>
-                <td>${componente.limiteCritico}</td>
-                <td>${componente.limiteAtencao}</td>
-                <td><button class="btn-purple" data-id="${componente.idcomponenteServidor}">Excluir</button></td>
-            `;
-            tabela.appendChild(linha);
+            componentes.forEach(componente => {
+                const linha = document.createElement("tr");
+                linha.innerHTML = ""; 
+                linha.innerHTML += `
+                    <th>${componente.idcomponenteServidor}</th>
+                    <td>${componente.tipo}</td>
+                    <td>${componente.modelo}</td>
+                    <td>${componente.medida}</td>
+                    <td>${componente.limiteCritico}</td>
+                    <td>${componente.limiteAtencao}</td>
+                    <td><button class="btn-purple" data-id="${componente.idcomponenteServidor}">Excluir</button></td>
+                `;
+                tabela.appendChild(linha);
 
-            const botaoExcluir = linha.querySelector(".btn-purple");
+                const botaoExcluir = linha.querySelector(".btn-purple");
 
-            botaoExcluir.addEventListener("click", () => {
-                Swal.fire({
-                    title: "Tem certeza?",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Sim, excluir!"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        excluirComponente(botaoExcluir);
-                    }
+                botaoExcluir.addEventListener("click", () => {
+                    Swal.fire({
+                        title: "Tem certeza?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#d33",
+                        cancelButtonColor: "#3085d6",
+                        confirmButtonText: "Sim, excluir!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            excluirComponente(botaoExcluir);
+                        }
+                    });
                 });
             });
-        });
     }).catch(erro => {
         console.error("Erro ao buscar componentes:", erro);
     });
@@ -269,6 +279,7 @@ function excluirComponente(botaoExcluir) {
       })
         .then(function (resposta) {
           if (resposta.ok) {
+            excluirComponenteFrio(idVar)
             listarComponente()
             Swal.fire('Excluído', 'Componente excluído com sucesso', 'success')
           } else {
@@ -277,6 +288,25 @@ function excluirComponente(botaoExcluir) {
         })
         .catch(function (resposta) {
           console.log(`#ERRO: ${resposta}`);
-        });
-        
+        });     
+}
+
+function excluirComponenteFrio(idVar) {
+  fetch("/componentes/excluirComponente", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+          idServer: idVar,
+        }),
+    })
+      .then(function (resposta) {
+        if (resposta.ok) {
+          listarComponente()
+        }
+      })
+      .catch(function (resposta) {
+        console.log(`#ERRO: ${resposta}`);
+      });     
 }

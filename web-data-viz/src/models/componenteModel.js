@@ -15,23 +15,23 @@ function verificar(tipo, medida) {
     return database.executar(instrucaoSql);
 }
 
-function cadastrar(codigo, modelo, limiteA, limiteG) {
+function cadastrar(codigo, modelo, limiteA, limiteG, idMaquina) {
     var instrucaoSql = `insert into componenteservidor (fkcomponente, fkmaquina, modelo, limitecritico, limiteatencao) values
-    (${codigo}, 1, '${modelo}', '${limiteG}', '${limiteA}')`;
+    (${codigo}, ${idMaquina}, '${modelo}', '${limiteG}', '${limiteA}')`;
 
     return database.executar(instrucaoSql);
 }
 
-function cadastrarFrio(codigo, modelo, limiteA, limiteG) {
+function cadastrarFrio(codigo, modelo, limiteA, limiteG, idMaquina) {
     var instrucaoSql = `insert into componenteservidor (fkcomponente, fkmaquina, modelo, limitecritico, limiteatencao) values
-    (${codigo}, 1, '${modelo}', '${limiteG}', '${limiteA}')`;
+    (${codigo}, ${idMaquina}, '${modelo}', '${limiteG}', '${limiteA}')`;
 
     return database.executarFRIO(instrucaoSql);
 }
 
-function listarComponentes() {
+function listarComponentes(idMaquina) {
     var instrucaoSql = `SELECT cs.idcomponenteServidor, cs.fkMaquina, c.tipo, c.medida, cs.modelo, cs.limiteCritico, cs.limiteAtencao 
-                        FROM componenteServidor AS cs JOIN componente AS c ON cs.fkComponente = c.idcomponente;`
+                        FROM componenteServidor AS cs JOIN componente AS c ON cs.fkComponente = c.idcomponente WHERE fkMaquina = ${idMaquina} ;`
     
     return database.executar(instrucaoSql);
 }
@@ -41,6 +41,11 @@ function excluirComponente(id) {
     return database.executar(instrucaoSql);
 }
 
+function excluirComponenteFrio(id) {
+    var instrucaoSql = `DELETE FROM componenteServidor WHERE idcomponenteServidor = ${id};`;
+    return database.executarFRIO(instrucaoSql);
+}
+
 module.exports ={ 
     listarTipo,
     listarMedida,
@@ -48,5 +53,6 @@ module.exports ={
     cadastrar,
     cadastrarFrio,
     listarComponentes,
-    excluirComponente
+    excluirComponente,
+    excluirComponenteFrio
  };

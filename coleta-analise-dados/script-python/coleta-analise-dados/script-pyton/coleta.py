@@ -9,18 +9,18 @@ import os
 import tempfile
 
 #Aqui a gente pega o mac Adress para comparar depois de tudo
-def enviarS3(mac_address,dados_json):
-    s3=boto3.client("s3",region_name='us-east-1')
+# def enviarS3(mac_address,dados_json):
+#     s3=boto3.client("s3",region_name='us-east-1')
 
-    nome_arquivo = os.path.join(tempfile.gettempdir(), 'dados.json')
-    with open(nome_arquivo, mode='wt') as file:
-        json.dump(dados_json, file)
+#     nome_arquivo = os.path.join(tempfile.gettempdir(), 'dados.json')
+#     with open(nome_arquivo, mode='wt') as file:
+#         json.dump(dados_json, file)
 
-    s3.upload_file(
-            Filename=nome_arquivo,
-            Bucket='s3-python-32',
-            Key= f'{mac_address}/dados.json',    
-)
+#     s3.upload_file(
+#             Filename=nome_arquivo,
+#             Bucket='s3-python-32',
+#             Key= f'{mac_address}/dados.json',    
+# )
    
 
 def pegando_mac_address():
@@ -193,12 +193,12 @@ def monitorar():
             cursorFrio.close()
             conexaoFrio.close()
 
-            tempo_passado = (datetime.datetime.now() - ultimo_envio_s3).total_seconds()
-            if tempo_passado >= intervalo_envio_s3:
-                enviarS3(mac_address, dados_json)
-                ultimo_envio_s3 = datetime.datetime.now()
+            # tempo_passado = (datetime.datetime.now() - ultimo_envio_s3).total_seconds()
+            # if tempo_passado >= intervalo_envio_s3:
+            #     enviarS3(mac_address, dados_json)
+            #     ultimo_envio_s3 = datetime.datetime.now()
 
-            time.sleep(10)
+            time.sleep(0)
            
 
         except Exception as e:
