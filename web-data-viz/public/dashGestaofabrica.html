@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,19 +24,13 @@
                 <div id="linha3"></div>
             </div>
 
-            <ul id="ul_links" class="nav-links">
-                <li class="li-active">
-                    <i class='bx bx-desktop' style='color:#ffffff'></i>
-                    <span>Monitoramento</span>
-                </li>
-                <li>
-                    <i class='bx bxs-bell-ring' style='color:#ffffff'></i>
-                    <span>Alertas</span>
-                </li>
-                <li>
-                    <i class='bx bx-server' style='color:#ffffff'></i>
-                    <span>Servidores</span>
-                </li>
+            <!-- <ul class="nav-links oculta">
+                <li><i class='bx bx-desktop' style='color:#ffffff' ></i></li>
+                <li><i class='bx bxs-bell-ring' style='color:#ffffff' ></i></li>
+                <li><i class='bx bx-server' style='color:#ffffff' ></i></li>
+            </ul> -->
+            <ul id="ul_links" class="nav-links ">
+
             </ul>
         </div>
     </div>
@@ -44,10 +39,12 @@
         <!-- Cabeçalho -->
         <div class="cabecalho">
             <div class="empresa">
+
                 <i class='bx bxs-business'></i>
+
                 <div class="txtInfo">
                     <p id="empresaNome">Nissan</p>
-                    <p class="endereco"> Rua Haddock Lobo, 595</p>
+
                 </div>
             </div>
 
@@ -55,8 +52,8 @@
                 <i class='bx bxs-user-circle' style="font-size: 4vw;"></i>
                 <div class="txtInfo">
                     <div class="txt">
-                        <p id="empresaNome">Jonhis Bringous</p>
-                        <p class="endereco">jonhis@gmail.com</p>
+                        <p id="usuarioNome">Jonhis Bringous</p>
+                        <p class="endereco" id="usuarioEmail"> jonhis@gmail.com</p>
                     </div>
                     <i class='bx bx-chevron-down' style="font-size: 3vw;"></i>
                 </div>
@@ -77,11 +74,12 @@
                 <!-- KPI de servidores -->
                 <div class="chart-container-blue">
                     <div class="chartCabecalho">
-                        <h2><i class='bx bx-server' style="border: solid 1px white; border-radius: 8px;"></i> Servidores:</h2>
+                        <h2><i class='bx bx-server' style="border: solid 1px white; border-radius: 8px;"></i>
+                            Servidores:</h2>
                         <div class="filtrar" onclick="window.location.href='listadeservidores.html'">
                             <h3>Visualizar:</h3>
                             <div class="iconeFiltro">
-                                <i class='bx bx-show'></i>   
+                                <i class='bx bx-show'></i>
                             </div>
                         </div>
                     </div>
@@ -97,7 +95,8 @@
                 <!-- KPI de efetividade -->
                 <div class="chart-container-blue">
                     <div class="chartCabecalho">
-                        <h2><i class='bx bxs-save' style="border: solid 1px white; border-radius: 8px;"></i> Efetividade na resolução de alertas:</h2>
+                        <h2><i class='bx bxs-save' style="border: solid 1px white; border-radius: 8px;"></i> Efetividade
+                            na resolução de alertas:</h2>
                     </div>
 
                     <div class="kpi-box">
@@ -167,27 +166,49 @@
         // Barra lateral
         function expand() {
             if (div_menu.classList.contains('menu-expand')) {
-                div_menu.style.animation = 'diminui 0.2s linear';
+                div_menu.style.animation = 'diminui 0.2s linear'
             } else {
-                div_menu.style.animation = 'expandir 0.2s linear';
+                div_menu.style.animation = 'expandir 0.2s linear'
             }
-            div_menu.classList.toggle('menu-expand');
-            ul_links.classList.toggle('nav-links-expanded');
+            div_menu.classList.toggle('menu-expand')
+            ul_links.classList.toggle('nav-links-expanded')
         }
 
         // Visualizar os servidores (não está sendo usado no HTML mas deixei aqui)
         function verServidores() {
-            window.location.href = "listadeservidores.html";
+            window.location.href = "listadeservidores.html"
         }
 
         // Preencher a quantidade de servidores
         document.addEventListener("DOMContentLoaded", () => {
-            const quantidadeServidores = sessionStorage.getItem("quantidadeServidores");
+            const quantidadeServidores = sessionStorage.getItem("quantidadeServidores")
             if (quantidadeServidores !== null) {
-                document.getElementById("qtd-servidores").innerText = quantidadeServidores;
+                document.getElementById("qtd-servidores").innerText = quantidadeServidores
             }
         });
     </script>
 
 </body>
+
 </html>
+
+<script>
+    // BARRA LATERAL
+    function expand() {
+        if (div_menu.classList.contains('menu-expand')) {
+            div_menu.style.animation = 'diminui 0.2s linear'
+
+        } else {
+            div_menu.style.animation = 'expandir 0.2s linear'
+
+        }
+        div_menu.classList.toggle('menu-expand')
+        ul_links.classList.toggle('nav-links-expanded')
+    }
+
+    function verServidores() {
+        window.location.href = "lista de servidores.html"
+
+    }
+
+</script>

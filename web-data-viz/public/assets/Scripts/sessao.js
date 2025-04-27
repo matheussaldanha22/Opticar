@@ -5,48 +5,48 @@ function deslogar() {
 
 let pagina = 0
 
-
-
 function funcionarios() {
   pagina = 1
   window.location.href = "./funcionarios.html"
-  document.getElementById('funcionarios').className = 'li-active'
+  document.getElementById("funcionarios").className = "li-active"
 }
-
-
 
 function componentes() {
   pagina = 2
   window.location.href = "./componentes.html"
-  document.getElementById('componentes').className = 'li-active'
-
+  document.getElementById("componentes").className = "li-active"
 }
 
 function dashMonitoramento() {
   pagina = 3
   window.location.href = "./dashMonitoramento.html"
-  document.getElementById('dashMonitoramento').className = 'li-active'
-
+  document.getElementById("dashMonitoramento").className = "li-active"
 }
 
-function alertas() {
+function alertasPagina() {
   pagina = 4
   window.location.href = "./alertas.html"
-  document.getElementById('alertas').className = 'li-active'
-
+  document.getElementById("alertas").className = "li-active"
 }
 
 function dashAnalise() {
   pagina = 5
   window.location.href = "./dashAnalise.html"
-  document.getElementById('dashAnalise').className = 'li-active'
-
+  document.getElementById("dashAnalise").className = "li-active"
 }
 
 function dashEmpresa() {
   pagina = 6
   window.location.href = "./dashEmpresa.html"
-  document.getElementById('dashEmpresa').className = 'li-active'
+  document.getElementById("dashEmpresa").className = "li-active"
+}
+
+function dashGestaoFabrica() {
+  window.location.href = "./dashGestaoFabrica.html"
+}
+
+function listaServidores() {
+  window.location.href = "./listadeservidores.html"
 }
 
 const nomeUsuario = sessionStorage.getItem("NOME_USUARIO")
@@ -66,11 +66,9 @@ if (emailElement) {
   emailElement.textContent = emailUsuario
 }
 
-if(empresaElement){
+if (empresaElement) {
   empresaElement.textContent = empresaUsuario
 }
-
-
 
 fetch(`/usuarios/listarPorId/${idUsuario}`, {
   method: "GET",
@@ -82,8 +80,7 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
         const cargoUsuario = resultado[0].cargo
 
         let ul_links = document.getElementById("ul_links")
-        if (
-          cargoUsuario === "GestorEmpresa") {
+        if (cargoUsuario === "GestorEmpresa") {
           ul_links.innerHTML = `
 
             <li id="dashEmpresa">
@@ -100,21 +97,23 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
             </li>
 
             `
-        } else if(cargoUsuario == 'GestorFabrica'){
-
+        } else if (cargoUsuario == "GestorFabrica") {
           ul_links.innerHTML = `
-
+            <li id="dashGestaoFabrica">
+              <i class='bx bxs-bar-chart-alt-2' style='color:#ffffff' onclick="dashGestaoFabrica()"></i>
+              <span onclick="dashGestaoFabrica()">Dashboard fábrica</span>
+            </li>
             <li id="dashMonitoramento">
               <i class='bx bx-desktop' style='color:#ffffff' onclick="dashMonitoramento()"></i>
               <span onclick="dashMonitoramento()">Dashboard monitoramento</span>
             </li>
             <li id="alertas">
-              <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertas()"></i>
-              <span onclick="alertas()">Alertas</span>
+              <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertasPagina()"></i>
+              <span onclick="alertasPagina()">Alertas</span>
             </li>
             <li id="servidores">
-              <i class='bx bx-server' style='color:#ffffff'></i>
-              <span>Servidores</span>
+              <i class='bx bx-server' style='color:#ffffff' onclick="listaServidores()"></i>
+              <span onclick="listaServidores()">Servidores</span>
             </li>
             <li id="funcionarios">
                 <i class='bx bx-user' style='color:#ffffff' onclick="funcionarios()"></i>
@@ -130,28 +129,15 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
             </li>
 
             `
-        }else if (cargoUsuario === "AnalistaDados") {
+        } else if (cargoUsuario === "AnalistaDados") {
           ul_links.innerHTML = `
-
-            <li id="dashMonitoramento">
-              <i class='bx bx-desktop' style='color:#ffffff' onclick="dashMonitoramento()"></i>
-              <span onclick="dashMonitoramento()">Dashboard monitoramento</span>
-            </li>
-            <li id="dashEmpresa">
-              <i class='bx bx-desktop' style='color:#ffffff' onclick="dashEmpresa()"></i>
-              <span onclick="dashEmpresa()">Dashboard empresa</span>
-            </li>
-            <li id="alertas">
-              <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertas()"></i>
-              <span onclick="alertas()">Alertas</span>
+            <li id="dashAnalise">
+              <i class='bx bxs-bar-chart-alt-2' style='color:#ffffff' onclick="dashAnalise()"></i>
+              <span onclick="dashAnalise()">Dashboard Análise</span>
             </li>
             <li id="servidores">
-              <i class='bx bx-server' style='color:#ffffff'></i>
-              <span>Servidores</span>
-            </li>
-            <li id="funcionarios">
-                <i class='bx bx-user' style='color:#ffffff' onclick="funcionarios()"></i>
-                <span onclick="funcionarios()">Funcionários</span>
+              <i class='bx bx-server' style='color:#ffffff' onclick="listaServidores()"></i>
+              <span onclick="listaServidores()">Servidores</span>
             </li>
             <li id="componentes">
                 <i class='bx bx-memory-card' style='color:#ffffff' onclick="componentes()"></i>
@@ -163,27 +149,19 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
             </li>
 
             `
-        }else if(cargoUsuario === 'EngenheiroManutencao'){
+        } else if (cargoUsuario === "EngenheiroManutencao") {
           ul_links.innerHTML = `
             <li id="dashMonitoramento">
               <i class='bx bx-desktop' style='color:#ffffff' onclick="dashMonitoramento()"></i>
               <span onclick="dashMonitoramento()">Dashboard monitoramento</span>
             </li>
-            <li id="dashEmpresa">
-              <i class='bx bx-desktop' style='color:#ffffff' onclick="dashEmpresa()"></i>
-              <span onclick="dashEmpresa()">Dashboard empresa</span>
-            </li>
             <li id="alertas">
-              <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertas()"></i>
-              <span onclick="alertas()">Alertas</span>
+              <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertasPagina()"></i>
+              <span onclick="alertasPagina()">Alertas</span>
             </li>
             <li id="servidores">
-              <i class='bx bx-server' style='color:#ffffff'></i>
-              <span>Servidores</span>
-            </li>
-            <li id="funcionarios">
-                <i class='bx bx-user' style='color:#ffffff' onclick="funcionarios()"></i>
-                <span onclick="funcionarios()">Funcionários</span>
+              <i class='bx bx-server' style='color:#ffffff' onclick="listaServidores()"></i>
+              <span onclick="listaServidores()">Servidores</span>
             </li>
             <li id="componentes">
                 <i class='bx bx-memory-card' style='color:#ffffff' onclick="componentes()"></i>
@@ -205,4 +183,3 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
   .catch((erro) => {
     console.log(erro)
   })
-

@@ -1,7 +1,7 @@
 //MODAL ADD
 function abrirModalAdd() {
-    Swal.fire({
-        html: `
+  Swal.fire({
+    html: `
     <div style="display: flex;flex-direction:column; align-items: center;border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); height:5vw;background-color:rgb(235, 234, 234);padding:5px;">
           
         <div style="margin-left: 15px; text-align: left;">
@@ -32,25 +32,22 @@ function abrirModalAdd() {
     </div>
   
 `,
-        showCancelButton: true,
-        cancelButtonText: "Fechar",
-        background: '#fff',
-        confirmButtonColor: '#2C3E50',
-        customClass: 'addModal'
-    })
+    showCancelButton: true,
+    cancelButtonText: "Fechar",
+    background: "#fff",
+    confirmButtonColor: "#2C3E50",
+    customClass: "addModal",
+  })
 }
-
 
 const itensPorPagina = 10
 let paginaAtual = 1
 let componentes = [] // Armazenamento dos dados recebidos do backend
 
-
-
 //PARTE DE RENDERIZAR E PAGINAR CASO HAJA MUITOS ELEMENTOS DO VITAO alertas.js, PODE SER UTIL(PRECISA IMPLEMENTAR)
 function renderTabela(pagina) {
-    const tabela = document.getElementById("tabela-alertas")
-    tabela.innerHTML = ` <tr>
+  const tabela = document.getElementById("tabela-alertas")
+  tabela.innerHTML = ` <tr>
                           <th>Servidor</th>
                           <th>Componente</th>
                           <th>Data</th>
@@ -58,14 +55,14 @@ function renderTabela(pagina) {
                           <th>Status</th>
                           <th>Visualizar</th>
                       </tr>`
-  
-    const inicio = (pagina - 1) * itensPorPagina
-    const fim = inicio + itensPorPagina
-    const paginaDados = componentes.slice(inicio, fim)
-  
-    paginaDados.forEach((alerta) => {
-      const tr = document.createElement("tr")
-      tr.innerHTML = `
+
+  const inicio = (pagina - 1) * itensPorPagina
+  const fim = inicio + itensPorPagina
+  const paginaDados = componentes.slice(inicio, fim)
+
+  paginaDados.forEach((alerta) => {
+    const tr = document.createElement("tr")
+    tr.innerHTML = `
         <td>${alerta.servidor}</td>
         <td>${alerta.componente}</td>
         <td>${alerta.dtAlerta}</td>
@@ -73,9 +70,9 @@ function renderTabela(pagina) {
         <td>${alerta.status}</td>
         <td><i class='bx bx-arrow-from-left btn' onclick="abrirModal(${alerta.id})"></i></td>
       `
-      tabela.appendChild(tr)
-    })
-  }
+    tabela.appendChild(tr)
+  })
+}
 
 function renderPaginacao() {
   const paginacao = document.getElementById("paginacao")
@@ -95,3 +92,4 @@ function renderPaginacao() {
     paginacao.appendChild(btn)
   }
 }
+document.getElementById("funcionarios").className = "li-active"

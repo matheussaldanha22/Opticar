@@ -27,18 +27,6 @@
 
             <ul id="ul_links" class="nav-links ">
 
-                <li class="li-active">
-                    <i class='bx bx-desktop' style='color:#ffffff'></i>
-                    <span>Monitoramento</span>
-                </li>
-                <li>
-                    <i class='bx bxs-bell-ring' style='color:#ffffff'></i>
-                    <span>Alertas</span>
-                </li>
-                <li>
-                    <i class='bx bx-server' style='color:#ffffff'></i>
-                    <span>Servidores</span>
-                </li>
             </ul>
         </div>
 
@@ -51,7 +39,6 @@
                     </div>
                     <div class="txtInfo">
                         <p id="empresaNome">Nissan</p>
-                        <p class="endereco"> Rua Haddock Lobo, 595</p>
                     </div>
                 </div>
 
@@ -59,8 +46,8 @@
                     <i class='bx bxs-user-circle' style="font-size: 4vw;"></i>
                     <div class="txtInfo">
                         <div class="txt">
-                            <p id="empresaNome">Shelly Douglas</p>
-                            <p class="endereco"> shelly@gmail.com</p>
+                            <p id="usuarioNome">Shelly Douglas</p>
+                            <p class="endereco" id="usuarioEmail"> shelly@gmail.com</p>
                         </div>
                         <i class='bx bx-chevron-down' style="font-size: 3vw;"></i>
                     </div>
@@ -121,7 +108,7 @@
         linha3.classList.toggle('linha3-active')
         menu.classList.toggle('nav-active')
 
-    });
+    })
 
     //MODAL ADD
     function abrirModalAdd() {
@@ -164,9 +151,9 @@
             customClass: 'addModal'
         }).then((result) => {
             if (result.isConfirmed) {
-            verificaPedido();
-        }
-        });
+                verificaPedido()
+            }
+        })
         listarTipo()
     }
 
@@ -188,14 +175,14 @@
                             <th>Status</th>
                             <th>Visualizar</th>
                         </tr>`
-    
+
         const inicio = (pagina - 1) * itensPorPagina
         const fim = inicio + itensPorPagina
         const paginaDados = componentesList.slice(inicio, fim)
-    
+
         paginaDados.forEach((alerta) => {
-        const tr = document.createElement("tr")
-        tr.innerHTML = `
+            const tr = document.createElement("tr")
+            tr.innerHTML = `
             <td>${alerta.servidor}</td>
             <td>${alerta.componente}</td>
             <td>${alerta.dtAlerta}</td>
@@ -203,27 +190,28 @@
             <td>${alerta.status}</td>
             <td><i class='bx bx-arrow-from-left btn' onclick="abrirModal(${alerta.id})"></i></td>
         `
-        tabela.appendChild(tr)
+            tabela.appendChild(tr)
         })
     }
 
     function renderPaginacao() {
-    const paginacao = document.getElementById("paginacao")
-    paginacao.innerHTML = ""
+        const paginacao = document.getElementById("paginacao")
+        paginacao.innerHTML = ""
 
-    const totalPaginas = Math.ceil(componentesList.length / itensPorPagina)
+        const totalPaginas = Math.ceil(componentesList.length / itensPorPagina)
 
-    for (let i = 1; i <= totalPaginas; i++) {
-        const btn = document.createElement("button")
-        btn.textContent = i
-        if (i === paginaAtual) btn.classList.add("active")
-        btn.addEventListener("click", () => {
-        paginaAtual = i
-        renderTabela(paginaAtual)
-        renderPaginacao()
-        })
-        paginacao.appendChild(btn)
-    }
+        for (let i = 1; i <= totalPaginas; i++) {
+            const btn = document.createElement("button")
+            btn.textContent = i
+            if (i === paginaAtual) btn.classList.add("active")
+            btn.addEventListener("click", () => {
+                paginaAtual = i
+                renderTabela(paginaAtual)
+                renderPaginacao()
+            })
+            paginacao.appendChild(btn)
+        }
     }
 </script>
+
 </html>

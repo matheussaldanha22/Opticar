@@ -12,7 +12,9 @@
     <link rel="stylesheet" href="./assets/styles/componentes.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="./assets/Scripts/backlistadeservidores.js"></script>
-    <title>Lista de Componentes</title>
+    <script src="./listadeservidores.html" defer></script>
+    <script src="./assets/Scripts/sessao.js" defer></script>
+    <title>Lista de Servidores</title>
 </head>
 
 <body onload="carregarServidores()">
@@ -27,18 +29,6 @@
 
             <ul id="ul_links" class="nav-links ">
 
-                <li class="li-active">
-                    <i class='bx bx-desktop' style='color:#ffffff'></i>
-                    <span>Monitoramento</span>
-                </li>
-                <li>
-                    <i class='bx bxs-bell-ring' style='color:#ffffff'></i>
-                    <span>Alertas</span>
-                </li>
-                <li>
-                    <i class='bx bx-server' style='color:#ffffff'></i>
-                    <span>Servidores</span>
-                </li>
             </ul>
         </div>
 
@@ -51,7 +41,6 @@
                     </div>
                     <div class="txtInfo">
                         <p id="empresaNome">Nissan</p>
-                        <p class="endereco"> Rua Haddock Lobo, 595</p>
                     </div>
                 </div>
 
@@ -59,8 +48,8 @@
                     <i class='bx bxs-user-circle' style="font-size: 4vw;"></i>
                     <div class="txtInfo">
                         <div class="txt">
-                            <p id="empresaNome">Shelly Douglas</p>
-                            <p class="endereco"> shelly@gmail.com</p>
+                            <p id="usuarioNome">Shelly Douglas</p>
+                            <p class="endereco" id="usuarioEmail"> shelly@gmail.com</p>
                         </div>
                         <i class='bx bx-chevron-down' style="font-size: 3vw;"></i>
                     </div>

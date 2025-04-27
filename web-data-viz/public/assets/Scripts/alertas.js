@@ -3,16 +3,19 @@ let paginaAtual = 1
 let alertas = [] // Armazenamento dos dados recebidos do backend
 
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("http://localhost:3000/alertas")
-    .then((res) => res.json())
-    .then((dados) => {
-      alertas = dados
-      renderTabela(paginaAtual)
-      renderPaginacao()
-    })
-    .catch((err) => {
-      console.error("Erro ao carregar alertas:", err)
-    })
+  // fetch("http://localhost:3000/alertas")
+  //   .then((res) => res.json())
+  //   .then((dados) => {
+  //     alertas = dados
+  //     renderTabela(paginaAtual)
+  //     renderPaginacao()
+  //   })
+  //   .catch((err) => {
+  //     console.error("Erro ao carregar alertas:", err)
+  //   })
+  console.log("Iniciando a API do JIRA")
+
+  getChamados()
 })
 
 function renderTabela(pagina) {
@@ -42,6 +45,67 @@ function renderTabela(pagina) {
     `
     tabela.appendChild(tr)
   })
+}
+
+// https://sptech-team-latencyslayer.atlassian.net/rest/api/2/
+function getChamados() {
+  const tabela = document.getElementById("tabela-alertas")
+  tabela.innerHTML = ` <tr>
+                        <th>Servidor</th>
+                        <th>Componente</th>
+                        <th>Data</th>
+                        <th>Gravidade</th>
+                        <th>Status</th>
+                        <th>Visualizar</th>
+                    </tr>`
+  console.log("testessssss")
+  // Fazendo a requisição para o backend
+  fetch("http://localhost:3333/jira/teste")
+    .then(function (response) {
+      // Verifica se a resposta foi bem-sucedida
+      if (!response.ok) {
+        throw new Error("Erro ao buscar chamados")
+      }
+
+      console.log(response.json())
+      return response.json() // Converte a resposta para JSON
+    })
+    .then(function (chamados) {
+      // Pegando o elemento onde os chamados serão exibidos
+      var listElement = document.getElementById("tabela-alertas")
+
+      // Limpando qualquer conteúdo anterior na lista
+      listElement.innerHTML = ""
+
+      // Iterando pelos chamados e criando as linhas da tabela
+      chamados.forEach(function (chamado) {
+        // Criando a linha da tabela
+        var tr = document.createElement("tr")
+
+        tr.innerHTML = `
+                  <td>${chamado.key}</td>
+                  <td>${chamado.fields.summary}</td>
+                  <td>${
+                    chamado.fields.assignee
+                      ? chamado.fields.assignee.displayName
+                      : "Não atribuído"
+                  }</td>
+                  <td>${chamado.fields.created}</td>
+                  <td>${chamado.fields.status.name}</td>
+                  <td><i class="bx bx-arrow-from-left btn" onclick="abrirModal(${
+                    chamado.id
+                  })"></i></td>
+              `
+
+        // Adicionando a linha à tabela
+        listElement.appendChild(tr)
+      })
+    })
+    .catch(function (error) {
+      // Em caso de erro, exibe um alerta
+      console.error("Erro ao carregar chamados:", error)
+      alert("Não foi possível carregar os chamados")
+    })
 }
 
 function renderPaginacao() {

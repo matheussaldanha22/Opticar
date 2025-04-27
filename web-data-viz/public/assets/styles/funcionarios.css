@@ -240,20 +240,19 @@
   align-items: center;
 }
 
-.persona{
+.persona {
   display: flex;
   flex-direction: row;
   align-items: center;
   font-size: 1vw;
 }
 
-
 .perfil p {
   font-size: 30px;
   text-align: center;
 }
 
-.empresa{
+.empresa {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -410,4 +409,10 @@
   border: 1px solid #ccc;
   margin-top: 5px;
   width: inherit;
+}
+
+.usuarioContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }

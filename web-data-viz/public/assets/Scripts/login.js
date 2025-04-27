@@ -56,19 +56,25 @@ function entrar() {
           sessionStorage.FABRICA_NOME = json.fabricaNome
           console.log(`ID Empresa: ${json.empresaId}`)
 
-          if(sessionStorage.getItem('CARGO') == 'GestorEmpresa'){
+          if (sessionStorage.getItem("CARGO") == "GestorEmpresa") {
             setTimeout(function () {
               window.location = "./dashEmpresa.html"
-            }, 1000) 
-          }else if(sessionStorage.getItem('CARGO') == 'GestorFabrica'){
-
-          }else if(sessionStorage.getItem('CARGO') == 'EngenheiroManutencao'){
+            }, 1000)
+          } else if (sessionStorage.getItem("CARGO") == "GestorFabrica") {
+            setTimeout(function () {
+              window.location = "./dashGestaoFabrica.html"
+            }, 1000) // apenas para exibir o loading
+          } else if (
+            sessionStorage.getItem("CARGO") == "EngenheiroManutencao"
+          ) {
             setTimeout(function () {
               window.location = "./dashMonitoramento.html"
             }, 1000) // apenas para exibir o loading
+          } else if (sessionStorage.getItem("CARGO") == "AnalistaDados") {
+            setTimeout(function () {
+              window.location = "./dashAnalise.html"
+            }, 1000) // apenas para exibir o loading
           }
-
-
         })
       } else {
         console.log("Houve um erro ao tentar realizar o login!")
