@@ -1,5 +1,3 @@
-const { excluirComponenteFrio } = require("../../../src/models/componenteModel");
-
 var lista_componente = [];
 var lista_tipo = [];
 var lista_medida = [];
@@ -292,7 +290,7 @@ function excluirComponente(botaoExcluir) {
 }
 
 function excluirComponenteFrio(idVar) {
-  fetch("/componentes/excluirComponente", {
+  fetch("/componentes/excluirComponenteFrio", {
       method: "POST",
       headers: {
           "Content-Type": "application/json",

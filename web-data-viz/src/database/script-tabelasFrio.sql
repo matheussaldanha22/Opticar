@@ -1,3 +1,4 @@
+drop database opticarfrio;
 create database opticarFrio;
 use opticarFrio;
 
@@ -24,8 +25,8 @@ CREATE TABLE componenteServidor (
     modelo VARCHAR(45),
     limiteCritico VARCHAR(45),
     limiteAtencao VARCHAR(45),
-    FOREIGN KEY (fkComponente) REFERENCES componente(idcomponente),
-    FOREIGN KEY (fkMaquina) REFERENCES servidor_maquina(idMaquina)
+    FOREIGN KEY (fkComponente) REFERENCES componente(idcomponente) ON DELETE CASCADE,
+    FOREIGN KEY (fkMaquina) REFERENCES servidor_maquina(idMaquina) ON DELETE CASCADE
 );
 
 -- Configuração Alerta
@@ -35,7 +36,7 @@ CREATE TABLE capturaDados (
     fkComponenteServidor INT,
     valor FLOAT,
     data DATETIME,
-    FOREIGN KEY (fkComponenteServidor) REFERENCES componenteServidor(idcomponenteServidor)
+    FOREIGN KEY (fkComponenteServidor) REFERENCES componenteServidor(idcomponenteServidor) ON DELETE CASCADE
 );
                         
 CREATE TABLE alerta (
@@ -50,7 +51,7 @@ CREATE TABLE alerta (
     statusAlerta ENUM('To Do', 'Done', 'In Progress') DEFAULT 'To Do' COMMENT 'Status do alerta',
     fkCapturaDados INT NOT NULL COMMENT 'Referência à tabela capturaDados',
     jira_issue_key VARCHAR(20) COMMENT 'Chave do ticket criado no JIRA (ex: PROJ-123)',
-    FOREIGN KEY (fkCapturaDados) REFERENCES capturaDados(idCapturaDados)
+    FOREIGN KEY (fkCapturaDados) REFERENCES capturaDados(idCapturaDados) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 INSERT INTO componente (tipo, medida, indicador) VALUES
@@ -71,6 +72,9 @@ INSERT INTO componente (tipo, medida, indicador) VALUES
 ('Sistema', 'Qtd Processos Ativos', 'Qtd'),
 ('Sistema', 'Top Processos CPU Média', '%');
 
+insert into servidor_maquina values
+(1,	'Windows', '192.168.56.1', 1, 251776438657434, 'DESKTOP-KHH0UBD');
+
 insert into componenteservidor values
 (default, 1, 1, "intel", "45", "59"),
 (default, 2, 1, "intel", "45", "59"),
@@ -87,7 +91,7 @@ insert into componenteservidor values
 (default, 13, 1, "intel", "45", "59"),
 (default, 14, 1, "intel", "45", "59"),
 (default, 15, 1, "intel", "45", "59");
-
+select * from componenteservidor;
 DELIMITER $$
 
 CREATE TRIGGER insere_alerta
@@ -113,5 +117,3 @@ BEGIN
     VALUES (NOW(), NEW.valor, NEW.idCapturaDados, 'Atenção');
   END IF;
 END$$
-
-DELIMITER;

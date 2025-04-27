@@ -176,5 +176,6 @@ function excluirComponenteFrio(req, res) {
     cadastrarFrio,
     verificar,
     listarComponentes,
-    excluirComponente
+    excluirComponente,
+    excluirComponenteFrio
   };
