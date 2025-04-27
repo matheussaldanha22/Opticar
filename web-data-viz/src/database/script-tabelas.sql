@@ -137,6 +137,14 @@ INSERT INTO componente (tipo, medida, indicador) VALUES
 ('Sistema', 'Qtd Processos Ativos', 'Qtd'),
 ('Sistema', 'Top Processos CPU Média', '%');
 
+<<<<<<< Updated upstream
+=======
+insert into componenteServidor (fkcomponente, fkmaquina, modelo, limitecritico, limiteatencao) values
+(1, 1, 'intel core i7', '90', '75'),
+(2, 1, 'corsair 16gb', '90', '75'),
+(3, 1, 'ssd kingston 480gb', '95', '80');
+
+>>>>>>> Stashed changes
 insert into componenteServidor values
 (default, 1, 1, "intel", "45", "59"),
 (default, 2, 1, "intel", "45", "59"),

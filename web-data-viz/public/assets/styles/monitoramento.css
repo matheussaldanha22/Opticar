@@ -199,9 +199,12 @@ body{
 
 
 .box .tempoReal{
+    width: 100%;
+    height: 100% ;
     padding: 0.7vw 0 ;
     display: flex;
     flex-direction: column;
+
 }
 
 .box div .texto h1{
@@ -209,7 +212,7 @@ body{
 }
 
 .box .tempoReal .texto p{
-    font-size: 1vw;
+    font-size: 3.6vw;
 }
 
 div .servidor{
@@ -253,6 +256,9 @@ div .servidor select{
     background: linear-gradient(270deg, #012027, #04708D);
     border-radius: 12px;
     padding: 2vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .chart-container-cpu h2{
@@ -263,7 +269,10 @@ div .servidor select{
 .container-dash{
     background-color: #D9D9D9;
     border-radius: 12px;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
 
 .container-dash-rede{
@@ -275,7 +284,102 @@ div .servidor select{
     cursor: pointer;
 }
 
+.tempo_atividade{
+    background: #012027;
+    background: linear-gradient(270deg, #012027, #04708D);
+    color: white;
+    padding: 1vw;
+    border-radius: 12px;
+    text-align: center;
+    margin: 1%;
+}
 
+.tempo_atividade h1{
+    font-size: 5vw;
+}
+
+.tempo_atividade h3{
+    font-size: 3vw;
+}
+
+
+.chart-container-disco{
+    width: 40vw;
+    height: 38vw;
+    display: flex;
+}
+
+chart-disco{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.chart-container-cpu{
+    width: 70vw;
+    height: 38vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-rede h3{
+    color: #2C3E50;
+    font-size: 4vw;
+}
+
+.info-rede h1{
+    color: #04708D;
+    font-size: 7vw;
+}
+
+.taxa {
+    color: #6aa3a3;
+    margin-bottom: 0.5vw;
+    }
+
+.taxa h1 {
+    display: flex;
+    align-items: center;
+    gap: 1vw;
+    font-size: 6vw;
+    color: #1c2e3f;
+}
+
+.taxa h3 {
+        font-size: 5vw;
+}
+
+.seta {
+    width: 10vw;
+    height: auto;
+}
+
+.info{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+.info h3{
+    color: #2C3E50;
+}
+
+.info h1{
+    color: #04708D;
+    font-size: 6vw;
+}
+
+.container-rede{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        
+}
 
 /* Menu que se expande */
 @media only screen and (min-width:702px) { 
@@ -404,27 +508,6 @@ div .servidor select{
 }
 
 
-
-.tempo_atividade{
-    background: #012027;
-    background: linear-gradient(270deg, #012027, #04708D);
-    color: white;
-    padding: 1vw;
-    border-radius: 12px;
-    text-align: center;
-    height: 20%;
-    width: 20%;
-}
-
-.tempo_atividade h1{
-    font-size: 1vw;
-}
-
-.tempo_atividade h3{
-    font-size: 1vw;
-}
-
-
 @media (min-width:702px){
 
     .contain{
@@ -495,8 +578,12 @@ div .servidor select{
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        padding-top: 1.5vw;
     }
+
+    .tempoReal{
+        width: 100%;
+    }
+
 
     .servidor{
         gap: 2vw;
@@ -526,10 +613,10 @@ div .servidor select{
         align-items: center;
         padding: 2vw;
         gap: 2vw;
-        align-items: center; 
         justify-content: center; 
         width: 100%;
-        height: 45%;
+        /* height: 45%; */
+        flex-direction: row;
     }
 
     .container-dash-rede {
@@ -538,9 +625,9 @@ div .servidor select{
         padding: 2vw;
         gap: 1vw;
         width: 100%;
-        height: 45%;
+        height: 50%;
     }
-    
+
     .container-kpi {
         display: flex;
         flex-direction: column;
@@ -556,6 +643,13 @@ div .servidor select{
         width: 11vw;
         height: fit-content;
     }
+
+    .container-kpi-rede h2 {
+        font-size: 1.5vw;
+        color: #2C3E50;
+        margin: 0;
+    }
+
 
     .container-kpi h2 {
         font-size: 1.5vw;
@@ -593,6 +687,7 @@ div .servidor select{
         display: flex;
         width: 100%;
         justify-content: center;
+        flex-direction: row;
     }
 
     .chart-container-rede{
@@ -632,6 +727,7 @@ div .servidor select{
  
     .tempo_atividade{
         padding: 1vw;
+        width: 30%;
         
     }
 
@@ -666,12 +762,16 @@ div .servidor select{
     margin: 0;
     }
 
+    .taxa h3 {
+        font-size: 2vw;
+    }
+
     .seta {
     width: 2vw;
     height: auto;
     }
 
-  
+
     
     
 }
