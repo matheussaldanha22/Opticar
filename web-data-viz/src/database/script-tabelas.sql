@@ -14,7 +14,7 @@ CREATE TABLE usuario (
     nome VARCHAR(45),
     email VARCHAR(45),
     senha VARCHAR(45),
-    cargo ENUM('GestorEmpresa', 'GestorFabrica', 'AnalistaDados', 'EngenheiroManutencao', 'OperadorMaquina'),
+    cargo ENUM('GestorEmpresa', 'GestorFabrica', 'AnalistaDados', 'EngenheiroManutencao'),
     cpf VARCHAR(45),
     fkFabrica INT  -- pode ser nulo inicialmente
 );
@@ -32,9 +32,7 @@ CREATE TABLE fabrica (
     nome VARCHAR(45),
     funcao VARCHAR(45),
     fkEmpresa INT,
-    fkGestorFabrica INT UNIQUE,
-    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idempresa) ON DELETE CASCADE,
-    FOREIGN KEY (fkGestorFabrica) REFERENCES usuario(idusuario) ON DELETE CASCADE
+    FOREIGN KEY (fkEmpresa) REFERENCES empresa(idempresa) ON DELETE CASCADE
 );
 
 ALTER TABLE usuario
