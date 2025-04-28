@@ -7,4 +7,8 @@ router.get("/listarFabricasEmpresa/:idEmpresa", function (req, res) {
   fabricaController.listarFabricasEmpresa(req, res)
 })
 
+router.put("/cadastrarGestorFabrica/:idGestor", (req, res) => {
+  fabricaController.cadastrarGestorFabrica(req, res)
+})
+
 module.exports = router

@@ -48,8 +48,8 @@ function renderTabela(pagina) {
       <td>${alerta.idAlerta}</td>
       <td>${alerta.valor}</td>
       <td>${alerta.prioridade}</td>
-      <td>${alerta.tipo_incidente}</td>
-      <td>${alerta.componente}</td>
+      <td>${alerta.tipo}</td>
+      <td>${alerta.tipoComponente}</td>
       <td>${alertaNome}</td>
       <td><i class='bx bx-arrow-from-left btn' onclick="abrirModal(${alerta.id})"></i></td>
     `
@@ -88,18 +88,22 @@ function abrirModal(id) {
     html: `
       <div class="modal-test">
         <div class="containerConfigAlerta">
-            <h3>Título: ${alerta.titulo} </h3>
+            <h2>Título: ${alerta.titulo} </h2>
+            <p><b>Data:</b> ${alerta.dataAlerta}</p>
             <p><b>Descrição:</b></p>
             <textarea rows="5" cols="30"> ${alerta.descricao}</textarea>
-            <p><b>Data:</b> ${alerta.dataAlerta}</p>
         </div>
 
         <div class="containerComponentes">
-            <p><b>Componente: </b> ${alerta.componente}</p>
-            <p><b>Servidor: </b> ${alerta.servidor}</p>
-            <p><b>Métrica registrada: </b>${alerta.gravidade}</p>
-            <p><b>Tipo de Métrica: </b>${alerta.tipoMetrica}</p>
-            <p><b>Processos Relacionados: </b></p>  
+            <p><b>Hostname: </b> ${alerta.hostname}</p>
+            <p><b>Mac Address: </b> ${alerta.Mac_Address}</p>
+            <p><b>Jira key: </b> ${alerta.jira_key}</p>
+            <hr>
+            <h3>Informações Componente</h3>
+            <p><b>Componente: </b>${alerta.tipoComponente}</p>
+            <p><b>Modelo: </b>${alerta.modelo}</p>
+            <p><b>Tipo: </b> ${alerta.medidaComponente}</p>  
+            <p><b>Valor: </b> ${alerta.valor}</p>  
         </div>
       </div>
     `,

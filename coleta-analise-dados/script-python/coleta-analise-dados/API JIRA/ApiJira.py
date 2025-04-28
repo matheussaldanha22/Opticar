@@ -95,7 +95,7 @@ def get_new_alerts(last_checked_id):
         WHERE 
             a.idAlerta > %(alert_id)s
             AND (a.jira_issue_key IS NULL OR a.jira_issue_key = '')
-            AND a.status = 'To Do'
+            AND a.statusAlerta = 'To Do'
         ORDER BY 
             a.idAlerta ASC;
         """
@@ -215,7 +215,7 @@ def atualizar_alertas():
                     conn = mysql.connector.connect(**DB_CONFIG)
                     cursor = conn.cursor()
                     try:
-                        cursor.execute("UPDATE alerta SET status = %s WHERE jira_issue_key = %s", (alerta.fields.status.name, alerta.key))
+                        cursor.execute("UPDATE alerta SET statusAlerta = %s WHERE jira_issue_key = %s", (alerta.fields.status.name, alerta.key))
                         conn.commit()
                         print(f'Alerta {alerta.fields.status.name} atualizado no banco')
                     except Exception as e:

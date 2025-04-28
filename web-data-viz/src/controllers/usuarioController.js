@@ -76,9 +76,11 @@ function cadastrar(req, res) {
     res.status(400).json({ erro: "Seu cpf está undefined!" })
   } else if (cargo == undefined) {
     res.status(400).json({ erro: "Seu cargo está undefined!" })
-  } else if (fkFabrica == undefined) {
-    res.status(400).json({ erro: "Sua fabrica a vincular está undefined!" })
-  } else {
+  }
+  // else if (fkFabrica == undefined) {
+  //   res.status(400).json({ erro: "Sua fabrica a vincular está undefined!" })
+  // }
+  else {
     // Passe os valores como parâmetro e vá para o arquivo usuarioModel.js
     usuarioModel
       .cadastrar(nome, email, cpf, cargo, senha, fkFabrica)
@@ -169,13 +171,39 @@ function atualizarUsuario(req, res) {
   var email = req.body.email
   var cpf = req.body.cpf
   var cargo = req.body.cargo
+
+  if (idUsuario == undefined) {
+    res.status(400).send("ID do usuario indefinido")
+  } else {
+    usuarioModel
+      .atualizarUsuario(idUsuario, nome, email, cpf, cargo)
+      .then(function (resultado) {
+        res.status(200).json(resultado)
+      })
+      .catch(function (erro) {
+        console.log(erro)
+        console.log(
+          "\nHouve um erro ao atualizar o usuário Erro: ",
+          erro.sqlMessage
+        )
+        res.status(500).json(erro.sqlMessage)
+      })
+  }
+}
+
+function atualizarUsuarioFabrica(req, res) {
+  var idUsuario = req.body.idUsuario
+  var nome = req.body.nome
+  var email = req.body.email
+  var cpf = req.body.cpf
+  var cargo = req.body.cargo
   var idFabrica = req.body.idFabrica
 
   if (idUsuario == undefined) {
     res.status(400).send("ID do usuario indefinido")
   } else {
     usuarioModel
-      .atualizarUsuario(idUsuario, nome, email, cpf, cargo, idFabrica)
+      .atualizarUsuarioFabrica(idUsuario, nome, email, cpf, cargo, idFabrica)
       .then(function (resultado) {
         res.status(200).json(resultado)
       })
@@ -197,4 +225,5 @@ module.exports = {
   listarPorEmpresa,
   listarPorFabrica,
   atualizarUsuario,
+  atualizarUsuarioFabrica,
 }

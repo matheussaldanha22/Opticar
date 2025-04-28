@@ -28,4 +28,8 @@ router.put("/atualizarUsuario", (req, res) => {
   usuarioController.atualizarUsuario(req, res)
 })
 
+router.put("/atualizarUsuarioFabrica", (req, res) => {
+  usuarioController.atualizarUsuarioFabrica(req, res)
+})
+
 module.exports = router

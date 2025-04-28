@@ -93,7 +93,24 @@ function listarPorFabrica(idFabrica) {
   return database.executar(instrucaoSql)
 }
 
-function atualizarUsuario(idUsuario, nome, email, cpf, cargo, idFabrica) {
+function atualizarUsuario(idUsuario, nome, email, cpf, cargo) {
+  var instrucaoSql = `
+UPDATE usuario
+SET nome = '${nome}', email = '${email}', cpf='${cpf}', cargo='${cargo}'
+WHERE idusuario = ${idUsuario};
+`
+  console.log("Executando a instrução SQL: \n" + instrucaoSql)
+  return database.executar(instrucaoSql)
+}
+
+function atualizarUsuarioFabrica(
+  idUsuario,
+  nome,
+  email,
+  cpf,
+  cargo,
+  idFabrica
+) {
   var instrucaoSql = `
 UPDATE usuario
 SET nome = '${nome}', email = '${email}', cpf='${cpf}', cargo='${cargo}', fkFabrica = ${idFabrica}
@@ -110,4 +127,5 @@ module.exports = {
   listarPorEmpresa,
   listarPorFabrica,
   atualizarUsuario,
+  atualizarUsuarioFabrica,
 }
