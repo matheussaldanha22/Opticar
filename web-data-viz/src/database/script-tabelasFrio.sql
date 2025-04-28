@@ -98,22 +98,83 @@ CREATE TRIGGER insere_alerta
 AFTER INSERT ON capturaDados
 FOR EACH ROW
 BEGIN
-  DECLARE limCritico FLOAT;
-  DECLARE limAtencao FLOAT;
+    DECLARE limCritico FLOAT;
+    DECLARE limAtencao FLOAT;
+    DECLARE nomeComponente VARCHAR(45);
+    DECLARE tipoComponente VARCHAR(45);
+    DECLARE prioridadeAlerta ENUM('Média', 'Crítica');
+    DECLARE descricaoAlerta TEXT;
 
-  -- Obtendo os valores limiteCritico e limiteAtencao do componenteServidor
-  SELECT CAST(limiteCritico AS DECIMAL(10,2)), CAST(limiteAtencao AS DECIMAL(10,2))
-  INTO limCritico, limAtencao
-  FROM componenteServidor
-  WHERE idcomponenteServidor = NEW.fkComponenteServidor;
-  
-  -- Verificando se o valor está acima do limite crítico ou de atenção e inserindo o alerta
-  IF NEW.valor > limCritico THEN
-    INSERT INTO alerta (dataHora, valor, fkCapturaDados, descricao)
-    VALUES (NOW(), NEW.valor, NEW.idCapturaDados, 'Crítico');
-    
-  ELSEIF NEW.valor > limAtencao THEN
-    INSERT INTO alerta (dataHora, valor, fkCapturaDados, descricao)
-    VALUES (NOW(), NEW.valor, NEW.idCapturaDados, 'Atenção');
-  END IF;
+    -- Buscar os limites e o nome/tipo do componente relacionado
+    SELECT 
+        CAST(cs.limiteCritico AS DECIMAL(10,2)), 
+        CAST(cs.limiteAtencao AS DECIMAL(10,2)),
+        c.tipo,
+        c.medida
+    INTO 
+        limCritico, 
+        limAtencao, 
+        nomeComponente, 
+        tipoComponente
+    FROM componenteServidor cs
+    JOIN componente c ON cs.fkComponente = c.idcomponente
+    WHERE cs.idcomponenteServidor = NEW.fkComponenteServidor;
+
+    -- Verificar se o valor excede limites
+    IF NEW.valor > limCritico THEN
+        SET prioridadeAlerta = 'Crítica';
+        SET descricaoAlerta = CONCAT('Valor crítico detectado: ', NEW.valor, ' ', tipoComponente);
+        
+        INSERT INTO alerta (
+            dataHora, 
+            valor, 
+            titulo, 
+            descricao, 
+            prioridade, 
+            tipo_incidente, 
+            componente, 
+            statusAlerta, 
+            fkCapturaDados
+        )
+        VALUES (
+            NOW(),
+            NEW.valor,
+            nomeComponente,
+            descricaoAlerta,
+            prioridadeAlerta,
+            'Alerta Crítico',
+            nomeComponente,
+            'To Do',
+            NEW.idCapturaDados
+        );
+        
+    ELSEIF NEW.valor > limAtencao THEN
+        SET prioridadeAlerta = 'Média';
+        SET descricaoAlerta = CONCAT('Valor de atenção detectado: ', NEW.valor, ' ', tipoComponente);
+
+        INSERT INTO alerta (
+            dataHora, 
+            valor, 
+            titulo, 
+            descricao, 
+            prioridade, 
+            tipo_incidente, 
+            componente, 
+            statusAlerta, 
+            fkCapturaDados
+        )
+        VALUES (
+            NOW(),
+            NEW.valor,
+            nomeComponente,
+            descricaoAlerta,
+            prioridadeAlerta,
+            'Alerta de Atenção',
+            nomeComponente,
+            'To Do',
+            NEW.idCapturaDados
+        );
+    END IF;
 END$$
+
+DELIMITER ;

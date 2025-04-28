@@ -176,7 +176,7 @@ def monitorar():
                     print(pedido_cliente['idcomponenteServidor'])
 
                     cursorFrio.execute("""
-                    SELECT opticarFrio.componenteServidor.idcomponenteServidor FROM opticarFrio.componenteservidor
+                    SELECT opticarFrio.componenteServidor.idcomponenteServidor FROM opticarFrio.componenteServidor
                     WHERE fkComponente = %s AND fkMaquina = %s
                     """, (pedido_cliente['fkComponente'], pedido_cliente['fkMaquina']))
 
