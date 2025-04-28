@@ -5,7 +5,7 @@
 /*
 comandos para mysql server
 */
-GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' IDENTIFIED BY 'admin123' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
 
 use opticar;
 
@@ -93,19 +93,17 @@ INSERT INTO empresa (idempresa, nome, cnpj, fkGestorEmpresa) VALUES
 (2, 'AgroData Ltda', '98765432000111', NULL), -- Ainda sem gestor
 (3, 'TechVitor Ltda', '22765432102111', 5);
 
-INSERT INTO fabrica (idfabrica, nome, funcao, fkEmpresa, fkGestorFabrica) VALUES
-(1, 'Fábrica Norte', 'Montagem de sensores', 1, NULL),
-(2, 'Fábrica Sul', 'Montagem de placas', 1, NULL),
-(3, 'Fábrica Centro', 'Montagem geral', 2, NULL),
-(4, 'Fábrica Oeste', 'Montagem Carros', 3, NULL);
+INSERT INTO fabrica (idfabrica, nome, funcao, fkEmpresa) VALUES
+(1, 'Fábrica Norte', 'Montagem de sensores', 1),
+(2, 'Fábrica Sul', 'Montagem de placas', 1),
+(3, 'Fábrica Centro', 'Montagem geral', 2),
+(4, 'Fábrica Oeste', 'Montagem Carros', 3);
 
 INSERT INTO usuario (idusuario, nome, email, senha, cargo, cpf, fkFabrica) VALUES
 (2, 'Carlos Souza', 'carlos@techagro.com', '123', 'GestorFabrica', '98765432100', 1), -- gestor da Fábrica 1
 (3, 'Beatriz Lima', 'beatriz@agrodata.com', '123', 'AnalistaDados', '11122233344', 3),
 (4, 'Mario Almeida', 'mario@teste.com', '123', 'GestorFabrica', '12222233322', 3); -- gestor da Fábrica 3
 
-UPDATE fabrica SET fkGestorFabrica = 2 WHERE idfabrica = 1;
-UPDATE fabrica SET fkGestorFabrica = 4 WHERE idfabrica = 3;
 
 INSERT INTO endereco (
   idendereco, logradouro, numLogradouro, cidade, bairro, uf, estado, cep, fkEmpresa, fkFabrica
@@ -154,22 +152,4 @@ insert into componenteServidor values
 (default, 13, 1, "intel", "45", "59"),
 (default, 14, 1, "intel", "45", "59"),
 (default, 15, 1, "intel", "45", "59");
-
-select * from componenteservidor;
-
-select * from servidor_Maquina;
-
-SELECT * FROM componenteServidor JOIN servidor_maquina ON componenteServidor.fkMaquina = servidor_maquina.idMaquina
-				JOIN componente ON componenteServidor.fkComponente = componente.idComponente
-                WHERE servidor_maquina.Mac_Address = 251776438657434;
-                
-select * from capturaDados;
-
-SELECT * FROM servidor_maquina WHERE Mac_Address = 251776438657434;
-
-SELECT * FROM componenteServidor WHERE fkMaquina = (SELECT idMaquina FROM servidor_maquina WHERE Mac_Address = 251776438657434);
-
-SELECT * FROM componenteServidor JOIN servidor_maquina ON componenteServidor.fkMaquina = servidor_maquina.idMaquina
-				JOIN componente ON componenteServidor.fkComponente = componente.idComponente
-                WHERE servidor_maquina.Mac_Address = 251776438657434;
 

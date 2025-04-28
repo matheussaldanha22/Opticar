@@ -1,5 +1,4 @@
-GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' IDENTIFIED BY 'admin123' WITH GRANT OPTION;
-FLUSH PRIVILEGES;
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
 use opticarFrio;
 
 CREATE TABLE servidor_maquina (
@@ -75,7 +74,7 @@ INSERT INTO componente (tipo, medida, indicador) VALUES
 insert into servidor_maquina values
 (1,	'Windows', '192.168.56.1', 1, 251776438657434, 'DESKTOP-KHH0UBD');
 
-insert into componenteservidor values
+insert into componenteServidor values
 (default, 1, 1, "intel", "45", "59"),
 (default, 2, 1, "intel", "45", "59"),
 (default, 3, 1, "intel", "45", "59"),
@@ -91,7 +90,7 @@ insert into componenteservidor values
 (default, 13, 1, "intel", "45", "59"),
 (default, 14, 1, "intel", "45", "59"),
 (default, 15, 1, "intel", "45", "59");
-select * from componenteservidor;
+
 DELIMITER $$
 
 CREATE TRIGGER insere_alerta
