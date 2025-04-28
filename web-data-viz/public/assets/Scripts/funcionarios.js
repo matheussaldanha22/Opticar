@@ -111,7 +111,7 @@ function abrirModal(id) {
 
         const idEmpresa = sessionStorage.getItem("EMPRESA")
         fetch(
-          `http://localhost:3333/fabricas/listarFabricasEmpresa/${idEmpresa}`,
+          `http://localhost:8080/fabricas/listarFabricasEmpresa/${idEmpresa}`,
           { method: "GET" }
         ).then((resposta) => {
           if (resposta.ok) {
@@ -146,7 +146,7 @@ function abrirModal(id) {
 
         // const idEmpresa = sessionStorage.getItem("EMPRESA")
         // fetch(
-        //   `http://localhost:3333/fabricas/listarFabricasEmpresa/${idEmpresa}`,
+        //   `http://localhost:8080/fabricas/listarFabricasEmpresa/${idEmpresa}`,
         //   { method: "GET" }
         // ).then((resposta) => {
         //   if (resposta.ok) {
@@ -192,7 +192,7 @@ function abrirModal(id) {
       }
 
       if (sessionStorage.getItem("CARGO") == "GestorFabrica") {
-        fetch(`http://localhost:3333/usuarios/atualizarUsuario`, {
+        fetch(`http://localhost:8080/usuarios/atualizarUsuario`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -227,7 +227,7 @@ function abrirModal(id) {
             }
           })
       } else if (sessionStorage.getItem("CARGO") == "GestorEmpresa") {
-        fetch(`http://localhost:3333/usuarios/atualizarUsuarioFabrica`, {
+        fetch(`http://localhost:8080/usuarios/atualizarUsuarioFabrica`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -319,7 +319,7 @@ async function abrirModalCriar() {
         `
 
         fetch(
-          `http://localhost:3333/fabricas/listarFabricasEmpresa/${idEmpresa}`,
+          `http://localhost:8080/fabricas/listarFabricasEmpresa/${idEmpresa}`,
           {
             method: "GET",
           }
@@ -375,7 +375,7 @@ async function abrirModalCriar() {
     //   )
     // }
 
-    fetch(`http://localhost:3333/usuarios/cadastrar`, {
+    fetch(`http://localhost:8080/usuarios/cadastrar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -426,7 +426,7 @@ async function abrirModalCriar() {
   //   .pop()?.idusuario
 
   // fetch(
-  //   `http://localhost:3333/fabricas/cadastrarGestorFabrica/${ultimoGestorEmpresa}`,
+  //   `http://localhost:8080/fabricas/cadastrarGestorFabrica/${ultimoGestorEmpresa}`,
   //   {
   //     method: "PUT",
   //     headers: {
@@ -458,7 +458,7 @@ function listarFuncionariosEmpresa() {
     })
   }
 
-  fetch(`http://localhost:3333/usuarios/listarPorEmpresa/${idEmpresa}`, {
+  fetch(`http://localhost:8080/usuarios/listarPorEmpresa/${idEmpresa}`, {
     method: "GET",
   })
     .then((resposta) => {
@@ -489,7 +489,7 @@ function listarFuncionariosFabrica() {
     })
   }
 
-  fetch(`http://localhost:3333/usuarios/listarPorFabrica/${idFabrica}`, {
+  fetch(`http://localhost:8080/usuarios/listarPorFabrica/${idFabrica}`, {
     method: "GET",
   })
     .then((resposta) => {

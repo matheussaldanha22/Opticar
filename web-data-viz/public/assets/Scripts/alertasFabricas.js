@@ -1,10 +1,10 @@
 const ctxFabrica = document.getElementById('fabricaChart').getContext('2d');
 
 const dataFabrica = {
-    labels: ['FB-01', 'FB-02', 'FB-03', 'FB-04', 'FB-05', 'FB-06'],
+    labels: ['FB-Sul', 'FB-Norte'],
     datasets: [{
-        label: 'Uso da CPU',
-        data: [50, 60, 60, 45, 100, 80],
+        label: 'Alertas',
+        data: [5, 8],
         borderColor: '#FFFFFF',
         backgroundColor: '#FFFFFF',
         borderWidth: 2,
@@ -26,9 +26,7 @@ const configFabrica = {
         },
         scales: {
             y: {
-                beginAtZero: false,
-                suggestedMin: 30,
-                suggestedMax: 100,
+                beginAtZero: true, // começa em 0
                 ticks: { color: 'white', font: { size: 12 } }
             },
             x: {

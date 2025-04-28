@@ -62,10 +62,10 @@
             <div class="dashCargo">
                 <div class="kpiF">
                     <span class="kpiTitle"> Fábricas: </span>
-                    <p class="kpiData" id="codServidor">13</p>
+                    <p class="kpiData" id="codServidor">2</p>
                     <i class='bx bx-cog'></i>
                 </div>
-
+                
                 <div class="kpiF">
                     <span class="kpiTitle"> Alertas: </span>
                     <p class="kpiData" id="codServidor">13</p>
@@ -74,7 +74,7 @@
 
                 <div class="kpiS">
                     <span class="kpiTitle"> Servidores: </span>
-                    <p class="kpiData" id="codServidor">13</p>
+                    <p class="kpiData" id="codServidor">1</p>
                     <i class='bx bx-cog'></i>
                 </div>
 
@@ -85,7 +85,13 @@
                 </div> -->
             </div>
             <div class="containerGrafico">
+                
                 <div class="chart-container-fabricas">
+                    <h2>Selecione uma fábrica: <select onchange="mudarTela()" name="" id="fabrica" style="border-radius: 8px;">
+                        <option value="" selected>Selecione umma Fábrica</option>
+                        <option value="">Fábrica Sul</option>
+                        <option value="">Fábrica Norte</option>
+                    </select></h2>
                     <div class="titulo"></div>
                     <h2> <i class='bx bxs-business' style="border: solid 1px white; border-radius: 8px;"></i>ALERTA POR FÁBRICA  <span>Filtrar:</span> <i id="abrir_modal" class='bx bx-filter-alt'></i></h2>
                     <canvas id="fabricaChart"></canvas>
@@ -186,5 +192,11 @@ function expand(){
     }
     div_menu.classList.toggle('menu-expand')
     ul_links.classList.toggle('nav-links-expanded')
+}
+
+function mudarTela() {
+    var select = fabrica.value;
+    window.location.href = "./dashGestaofabrica.html";
+
 }
 </script>
