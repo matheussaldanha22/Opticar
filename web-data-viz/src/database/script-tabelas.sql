@@ -92,11 +92,11 @@ INSERT INTO empresa (idempresa, nome, cnpj, fkGestorEmpresa) VALUES
 (2, 'AgroData Ltda', '98765432000111', NULL), -- Ainda sem gestor
 (3, 'TechVitor Ltda', '22765432102111', 5);
 
-INSERT INTO fabrica (idfabrica, nome, funcao, fkEmpresa, fkGestorFabrica) VALUES
-(1, 'Fábrica Norte', 'Montagem de sensores', 1, NULL),
-(2, 'Fábrica Sul', 'Montagem de placas', 1, NULL),
-(3, 'Fábrica Centro', 'Montagem geral', 2, NULL),
-(4, 'Fábrica Oeste', 'Montagem Carros', 3, NULL);
+INSERT INTO fabrica (idfabrica, nome, funcao, fkEmpresa) VALUES
+(1, 'Fábrica Norte', 'Montagem de sensores', 1),
+(2, 'Fábrica Sul', 'Montagem de placas', 1),
+(3, 'Fábrica Centro', 'Montagem geral', 2),
+(4, 'Fábrica Oeste', 'Montagem Carros', 3);
 
 INSERT INTO usuario (idusuario, nome, email, senha, cargo, cpf, fkFabrica) VALUES
 (2, 'Carlos Souza', 'carlos@techagro.com', '123', 'GestorFabrica', '98765432100', 1), -- gestor da Fábrica 1
