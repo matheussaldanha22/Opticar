@@ -2,11 +2,11 @@ import psutil
 import time
 import uuid
 import mysql.connector
-import json
+# import json
 import datetime
-import boto3
-import os
-import tempfile
+# import boto3
+# import os
+# import tempfile
 
 #Aqui a gente pega o mac Adress para comparar depois de tudo
 # def enviarS3(mac_address,dados_json):
@@ -111,18 +111,20 @@ pedido_coleta = {
 
 def conectar():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="@Zaqueuchavier123",
-        database="opticar"
+    host="23.20.206.123",
+    user="admin",
+    password="admin123",
+    database="opticar",
+    port="3306"
     )
 
 def conectarFrio():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="@Zaqueuchavier123",
-        database="opticarFrio"
+    host="23.20.206.123",
+    user="admin",
+    password="admin123",
+    database="opticarFrio",
+    port="3307"
     )
 
 #Aqui é afunção principal que vai realizar as validações e os inserts
@@ -134,12 +136,14 @@ def monitorar():
     ultimo_envio_s3 = datetime.datetime.now()
 
     while True:
+        print("Conexao com o banco iniciada (WHILE)")
+
         try:
             conexao = conectar()
             conexaoFrio = conectarFrio()
             cursor = conexao.cursor(dictionary=True)
             cursorFrio = conexaoFrio.cursor(dictionary=True)
-
+            print(conexao)
             # Busca no banco os componentes que devem ser monitorados para esse MAC
             cursor.execute("""
                 SELECT * FROM opticar.componenteServidor 

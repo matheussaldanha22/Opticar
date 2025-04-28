@@ -1,4 +1,12 @@
-GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' WITH GRANT OPTION;
+
+
+CREATE DATABASE IF NOT EXISTS opticarFrio;
+
+CREATE USER IF NOT EXISTS 'admin'@'%' IDENTIFIED BY 'admin123';
+GRANT ALL PRIVILEGES ON opticarFrio.* TO 'admin'@'%';
+FLUSH PRIVILEGES;
+
+
 use opticarFrio;
 
 CREATE TABLE servidor_maquina (
