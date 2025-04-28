@@ -1,5 +1,5 @@
-drop database opticarfrio;
-
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' IDENTIFIED BY 'admin123' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
 use opticarFrio;
 
 CREATE TABLE servidor_maquina (

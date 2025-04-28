@@ -5,7 +5,8 @@
 /*
 comandos para mysql server
 */
-DROP database opticar;
+GRANT ALL PRIVILEGES ON *.* TO 'admin'@'%' IDENTIFIED BY 'admin123' WITH GRANT OPTION;
+
 use opticar;
 
 CREATE TABLE usuario (
