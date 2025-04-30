@@ -14,7 +14,7 @@ JOIN componente ON componenteServidor.fkComponente = idcomponente;
   // select idAlerta, valor, titulo, descricao, prioridade, tipo_incidente, componente, statusAlerta , jira_issue_key AS jira_key, dataHora AS dataAlerta from alerta;
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 module.exports = {

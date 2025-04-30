@@ -62,7 +62,7 @@ function entrar() {
             }, 1000)
           } else if (sessionStorage.getItem("CARGO") == "GestorFabrica") {
             setTimeout(function () {
-              window.location = "./dashGestaoFabrica.html"
+              window.location = "./dashGestaofabrica.html"
             }, 1000) // apenas para exibir o loading
           } else if (
             sessionStorage.getItem("CARGO") == "EngenheiroManutencao"

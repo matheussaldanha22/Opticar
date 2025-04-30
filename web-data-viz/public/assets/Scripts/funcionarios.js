@@ -111,7 +111,7 @@ function abrirModal(id) {
 
         const idEmpresa = sessionStorage.getItem("EMPRESA")
         fetch(
-          `http://localhost:8080/fabricas/listarFabricasEmpresa/${idEmpresa}`,
+          `/fabricas/listarFabricasEmpresa/${idEmpresa}`,
           { method: "GET" }
         ).then((resposta) => {
           if (resposta.ok) {
@@ -146,7 +146,7 @@ function abrirModal(id) {
 
         // const idEmpresa = sessionStorage.getItem("EMPRESA")
         // fetch(
-        //   `http://localhost:8080/fabricas/listarFabricasEmpresa/${idEmpresa}`,
+        //   `/fabricas/listarFabricasEmpresa/${idEmpresa}`,
         //   { method: "GET" }
         // ).then((resposta) => {
         //   if (resposta.ok) {
@@ -192,7 +192,7 @@ function abrirModal(id) {
       }
 
       if (sessionStorage.getItem("CARGO") == "GestorFabrica") {
-        fetch(`http://localhost:8080/usuarios/atualizarUsuario`, {
+        fetch(`/usuarios/atualizarUsuario`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -227,7 +227,7 @@ function abrirModal(id) {
             }
           })
       } else if (sessionStorage.getItem("CARGO") == "GestorEmpresa") {
-        fetch(`http://localhost:8080/usuarios/atualizarUsuarioFabrica`, {
+        fetch(`/usuarios/atualizarUsuarioFabrica`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -319,7 +319,7 @@ async function abrirModalCriar() {
         `
 
         fetch(
-          `http://localhost:8080/fabricas/listarFabricasEmpresa/${idEmpresa}`,
+          `/fabricas/listarFabricasEmpresa/${idEmpresa}`,
           {
             method: "GET",
           }
@@ -375,7 +375,7 @@ async function abrirModalCriar() {
     //   )
     // }
 
-    fetch(`http://localhost:8080/usuarios/cadastrar`, {
+    fetch(`/usuarios/cadastrar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -426,7 +426,7 @@ async function abrirModalCriar() {
   //   .pop()?.idusuario
 
   // fetch(
-  //   `http://localhost:8080/fabricas/cadastrarGestorFabrica/${ultimoGestorEmpresa}`,
+  //   `/fabricas/cadastrarGestorFabrica/${ultimoGestorEmpresa}`,
   //   {
   //     method: "PUT",
   //     headers: {
@@ -458,7 +458,7 @@ function listarFuncionariosEmpresa() {
     })
   }
 
-  fetch(`http://localhost:8080/usuarios/listarPorEmpresa/${idEmpresa}`, {
+  fetch(`/usuarios/listarPorEmpresa/${idEmpresa}`, {
     method: "GET",
   })
     .then((resposta) => {
@@ -489,7 +489,7 @@ function listarFuncionariosFabrica() {
     })
   }
 
-  fetch(`http://localhost:8080/usuarios/listarPorFabrica/${idFabrica}`, {
+  fetch(`/usuarios/listarPorFabrica/${idFabrica}`, {
     method: "GET",
   })
     .then((resposta) => {

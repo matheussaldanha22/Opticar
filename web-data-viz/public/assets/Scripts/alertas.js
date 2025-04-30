@@ -3,7 +3,7 @@ let paginaAtual = 1
 let alertas = [] // Armazenamento dos dados recebidos do backend
 
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("http://localhost:3333/alertas/listar")
+  fetch("/alertas/listar")
     .then((res) => res.json())
     .then((dados) => {
       alertas = dados
@@ -13,9 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((err) => {
       console.error("Erro ao carregar alertas:", err)
     })
-  console.log("Iniciando a API do JIRA")
 
-  getChamados()
 })
 
 function renderTabela(pagina) {
