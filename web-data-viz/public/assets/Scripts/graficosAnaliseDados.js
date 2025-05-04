@@ -48,16 +48,27 @@ const ctxCPU = document.getElementById('cpuChart').getContext('2d');
 
 const dataCPU = {
     labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho','Julho','Agosto','Setembro','Novembro','Dezembro'],
-    datasets: [{
-        label: 'Uso da CPU',
-        data: [50, 60, 60, 45, 100, 80,50,60,23,55,12,55],
-        borderColor: '#FFFFFF',
-        borderWidth: 2,
-        fill: false,
-        pointBackgroundColor: '#FFFFFF',
-        pointRadius: 5,
-        tension: 0.3
-    }]
+    datasets: [
+        {
+            label: 'Uso da CPU',
+            data: [50, 60, 60, 45, 100, 80,50,60,23,55,12,55],
+            borderColor: '#FFFFFF',
+            borderWidth: 2,
+            fill: false,
+            pointBackgroundColor: '#FFFFFF',
+            pointRadius: 5,
+            tension: 0.3
+        },
+        {
+            label: 'Alerta',
+            data: Array(12).fill(50), // linha parametro
+            borderColor: 'red',
+            borderWidth: 2,
+            borderDash: [5, 5],
+            pointRadius: 0,
+            fill: false
+        }
+    ]
 };
 
 const configCPU = {
@@ -99,6 +110,15 @@ const dataDisco = {
         pointBackgroundColor: '#FFFFFF',
         pointRadius: 5,
         tension: 0.3
+    },
+    {
+        label: 'Alerta',
+        data: Array(12).fill(50), // linha parametro
+        borderColor: 'red',
+        borderWidth: 2,
+        borderDash: [5, 5],
+        pointRadius: 0,
+        fill: false
     }]
 };
 
@@ -141,6 +161,15 @@ const dataRAM = {
         pointBackgroundColor: '#000000',
         pointRadius: 5,
         tension: 0.3
+    },
+    {
+        label: 'Alerta',
+        data: Array(12).fill(50), // linha parametro
+        borderColor: 'red',
+        borderWidth: 2,
+        borderDash: [5, 5],
+        pointRadius: 0,
+        fill: false
     }]
 };
 
@@ -183,6 +212,15 @@ const dataRede = {
         pointBackgroundColor: '#000000',
         pointRadius: 5,
         tension: 0.3
+    },
+    {
+        label: 'Alerta',
+        data: Array(12).fill(50), // linha parametro
+        borderColor: 'red',
+        borderWidth: 2,
+        borderDash: [5, 5],
+        pointRadius: 0,
+        fill: false
     }]
 };
 
@@ -218,7 +256,7 @@ const data2 = {
     labels: ["CPU", "RAM", "DISCO", "REDE"],
     datasets: [{
         label: "Quantidade de alertas",
-        data: [90, 70, 50, 40],
+        data: [30, 20, 15, 6],
         backgroundColor: ["#012027", "#04708D", "#D9D9D9", "#0084FF"],
         borderRadius: 8,
         barPercentage: 1,
