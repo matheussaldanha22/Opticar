@@ -69,7 +69,8 @@ CREATE TABLE componente (
     idcomponente INT PRIMARY KEY auto_increment,
     tipo VARCHAR(45),
     medida VARCHAR(45),
-    indicador VARCHAR(45)
+    indicador VARCHAR(45),
+    codigo VARCHAR(200)
 );
 
 CREATE TABLE componenteServidor (
