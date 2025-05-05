@@ -28,8 +28,10 @@ CREATE TABLE empresa (
 
 CREATE TABLE fabrica (
     idfabrica INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(45),
-    funcao VARCHAR(45),
+    nome VARCHAR(45) unique,
+    funcao varchar(100),
+    limiteAtencao INT,
+    limiteCritico INT,
     fkEmpresa INT,
     FOREIGN KEY (fkEmpresa) REFERENCES empresa(idempresa) ON DELETE CASCADE
 );
@@ -102,9 +104,6 @@ INSERT INTO usuario (idusuario, nome, email, senha, cargo, cpf, fkFabrica) VALUE
 (2, 'Carlos Souza', 'carlos@techagro.com', '123', 'GestorFabrica', '98765432100', 1), -- gestor da Fábrica 1
 (3, 'Beatriz Lima', 'beatriz@agrodata.com', '123', 'AnalistaDados', '11122233344', 3),
 (4, 'Mario Almeida', 'mario@teste.com', '123', 'GestorFabrica', '12222233322', 3); -- gestor da Fábrica 3
-
-UPDATE fabrica SET fkGestorFabrica = 2 WHERE idfabrica = 1;
-UPDATE fabrica SET fkGestorFabrica = 4 WHERE idfabrica = 3;
 
 INSERT INTO endereco (
   idendereco, logradouro, numLogradouro, cidade, bairro, uf, estado, cep, fkEmpresa, fkFabrica
