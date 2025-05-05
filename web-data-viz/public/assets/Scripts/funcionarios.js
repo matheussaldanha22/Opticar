@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function renderTabela(pagina) {
   const tabela = document.getElementById("tabela-alertas")
-  tabela.innerHTML = ` <tr>
+  tabela.innerHTML = ` <thead>
+                        <tr>
                         <th>Id</th>
                         <th>Nome</th>
                         <th>Email</th>
@@ -23,7 +24,8 @@ function renderTabela(pagina) {
                         <th>Cargo</th>    
                         <th>Fabrica</th>    
                         <th>Editar</th>
-                    </tr>`
+                    </tr>
+                    </thead>`
 
   const inicio = (pagina - 1) * itensPorPagina
   const fim = inicio + itensPorPagina
@@ -32,13 +34,15 @@ function renderTabela(pagina) {
   paginaDados.forEach((funcionario) => {
     const tr = document.createElement("tr")
     tr.innerHTML = `
-      <td>${funcionario.idusuario}</td>
-      <td>${funcionario.nome}</td>
-      <td>${funcionario.email}</td>
-      <td>${funcionario.cpf}</td>
-      <td>${funcionario.cargo}</td>
-      <td>${funcionario.nomeFabrica}</td>
-      <td><i class='bx bxs-edit btn' onclick="abrirModal(${funcionario.idusuario})"></i></td>
+    <tbody>
+      <td data-label="ID">${funcionario.idusuario}</td>
+      <td data-label="Nome">${funcionario.nome}</td>
+      <td data-label="Email">${funcionario.email}</td>
+      <td data-label="Cpf">${funcionario.cpf}</td>
+      <td data-label="Cargo">${funcionario.cargo}</td>
+      <td data-label="Fabrica">${funcionario.nomeFabrica}</td>
+      <td data-label="Editar"><i class='bx bxs-edit btn' onclick="abrirModal(${funcionario.idusuario})"></i></td>
+      </tbody>
     `
     tabela.appendChild(tr)
   })
@@ -110,10 +114,9 @@ function abrirModal(id) {
         ).value = `${funcionarios.cargo}`
 
         const idEmpresa = sessionStorage.getItem("EMPRESA")
-        fetch(
-          `/fabricas/listarFabricasEmpresa/${idEmpresa}`,
-          { method: "GET" }
-        ).then((resposta) => {
+        fetch(`/fabricas/listarFabricasEmpresa/${idEmpresa}`, {
+          method: "GET",
+        }).then((resposta) => {
           if (resposta.ok) {
             resposta.json().then((resultado) => {
               console.log(resultado)
@@ -318,12 +321,9 @@ async function abrirModalCriar() {
           <option value="GestorFabrica">Gestor fábrica</option>
         `
 
-        fetch(
-          `/fabricas/listarFabricasEmpresa/${idEmpresa}`,
-          {
-            method: "GET",
-          }
-        ).then((resposta) => {
+        fetch(`/fabricas/listarFabricasEmpresa/${idEmpresa}`, {
+          method: "GET",
+        }).then((resposta) => {
           if (resposta.ok) {
             resposta.json().then((dados) => {
               listaFabricas = dados

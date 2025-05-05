@@ -12,10 +12,16 @@
   font-family: "Montserrat";
 }
 
+body {
+  height: 100vh;
+  overflow-x: hidden;
+}
+
 .mainContainer {
   display: flex;
   gap: 10%;
   flex-direction: row;
+  min-height: 100vh;
 }
 
 .contentContainer {
@@ -107,7 +113,7 @@
 @media only screen and (min-width: 702px) {
   .menu {
     width: 5%;
-    height: 100vh;
+    height: 100%;
     position: fixed;
     left: 0;
   }
@@ -224,11 +230,13 @@
   display: flex;
   width: inherit;
   justify-content: space-between;
-  background-color: var(--cinza);
+  background-color: #fff;
+
   height: 10%;
   border-radius: 15px;
   align-items: center;
-  box-shadow: 0px 9px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.75);
+
   margin-top: 2%;
 }
 
@@ -272,34 +280,19 @@
 .funcionariosContainer {
   width: 100%;
   margin-top: 2%;
-  height: 65%;
-  background-color: var(--cinza);
+  height: 60%;
+  background-color: #fff;
   border-radius: 10px;
-  box-shadow: 0px 9px 5px 0px rgba(0, 0, 0, 0.75);
-  display: flex;
-  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* display: flex;
+  flex-direction: column; */
+  overflow-x: auto;
   /* justify-content:; */
-}
-
-.tabelaContainer {
-  width: 100%;
-  background-color: var(--cinza);
-  border-radius: 10px;
-  border-spacing: 0 10px;
-}
-
-.tabelaContainer th {
-  font-size: 25px;
-}
-
-.tabelaContainer td {
-  text-align: center;
-  font-size: 20px;
 }
 
 .tabelaContainer td:nth-child(7) {
   cursor: pointer;
-  font-size: 30px;
+  /* font-size: 30px; */
 }
 
 .bx-arrow-from-left:hover {
@@ -415,4 +408,148 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+}
+
+thead {
+  background-color: #011f27;
+  color: white;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr:hover {
+  background-color: #f1f5ff;
+}
+
+/* Zebra stripes */
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+@media screen and (max-width: 700px) {
+  body {
+    overflow-y: hide;
+  }
+
+  .mainContainer {
+    gap: 2%;
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    overflow-y: hide;
+  }
+
+  .contentContainer {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    margin-left: 0;
+    padding: 0 10px;
+  }
+
+  .funcionariosContainer {
+    height: 70vh;
+    min-height: 50vh;
+    max-height: none;
+    overflow-y: scroll;
+  }
+
+  .tabelaContainer {
+    height: auto;
+    width: inherit;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .perfil h3 {
+    font-size: 10px;
+    margin-left: 5%;
+  }
+
+  .empresa i {
+    font-size: 20px;
+    margin-left: 5px;
+  }
+
+  .persona i {
+    font-size: 20px;
+  }
+
+  table {
+    border: 0;
+  }
+
+  table thead {
+    display: none;
+  }
+
+  table tr {
+    margin-bottom: 20px;
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  table td {
+    display: block;
+    text-align: right;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    width: fit-content;
+  }
+
+  td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  table td:last-child {
+    border-bottom: 0;
+  }
+
+  table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    top: 6px;
+    font-weight: bold;
+    color: #4a6fdc;
+    text-align: left;
+  }
+
+  .menu {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .pagination {
+    position: static;
+    height: auto;
+    width: 100%;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  .nav-links li {
+    list-style: none;
+  }
+
+  .nav-links li i {
+    font-size: 6vw;
+  }
 }
