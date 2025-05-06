@@ -77,12 +77,12 @@ function listarFabricas() {
             const tabela = document.querySelector(".fabricaContainer table");
             tabela.innerHTML = "";
             tabela.innerHTML = `<thead class ="tituloTabela">
-                                  <tr class="tituloTabela">
-                                    <th>ID Fábrica</th>
-                                    <th>Nome</th>
-                                    <th>Status/Parâmetro</th>
-                                    <th>Gestor</th>
-                                    <th>Ações</th>
+                                  <tr >
+                                      <th>ID Fabrica</th>
+                                      <th>Nome</th>
+                                      <th>Status/Parâmetro</th>
+                                      <th>Gestor</th>
+                                      <th>Ações</th>
                                   </tr>
                                 </thead> `;
           
@@ -107,46 +107,46 @@ function listarFabricas() {
                   if (alerta.quantidade_alertas < fabrica.limiteAtencao) {
                       linha.innerHTML += `
                           <tbody>
-                            <td>${fabrica.idFabrica}</td>
-                            <td>${fabrica.nomeFabrica}</td>
-                            <td class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
-                            <td>${fabrica.nomeGestorFabrica}</td>
-                            <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
-                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
+                            <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
+                            <td data-label = "Nome">${fabrica.nomeFabrica}</td>
+                            <td data-label = "Status/Parâmetro" class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
+                            <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
+                            <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
+                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
                             </td>
                           </tbody>`;
                   } else if (alerta.quantidade_alertas >= fabrica.limiteAtencao && alerta.quantidade_alertas < fabrica.limiteCritico) {
                       linha.innerHTML += `
                           <tbody>
-                            <td>${fabrica.idFabrica}</td>
-                            <td>${fabrica.nomeFabrica}</td>
-                            <td class="atencao">Atenção <i class='bx bx-error-circle atencao'></i></td>
-                            <td>${fabrica.nomeGestorFabrica}</td>
-                            <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
-                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
+                            <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
+                            <td data-label = "Nome">${fabrica.nomeFabrica}</td>
+                            <td data-label = "Status/Parâmetro" class="atencao">Atenção <i class='bx bx-error-circle atencao'></i></td>
+                            <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
+                            <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
+                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
                             </td>
                           </tbody>`;
                   } else {
                       linha.innerHTML += `
                           <tbody>
-                            <td>${fabrica.idFabrica}</td>
-                            <td>${fabrica.nomeFabrica}</td>
-                            <td class="critico">Crítico <i class='bx bx-error critico'></i></td>
-                            <td>${fabrica.nomeGestorFabrica}</td>
-                            <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
-                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
+                            <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
+                            <td data-label = "Nome">${fabrica.nomeFabrica}</td>
+                            <td data-label = "Status/Parâmetro" class="critico">Crítico <i class='bx bx-error critico'></i></td>
+                            <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
+                            <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
+                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
                             </td>
                           </tbody>`;
                   } 
                 } else {
                   linha.innerHTML += `
                       <tbody>
-                        <td>${fabrica.idFabrica}</td>
-                        <td>${fabrica.nomeFabrica}</td>
-                        <td class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
-                        <td>${fabrica.nomeGestorFabrica}</td>
-                        <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
-                            <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
+                        <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
+                        <td data-label = "Nome">${fabrica.nomeFabrica}</td>
+                        <td data-label = "Status/Parâmetro" class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
+                        <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
+                        <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
+                            <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
                         </td>
                       </tbody>`;
                 }

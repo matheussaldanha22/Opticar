@@ -316,6 +316,10 @@
     word-break: break-word;
   }
 
+table i {
+    font-size: 150%;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
