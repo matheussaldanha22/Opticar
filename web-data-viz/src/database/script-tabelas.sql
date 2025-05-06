@@ -25,6 +25,15 @@ CREATE TABLE empresa (
     fkGestorEmpresa INT UNIQUE,
 	FOREIGN KEY (fkGestorEmpresa) REFERENCES usuario(idusuario) ON DELETE CASCADE
 );
+INSERT INTO fabrica (
+    nome,
+    funcao,
+    fkEmpresa
+) VALUES (
+    'Fábrica Central',
+    'Montagem de componentes eletrônicos',
+    1 -- substitua pelo ID válido de uma empresa existente
+);
 
 CREATE TABLE fabrica (
     idfabrica INT PRIMARY KEY AUTO_INCREMENT,

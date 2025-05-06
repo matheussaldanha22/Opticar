@@ -46,12 +46,12 @@ function renderTabela(pagina) {
     }
     tr.innerHTML = `
       <td data-label="ID">${alerta.idAlerta}</td>
-      <td>${alerta.valor}</td>
-      <td>${alerta.prioridade}</td>
-      <td>${alerta.tipo}</td>
-      <td>${alerta.tipoComponente}</td>
-      <td>${alertaNome}</td>
-      <td><i class='bx bx-arrow-from-left btn' onclick="abrirModal(${alerta.id})"></i></td>
+      <td data-label="Valor">${alerta.valor}</td>
+      <td data-label="Prioridade">${alerta.prioridade}</td>
+      <td data-label="Tipo">${alerta.tipo}</td>
+      <td data-label="TipoComponente">${alerta.tipoComponente}</td>
+      <td data-label="Status">${alertaNome}</td>
+      <td data-label="Vizualizar"><i class='bx bx-arrow-from-left btn' onclick="abrirModal(${alerta.id})"></i></td>
     `
     tabela.appendChild(tr)
   })

@@ -65,7 +65,6 @@ function carregarServidores() {
         sessionStorage.setItem("quantidadeServidores", quantidade);    
 
         const tabela = document.querySelector(".componentesContainer table");
-        tabela.innerHTML = "";
         tabela.innerHTML = `<tr>
                               <th>Servidor</th>
                               <th>Componente(s)</th>

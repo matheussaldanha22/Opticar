@@ -47,14 +47,16 @@ let componentes = [] // Armazenamento dos dados recebidos do backend
 //PARTE DE RENDERIZAR E PAGINAR CASO HAJA MUITOS ELEMENTOS DO VITAO alertas.js, PODE SER UTIL(PRECISA IMPLEMENTAR)
 function renderTabela(pagina) {
   const tabela = document.getElementById("tabela-alertas")
-  tabela.innerHTML = ` <tr>
+  tabela.innerHTML = `<thead> 
+                          <tr>
                           <th>Servidor</th>
                           <th>Componente</th>
                           <th>Data</th>
                           <th>Gravidade</th>
                           <th>Status</th>
                           <th>Visualizar</th>
-                      </tr>`
+                      </tr>
+                      </thead>`
 
   const inicio = (pagina - 1) * itensPorPagina
   const fim = inicio + itensPorPagina
@@ -63,11 +65,11 @@ function renderTabela(pagina) {
   paginaDados.forEach((alerta) => {
     const tr = document.createElement("tr")
     tr.innerHTML = `
-        <td>${alerta.servidor}</td>
-        <td>${alerta.componente}</td>
-        <td>${alerta.dtAlerta}</td>
-        <td>${alerta.gravidade}</td>
-        <td>${alerta.status}</td>
+        <td data-label="ID">${alerta.servidor}</td>
+        <td data-label="Tipo">${alerta.componente}</td>
+        <td data-label="Medida">${alerta.dtAlerta}</td>
+        <td data-label="Limite grave">${alerta.gravidade}</td>
+        <td data-label="Limite atenção">${alerta.status}</td>
         <td><i class='bx bx-arrow-from-left btn' onclick="abrirModal(${alerta.id})"></i></td>
       `
     tabela.appendChild(tr)

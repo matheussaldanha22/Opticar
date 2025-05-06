@@ -233,14 +233,18 @@ textarea {
 .perfilContainer {
   color: #000;
   display: flex;
-  width: 100%;
-  background-color: var(--cinza);
+  width: inherit;
+  justify-content: space-between;
+  background-color: #fff;
+
   height: 10%;
   border-radius: 15px;
   align-items: center;
-  box-shadow: 0px 9px 5px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.75);
+
   margin-top: 2%;
 }
+
 
 .persona {
   display: flex;
@@ -410,4 +414,121 @@ tbody tr:nth-child(even) {
 }
 .pagination button.active {
   background-color: #008;
+}
+
+@media screen and (max-width: 700px) {
+  body {
+    overflow-y: hide;
+  }
+
+  .mainContainer {
+    gap: 2%;
+    width: 100%;
+    height: 100vh;
+    min-height: 100vh;
+    overflow-y: hide;
+  }
+
+  .contentContainer {
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    margin-left: 0;
+    padding: 0 10px;
+  }
+
+  .funcionariosContainer {
+    height: 70vh;
+    min-height: 50vh;
+    max-height: none;
+    overflow-y: scroll;
+  }
+
+  .tabelaContainer {
+    height: auto;
+    width: inherit;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+  }
+
+  .perfil h3 {
+    font-size: 10px;
+    margin-left: 5%;
+  }
+
+  .empresa i {
+    font-size: 20px;
+    margin-left: 5px;
+  }
+
+  .persona i {
+    font-size: 20px;
+  }
+
+  table {
+    border: 0;
+  }
+
+  table thead {
+    display: none;
+  }
+
+  table tr {
+    margin-bottom: 20px;
+    display: block;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  table td {
+    display: block;
+    text-align: right;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50%;
+    width: fit-content;
+  }
+
+  td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  table td:last-child {
+    border-bottom: 0;
+  }
+
+  table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    top: 6px;
+    font-weight: bold;
+    color: #4a6fdc;
+    text-align: left;
+  }
+
+  .menu {
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .pagination {
+    position: static;
+    height: auto;
+    width: 100%;
+    margin-top: 20px;
+    justify-content: center;
+  }
+
+  .nav-links li {
+    list-style: none;
+  }
+
+  .nav-links li i {
+    font-size: 6vw;
+  }
 }
