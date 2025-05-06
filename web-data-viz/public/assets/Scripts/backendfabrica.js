@@ -76,13 +76,15 @@ function listarFabricas() {
           .then(fabricas => {
             const tabela = document.querySelector(".fabricaContainer table");
             tabela.innerHTML = "";
-            tabela.innerHTML = `<tr>
-                                  <th>ID Fábrica</th>
-                                  <th>Nome</th>
-                                  <th>Status/Parâmetro</th>
-                                  <th>Gestor</th>
-                                  <th>Ações</th>
-                              </tr>`;
+            tabela.innerHTML = `<thead class ="tituloTabela">
+                                  <tr class="tituloTabela">
+                                    <th>ID Fábrica</th>
+                                    <th>Nome</th>
+                                    <th>Status/Parâmetro</th>
+                                    <th>Gestor</th>
+                                    <th>Ações</th>
+                                  </tr>
+                                </thead> `;
           
 
             fabricas.forEach(fabrica => {
@@ -104,41 +106,49 @@ function listarFabricas() {
                   console.log(fabrica.limiteAtencao)
                   if (alerta.quantidade_alertas < fabrica.limiteAtencao) {
                       linha.innerHTML += `
-                          <th>${fabrica.idFabrica}</th>
-                          <td>${fabrica.nomeFabrica}</td>
-                          <td class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
-                          <td>${fabrica.nomeGestorFabrica}</td>
-                          <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
-                              <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
-                          </td>`;
+                          <tbody>
+                            <td>${fabrica.idFabrica}</td>
+                            <td>${fabrica.nomeFabrica}</td>
+                            <td class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
+                            <td>${fabrica.nomeGestorFabrica}</td>
+                            <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
+                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
+                            </td>
+                          </tbody>`;
                   } else if (alerta.quantidade_alertas >= fabrica.limiteAtencao && alerta.quantidade_alertas < fabrica.limiteCritico) {
                       linha.innerHTML += `
-                          <th>${fabrica.idFabrica}</th>
-                          <td>${fabrica.nomeFabrica}</td>
-                          <td class="atencao">Atenção <i class='bx bx-error-circle atencao'></i></td>
-                          <td>${fabrica.nomeGestorFabrica}</td>
-                          <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
-                              <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
-                          </td>`;
+                          <tbody>
+                            <td>${fabrica.idFabrica}</td>
+                            <td>${fabrica.nomeFabrica}</td>
+                            <td class="atencao">Atenção <i class='bx bx-error-circle atencao'></i></td>
+                            <td>${fabrica.nomeGestorFabrica}</td>
+                            <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
+                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
+                            </td>
+                          </tbody>`;
                   } else {
                       linha.innerHTML += `
-                          <th>${fabrica.idFabrica}</th>
-                          <td>${fabrica.nomeFabrica}</td>
-                          <td class="critico">Crítico <i class='bx bx-error critico'></i></td>
-                          <td>${fabrica.nomeGestorFabrica}</td>
-                          <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
-                              <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
-                          </td>`;
+                          <tbody>
+                            <td>${fabrica.idFabrica}</td>
+                            <td>${fabrica.nomeFabrica}</td>
+                            <td class="critico">Crítico <i class='bx bx-error critico'></i></td>
+                            <td>${fabrica.nomeGestorFabrica}</td>
+                            <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
+                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
+                            </td>
+                          </tbody>`;
                   } 
                 } else {
                   linha.innerHTML += `
-                      <th>${fabrica.idFabrica}</th>
-                      <td>${fabrica.nomeFabrica}</td>
-                      <td class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
-                      <td>${fabrica.nomeGestorFabrica}</td>
-                      <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
-                          <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
-                      </td>`;
+                      <tbody>
+                        <td>${fabrica.idFabrica}</td>
+                        <td>${fabrica.nomeFabrica}</td>
+                        <td class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
+                        <td>${fabrica.nomeGestorFabrica}</td>
+                        <td><button class="btn-editar" data-id="${fabrica.idFabrica}">Editar</button>
+                            <button class="btn-purple excluir" data-id="${fabrica.idFabrica}">Excluir</button>
+                        </td>
+                      </tbody>`;
                 }
   
                 tabela.appendChild(linha);

@@ -63,37 +63,48 @@
 
             <div class="fabricaContainer">
                 <table class="tabelaContainer">
-                    <tr>
-                        <th>ID Fabrica</th>
-                        <th>Nome</th>
-                        <th>Status/Parâmetro</th>
-                        <th>Gestor</th>
-                        <th></th>
-                        <!-- excluir -->
-                    </tr>
+                    <thead class ="tituloTabela">
+                        <tr >
+                            <th>ID Fabrica</th>
+                            <th>Nome</th>
+                            <th>Status/Parâmetro</th>
+                            <th>Gestor</th>
+                            <th></th>
+                            <!-- excluir -->
+                        </tr>
+                    </thead>
                     <tr class="cor">
-                    <th>1</th>
-                    <td>Fabrica Norte</td>
-                    <td class="critico">Crítico <i class='bx bx-error critico' ></i> </td>
-                    <td>Zaqueu Chavier</td>
-                    <td><button class="btn-purple" data-id="${componente.idcomponenteServidor}">Excluir</button></td>
+                        <tbody>
+                            <td data-label = "ID Fábrica">1</td>
+                            <td data-label = "Nome">Fabrica Norte</td>
+                            <td data-label = "Status/Parâmetro" class="critico">Crítico <i class='bx bx-error critico' ></i> </td>
+                            <td data-label = "Gestor" >Zaqueu Chavier</td>
+                            <td data-label = "Ações"><button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bxs-trash'></i></button>
+                            <button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bx-edit' ></i></button></td>
+                        </tbody>
                     </tr>
+                
                     <tr class="cor">
-                        <th>1</th>
-                        <td>Fabrica Norte</td>
-                        <td class="ok">Ok <i class='bx bx-check-circle ok' ></i></td>
-                        <td>Zaqueu Chavier</td>
-                        <td><button class="btn-purple" data-id="${componente.idcomponenteServidor}">Excluir</button></td>
+                        <tbody>
+                            <td data-label = "ID Fábrica">1</td>
+                            <td data-label = "Nome">Fabrica Norte</td>
+                            <td data-label = "Status/Parâmetro" class="ok">Ok <i class='bx bx-check-circle ok' ></i></td>
+                            <td data-label = "Gestor">Zaqueu Chavier</td>
+                            <td data-label = "Ações"><button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bxs-trash'></i></button>
+                                <button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bx-edit' ></i></button></td>
+                        </tbody>
                     </tr>
 
                     <tr class="cor">
-                        <th>1</th>
-                        <td>Fabrica Norte</td>
-                        <td class="atencao">Atenção <i class='bx bx-error-circle atencao' ></i></td>
-                        <td>Zaqueu Chavier</td>
-                        <td><button class="btn-purple" data-id="${componente.idcomponenteServidor}">Excluir</button></td>
-                        </tr>
-                    
+                        <tbody>
+                            <td data-label = "ID Fábrica">1</td>
+                            <td data-label = "Nome">Fabrica Norte</td>
+                            <td data-label = "Status/Parâmetro" class="atencao">Atenção <i class='bx bx-error-circle atencao' ></i></td>
+                            <td data-label = "Gestor">Zaqueu Chavier</td>
+                            <td data-label = "Ações"><button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bxs-trash'></i></button>
+                                <button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bx-edit' ></i></button></td>
+                        </tbody>
+                    </tr>
                 </table>
                 <div class="pagination" id="paginacao"></div>
             </div>
