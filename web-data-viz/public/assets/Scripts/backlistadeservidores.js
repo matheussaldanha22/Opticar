@@ -65,13 +65,16 @@ function carregarServidores() {
         sessionStorage.setItem("quantidadeServidores", quantidade);    
 
         const tabela = document.querySelector(".componentesContainer table");
-        tabela.innerHTML = `<tr>
+        tabela.innerHTML = `<thead>
+                            <tr>
                               <th>Servidor</th>
                               <th>Componente(s)</th>
                               <th>IP</th>
                               <th>Visualizar</th>
                               <th></th>
-                           </tr>`;
+                           </tr>
+                           </thead>`
+                           ;
 
         servidores.forEach(servidor => {
             const linha = document.createElement("tr");
