@@ -135,7 +135,7 @@ INSERT INTO componente (tipo, medida, indicador) VALUES
 ('Sistema', 'Top Processos CPU Média', '%');
 
 insert into servidor_maquina values
-(1,	'Windows', '192.168.56.1', 1, 251776438657434, 'DESKTOP-KHH0UBD');
+(2,	'Windows', '192.168.56.1', 1, 251776438657434, 'DESKTOP-KHH0UBD');
 
 insert into componenteServidor values
 (default, 1, 1, "intel", "45", "59"),

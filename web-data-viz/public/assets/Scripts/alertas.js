@@ -18,7 +18,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function renderTabela(pagina) {
   const tabela = document.getElementById("tabela-alertas")
-  tabela.innerHTML = ` <tr>
+  tabela.innerHTML = ` <thead>
+                        <tr>
                         <th>Id</th>
                         <th>valor</th>
                         <th>Prioridade</th>
@@ -26,7 +27,8 @@ function renderTabela(pagina) {
                         <th>Componente</th>
                         <th>Status</th>
                         <th>Visualizar</th>
-                    </tr>`
+                    </tr>
+                    </thead>`
 
   const inicio = (pagina - 1) * itensPorPagina
   const fim = inicio + itensPorPagina
@@ -43,7 +45,7 @@ function renderTabela(pagina) {
       alertaNome = "Fechado"
     }
     tr.innerHTML = `
-      <td>${alerta.idAlerta}</td>
+      <td data-label="ID">${alerta.idAlerta}</td>
       <td>${alerta.valor}</td>
       <td>${alerta.prioridade}</td>
       <td>${alerta.tipo}</td>

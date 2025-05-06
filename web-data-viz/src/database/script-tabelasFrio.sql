@@ -2,6 +2,8 @@ drop database opticarfrio;
 
 use opticarFrio;
 
+CREATE DATABASE opticarFrio;
+
 CREATE TABLE servidor_maquina (
     idMaquina INT PRIMARY KEY auto_increment,
     sistema_operacional VARCHAR(45),
@@ -178,3 +180,17 @@ BEGIN
 END$$
 
 DELIMITER ;
+
+INSERT INTO capturaDados (fkComponenteServidor, valor, data)
+VALUES (1, 80, NOW());
+
+INSERT INTO capturaDados (fkComponenteServidor, valor, data)
+VALUES (1, 50, NOW());
+
+INSERT INTO capturaDados (fkComponenteServidor, valor, data)
+VALUES (1, 20, NOW());
+
+SELECT * FROM alerta;
+
+INSERT INTO capturaDados (fkComponenteServidor, valor, data)
+VALUES (1, 85, NOW());
