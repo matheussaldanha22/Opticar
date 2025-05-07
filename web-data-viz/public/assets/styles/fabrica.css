@@ -18,6 +18,24 @@
     flex-direction: row;
 }
 
+.modal-test {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .containerCadastroFunc {
+    height: inherit;
+    margin: 2.5% 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: start;
+    gap: 30%;
+  }
+
 .contentContainer {
     width: 90vw;
     height: 100vh;
@@ -448,20 +466,19 @@ table {
 }
 
 .modal-test {
-    border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
 }
 
 .containerConfigAlerta {
     margin: 2.5% 0;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    text-align: start;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .containerFabrica {
@@ -475,7 +492,7 @@ table {
 }
 
 
-.addModal {
+/* .addModal {
     border-radius: 25px !important;
     padding: 0 !important;
     width: 25vw;
@@ -502,10 +519,17 @@ table {
     border-bottom: 2px solid black;
     padding: 10px;
     align-items: center;
-}
+} */
 
 #infoUltimo{
     border-bottom: none;
+}
+
+.containerCadastroFunc label {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 1rem 0;
 }
 
 .label{
