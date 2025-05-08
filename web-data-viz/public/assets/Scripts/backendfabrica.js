@@ -245,34 +245,15 @@ function abrirModal(botaoEditar) {
     const fabrica = dados[0]; 
     Swal.fire({
       html: `
-        <div style="display: flex;flex-direction:column; align-items: center;border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); height:5vw;background-color:rgb(235, 234, 234);padding:5px;">
-          <div style="margin-left: 15px; text-align: left;">
-            <h2 style="color:black;margin: 0; font-size: 22px; font-weight: bold;">
-              <i class='bx bx-add-to-queue' style="color: #646363; font-size: 30px; border: 3px solid rgb(138, 136, 136);border-radius: 5px;"></i> 
-              Cadastro parâmetro fábrica
-            </h2>
-            <p style="margin: 4px 0 0 0; font-size: 17px;color:black">Informe o parâmetro de alerta que julgar adequado..</p>
-          </div>
-        </div>
-        
-        <div class="modal-content">
-          <div class="infosCadastro">
-              <p class="label">Nome fábrica:</p>
-              <input class="iptsCad" id="iptNomeFabrica" value="${fabrica.nome}">
-          </div>
-          <div class="infosCadastro">
-              <p class="label">Função:</p>
-              <input class="iptsCad" id="iptFuncaoFabrica" value="${fabrica.funcao}">
-          </div>
-          <div class="infosCadastro">
-              <p class="label">Limite atenção:</p>
-              <input class="iptsCad" id="iptLimiteAtencao" value="${fabrica.limiteAtencao}">
-          </div>
-          <div class="infosCadastro" id="infoUltimo">
-              <p class="label">Limite grave:</p>
-              <input class="iptsCad" id="iptLimiteGrave" value="${fabrica.limiteCritico}">
-          </div>
-        </div>
+            <div class="modal-test">
+                <div class="containerCadastroFrabic">
+                    <h3>Cadastrar Fábrica</h3>
+                    <label>Nome Fábrica: <input id="iptNomeFabrica" value="${fabrica.nome}"></label>
+                    <label>Função: <input id="iptFuncaoFabrica" value="${fabrica.funcao}"></label>
+                    <label>Limite atenção: <input id="iptLimiteAtencao" value="${fabrica.limiteAtencao}"></label>
+                    <label>Limite grave: <input id="iptLimiteGrave" value="${fabrica.limiteCritico}"></label>
+                </div>
+            </div>
       `,
       showCancelButton: true,
       cancelButtonText: "Fechar",

@@ -9,7 +9,7 @@
     <!-- <script src="./assets/Scripts/sessao.js" defer></script> -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
-    <link rel="stylesheet" href="./assets/styles/componentes.css">
+    <link rel="stylesheet" href="./assets/styles/listaServidores.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="./assets/Scripts/backlistadeservidores.js"></script>
     <script src="./listadeservidores.html" defer></script>
@@ -61,7 +61,8 @@
             </div>
 
             
-
+            <button class="btn-add" onclick="abrirModalAdd()">Adicionar Parâmetro Servidor<i class='bx bx-add-to-queue'
+                style="color: white; font-size: 15px;"></i></button>
             <div class="componentesContainer">
                 <table >
                     <thead>
@@ -110,6 +111,31 @@
         menu.classList.toggle('nav-active')
 
     });
+
+    function abrirModalAdd() {
+        Swal.fire({
+            html: `
+            <div class="modal-test">
+                <div class="containerCadastroServ">
+                    <h3>Cadastrar Parâmetro Servidor</h3>
+                    <label>Limite Atenção: <input value="" id="iptLimiteAtencao" placeholder="Ex: 10"></label>
+                    <label>Limite Grave: <input value="" id="iptLimiteGrave" placeholder="Ex: 15"></label>
+                </div>
+            </div>
+    
+    `,
+            showCancelButton: true,
+            cancelButtonText: "Cancelar",
+            background: '#fff',
+            confirmButtonColor: '#2C3E50',
+            confirmButtonText: 'Cadastrar',
+            customClass: 'addModal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                cadastrarParametro()
+            }
+        })
+    }
 
 
 

@@ -66,13 +66,12 @@ function carregarServidores() {
 
         const tabela = document.querySelector(".componentesContainer table");
         tabela.innerHTML = `<thead>
-                            <tr>
-                              <th>Servidor</th>
-                              <th>Componente(s)</th>
-                              <th>IP</th>
-                              <th>Visualizar</th>
-                              <th></th>
-                           </tr>
+                                <tr>
+                                    <td>Servidor</td>
+                                    <td>Componente(s)</td>
+                                    <td>IP</td>
+                                    <td>Ações</td>
+                                </tr>
                            </thead>`
                            ;
 
@@ -80,15 +79,20 @@ function carregarServidores() {
             const linha = document.createElement("tr");
             linha.innerHTML = ""; 
             linha.innerHTML += `
-                <th>SV00${servidor.idMaquina}</th>
-                <td>${servidor.componentes}<button class='bx bx-plus' data-id="${servidor.idMaquina}" style="cursor:pointer; background:linear-gradient(270deg, #012027, #04708D); border-radius:10px; margin-left: 8px;">
-            </button></td>
-                <td>${servidor.ip}</td>
-                <td><button class="btn-purple" data-id="${servidor.idMaquina}">Excluir</button></td>
+                <tbody>
+                    <td data-label = "Servidor">SV00${servidor.idMaquina}</td>
+                    <td data-label = "Componente(s)">${servidor.componentes}<button class='bx bx-plus' data-id="${servidor.idMaquina}" style="cursor:pointer; background:linear-gradient(270deg, #012027, #04708D); border-radius:10px; margin-left: 8px;">
+                    </button></td>
+                    <td data-label = "IP">${servidor.ip}</td>
+                    <td data-label = "Ações"><button class="btn-editar" data-id="${servidor.idMaquina}"><i class='bx bx-edit' ></i>
+                    <button class="btn-purple" data-id="${servidor.idMaquina}"><i class='bx bxs-trash'></i></button></td>
+                </tbody>
             `;
             tabela.appendChild(linha);
 
-            
+            botaoEditar.addEventListener("click", () => {
+                abrirModal(botaoEditar)
+              })
 
             const botaoExcluir = linha.querySelector(".btn-purple");
 
@@ -129,6 +133,126 @@ botaoComponente.addEventListener("click", () => {
     
 }
 
+function abrirModal(botaoEditar) {
+    var idVar = botaoEditar.getAttribute("data-id");
+  
+    fetch("/fabricas/modalUpdate", {
+      method: "POST",
+      headers: {
+          "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ idServer: idVar }),
+    })
+    .then(resposta => {
+      if (!resposta.ok) throw new Error("Erro na resposta da API");
+      return resposta.json();
+    })
+    .then(dados => {
+      const servidor = dados[0]; 
+      Swal.fire({
+        html: `
+           <div class="modal-test">
+                <div class="containerCadastroServ">
+                    <h3>Cadastrar Parâmetro Servidor</h3>
+                    <label>Limite Atenção: <input value="${servidor.limiteAtencao}" id="iptLimiteA" ></label>
+                    <label>Limite Grave: <input value="${servidor.limiteGrave}" id="iptLimiteG" ></label>
+                </div>
+            </div>
+        `,
+        showCancelButton: true,
+        cancelButtonText: "Fechar",
+        background: '#fff',
+        confirmButtonColor: '#2C3E50',
+        confirmButtonText: "Salvar",
+        customClass: 'addModal'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          updateServidor(idVar);
+        }
+      });
+  
+      carregarServidores(); 
+    })
+    .catch(function (error) {
+      console.error("Erro ao realizar fetch:", error);
+    });
+  }
+
+function updateServidor(idVar) {
+    var limiteA = Number(iptLimiteA.value)
+    var limiteG = Number(iptLimiteG.value)
+  
+    if (limiteA == '' || limiteG ==  '') {
+        Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
+        return;
+    }
+  
+    fetch("/fabricas/updateFabrica", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+        idServer: idVar,
+        limiteAServer: limiteA,
+        limiteGServer: limiteG,
+      }),
+      })
+        .then(async function (resposta) {
+          console.log("resposta: ", resposta);
+          var mensagem = await resposta.text();
+          if (resposta.ok) {
+            listarFabricas()
+            Swal.fire('Sucesso!', 'Fábrica editada com sucesso!', 'success');
+          } else {
+            Swal.fire('Erro!', 'Falha ao editar a Fábrica.', 'error');
+          }
+        })
+        .catch(function (erro) {
+          console.error("Erro ao enviar dados:", erro);
+        });
+        return false;
+}
+
+function cadastrarParametro() {
+    var limiteAVar = iptLimiteAtencao.value
+    var limiteGVar = iptLimiteGrave.value
+
+
+    if (!limiteAVar || !limiteGVar) {
+        Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
+        return;
+    }
+
+    fetch("/fabricas/cadastrar", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+        nomeServer: nomeVar,
+        funcaoServer: funcaoVar,
+        limiteAServer: limiteAVar,
+        limiteGServer: limiteGVar
+      }),
+      })
+        .then(async function (resposta) {
+          console.log("resposta: ", resposta);
+          var mensagem = await resposta.text();
+          if (resposta.ok) {
+            listarFabricas()
+            Swal.fire('Sucesso!', 'Fábrica cadastrada com sucesso!', 'success');
+          } else if (mensagem.includes("Duplicate entry")) {
+            Swal.fire('Erro!', 'Fábrica já cadastrada', 'error');
+          } else {
+            Swal.fire('Erro!', 'Falha ao cadastrar a Fábrica.', 'error');
+          }
+        })
+        .catch(function (erro) {
+          console.error("Erro ao enviar dados:", erro);
+        });
+        return false;
+}
 
 
 
