@@ -116,36 +116,18 @@
     function abrirModalAdd() {
         Swal.fire({
             html: `
-        <div style="display: flex;flex-direction:column; align-items: center;border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); height:5vw;background-color:rgb(235, 234, 234);padding:5px;">
-            
-            <div style="margin-left: 15px; text-align: left;">
-                <h2 style="color:black;margin: 0; font-size: 22px; font-weight: bold;"><i class='bx bx-add-to-queue' style="color: #646363; font-size: 30px; border: 3px solid rgb(138, 136, 136);border-radius: 5px;"></i> Cadastro de componentes</h2>
-                <p style="margin: 4px 0 0 0; font-size: 17px;color:black">Cadastre um novo componente que deseja monitorar.</p>
-            </div>
-        
-        </div>
+                    <div class="modal-test">
+                            <div class="containerCadastroComp">
+                                <h3>Cadastro de Componentes</h3>
+                                <h4>Cadastre um novo componente que deseja monitorar.</h4>
+                                <label>Tipo:</p><select id="sltTipo" class="sltsCad" onchange="listarMedida()"><option value="#" selected>Selecione o Componente</option></select></label>
+                                <label>Medida:</p><select id="sltMedida" class="sltsCad"> <option value="#" selected>Selecione a Medida</option> </select></label>
+                                <label>Modelo</p><input class="iptsCad" id="iptModelo" placeholder="Ex: intel core, amd"></label>
+                                <label>Limite atenção:</p><input class="iptsCad" id="iptLimiteAtencao" placeholder="Ex: 30%, 30.5, 11.5Mbps"></label>
+                                <label>Limite grave:</p><input class="iptsCad" id="iptLimiteGrave" placeholder="Ex: 30%, 30.5, 11.5Mbps"></label>
+                            </div>
 
-        <div class="modal-content">
-        
-            <div class="infosCadastro">
-                <p class="label">Tipo:</p><select id="sltTipo" class="sltsCad" onchange="listarMedida()"><option value="#" selected>Selecione o Componente</option></select>
-            </div>
-            <div class="infosCadastro">
-                <p class="label">Medida:</p><select id="sltMedida" class="sltsCad"> <option value="#" selected>Selecione a Medida</option> </select>
-            </div>
-            <div class="infosCadastro">
-                <p class="label">Modelo</p><input class="iptsCad" id="iptModelo" placeholder="Ex: intel core, amd">
-            </div>
-            <div class="infosCadastro">
-                <p class="label">Limite atenção:</p><input class="iptsCad" id="iptLimiteAtencao" placeholder="Ex: 30%, 30.5, 11.5Mbps">
-            </div>
-            <div class="infosCadastro" id="infoUltimo">
-                <p class="label">Limite grave:</p><input class="iptsCad" id="iptLimiteGrave" placeholder="Ex: 30%, 30.5, 11.5Mbps">
-            </div>
-
-        </div>
-    
-    `,
+                    </div>`,
             showCancelButton: true,
             cancelButtonText: "Fechar",
             background: '#fff',

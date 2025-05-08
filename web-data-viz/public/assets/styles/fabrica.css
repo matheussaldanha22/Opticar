@@ -25,7 +25,7 @@
     align-items: center;
   }
   
-  .containerCadastroFunc {
+  .containerCadastroFrabic {
     height: inherit;
     margin: 2.5% 0;
     display: flex;
@@ -450,8 +450,8 @@ table {
     color: #FFFF;
     border: none;
     border-radius: 12px;
-    width: 10vw;
-    height: 4vh;
+    width: 160px;
+    height: 70px;
     transition: 0.2s;
 }
 
@@ -525,7 +525,7 @@ table {
     border-bottom: none;
 }
 
-.containerCadastroFunc label {
+.containerCadastroFrabic label {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -598,7 +598,8 @@ table {
     }
 
     .btn-add {
-        padding: 13%;
+        width: 160px;
+        height: 70px;
     }
   
     .mainContainer {
@@ -717,3 +718,11 @@ table {
       font-size: 6vw;
     }
   }
+
+@media only screen and (max-width: 450px) {
+    .containerCadastroFrabic label {
+        display: flex;
+        flex-direction: column;
+    }
+
+}

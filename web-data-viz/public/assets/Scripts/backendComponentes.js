@@ -217,27 +217,32 @@ function listarComponente() {
             lista_componente.push(componentes);
             const tabela = document.querySelector(".componentesContainer table");
             tabela.innerHTML = "";
-            tabela.innerHTML = `<tr>
-                                  <th>ID Componente</th>
-                                  <th>Tipo do componente</th>
-                                  <th>Modelo</th>
-                                  <th>Tipo de medida</th>
-                                  <th>Limite grave</th>
-                                  <th>Limite atenção</th>
-                                  <th></th>
-                              </tr>`;
+            tabela.innerHTML = `
+                              <thead class ="tituloTabela">    
+                                <tr>
+                                    <th>ID Componente</th>
+                                    <th>Tipo do componente</th>
+                                    <th>Modelo</th>
+                                    <th>Tipo de medida</th>
+                                    <th>Limite grave</th>
+                                    <th>Limite atenção</th>
+                                    <th></th>
+                                </tr>
+                              </thead>`;
 
             componentes.forEach(componente => {
                 const linha = document.createElement("tr");
                 linha.innerHTML = ""; 
                 linha.innerHTML += `
-                    <th>${componente.idcomponenteServidor}</th>
-                    <td>${componente.tipo}</td>
-                    <td>${componente.modelo}</td>
-                    <td>${componente.medida}</td>
-                    <td>${componente.limiteCritico}</td>
-                    <td>${componente.limiteAtencao}</td>
-                    <td><button class="btn-purple" data-id="${componente.idcomponenteServidor}">Excluir</button></td>
+                    <tbody>
+                      <td data-label = "ID Componente">${componente.idcomponenteServidor}</td>
+                      <td data-label = "Tipo componente">${componente.tipo}</td>
+                      <td data-label = "Modelo">${componente.modelo}</td>
+                      <td data-label = "Tipo de medida">${componente.medida}</td>
+                      <td data-label = "Limite frave">${componente.limiteCritico}</td>
+                      <td data-label = "Limite atenção">${componente.limiteAtencao}</td>
+                      <td data-label = "Ações"><button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bxs-trash'></i></button></td>
+                    </tbody>
                 `;
                 tabela.appendChild(linha);
 

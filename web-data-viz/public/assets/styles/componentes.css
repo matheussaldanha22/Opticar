@@ -370,18 +370,19 @@
 .btn-add{
     margin-top: 2vh;
     display: flex;
+    flex-direction: column;
     gap: 5px;
     justify-content: center;
     align-items: center;
     text-align: center;
     font-family: 'Montserrat';
     font-weight: 600;
-    background-color: #2C2C2C;
+    background-color: #011f27;
     color: #FFFF;
     border: none;
     border-radius: 12px;
-    width: 10vw;
-    height: 4vh;
+    width: 180px;
+    height: 70px;
     transition: 0.2s;
 }
 
@@ -396,11 +397,43 @@
 }
 
 .modal-test {
-    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .containerCadastroComp {
+    height: inherit;
+    margin: 2.5% 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
+    text-align: start;
+    gap: 30%;
+  }
+
+  .containerCadastroComp label {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    padding: 1rem 0;
+}
+
+.containerCadastroComp input{
+    width: 180px;
+    border: 1px solid #000;
+}
+
+.containerCadastroComp select{
+    width: 200px;
+    border: 1px solid #000;
+}
+
+.label{
+    font-size: 17px;
+    font-weight: bold;
 }
 
 .containerConfigAlerta {
@@ -423,7 +456,7 @@
 }
 
 
-.addModal {
+/* .addModal {
     border-radius: 25px !important;
     padding: 0 !important;
     width: 25vw;
@@ -459,7 +492,7 @@
 .label{
     font-size: 17px;
     font-weight: bold;
-}
+} */
 
 .sltsCad{
     font-family: 'Montserrat', sans-serif;
@@ -632,3 +665,12 @@
       font-size: 6vw;
     }
   }
+
+
+  @media only screen and (max-width: 450px) {
+    .containerCadastroComp label {
+        display: flex;
+        flex-direction: column;
+    }
+
+}
