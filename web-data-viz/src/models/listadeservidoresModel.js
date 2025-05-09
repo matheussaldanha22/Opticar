@@ -25,11 +25,49 @@ function excluirServidorFrio(idMaquina) {
   return database.executarFRIO(sql);
 }
 
+function cadastrar(limiteA, limiteG) {
+    var instrucaoSql = `UPDATE servidor_maquina SET limiteA = ${limiteA}, limiteG = ${limiteG};`;
+
+    return database.executar(instrucaoSql);
+}
+
+function cadastrarFRIO(limiteA, limiteG) {
+  var instrucaoSql = `UPDATE servidor_maquina SET limiteA = ${limiteA}, limiteG = ${limiteG};`;
+
+  return database.executarFRIO(instrucaoSql);
+}
+
+function modalUpdate(id) {
+  var instrucaoSql = `select * from servidor_maquina where idMaquina = ${id};`
+
+  return database.executar(instrucaoSql)
+}
+
+function updateServidor(limiteA, limiteG, id) {
+  var instrucaoSql = `UPDATE servidor_maquina SET limiteA = ${limiteA}, limiteG = ${limiteG} WHERE idMaquina = ${id};`;
+
+  console.log("SQL:", instrucaoSql);
+  return database.executar(instrucaoSql);
+  
+}
+
+function updateServidorFRIO(limiteA, limiteG, id) {
+  var instrucaoSql = `UPDATE servidor_maquina SET limiteA = ${limiteA}, limiteG = ${limiteG} WHERE idMaquina = ${id};`;
+
+  console.log("SQL:", instrucaoSql);
+  return database.executarFRIO(instrucaoSql);
+  
+}
 
   
   module.exports = {
     carregarServidores,
     excluirServidor,
-    excluirServidorFrio
+    excluirServidorFrio,
+    cadastrar,
+    cadastrarFRIO,
+    modalUpdate,
+    updateServidor,
+    updateServidorFRIO
   };
   

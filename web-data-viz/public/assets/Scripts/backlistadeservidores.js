@@ -84,11 +84,13 @@ function carregarServidores() {
                     <td data-label = "Componente(s)">${servidor.componentes}<button class='bx bx-plus' data-id="${servidor.idMaquina}" style="cursor:pointer; background:linear-gradient(270deg, #012027, #04708D); border-radius:10px; margin-left: 8px;">
                     </button></td>
                     <td data-label = "IP">${servidor.ip}</td>
-                    <td data-label = "Ações"><button class="btn-editar" data-id="${servidor.idMaquina}"><i class='bx bx-edit' ></i>
+                    <td data-label = "Ações"><button class="btn-editar" data-id="${servidor.idMaquina}"><i class='bx bx-edit' ></i></button>
                     <button class="btn-purple" data-id="${servidor.idMaquina}"><i class='bx bxs-trash'></i></button></td>
                 </tbody>
             `;
             tabela.appendChild(linha);
+
+            const botaoEditar = linha.querySelector(".btn-editar");
 
             botaoEditar.addEventListener("click", () => {
                 abrirModal(botaoEditar)
@@ -136,7 +138,7 @@ botaoComponente.addEventListener("click", () => {
 function abrirModal(botaoEditar) {
     var idVar = botaoEditar.getAttribute("data-id");
   
-    fetch("/fabricas/modalUpdate", {
+    fetch("/listadeservidores/modalUpdate", {
       method: "POST",
       headers: {
           "Content-Type": "application/json"
@@ -154,8 +156,8 @@ function abrirModal(botaoEditar) {
            <div class="modal-test">
                 <div class="containerCadastroServ">
                     <h3>Cadastrar Parâmetro Servidor</h3>
-                    <label>Limite Atenção: <input value="${servidor.limiteAtencao}" id="iptLimiteA" ></label>
-                    <label>Limite Grave: <input value="${servidor.limiteGrave}" id="iptLimiteG" ></label>
+                    <label>Limite Atenção: <input value="${servidor.limiteA}" id="iptLimiteA" ></label>
+                    <label>Limite Grave: <input value="${servidor.limiteG}" id="iptLimiteG" ></label>
                 </div>
             </div>
         `,
@@ -187,7 +189,7 @@ function updateServidor(idVar) {
         return;
     }
   
-    fetch("/fabricas/updateFabrica", {
+    fetch("/listadeservidores/updateServidor", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -202,16 +204,50 @@ function updateServidor(idVar) {
           console.log("resposta: ", resposta);
           var mensagem = await resposta.text();
           if (resposta.ok) {
-            listarFabricas()
-            Swal.fire('Sucesso!', 'Fábrica editada com sucesso!', 'success');
+            updateServidorFRIO(idVar)
+            carregarServidores()
+            Swal.fire('Sucesso!', 'Parâmetro servidor editado com sucesso!', 'success');
           } else {
-            Swal.fire('Erro!', 'Falha ao editar a Fábrica.', 'error');
+            Swal.fire('Erro!', 'Falha ao editar o parâmetro do servidor.', 'error');
           }
         })
         .catch(function (erro) {
           console.error("Erro ao enviar dados:", erro);
         });
         return false;
+}
+
+function updateServidorFRIO(idVar) {
+  var limiteA = Number(iptLimiteA.value)
+  var limiteG = Number(iptLimiteG.value)
+
+  if (limiteA == '' || limiteG ==  '') {
+      Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
+      return;
+  }
+
+  fetch("/listadeservidores/updateServidorFRIO", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+      idServer: idVar,
+      limiteAServer: limiteA,
+      limiteGServer: limiteG,
+    }),
+    })
+      .then(async function (resposta) {
+        console.log("resposta: ", resposta);
+        var mensagem = await resposta.text();
+        if (resposta.ok) {
+          
+        }
+      })
+      .catch(function (erro) {
+        console.error("Erro ao enviar dados:", erro);
+      });
+      return false;
 }
 
 function cadastrarParametro() {
@@ -224,14 +260,12 @@ function cadastrarParametro() {
         return;
     }
 
-    fetch("/fabricas/cadastrar", {
+    fetch("/listadeservidores/cadastrar", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-        nomeServer: nomeVar,
-        funcaoServer: funcaoVar,
         limiteAServer: limiteAVar,
         limiteGServer: limiteGVar
       }),
@@ -240,18 +274,51 @@ function cadastrarParametro() {
           console.log("resposta: ", resposta);
           var mensagem = await resposta.text();
           if (resposta.ok) {
-            listarFabricas()
-            Swal.fire('Sucesso!', 'Fábrica cadastrada com sucesso!', 'success');
-          } else if (mensagem.includes("Duplicate entry")) {
-            Swal.fire('Erro!', 'Fábrica já cadastrada', 'error');
+            cadastrarParametroFRIO()
+            carregarServidores()
+            Swal.fire('Sucesso!', 'Parâmetro cadastrado com sucesso', 'success');
           } else {
-            Swal.fire('Erro!', 'Falha ao cadastrar a Fábrica.', 'error');
+            Swal.fire('Erro!', 'Falha ao cadastrar o Parâmetro.', 'error');
           }
         })
         .catch(function (erro) {
           console.error("Erro ao enviar dados:", erro);
         });
         return false;
+}
+
+function cadastrarParametroFRIO() {
+  var limiteAVar = iptLimiteAtencao.value
+  var limiteGVar = iptLimiteGrave.value
+
+
+  if (!limiteAVar || !limiteGVar) {
+      Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
+      return;
+  }
+
+  fetch("/listadeservidores/cadastrarFRIO", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+      limiteAServer: limiteAVar,
+      limiteGServer: limiteGVar
+    }),
+    })
+      .then(async function (resposta) {
+        console.log("resposta: ", resposta);
+        var mensagem = await resposta.text();
+        if (resposta.ok) {
+          carregarServidores()
+          
+        }
+      })
+      .catch(function (erro) {
+        console.error("Erro ao enviar dados:", erro);
+      });
+      return false;
 }
 
 

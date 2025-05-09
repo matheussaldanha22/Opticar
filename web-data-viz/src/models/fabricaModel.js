@@ -68,6 +68,7 @@ function updateFabrica(id, nome, funcao, limiteA, limiteG) {
   return database.executar(instrucaoSql);
   
 }
+
 module.exports = {
   listarFabricasEmpresa,
   cadastrarGestorFabrica,

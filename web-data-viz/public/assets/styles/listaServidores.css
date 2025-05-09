@@ -321,6 +321,10 @@
     border-collapse: collapse;
     background-color: #fff;
   }
+
+  table i {
+    font-size: 150%;
+    }
   
   thead {
     background-color: #011f27;
@@ -362,6 +366,25 @@
 }
 
 .btn-purple:hover{
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: 0.2s;
+}
+
+.btn-editar{
+    text-align: center;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    background-color: #f1d792;
+    color: black;
+    border: none;
+    border-radius: 12px;
+    width: 5vw;
+    height: 3vh;
+    transition: 0.2s;
+}
+
+.btn-editar:hover{
     cursor: pointer;
     transform: scale(1.05);
     transition: 0.2s;

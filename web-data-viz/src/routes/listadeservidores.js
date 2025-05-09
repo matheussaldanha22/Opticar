@@ -16,4 +16,24 @@ router.delete("/excluirServidorFrio/:id", function (req, res) {
   listadeservidoresController.excluirServidorFrio(req, res);
 });
 
+router.post("/cadastrar", function (req, res) {
+  listadeservidoresController.cadastrar(req, res)
+})
+
+router.post("/cadastrarFRIO", function (req, res) {
+  listadeservidoresController.cadastrarFRIO(req, res)
+})
+
+router.post("/modalUpdate", function (req, res) {
+  listadeservidoresController.modalUpdate(req, res)
+})
+
+router.post("/updateServidor", function (req, res) {
+  listadeservidoresController.updateServidor(req, res)
+})
+
+router.post("/updateServidorFRIO", function (req, res) {
+  listadeservidoresController.updateServidorFRIO(req, res)
+})
+
 module.exports = router;
