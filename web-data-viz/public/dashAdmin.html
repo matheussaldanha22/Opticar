@@ -13,6 +13,8 @@
     <script src="./assets/Scripts/graficosAdmin.js" defer></script>
 </head>
 <body>
+    <div class="bg"></div>
+
     <div class="mainContainer">
         <div id="div_menu" class="menu ">
             <div class="nav-burger" onclick="expand()">
@@ -56,23 +58,23 @@
                 <div class="kpiUso">
                     <div class="tituloKpi">
                         <h2>Fábrica mais crítica:</h2>
-                        <h3>Fábrica 1</h3>
+                        <h3>13 Alertas em aberto</h3>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoCpu" style="color: red;">Crítico</p>
+                        <p class="dadoKpi" id="usoCpu" style="color: white; text-shadow: 2px 2px 4px red;">Fábrica 1</p>
                     </span>
-                    <h3><b id="parametroCpu" style="color: red; font-size: 14px;">13 Alertas em aberto</b></h3>
+                    <h3><b id="parametroCpu" style="color: red; font-size: 14px;">Status: Crítico</b></h3>
                 </div>
 
                 <div class="kpiUso">
                     <div class="tituloKpi">
-                        <h2>Maior tempo na resolução dos alertas(Min):</h2>
-                        <h3>Fábrica 1</h3>
+                        <h2>Maior tempo na resolução dos alertas:</h2>
+                        <h3>50(Min)</h3>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoRam" style="color: red;">Crítico</p>
+                        <p class="dadoKpi" id="usoRam" style="color: white; text-shadow: 2px 2px 4px red;">Fábrica 1</p>
                     </span>
-                    <h3><b id="parametroRam" style="color: red; font-size: 14px;">50 min</b></h3>
+                    <h3><b id="parametroRam" style="color: red; font-size: 14px;">Status: Crítico</b></h3>
                 </div>
 
                 <!-- USO DISCO -->
@@ -82,39 +84,39 @@
                         <h3>Clique <a id="fabricas">aqui</a> para ver elas</h3>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoDisco" style="color: red;">13 Fábricas</p>
+                        <p class="dadoKpi" id="usoDisco" style="color: white; text-shadow: 2px 2px 4px red;">13 Fábricas</p>
                     </span>
                     <h3><b id="parametroDisco" style="color: red; font-size: 14px;">Crítico</b></h3>
+                </div>
+            </div>
+
+            <div class="modalPredicao">
+                <h1>Selecione até 5 fábricas para predição</h1>
+                <div class="container">
+                    <div class="grade-fabricas" id="grade-fabricas"></div>
+                    <div class="kpiUso">
+                        <div class="tituloKpi">
+                            <h2>Fábrica mais crítica:</h2>
+                            <h3>Fábrica 1</h3>
+                        </div>
+                        <span class="txtKpi">
+                            <p class="dadoKpi" id="usoCpu" style="color: red;">Crítico</p>
+                        </span>
+                        <h3><b id="parametroCpu" style="color: red; font-size: 14px;">13 Alertas em aberto</b></h3>
+                    </div>
+                </div>
+
+                <div class="paginacao" id="paginacao"></div>
+                <div class="info-pagina" id="info-pagina"></div>
+                <div id="graficoPredicao"></div>
+                <div class="fechar">
+                    <h1>FECHAR</h1>
                 </div>
             </div>
 
             <div class="containerGraficos">
                 <div class="graficos">
                     <div id="graficoAlertaFabricas"></div>
-                    
-                    <div class="modalPredicao">
-                        <h1>Selecione até 5 fábricas para predição</h1>
-                        <div class="container">
-                            <div class="grade-fabricas" id="grade-fabricas"></div>
-                            <div class="kpiUso">
-                                <div class="tituloKpi">
-                                    <h2>Fábrica mais crítica:</h2>
-                                    <h3>Fábrica 1</h3>
-                                </div>
-                                <span class="txtKpi">
-                                    <p class="dadoKpi" id="usoCpu" style="color: red;">Crítico</p>
-                                </span>
-                                <h3><b id="parametroCpu" style="color: red; font-size: 14px;">13 Alertas em aberto</b></h3>
-                            </div>
-                        </div>
-
-                        <div class="paginacao" id="paginacao"></div>
-                        <div class="info-pagina" id="info-pagina"></div>
-                        <div id="graficoPredicao"></div>
-                        <div class="fechar">
-                            <h1>FECHAR</h1>
-                        </div>
-                    </div>
 
                     <div class="informaçõesFábrica">
                         <div class="titulo"><h1>Informações Fábrica</h1></div>

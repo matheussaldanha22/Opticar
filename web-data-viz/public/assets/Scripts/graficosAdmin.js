@@ -4,7 +4,7 @@ const larguraGrafico = Math.max(fabricasG.length * 105, 400);
 //GRÁFICO ALERTAS
 var optionsBar = {
   chart: {
-    height: 430,
+    height: 550,
     width: larguraGrafico,
     type: "bar",
     toolbar: {
@@ -52,16 +52,24 @@ var chartBar = new ApexCharts(
 
 chartBar.render();
 
+const bg = document.querySelector(".bg")
 const modalPredicao = document.querySelector(".modalPredicao");
 const cliqueAqui = document.querySelector("#cliqueAqui");
 const fechar = document.querySelector('.fechar');
+const ancoraFabrica = document.querySelector('#fabricas')
+
+ancoraFabrica.addEventListener("click", () => {
+  window.location.href = "./fabricas.html";
+})
 
 cliqueAqui.addEventListener("click", () => {
   modalPredicao.classList.add("ativo");
+  bg.classList.add("ativoBg")
 });
 
 fechar.addEventListener("click", () => {
   modalPredicao.classList.remove("ativo");
+  bg.classList.remove("ativoBg")
 });
 
 //GRÁFICO PREDIÇÃO
@@ -74,7 +82,7 @@ var options = {
     toolbar: {
       show: true,
     },
-    background: "#f8f9fa",  
+    background: "#FFFFF",  
   },
   series: [
     {
