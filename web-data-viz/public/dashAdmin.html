@@ -55,62 +55,86 @@
             <div class="containerKPI">
                 <div class="kpiUso">
                     <div class="tituloKpi">
-                        <h2></h2>
-                        <h3></h3>
+                        <h2>Fábrica mais crítica:</h2>
+                        <h3>Fábrica 1</h3>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoCpu" style="color: red;"></p>
+                        <p class="dadoKpi" id="usoCpu" style="color: red;">Crítico</p>
                     </span>
-                    <h3><b id="parametroCpu" style="color: red; font-size: 14px;"></b></h3>
+                    <h3><b id="parametroCpu" style="color: red; font-size: 14px;">13 Alertas em aberto</b></h3>
                 </div>
 
                 <div class="kpiUso">
                     <div class="tituloKpi">
-                        <h2></h2>
-                        <h3></h3>
+                        <h2>Maior tempo na resolução dos alertas(Min):</h2>
+                        <h3>Fábrica 1</h3>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoRam"></p>
+                        <p class="dadoKpi" id="usoRam" style="color: red;">Crítico</p>
                     </span>
-                    <h3><b id="parametroRam" style="color: red; font-size: 14px;"></b></h3>
+                    <h3><b id="parametroRam" style="color: red; font-size: 14px;">50 min</b></h3>
                 </div>
 
                 <!-- USO DISCO -->
                 <div class="kpiUso">
                     <div class="tituloKpi">
-                        <h2></h2>
-                        <h3></h3>
+                        <h2>Quantidade Fábricas em estado crítico</h2>
+                        <h3>Clique <a id="fabricas">aqui</a> para ver elas</h3>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoDisco"></p>
+                        <p class="dadoKpi" id="usoDisco" style="color: red;">13 Fábricas</p>
                     </span>
-                    <h3><b id="parametroDisco" style="color: red; font-size: 14px;"></b></h3>
+                    <h3><b id="parametroDisco" style="color: red; font-size: 14px;">Crítico</b></h3>
                 </div>
             </div>
 
-            <div class="graficos">
-                <div id="graficoAlertaFabricas"></div>
-                <!-- <div class="predicao">
-                    <div class="ferramentas">
-                        <select name="opcão1" id="fabricaUm">
-                            <option value="#" selected>Escolha fábrica para predição</option>
-                        </select>
-                        
-                        <select name="opcão1" id="fabricaDois">
-                            <option value="#" selected>Escolha fábrica para comparação</option>
-                        </select>
+            <div class="containerGraficos">
+                <div class="graficos">
+                    <div id="graficoAlertaFabricas"></div>
+                    
+                    <div class="modalPredicao">
+                        <h1>Selecione até 5 fábricas para predição</h1>
+                        <div class="container">
+                            <div class="grade-fabricas" id="grade-fabricas"></div>
+                            <div class="kpiUso">
+                                <div class="tituloKpi">
+                                    <h2>Fábrica mais crítica:</h2>
+                                    <h3>Fábrica 1</h3>
+                                </div>
+                                <span class="txtKpi">
+                                    <p class="dadoKpi" id="usoCpu" style="color: red;">Crítico</p>
+                                </span>
+                                <h3><b id="parametroCpu" style="color: red; font-size: 14px;">13 Alertas em aberto</b></h3>
+                            </div>
+                        </div>
+
+                        <div class="paginacao" id="paginacao"></div>
+                        <div class="info-pagina" id="info-pagina"></div>
+                        <div id="graficoPredicao"></div>
+                        <div class="fechar">
+                            <h1>FECHAR</h1>
+                        </div>
                     </div>
-                    <div id="graficoPredicao"></div>
-                </div> -->
-                <div id="graficoTempoResolucao"></div>
+
+                    <div class="informaçõesFábrica">
+                        <div class="titulo"><h1>Informações Fábrica</h1></div>
+                        <div class="detalhes">
+                            <p id="pNome">Nome:</p>
+                            <p id="pGestor">Gestor:</p>
+                            <p id="pTelefone">Telefone:</p>
+                            <p id="pStatus">Status:</p>
+                            <p id="pQtdAlertaAberto">Quantidade de Alertas em aberto:</p>
+                            <p id="pQtdAlertaAndamento">Quantidade de Alertas em andamento:</p>
+                            <p id="pTempoResolucao">Tempo médio de resolução por alerta(minutos):</p>
+                            <p id="pPredicao">Predição para daqui 30 dias:</p> 
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="areaPredicao">
-                <h2>Gostaria de fazer uma predição para ver como estará suas fábricas? Clique aqui</h2> 
+                <h2>Gostaria de fazer uma predição para ver como estará suas fábricas? <a id="cliqueAqui">Clique aqui</a></h2> 
             </div>
-            
-
-
         </div>
     </div>
     
