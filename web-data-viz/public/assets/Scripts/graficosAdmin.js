@@ -30,11 +30,8 @@ function plotarGraficoAlerta(dadosAlerta) {
         if (alerta.fkFabrica === fabrica.idFabrica) {
           fabricasG.push(fabrica.nomeFabrica);
           idFabrica.push(fabrica.idFabrica)
-          if (alerta.statusAlerta === "To Do") {
-            alertasEmAberto[i] += alerta.qtd_alertas;
-          } else if (alerta.statusAlerta === "In Progress") {
-            alertasEmAndamento[i] += alerta.qtd_alertas;
-          }
+          alertasEmAberto[i] = alerta.qtd_to_do;
+          alertasEmAndamento[i] = alerta.qtd_in_progress;
         }
       }
     }
@@ -53,8 +50,9 @@ function plotarGraficoAlerta(dadosAlerta) {
           dataPointSelection: function(event, chartContext, config) {
             const serieNome = optionsBar.series[config.seriesIndex].name;
             const fabricaNome = optionsBar.xaxis.categories[config.dataPointIndex];
-            const valor = optionsBar.series[config.seriesIndex].data[config.dataPointIndex];
-            informacaoFabrica(fabricaNome, serieNome, valor);
+            const valorAberto = optionsBar.series[0].data[config.dataPointIndex];
+            const valorAndamento = optionsBar.series[1].data[config.dataPointIndex];
+            informacaoFabrica(fabricaNome, serieNome, valorAberto, valorAndamento);
           }
         }
       },

@@ -1,12 +1,15 @@
 var database = require("../database/config")
 
 function dadosGraficoAlerta() {
-  var instrucaoSql = `SELECT COUNT(alerta.idAlerta) AS qtd_alertas, alerta.statusAlerta, servidor.fkFabrica FROM alerta 
-                        JOIN capturaDados AS captura ON alerta.fkCapturaDados = captura.idCapturaDados
-                        JOIN componenteServidor ON captura.fkComponenteServidor = idcomponenteServidor
-                        JOIN servidor_maquina AS servidor ON componenteServidor.fkMaquina = servidor.idMaquina
-                        JOIN componente ON componenteServidor.fkComponente = idcomponente
-                        GROUP BY alerta.statusAlerta, servidor.fkFabrica;`
+  var instrucaoSql = `SELECT servidor.fkFabrica, 
+                        COUNT(CASE WHEN alerta.statusAlerta = 'To Do' THEN 1 END) AS qtd_to_do,
+                        COUNT(CASE WHEN alerta.statusAlerta = 'In Progress' THEN 1 END) AS qtd_in_progress,
+                        COUNT(CASE WHEN alerta.statusAlerta = 'Done' THEN 1 END) AS qtd_done
+                        FROM servidor_maquina AS servidor
+                        LEFT JOIN componenteServidor ON servidor.idMaquina = componenteServidor.fkMaquina
+                        LEFT JOIN capturaDados AS captura ON componenteServidor.idcomponenteServidor = captura.fkComponenteServidor
+                        LEFT JOIN alerta ON captura.idCapturaDados = alerta.fkCapturaDados
+                        GROUP BY servidor.fkFabrica;`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executarFRIO(instrucaoSql)

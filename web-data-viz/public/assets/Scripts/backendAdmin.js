@@ -17,7 +17,7 @@ function dadosGraficoAlerta() {
     });
 }
 
-function informacaoFabrica(fabricaNome, serieNome, valor) {
+function informacaoFabrica(fabricaNome, serieNome, valorAndamento, valorAberto) {
   fetch("/admin/informacaoFabrica", {
         method: "POST",
          headers: {
@@ -43,20 +43,20 @@ function informacaoFabrica(fabricaNome, serieNome, valor) {
         var tempoResolucao = document.querySelector("#pTempoResolucao");
         var predicao = document.querySelector("#pPredicao");
 
-        console.log(informacoes[0].nome)
+        var valorTotal = valorAndamento + valorAberto;
 
         nome.innerHTML = `Nome: ${informacoes[0].nomeFabrica}`;
         gestor.innerHTML = `Gestor: ${informacoes[0].nome}`;
         telefone.innerHTML = `Telefone: ${informacoes[0].telefone}`;
-        if (valor >= informacoes[0].limiteAtencao && valor < informacoes[0].limiteCritico) {
+        if (valorTotal >= informacoes[0].limiteAtencao && valorTotal < informacoes[0].limiteCritico) {
             status.innerHTML += `Status: Atenção`;
-        } else if (valor >= informacoes[0].limiteCritico) {
+        } else if (valorTotal >= informacoes[0].limiteCritico) {
             status.innerHTML = `Status: Crítico`;
         } else {
             status.innerHTML = `Status: Ok`;
         }
-        qtdAlertasAberto.innerHTML = `Quantidade de Alertas em aberto: ${valor}`;
-        qtdAlertasAndamento.innerHTML = `Quantidade de Alertas em andamento: ${valor}`;
+        qtdAlertasAberto.innerHTML = `Quantidade de Alertas em aberto: ${valorAberto}`;
+        qtdAlertasAndamento.innerHTML = `Quantidade de Alertas em andamento: ${valorAndamento}`;
 
     }).catch(function (erro) {
         console.error(`#ERRO: ${erro}`);
