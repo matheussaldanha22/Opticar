@@ -1,56 +1,100 @@
-const fabricasG = Array.from({ length: 10 }, (_, i) => `Fábrica ${i + 1}`);
-const larguraGrafico = Math.max(fabricasG.length * 105, 400);
+// const fabricasG = Array.from({ length: 10 }, (_, i) => `Fábrica ${i + 1}`);
+// const larguraGrafico = Math.max(fabricasG.length * 105, 400);
 
 //GRÁFICO ALERTAS
-var optionsBar = {
-  chart: {
-    height: 550,
-    width: larguraGrafico,
-    type: "bar",
-    toolbar: {
-      show: true,
-    },
-    zoom: {
-      enabled: true,
-    },
-    stacked: true,
-  },
-  plotOptions: {
-    bar: {
-      columnWidth: "30%",
-      horizontal: false,
-    },
-  },
-  series: [
-    {
-      name: "Alertas em Aberto",
-      data: Array.from({ length: fabricasG.length }, () =>
-        Math.floor(Math.random() * 100)
-      ),
-      color: "#22B4D1",
-    },
-    {
-      name: "Alertas em Andamento",
-      data: Array.from({ length: fabricasG.length }, () =>
-        Math.floor(Math.random() * 50)
-      ),
-      color: "#04708D",
-    },
-  ],
-  xaxis: {
-    categories: fabricasG,
-  },
-  fill: {
-    opacity: 1,
-  },
-};
+var dadosFabricas = [];
 
-var chartBar = new ApexCharts(
-  document.querySelector("#graficoAlertaFabricas"),
-  optionsBar
-);
 
-chartBar.render();
+function plotarGraficoAlerta(dadosAlerta) {
+  fetch("/admin/dadosFabrica", {
+    method: "GET",
+  })
+  .then(function (resposta) {
+    if (!resposta.ok) {
+      throw new Error(`Erro na resposta: ${resposta.status}`);
+    }
+    return resposta.json();
+  })
+  .then(function (dadosFabrica) {
+    const idFabrica = [];
+    const fabricasG = [];
+    const alertasEmAberto = [];
+    const alertasEmAndamento = [];
+
+    for (let i = 0; i < dadosFabrica.length; i++) {
+      const fabrica = dadosFabrica[i];
+      alertasEmAberto.push(0);     
+      alertasEmAndamento.push(0);   
+      for (let j = 0; j < dadosAlerta.length; j++) {
+        const alerta = dadosAlerta[j];
+        if (alerta.fkFabrica === fabrica.idFabrica) {
+          fabricasG.push(fabrica.nomeFabrica);
+          idFabrica.push(fabrica.idFabrica)
+          if (alerta.statusAlerta === "To Do") {
+            alertasEmAberto[i] += alerta.qtd_alertas;
+          } else if (alerta.statusAlerta === "In Progress") {
+            alertasEmAndamento[i] += alerta.qtd_alertas;
+          }
+        }
+      }
+    }
+
+    const larguraGrafico = Math.max(fabricasG.length * 105, 400);
+
+    var optionsBar = {
+      chart: {
+        height: 550,
+        width: larguraGrafico,
+        type: "bar",
+        toolbar: { show: true },
+        zoom: { enabled: true },
+        stacked: true,
+        events: {
+          dataPointSelection: function(event, chartContext, config) {
+            const serieNome = optionsBar.series[config.seriesIndex].name;
+            const fabricaNome = optionsBar.xaxis.categories[config.dataPointIndex];
+            const valor = optionsBar.series[config.seriesIndex].data[config.dataPointIndex];
+            informacaoFabrica(fabricaNome, serieNome, valor);
+          }
+        }
+      },
+      plotOptions: {
+        bar: {
+          columnWidth: "30%",
+          horizontal: false,
+        },
+      },
+      series: [
+        {
+          name: "Alertas em Aberto",
+          data: alertasEmAberto,
+          color: "#22B4D1",
+        },
+        {
+          name: "Alertas em Andamento",
+          data: alertasEmAndamento,
+          color: "#04708D",
+        },
+      ],
+      xaxis: {
+        categories: fabricasG,
+      },
+      fill: {
+        opacity: 1,
+      },
+    };
+
+    var chartBar = new ApexCharts(
+      document.querySelector("#graficoAlertaFabricas"),
+      optionsBar
+    );
+
+    chartBar.render();
+  })
+  .catch(function (erro) {
+    console.error(`#ERRO: ${erro}`);
+  });
+}
 
 const bg = document.querySelector(".bg")
 const modalPredicao = document.querySelector(".modalPredicao");
@@ -248,7 +292,4 @@ function criarBotoesPaginacao() {
   paginacao.appendChild(btnProximo);
 }
 
-window.onload = function () {
-  mostrarFabricas();
-  criarBotoesPaginacao();
-};
+
