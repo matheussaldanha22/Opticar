@@ -10,10 +10,24 @@ load_dotenv()
 # Configurações (agora via variáveis de ambiente)
 DB_CONFIG = {
     'host': os.getenv('DB_HOST', 'localhost'),
-    'database': os.getenv('DB_NAME', 'opticar'),
+    'database': os.getenv('DB_NAME', 'opticarFrio'),
     'user': os.getenv('DB_USER', 'root'),
-    'password': os.getenv('DB_PASSWORD', 'root'),
-    'port': os.getenv('DB_PORT', '3306')
+    'password': os.getenv('DB_PASSWORD', 'opticar123'),
+    'port': os.getenv('DB_PORT', '3307')
+}
+
+# DB_HOST_FRIO=localhost
+# DB_NAME_FRIO=opticar
+# DB_USER_FRIO=root
+# DB_PASSWORD_FRIO=opticar123
+# DB_PORT_FRIO=3308
+
+DB_CONFIG_FRIO = {
+    'host': os.getenv('DB_HOST_FRIO', 'localhost'),
+    'database': os.getenv('DB_NAME_FRIO', 'opticar'),
+    'user': os.getenv('DB_USER_FRIO', 'root'),
+    'password': os.getenv('DB_PASSWORD_FRIO', 'opticar123'),
+    'port': os.getenv('DB_PORT_FRIO', '3308')
 }
 
 JIRA_CONFIG = {
@@ -42,7 +56,7 @@ print("\n📋 Projetos disponíveis neste JIRA:")
 for project in projects:
     print(f"→ {project.key}: {project.name}")
 
-    # Verifica se o projeto existe
+# Verifica se o projeto existe
 try:
     project = jira.project(JIRA_CONFIG['project_key'])
     print(f"\n✅ Projeto válido: {project.key} - {project.name}")
@@ -72,7 +86,7 @@ def get_new_alerts(last_checked_id):
         
         # Consulta reformulada com tratamento seguro de parâmetros
         query = """
-        SELECT 
+            SELECT 
             a.idAlerta AS id,
             a.titulo AS title,
             a.prioridade AS prioridade,
@@ -89,9 +103,16 @@ def get_new_alerts(last_checked_id):
                 ELSE 'Low'
             END AS priority,
             IFNULL(a.tipo_incidente, 'Incident') AS issue_type,
-            a.componente AS component
+            a.componente AS component,
+            sm.fkFabrica AS idFabrica  -- Adicionando idFabrica
         FROM 
-            alerta a
+            opticarFrio.alerta a  -- Tabela alerta no banco opticarFrio
+        JOIN 
+            opticarFrio.capturaDados cd ON cd.idCapturaDados = a.fkCapturaDados  -- Junção com capturaDados
+        JOIN 
+            opticarFrio.componenteServidor cs ON cs.idComponenteServidor = cd.fkComponenteServidor  -- Junção com componenteServidor
+        JOIN 
+            opticarFrio.servidor_maquina sm ON sm.idMaquina = cs.fkMaquina  -- Junção com servidor_maquina (no banco opticar)
         WHERE 
             a.idAlerta > %(alert_id)s
             AND (a.jira_issue_key IS NULL OR a.jira_issue_key = '')
@@ -107,6 +128,9 @@ def get_new_alerts(last_checked_id):
         cursor.execute(query, params)
         new_alerts = cursor.fetchall()
         print(f"Alertas encontrados: {len(new_alerts)}")  # Debug
+        print(f"Alerta: {new_alerts}")
+
+        time.sleep(5)
         
         return new_alerts
         
@@ -131,26 +155,66 @@ URGENCY = {
     'Medium' : 'Medium'
 }
 
+
+def get_factory(fabrica_id):
+    """Busca informações da fábrica pelo ID"""
+    try:
+        conn_frio = mysql.connector.connect(**DB_CONFIG_FRIO)
+        cursor_frio = conn_frio.cursor(dictionary=True)
+
+        query = """
+        SELECT idfabrica, nome FROM fabrica WHERE idfabrica = %(fabrica_id)s;
+        """
+        
+        params = {'fabrica_id': fabrica_id}
+        cursor_frio.execute(query, params)
+        fabrica = cursor_frio.fetchone()  # Pega apenas um registro
+        
+        return fabrica or {'idfabrica': fabrica_id, 'nome': 'Fábrica Desconhecida'}
+        
+    except mysql.connector.Error as err:
+        print(f"Erro ao buscar fábrica {fabrica_id}: {err}")
+        return {'idfabrica': fabrica_id, 'nome': 'Fábrica Desconhecida'}
+    finally:
+        if 'conn_frio' in locals() and conn_frio.is_connected():
+            conn_frio.close()
+
+
+
+
 def create_jira_issue(alert):
     issue_type = ISSUE_TYPE_MAPPING.get(alert["issue_type"], 'Alerta')
-
-
     urgency = URGENCY.get(alert["priority"], 'Medium')  # Usa o priority já mapeado
-
+    
+    # Obter informações da fábrica
+    fabrica = get_factory(alert["idFabrica"])
+    
     issue_dict = {
         'project': {'key': 'OP'},
-        'summary': f'[Alerta {alert["id"]}] {alert["title"]}',
-        'description': alert["description"],
+        'summary': f'[Alerta {alert["id"]}] {alert["title"]} - Fábrica: {fabrica["nome"]}({fabrica['idfabrica']})',
+        'description': alert["description"] + f"\n\n**Fábrica:** {fabrica['nome']} (ID: {fabrica['idfabrica']})",
         'issuetype': {'name': issue_type},  # Mude para um tipo da listagem
         'priority': {'name': alert["priority"]},
-        'customfield_10124' : {'value' : urgency}
+        'customfield_10124': {'value': urgency}
     }
-    print(urgency)
+      # Adiciona campo personalizado para fábrica se ele existir no Jira
+    try:
+        fields = jira.fields()
+        for field in fields:
+            if any(term in field['name'].lower() for term in ['fabrica', 'fábrica', 'local', 'site', 'location']):
+                issue_dict[field['id']] = {'value': f"{fabrica['nome']} (ID: {fabrica['idfabrica']})"}
+                break
+    except Exception as e:
+        # Se não conseguir adicionar o campo personalizado, apenas continue com os campos padrão
+        pass
+        
+    print(f"Urgency: {urgency}")
+    print(f"Fábrica: {fabrica['nome']} (ID: {fabrica['idfabrica']})")
     print(issue_dict)
     
     try:
         new_issue = jira.create_issue(fields=issue_dict)
-        print(f"✅ Chamado criado: {new_issue.key}")
+        print(f"✅ Chamado criado: {new_issue.key} para fábrica {fabrica['nome']}")
         return new_issue.key
     except Exception as e:
         print(f"❌ Erro completo: {str(e)}")
@@ -236,6 +300,7 @@ def main():
                 print(f"🔍 Encontrados {len(new_alerts)} novos alertas")
                 for alert in new_alerts:
                     issue_key = create_jira_issue(alert)
+
                     if issue_key:
                         update_alert_with_issue(alert['id'], issue_key)
                         last_checked_id = alert['id']

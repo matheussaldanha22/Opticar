@@ -1,5 +1,3 @@
-drop database opticarfrio;
-create database opticarFrio;
 use opticarFrio;
 
 
@@ -194,18 +192,5 @@ BEGIN
   END IF;
 END$$
 
-SELECT alerta.idAlerta, alerta.dataHora, alerta.valor, alerta.titulo, alerta.descricao, alerta.prioridade, alerta.statusAlerta,
-servidor.hostname, servidor.ip, servidor.Mac_Address, servidor.idMaquina, componenteServidor.modelo, componente.tipo AS tipoComponente, componente.medida AS medidaComponente 
-FROM alerta JOIN capturaDados AS captura ON alerta.fkCapturaDados = captura.idCapturaDados
-JOIN componenteServidor ON captura.fkComponenteServidor = idcomponenteServidor
-JOIN servidor_maquina AS servidor ON componenteServidor.fkMaquina = servidor.idMaquina
-JOIN componente ON componenteServidor.fkComponente = idcomponente;
 
-SELECT 
-    sm.fkFabrica,
-    COUNT(a.idAlerta) AS quantidade_alertas
-FROM servidor_maquina sm
-LEFT JOIN componenteServidor cs ON cs.fkMaquina = sm.idMaquina
-LEFT JOIN capturaDados cd ON cd.fkComponenteServidor = cs.idcomponenteServidor
-LEFT JOIN alerta a ON a.fkCapturaDados = cd.idCapturaDados
-GROUP BY sm.fkFabrica;
+

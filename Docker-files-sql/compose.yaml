@@ -1,0 +1,25 @@
+services:
+  opticarQuente:
+    image: vitoralmeida06/projeto-pi:mysql-quente
+    ports:
+      - "3307:3306"
+    networks:
+      - rede-opticar
+    container_name: opticarQuente
+    command: ["mysqld"]
+    depends_on:
+      - opticarFrio
+
+  opticarFrio:
+    image: vitoralmeida06/projeto-pi:mysql-frio
+    ports:
+      - "3308:3306"
+    networks:
+      - rede-opticar
+    container_name: opticarFrio
+    command: ["mysqld"]
+
+networks:
+  rede-opticar:
+    driver: bridge
+    name: rede-opticar
