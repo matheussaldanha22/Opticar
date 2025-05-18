@@ -163,7 +163,7 @@ VALUES
 (198, 'Alerta 27', 'Velocidade fora da margem', 'Média', 'Investigação', 'Sensor C', 'In Progress', 3),
 (200, 'Alerta 28', 'Velocidade extrema', 'Crítica', 'Manutenção requerida', 'Sensor C', 'Done', 3);
 
-
+select * from alerta;
 
 
 

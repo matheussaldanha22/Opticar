@@ -6,6 +6,6 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 3333
+EXPOSE 3333 
 
 ENTRYPOINT ["npm", "start"]
