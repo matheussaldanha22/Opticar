@@ -1,21 +1,60 @@
 // BARRA LATERAL
-function expand(){
-    if(div_menu.classList.contains('menu-expand')){
-        div_menu.style.animation = 'diminui 0.2s linear';
+function expand() {
+  if (div_menu.classList.contains('menu-expand')) {
+    div_menu.style.animation = 'diminui 0.2s linear';
 
-    }else{
-        div_menu.style.animation = 'expandir 0.2s linear';
+  } else {
+    div_menu.style.animation = 'expandir 0.2s linear';
 
-    }
-    div_menu.classList.toggle('menu-expand')
-    ul_links.classList.toggle('nav-links-expanded')
+  }
+  div_menu.classList.toggle('menu-expand')
+  ul_links.classList.toggle('nav-links-expanded')
 }
 
+function carregaPagina() {
+  mostrarData();
+  document.getElementById("infoData").innerHTML = obterData()
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  carregaPagina();
+});
+
+//NOME KPI
+
+
+//EXIBE DATA
+const nomeDias = [
+  "Domingo",
+  "Segunda-Feira",
+  "Terça-Feira",
+  "Quarta-Feira",
+  "Quinta-Feira",
+  "Sexta-Feira",
+  "Sábado"
+]
+
+const nomeMeses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
+
+function obterData() {
+  let data = new Date();
+  return `${nomeDias[data.getDay()]} - ${data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`;
+}
+
+function mostrarData() {
+  setInterval(() => {
+    document.getElementById("dataInfo").innerHTML = obterData()
+  }, 1000);
+}
+
+
+
 //MODAL FILTRAR
-function abrirModal(componente){
-    Swal.fire({
-title: `Filtrar gráfico <u style="color:#2C3E50;">${componente}</u>`,
-html: `
+function abrirModal(componente) {
+  Swal.fire({
+    title: `Filtrar gráfico <u style="color:#2C3E50;">${componente}</u>`,
+    html: `
     <div class="modal-test">
         <div class="containerPeriodo">
             <h3>Escolha o período especifico:</h3>
@@ -36,272 +75,168 @@ html: `
         </div>
   </div>
 `,
-showCancelButton: true,
-cancelButtonText: "Fechar",
-customClass: "alertaModal",
-confirmButtonColor: '#2C3E50',
-})
+    showCancelButton: true,
+    cancelButtonText: "Fechar",
+    customClass: "alertaModal",
+    confirmButtonColor: '#2C3E50',
+  })
+}
+//GRAF VALORES
+let data2 = new Date;
+let mesAtual= data2.getMonth()
+const mesesSeguintes = [];
+for (let i = 1; i <= 6; i++) {
+  mesesSeguintes.push(nomeMeses[(mesAtual + i) % 12]);
+}
+document.getElementById("kpiMes").innerHTML = `(${nomeMeses[mesAtual]})`
+
+
+
+const chartData = {
+  alertas: [3, 5, 6, 8, 10],
+  risco: {
+    data: [30, 10, 34, 12, 33, 11],
+  },
+  tendencia: [65, 67, 70, 72, 74, 77, 80],
+  severidade: {
+    mensal: {
+      critico: [4, 7, 3, 8, 2, 10, 3, 7, 6, 5, 10, 20],
+      atencao: [5, 2, 7, 2, 4, 2, 8, 2, 1, 2, 11, 12],
+      categorias: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+    },
+    semanal: {
+      critico: [2, 3],
+      atencao: [1, 2],
+      categorias: ['Semana Atual', 'Semana Anterior']
+    }
+  }
+};
+
+//GRAF USO
+function renderGraficoUso(periodo = 'ano') {
+  const usoPorPeriodo = {
+    ano: {
+      categorias: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      dados: [52, 61, 60, 45, 100, 80, 50, 55, 28, 53, 55, 12]
+    },
+    '6m': {
+      categorias: ['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      dados: [50, 55, 28, 53, 55, 12]
+    },
+    '3m': {
+      categorias: ['Out', 'Nov', 'Dez'],
+      dados: [53, 55, 12]
+    }
+  };
+
+  const parametroAlerta = 70;
+  const { categorias, dados } = usoPorPeriodo[periodo];
+  const options = {
+    chart: { type: 'line', height: 300, toolbar: { show: false } },
+    series: [
+      { name: 'Uso médio (%)', data: dados },
+      { name: 'Parâmetro de alerta', data: new Array(categorias.length).fill(parametroAlerta), stroke: { dashArray: 5 } }
+    ],
+    xaxis: { categories: categorias, labels: { style: { colors: '#000' } } },
+    yaxis: { max: 100, labels: { style: { colors: '#000' } } },
+    colors: ['#000', '#e63946'],
+    stroke: { curve: 'smooth', width: [3, 2] },
+    legend: { labels: { colors: '#000' } },
+    tooltip: { theme: 'light' },
+    grid: { borderColor: '#ccc' }
+  };
+
+  if (window.chartUso) {
+    window.chartUso.destroy();
+  }
+
+  window.chartUso = new ApexCharts(document.querySelector("#graficoUsoComponente"), options);
+  window.chartUso.render();
 }
 
-//PLOTAR GRAF CPU
-const ctxCPU = document.getElementById('cpuChart').getContext('2d');
+//GRAF DISTRIBUIÇÃO
+function renderSeveridade(periodo = 'mensal') {
+  const dados = chartData.severidade[periodo];
+  const options = {
+    chart: { type: 'bar', stacked: true, height: 300 },
+    series: [
+      { name: 'Crítico', data: dados.critico },
+      { name: 'Atenção', data: dados.atencao }
+    ],
+    xaxis: { categories: dados.categorias, labels: { style: { colors: '#000' } } },
+    colors: ['#011f4b', '#0077b6'],
+    legend: { labels: { colors: '#000' } },
+    tooltip: { theme: 'light' }
+  };
 
-const dataCPU = {
-    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho','Julho','Agosto','Setembro','Novembro','Dezembro'],
-    datasets: [
-        {
-            label: 'Uso da CPU',
-            data: [50, 60, 60, 45, 100, 80,50,60,23,55,12,55],
-            borderColor: '#FFFFFF',
-            borderWidth: 2,
-            fill: false,
-            pointBackgroundColor: '#FFFFFF',
-            pointRadius: 5,
-            tension: 0.3
-        },
-        {
-            label: 'Alerta',
-            data: Array(12).fill(50), // linha parametro
-            borderColor: 'red',
-            borderWidth: 2,
-            borderDash: [5, 5],
-            pointRadius: 0,
-            fill: false
-        }
-    ]
-};
+  if (window.chartSeveridade) window.chartSeveridade.destroy();
+  window.chartSeveridade = new ApexCharts(document.querySelector("#distribuicaoSeveridade"), options);
+  window.chartSeveridade.render();
+}
 
-const configCPU = {
-    type: 'line',
-    data: dataCPU,
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { display: false },
-            tooltip: { enabled: true }
-        },
-        scales: {
-            y: {
-                beginAtZero: false,
-                suggestedMin: 30,
-                suggestedMax: 100,
-                ticks: { color: 'white', font: { size: 12 } }
-            },
-            x: {
-                ticks: { color: 'white', font: { size: 12 } }
-            }
-        }
-    }
-};
+//PREDICAO
+let currentChart;
+const chartElement = document.querySelector("#predictionChart");
+const titleElement = document.querySelector("#chartTitle");
 
-new Chart(ctxCPU, configCPU);
 
-//PLOTAR GRAF DISCO
-const ctxDisco = document.getElementById('discoChart').getContext('2d');
+function renderChart(tipo) {
+  if (currentChart) currentChart.destroy();
 
-const dataDisco = {
-    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho','Julho','Agosto','Setembro','Novembro','Dezembro'],
-    datasets: [{
-        label: 'Uso do Disco',
-        data: [50, 60, 60, 45, 100, 80,50,60,23,55,12,55],
-        borderColor: '#FFFFFF',
-        borderWidth: 2,
-        fill: false,
-        pointBackgroundColor: '#FFFFFF',
-        pointRadius: 5,
-        tension: 0.3
-    },
-    {
-        label: 'Alerta',
-        data: Array(12).fill(50), // linha parametro
-        borderColor: 'red',
-        borderWidth: 2,
-        borderDash: [5, 5],
-        pointRadius: 0,
-        fill: false
-    }]
-};
+  let options;
+  if (tipo === 'alertas') {
+    titleElement.innerText = `Número de alertas previstos - CPU (Prox. Mês - ${nomeMeses[mesAtual+1]})`;
+    options = {
+      chart: { type: 'line', height: 300, toolbar: { show: false } },
+      series: [{ name: 'Alertas', data: chartData.alertas }],
+      xaxis: {
+        categories: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
+        labels: { style: { colors: '#333' } }
+      },
+      colors: ['#0077b6']
+    };
+  } else if (tipo === 'risco') {
+    titleElement.innerText = `Probabilidade de Sobrecarga - CPU (Próx.Semestre)`;
+    const dados = chartData.risco;
+    const options = {
+      chart: { type: 'bar', stacked: false, height: 300 },
+      series: [
+        { name: 'Sobrecarga (%)', data: dados.data }
+      ],
+      xaxis: { categories: mesesSeguintes, labels: { style: { colors: '#000' } } },
+      colors: ['#011f4b'],
+      legend: { labels: { colors: '#000' } },
+      tooltip: { theme: 'light' }
+    };
 
-const configDisco = {
-    type: 'line',
-    data: dataDisco,
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { display: false },
-            tooltip: { enabled: true }
-        },
-        scales: {
-            y: {
-                beginAtZero: false,
-                suggestedMin: 30,
-                suggestedMax: 100,
-                ticks: { color: 'white', font: { size: 12 } }
-            },
-            x: {
-                ticks: { color: 'white', font: { size: 12 } }
-            }
-        }
-    }
-};
+    currentChart = new ApexCharts(chartElement, options);
+    currentChart.render();
+  }
+  else if (tipo === 'tendencia') {
+    titleElement.innerText = `Tendência de Crescimento de Uso - CPU (7 dias)`;
+    options = {
+      chart: { type: 'area', height: 300, toolbar: { show: false } },
+      series: [{ name: 'Uso Projetado (%)', data: chartData.tendencia }],
+      xaxis: {
+        categories: ['Hoje', '+1d', '+2d', '+3d', '+4d', '+5d', '+6d'],
+        labels: { style: { colors: '#333' } }
+      },
+      colors: ['#2196f3']
+    };
+  }
 
-new Chart(ctxDisco, configDisco);
+  currentChart = new ApexCharts(chartElement, options);
+  currentChart.render();
+}
 
-//PLOTAR GRAF RAM
-const ctxRAM = document.getElementById('ramChart').getContext('2d');
+document.getElementById("tipo").addEventListener("change", () => {
+  renderChart(document.getElementById("tipo").value);
+});
 
-const dataRAM = {
-    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho','Julho','Agosto','Setembro','Novembro','Dezembro'],
-    datasets: [{
-        label: 'Uso da RAM',
-        data: [50, 60, 60, 45, 100, 80,50,60,23,55,12,55],
-        borderColor: '#000000',
-        borderWidth: 2,
-        fill: false,
-        pointBackgroundColor: '#000000',
-        pointRadius: 5,
-        tension: 0.3
-    },
-    {
-        label: 'Alerta',
-        data: Array(12).fill(50), // linha parametro
-        borderColor: 'red',
-        borderWidth: 2,
-        borderDash: [5, 5],
-        pointRadius: 0,
-        fill: false
-    }]
-};
+renderGraficoUso();
+renderSeveridade();
+renderChart("alertas");
 
-const configRAM = {
-    type: 'line',
-    data: dataRAM,
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { display: false },
-            tooltip: { enabled: true }
-        },
-        scales: {
-            y: {
-                beginAtZero: false,
-                suggestedMin: 30,
-                suggestedMax: 100,
-                ticks: { color: 'black', font: { size: 12 } }
-            },
-            x: {
-                ticks: { color: 'black', font: { size: 12 } }
-            }
-        }
-    }
-};
 
-new Chart(ctxRAM, configRAM);
 
-//PLOTAR GRAF REDE
-const ctxRede = document.getElementById('redeChart').getContext('2d');
 
-const dataRede = {
-    labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho','Julho','Agosto','Setembro','Novembro','Dezembro'],
-    datasets: [{
-        label: 'Uso da Rede',
-        data: [50, 60, 60, 45, 100, 80,50,60,23,55,12,55],
-        borderColor: '#000000',
-        borderWidth: 2,
-        fill: false,
-        pointBackgroundColor: '#000000',
-        pointRadius: 5,
-        tension: 0.3
-    },
-    {
-        label: 'Alerta',
-        data: Array(12).fill(50), // linha parametro
-        borderColor: 'red',
-        borderWidth: 2,
-        borderDash: [5, 5],
-        pointRadius: 0,
-        fill: false
-    }]
-};
-
-const configRede = {
-    type: 'line',
-    data: dataRede,
-    options: {
-        responsive: true,
-        plugins: {
-            legend: { display: false },
-            tooltip: { enabled: true }
-        },
-        scales: {
-            y: {
-                beginAtZero: false,
-                suggestedMin: 30,
-                suggestedMax: 100,
-                ticks: { color: 'black', font: { size: 12 } }
-            },
-            x: {
-                ticks: { color: 'black', font: { size: 12 } }
-            }
-        }
-    }
-};
-
-new Chart(ctxRede, configRede);
-
-//PLOTAR GRAF ALERTAS
-const ctx2 = document.getElementById('alertasChart');
-
-const data2 = {
-    labels: ["CPU", "RAM", "DISCO", "REDE"],
-    datasets: [{
-        label: "Quantidade de alertas",
-        data: [30, 20, 15, 6],
-        backgroundColor: ["#012027", "#04708D", "#D9D9D9", "#0084FF"],
-        borderRadius: 8,
-        barPercentage: 1,
-        categoryPercentage: 0.5
-    }]
-};
-
-const config2 = {
-    type: "bar",
-    data: data2,
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                display: false 
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {
-                    color: "#000", 
-                    font: {
-                        size: 14
-                    }
-                },
-                grid: {
-                    color: "#ddd" 
-                }
-            },
-            x: {
-                ticks: {
-                    color: "#000",
-                    font: {
-                        size: 14,
-                        weight: 'bold'
-                    }
-                },
-                grid: {
-                    display: false // remove linhas verticais (opcional)
-                }
-            }
-        }
-    }
-};
-
-new Chart(ctx2, config2);

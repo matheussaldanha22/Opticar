@@ -11,7 +11,7 @@
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 
 
@@ -73,170 +73,164 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- painel grafs -->
         <div class="painelDash">
 
             <!-- cabecalho -->
             <div class="cabecalhoDash">
                 <div class="texto">
-                    <p id="titulo">Dashboard Análise Histórica</p>
-                    <p class="descricao"> Acompanhe registros históricos capturados do seu servidor</p>
+                    <div class="tituloDash">
+                        <p id="titulo">Análise de risco do componente - </p>
+                        <div class="sltInvisivel">
+                            <select id="sltServidor">
+                                <option value="" selected>CPU</option>
+                                <option value="">RAM</option>
+                                <option value="">Rede</option>
+                                <option value="">Disco</option>
+                            </select>
+                        </div>
+                        <!-- data -->
+                        <div style="display: flex; align-items: center; gap: 10px; margin-left: 10vw; color: gray;height: 5vh;">
+                            <i class='bx bxs-time' style="font-size: 20px;"></i>
+                            <p id="dataInfo"></p>
+                        </div>
+                    </div>
+                    <p class="descricao"> Acompanhe o desempenho do seu componente com base em registros históricos.</p>
                 </div>
                 <div class="servidor">
-                    <i class='bx bx-info-circle' id="serv"></i>
-                    <select name="" id="sltServidor">
+                    <select name="" class="sltRoxo" id="sltServidor">
                         <option value="">Servidor: SP-01</option>
                         <option value="">Servidor: SP-02</option>
                         <option value="">Servidor: SP-03</option>
                     </select>
                 </div>
             </div>
-            
+
             <!-- kpis -->
-            <div class="kpisUso">
+            <div class="kpis">
 
                 <!-- USO CPU -->
-                <div class="kpiUso">
+                <div class="kpiIdv">
                     <div class="tituloKpi">
-                        <h2>Maior pico de utilização (Anual)</h2>
-                        <h3>CPU - 14/02</h3>
+                        <h2 style="display: flex; gap: 3px;">Percentual de alertas críticos <p id="kpiMes"></p></h2>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoCpu" style="color: red;">87%</p>
+                        <p class="dadoKpi" id="probFalha" style="color: red;">72%</p>
                     </span>
-                    <h3>Parâmetro de alerta<b id="parametroCpu" style="color: red; font-size: 14px;">70%</b></h3>
+                    <h3>Quantidade de alertas: <p>32</p>
+
                 </div>
 
                 <!-- USO RAM -->
-                <div class="kpiUso">
+                <div class="kpiIdv">
                     <div class="tituloKpi">
-                        <h2>Mês com MAIS sobrecargas</h2>
-                        <h3>(Alertas gerados)</h3>
+                        <h2>Tempo em sobrecarga (Ultimo mês)</h2>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoRam">Fevereiro</p>
+                        <p class="dadoKpi" id="usoRam">18h 23min</p>
                     </span>
-                    <h3>Quantidade de alertas:<b id="parametroRam" style="color: red; font-size: 14px;">134</b></h3>
                 </div>
 
                 <!-- USO DISCO -->
-                <div class="kpiUso">
+                <div class="kpiIdv">
                     <div class="tituloKpi">
-                        <h2>Mês com MENOS sobrecargas</h2>
-                        <h3>(Alertas gerados)</h3>
+                        <h2>MTBF Atual</h2>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoDisco">Maio</p>
+                        <p class="dadoKpi" id="mtbf">52 min</p>
                     </span>
-                    <h3>Quantidade de alertas<b id="parametroDisco" style="color: red; font-size: 14px;">21</b></h3>
+                </div>
+
+                <!-- USO DISCO -->
+                <div class="kpiIdv">
+                    <div class="tituloKpi">
+                        <h2>Índice de confiabilidade</h2>
+                    </div>
+                    <span class="txtKpi">
+                        <p class="dadoKpi" id="confiabilidade">42/100</p>
+                    </span>
+                    <h3>Faixa: <p>Zona de risco</p>
+                    </h3>
                 </div>
 
             </div>
-            
+
 
             <!-- charts -->
             <div class="grafSuperior">
-                <div class="chart-container-blue">
-                    <div class="chartCabecalho">
-                        <h2><i class='bx bx-chip' style="border: solid 1px white; border-radius: 8px;"></i> Utilização CPU (%)</h2>
-
-                        <div class="filtrar">
-                            <h3>Filtrar:</h3>
-                            <div class="iconeFiltro" onclick="abrirModal('CPU')">
-                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                <!-- GRAFICO USO -->
+                <div class="graficos">
+                    <div class="grafBox">
+                        <div class="grafContainer">
+                            <h4 style="display: flex; justify-content: space-between;width: 26vw;">Uso Médio vs Limite - CPU
+                                <p style="border-bottom: solid 1px gray; color: gray;"> 
+                                    <i class='bx bx-filter-alt'> </i>
+                                    <span id="tipoFiltro"> Anual </span>-
+                                    <span id="periodo">2025</span>
+                                </p>
+                            </h4>
+                            <div class="filtrar">
+                                <h3>Filtrar:</h3>
+                                <div class="iconeFiltro" onclick="abrirModal('CPU')">
+                                    <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                                </div>
                             </div>
                         </div>
+                        <div id="graficoUsoComponente"></div>
                     </div>
 
-                    <canvas id="cpuChart"></canvas>
-                </div>
-
-                <div class="chart-container-blue">
-                    <div class="chartCabecalho">
-                        <h2><i class='bx bxs-save' style="border: solid 1px white; border-radius: 8px;"></i> Utilização Disco (%)</h2>
-
-                        <div class="filtrar">
-                            <h3>Filtrar:</h3>
-                            <div class="iconeFiltro" onclick="abrirModal('Disco')">
-                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                    <!-- GRAFICO ALERTAS -->
+                    <div class="grafBox">
+                        <div class="grafContainer">
+                            <h4 style="display: flex; justify-content: space-between;width: 26vw;">Distribuição de alertas - CPU
+                                <p style="border-bottom: solid 1px gray; color: gray;"> 
+                                    <i class='bx bx-filter-alt'> </i>
+                                    <span id="tipoFiltro"> Anual </span>-
+                                    <span id="periodo">2025</span>
+                                </p>
+                            </h4>
+                            <div class="filtrar">
+                                <h3>Filtrar:</h3>
+                                <div class="iconeFiltro" onclick="abrirModal('CPU')">
+                                    <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                                </div>
                             </div>
                         </div>
+                        <div id="distribuicaoSeveridade" style="height: 300px;"></div>
                     </div>
 
-                    <canvas id="discoChart"></canvas>
 
-                </div>
-                <div class="kpisTempo">
-                    <div class="kpiTempo branco">
-                        <h2>Tempo do servidor LIGADO</h2>
-                        <span class="txtKpi">
-                            <p id="diasOcioso">87</p>Dias
-                        </span>
-                    </div>
-
-                    <div class="kpiTempo">
-                        <h2>Tempo do servidor OCIOSO</h2>
-                        <span class="txtKpi">
-                            <p id="diasOcioso">13</p>Dias
-                        </span>
-                    </div>
                 </div>
             </div>
+
+            <!-- GRAF PREDICAO -->
             <div class="grafInferior">
-
-                <!-- ram -->
-                <div class="chart-container-white">
-                    <div class="chartCabecalho">
-                        <h2><i class='bx bxs-memory-card' style="border: solid 1px black; border-radius: 8px;"></i> Utilização RAM (%)
-                        </h2>
-
-                        <div class="filtrar">
-                            <h3>Filtrar:</h3>
-                            <div class="iconeFiltro" onclick="abrirModal('RAM')">
-                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
-                            </div>
+                <div class="predicao">
+                    <div class="tituloPred">
+                        <div style="display:flex;align-items:center;">
+                            <i class='bx bx-bar-chart-square' style="font-size: 30px;"></i>
+                            <b style="font-size: 20px;">Previsões inteligentes</b><br>
+                        </div>
+                        <div class="escolha">
+                            <span>Tipo de Previsão:</span><br>
+                            <select id="tipo">
+                                <option value="alertas">Número de Alertas Previstos (Prox. Mês)</option>
+                                <option value="risco">Probabilidade de Sobrecarga do Componente (Próx.Semestre)</option>
+                                <option value="tendencia">Tendência de Crescimento de Uso (7 dias)</option>
+                            </select>
                         </div>
                     </div>
 
-                    <canvas id="ramChart"></canvas>
-
-                </div>
-
-                <!-- rede -->
-                <div class="chart-container-white">
-                    <div class="chartCabecalho">
-                        <h2><i class='bx bx-wifi' style="border: solid 1px black; border-radius: 8px;"></i> Utilização Rede (%)</h2>
-
-                        <div class="filtrar">
-                            <h3>Filtrar:</h3>
-                            <div class="iconeFiltro" onclick="abrirModal('Rede')">
-                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
-                            </div>
-                        </div>
+                    <div class="grafBox">
+                        <h4 id="chartTitle">Número de alertas previstos (7 dias)</h4>
+                        <div id="predictionChart"></div>
                     </div>
-
-                    <canvas id="redeChart"></canvas>
-
                 </div>
 
-                <!-- alertas p comp -->
-                <div class="chart-container-alert">
-                    <div class="chartCabecalho">
-                        <h2><i class='bx bxs-bell-ring'
-                                style="border: solid 1px black; border-radius: 8px; font-size: 25px;"></i> Alertas por
-                            componente</h2>
-                        <div class="filtrar">
-                            <h3>Filtrar:</h3>
-                            <div class="iconeFiltro" onclick="abrirModal('Alertas')">
-                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
-                            </div>
-                        </div>
-                    </div>
 
-                    <canvas id="alertasChart"></canvas>
 
-                </div>
+
             </div>
 
 
