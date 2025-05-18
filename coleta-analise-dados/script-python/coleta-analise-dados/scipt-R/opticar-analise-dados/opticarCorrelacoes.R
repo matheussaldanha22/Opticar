@@ -1,3 +1,6 @@
+getwd()
+
+
 df <- read.csv("dadosCaptura.csv")
 
 #TRATAMENTO - Retirar colunas inutilizadas e transformar o df em colunar de acordo com medidas
