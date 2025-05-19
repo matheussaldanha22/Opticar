@@ -312,14 +312,14 @@ body {
   background: #012027;
   background: linear-gradient(270deg, #012027, #04708d);
   border-radius: 12px;
-  padding: 1vw;
+  padding: 0.3vw;
   width: 20vw;
   /* height: fit-content; */
   font-size: 18px;
   color: #fffafa;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
   font-weight: bold;
-  gap: 5px;
+  /* gap: 5px; */
 }
 
 .tituloKpi {
@@ -424,8 +424,8 @@ body {
 } */
 
 .graficoPeriodo{
-  width: 55%;
-  background-color: white;
+  width: 65%;
+  background-color: #EDEDED;
   gap: 1vw;
 
   .titulo{
@@ -435,6 +435,14 @@ body {
 
 }
 
+.chartPeriodo{
+  background-color: white;
+  width: 98%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1vw;
+}
 .iconeFiltro{
     display: flex;
     align-items: center;
