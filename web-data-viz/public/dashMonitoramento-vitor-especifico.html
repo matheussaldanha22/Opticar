@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="./assets/styles/dashMonitoramento-especifica.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="./assets/Scripts/dashMonitoramento-especifica.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <title>Dashboar monitoramento</title>
 </head>
 
@@ -47,7 +48,7 @@
 
 
         <div class="contentContainer">
-            <div class="perfilContainer">
+            <!-- <div class="perfilContainer">
                 <div class="perfil">
 
                     <div class="empresa">
@@ -66,14 +67,14 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <div class="titleContainer">
                 <h1>SV001</h1>
                 <p>Acompanhe o consumo em tempo real</p>
             </div>
             <hr>
-            <div class="alertasContainer">
+            <div class="alertasContainer">  
 
                 <div class="tempoReal">
                     <div class="containerKpis">
@@ -95,16 +96,64 @@
                                 <th>Informações</th>
                             </tr>
                         </thead>
-                        <td data-label="ID">1</td>
-                        <td data-label="Servidor">SV001</td>
-                        <td data-label="CPU">80%</td>
-                        <td data-label="RAM">90%</td>
-                        <td data-label="Informações"><i class="fa fa-eye" aria-hidden="true"
-                                onclick="redirecionarPagina()"></i>
-                        </td>
+                        <tbody>
+                            <tr>
+                                <td data-label="ID">1</td>
+                                <td data-label="Servidor">SV001</td>
+                                <td data-label="CPU">80%</td>
+                                <td data-label="RAM">90%</td>
+                                <td data-label="Informações"><i class="fa fa-eye" aria-hidden="true"
+                                        onclick="redirecionarPagina()"></i>
+                                </td>
+                            </tr>
+                                                        <tr>
+                                <td data-label="ID">2</td>
+                                <td data-label="Servidor">SV001</td>
+                                <td data-label="CPU">80%</td>
+                                <td data-label="RAM">90%</td>
+                                <td data-label="Informações"><i class="fa fa-eye" aria-hidden="true"
+                                        onclick="redirecionarPagina()"></i>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td data-label="ID">3</td>
+                                <td data-label="Servidor">SV001</td>
+                                <td data-label="CPU">80%</td>
+                                <td data-label="RAM">90%</td>
+                                <td data-label="Informações"><i class="fa fa-eye" aria-hidden="true"
+                                        onclick="redirecionarPagina()"></i>
+                                </td>
+                            </tr>
+
+                        </tbody>
+
                     </table>
                     <div class="pagination" id="paginacao"></div>
+                </div>  
+
+                <div class="chartsContainer">
+                    <div class="sessao1Charts">
+                        <div class="cpuChart charts">
+                            <div class="informacoesCPU textoGrafico">
+                                <h4>CPU</h4>
+                                <div>
+                                    <h5>Utilização</h5>
+                                    <p id="utilizacaoInfo">100%</p>
+                                </div>
+                            </div>
+                            <div id="chart"></div>
+                        </div>
+                        <div class="discoChart charts"></div>
+                    </div>
+
+                    <div class="sessao2Charts">
+                        <div class="redeChart charts"></div>
+                        <div class="ramChart charts"></div>
+                    </div>
                 </div>
+
+
+
             </div>
         </div>
     </div>

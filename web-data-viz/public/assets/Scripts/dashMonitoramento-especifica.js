@@ -112,3 +112,26 @@ function abrirModal(id) {
     customClass: "alertaModal",
   })
 }
+
+
+
+var options = {
+  chart: {
+    type: 'line',
+    height: '100%',
+    width: '100%',
+    foreColor: '#fff'
+  },
+  series: [{
+    name: 'sales',
+    data: [30,40,45,50,49,60,70,91,125]
+  }],
+  colors: ['#fff'],
+  xaxis: {
+    categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
+  }
+}
+
+var chart = new ApexCharts(document.querySelector("#chart"), options);
+
+chart.render();

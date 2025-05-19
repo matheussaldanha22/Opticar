@@ -289,7 +289,7 @@ textarea {
 
 .alertasContainer {
   width: 100%;
-  height: 75%;
+  height: 90%;
   overflow-x: auto;
 }
 
@@ -473,6 +473,85 @@ table i:hover {
   border: 1px solid black;
   height: 1%;
 }
+
+#chart {
+  max-height: inherit;
+  max-width: inherit;
+  width: 70%;
+  /* margin: 2% 2%; */
+    background: linear-gradient(270deg, #012027, #04708d);
+    border-radius: 10px;
+  /* color: #fff; */
+  
+
+}
+
+.chartsContainer{
+  display: flex;
+  /* border: 1px solid black; */
+  width: inherit;
+  height: 60vh;
+  margin-top: 1%;
+  flex-wrap: wrap;
+  gap: 2%;
+}
+
+.sessao1Charts{
+  width: inherit;
+  display: flex;
+  height: 50%;
+  gap: 2%;
+}
+
+.sessao2Charts{
+  width: inherit;
+  display: flex;
+  height: 50%;
+  gap: 2%;
+  margin-bottom: 40px;
+}
+
+.cpuChart{
+  width: 100%;
+}
+
+.charts{
+  width: 100%;
+  height: 100%;
+  /* border: 1px solid black; */
+  background-color: #EFEFEF;
+  display: flex;
+  padding: 1%;
+  border-radius: 10px;
+}
+
+.textoGrafico{
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  height: 100%;
+  gap: 20%;
+  padding-left: 2.5%;
+  text-wrap: wrap;
+}
+
+.textoGrafico h4{
+  font-size: 2vw;
+}
+
+.textoGrafico div{
+  font-size: 2vw;
+}
+
+.textoGrafico div p{
+  font-size: 4vw;
+}
+
+#utilizacaoInfo{
+  color: #04708D;
+  font-weight: 1000;
+}
+
 
 @media screen and (max-width: 700px) {
   body {
