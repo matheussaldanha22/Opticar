@@ -25,6 +25,7 @@ var componenteRouter = require("./src/routes/componentes")
 var listaservidoresRouter = require("./src/routes/listadeservidores")
 var alertasRouter = require("./src/routes/alertas")
 var adminRouter = require("./src/routes/admin")
+var jiraRouter = require("./src/routes/jira")
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -42,6 +43,7 @@ app.use("/componentes", componenteRouter)
 app.use("/listadeservidores", listaservidoresRouter)
 app.use("/alertas", alertasRouter)
 app.use("/admin", adminRouter)
+app.use("/jira", jiraRouter)
 
 app.listen(PORTA_APP, function () {
   console.log(`
