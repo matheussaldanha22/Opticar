@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="assets/styles/monitoramento.css"> -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src="./assets/Scripts/sessao.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./assets/styles/dashMonitoramento-especifica.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
+    <script src="./assets/Scripts/dashMonitoramento-especifica.js" defer></script>
+    <title>Dashboar monitoramento</title>
+</head>
+
+<body>
+    <!-- NavBar -->
+    <div class="mainContainer">
+        <div id="div_menu" class="menu ">
+            <div class="nav-burger" onclick="expand()">
+                <div id="linha1"></div>
+                <div id="linha2"></div>
+                <div id="linha3"></div>
+            </div>
+
+            <ul id="ul_links" class="nav-links ">
+
+                <li class="li-active">
+                    <i class='bx bx-desktop' style='color:#ffffff'></i>
+                    <span>Monitoramento</span>
+                </li>
+                <li>
+                    <i class='bx bxs-bell-ring' style='color:#ffffff'></i>
+                    <span>Alertas</span>
+                </li>
+                <li>
+                    <i class='bx bx-server' style='color:#ffffff'></i>
+                    <span>Servidores</span>
+                </li>
+            </ul>
+        </div>
+
+
+        <div class="contentContainer">
+            <div class="perfilContainer">
+                <div class="perfil">
+
+                    <div class="empresa">
+                        <i class='bx bxs-business' undefined></i>
+                        <h3 id="empresaNome"></h3>
+                    </div>
+                    <div class="persona">
+                        <i class='bx bxs-user-circle'></i>
+                        <div class="usuarioContainer">
+                            <h3 id="usuarioNome">Luciano Alves</h3>
+                            <h3 class="desktop-email" id="usuarioEmail">
+                                luciano@empresa.com</h3>
+                        </div>
+                        <div>
+                            <i class='bx bx-chevron-down'></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="titleContainer">
+                <h1>SV001</h1>
+                <p>Acompanhe o consumo em tempo real</p>
+            </div>
+            <hr>
+            <div class="alertasContainer">
+
+                <div class="tempoReal">
+                    <div class="containerKpis">
+                        <div class="tempo_atividade">
+                            <h3 id="alerta">Total de processos</h3>
+                            <p>2</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mainContainerTabela">
+                    <h2 class="tituloTabela">Servidores em alta utilização (crítico e atenção)</h2>
+                    <table id="tabela-alertas" class="tabelaContainer">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nome</th>
+                                <th>CPU</th>
+                                <th>RAM</th>
+                                <th>Informações</th>
+                            </tr>
+                        </thead>
+                        <td data-label="ID">1</td>
+                        <td data-label="Servidor">SV001</td>
+                        <td data-label="CPU">80%</td>
+                        <td data-label="RAM">90%</td>
+                        <td data-label="Informações"><i class="fa fa-eye" aria-hidden="true"
+                                onclick="redirecionarPagina()"></i>
+                        </td>
+                    </table>
+                    <div class="pagination" id="paginacao"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="modal-test">
+        <div class="containerConfigAlerta">
+            <h3>Configuração alerta</h3>
+            <p><b>id:</b></p>
+            <p><b>Gravidade</b> </p>
+            <p><b>Data</b> </p>
+
+            <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum porro, provident sunt tenetur ad
+                perspiciatis mollitia repellat, unde, pariatur consequatur omnis eveniet consequuntur aperiam delectus
+                aliquid iste esse. Nihil, adipisci?</p>
+        </div>
+
+        <div class="containerComponentes">
+            <p><b>Componente: </b> </p>
+            <p><b>Servidor: </b></p>
+            <p><b>Métrica registrada: </b></p>
+            <p><b>Tipo de Métrica: </b></p>
+            <p><b>Processos Relacionados: </b></p>
+        </div>
+    </div> -->
+
+</body>
+
+<script>
+    function expand() {
+        if (div_menu.classList.contains('menu-expand')) {
+            div_menu.style.animation = 'diminui 0.2s linear'
+
+        } else {
+            div_menu.style.animation = 'expandir 0.2s linear'
+
+        }
+        div_menu.classList.toggle('menu-expand')
+        ul_links.classList.toggle('nav-links-expanded')
+    }
+
+    const menu = document.querySelector('.nav-links')
+    const burger = document.querySelector('.nav-burger')
+    const linha1 = document.querySelector('#linha1')
+    const linha2 = document.querySelector('#linha2')
+    const linha3 = document.querySelector('#linha3')
+    burger.addEventListener('click', () => {
+
+        linha1.classList.toggle('linha1-active')
+        linha2.classList.toggle('linha2-active')
+        linha3.classList.toggle('linha3-active')
+        menu.classList.toggle('nav-active')
+
+    });
+</script>
+
+</html>

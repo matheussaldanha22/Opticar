@@ -50,6 +50,13 @@ print(f"Servidor: {JIRA_CONFIG['server']}")
 print(f"Usuário: {JIRA_CONFIG['email']}")
 print(f"Project Key configurado: {JIRA_CONFIG['project_key']}")
 
+################################################################
+fields = jira.fields()
+print("\n🔧 Campos personalizados disponíveis:")
+for field in fields:
+    if field['custom']:
+        print(f"- {field['id']}: {field['name']}")
+################################################################
 # Lista todos os projetos disponíveis
 projects = jira.projects()
 print("\n📋 Projetos disponíveis neste JIRA:")
@@ -130,7 +137,7 @@ def get_new_alerts(last_checked_id):
         print(f"Alertas encontrados: {len(new_alerts)}")  # Debug
         print(f"Alerta: {new_alerts}")
 
-        time.sleep(5)
+        time.sleep(2)
         
         return new_alerts
         
@@ -188,6 +195,8 @@ def create_jira_issue(alert):
     
     # Obter informações da fábrica
     fabrica = get_factory(alert["idFabrica"])
+    idFabrica = int(fabrica['idfabrica'])
+    print(f'Tipo fabrica: {type(idFabrica)}')
     
     issue_dict = {
         'project': {'key': 'OP'},
@@ -195,18 +204,18 @@ def create_jira_issue(alert):
         'description': alert["description"] + f"\n\n**Fábrica:** {fabrica['nome']} (ID: {fabrica['idfabrica']})",
         'issuetype': {'name': issue_type},  # Mude para um tipo da listagem
         'priority': {'name': alert["priority"]},
-        'customfield_10124': {'value': urgency}
+        'customfield_10124': {'value': urgency},
+        'customfield_10157': int(idFabrica)
     }
       # Adiciona campo personalizado para fábrica se ele existir no Jira
-    try:
-        fields = jira.fields()
-        for field in fields:
-            if any(term in field['name'].lower() for term in ['fabrica', 'fábrica', 'local', 'site', 'location']):
-                issue_dict[field['id']] = {'value': f"{fabrica['nome']} (ID: {fabrica['idfabrica']})"}
-                break
-    except Exception as e:
-        # Se não conseguir adicionar o campo personalizado, apenas continue com os campos padrão
-        pass
+    # try:
+    #     fields = jira.fields()
+    #     for field in fields:
+    #         if any(term in field['name'].lower() for term in ['fabrica', 'fábrica', 'local', 'site', 'location']):
+    #             issue_dict[field['id']] = {'value': f"{fabrica['nome']} (ID: {fabrica['idfabrica']})"}
+    #             break
+    # except Exception as e:
+    #     pass
         
     print(f"Urgency: {urgency}")
     print(f"Fábrica: {fabrica['nome']} (ID: {fabrica['idfabrica']})")
@@ -305,11 +314,11 @@ def main():
                         update_alert_with_issue(alert['id'], issue_key)
                         last_checked_id = alert['id']
             atualizar_alertas()
-            time.sleep(5)  # Verifica a cada minuto
+            time.sleep(2)  # Verifica a cada minuto
             
         except Exception as e:
             print(f"⚠️ Erro no loop principal: {str(e)}")
-            time.sleep(5)  # Espera 5 minutos em caso de erro
+            time.sleep(2)  # Espera 5 minutos em caso de erro
 
 
 
