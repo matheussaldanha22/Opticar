@@ -17,3 +17,41 @@ window.onclick = function(event){
         switchModal()
     }
 }
+
+
+function listarServidores() {
+    const servidores = JSON.parse(sessionStorage.SERVIDORES); 
+    for (let i = 0; i < servidores.length; i++) {
+        const idServidor = servidores[i].idMaquina;
+        
+        document.getElementById('slt_servidor').innerHTML += `<option value="${idServidor}">SV${idServidor}</option>`
+                            
+    }
+}
+listarServidores()
+
+
+function listarMes(){
+    fetch('/alertas/listarMes', {
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+    }).then((resultado) => {
+       resultado.json().then((json) =>{
+        alertaMes = json
+
+        for (let i = 0; i < alertaMes.length; i++) {
+            const mes = alertaMes[i].mes;
+            const ano = alertaMes[i].ano;
+
+            document.getElementById('slt_mes').innerHTML += `<option value="${mes}/${ano}"> ${mes}/${ano}</option>`
+            
+        }
+       })
+    })
+}
+
+listarMes()
+
+

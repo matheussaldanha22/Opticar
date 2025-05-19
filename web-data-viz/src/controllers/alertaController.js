@@ -1,9 +1,8 @@
 var alertaModel = require("../models/alertaModel")
 
 function listarAlertas(req, res) {
-  alertaModel
-    .listarAlertas()
-    .then(function (resultado) {
+  alertaModel.listarAlertas()
+    .then((resultado) => {
       if (resultado.length > 0) {
         res.status(200).json(resultado)
       } else {
@@ -17,6 +16,13 @@ function listarAlertas(req, res) {
     })
 }
 
+function listarMes(req,res){
+    alertaModel.listarMes().then((resultado)=>{
+      res.status(200).send(resultado)
+    })
+}
+
 module.exports = {
   listarAlertas,
+  listarMes
 }

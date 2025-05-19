@@ -48,7 +48,7 @@ function entrar() {
           sessionStorage.EMAIL_USUARIO = json.email
           sessionStorage.NOME_USUARIO = json.nome
           sessionStorage.ID_USUARIO = json.id
-          sessionStorage.SERVIDORES = JSON.stringify(json.servidores)
+          sessionStorage.SERVIDORES = JSON.stringify(json.servidores) 
           sessionStorage.EMPRESA = json.empresaId
           sessionStorage.EMPRESA_NOME = json.empresaNome
           sessionStorage.CARGO = json.cargo

@@ -3,7 +3,7 @@ CREATE database opticar;
 use opticar;
 
 select * from servidor_maquina;
-
+select * from usuario;
 
 CREATE TABLE usuario (
     idusuario INT PRIMARY KEY AUTO_INCREMENT,

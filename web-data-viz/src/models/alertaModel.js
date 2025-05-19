@@ -17,6 +17,16 @@ JOIN componente ON componenteServidor.fkComponente = idcomponente;
   return database.executarFRIO(instrucaoSql)
 }
 
+function listarMes() {
+  var instrucaoSql = `select extract(month from dataHora) as mes,
+  extract(year from dataHora) as ano
+  from alerta group by mes, ano
+  order by ano, mes asc;`
+
+  return database.executarFRIO(instrucaoSql)
+}
+
 module.exports = {
   listarAlertas,
+  listarMes
 }
