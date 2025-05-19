@@ -4,20 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Opticar - Análise de Dados</title>
+    <title>Opticar - Gestão de Infraestrutura</title>
 
     <!-- Estilos -->
     <link rel="stylesheet" href="assets/styles/monitoramentoGestao Fabrica.css">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
-    <script src="./assets/Scripts/sessao.js" defer></script>
-    <script src="/assets/Scripts/backlistadeservidores.js" defer></script>
-    <script src="/assets/Scripts/dashsEstaticasFabrica/compdebili.js" defer></script>
-    <script src="/assets/Scripts/dashsEstaticasFabrica/funcionarioscontagem.js" defer></script>
-    <script src="/assets/Scripts/dashsEstaticasFabrica/eficiencia.js" defer></script>
 
+    <!-- Scripts -->
+    <script src="./assets/Scripts/sessao.js" defer></script>
+    
     <!-- Bibliotecas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> 
 </head>
 
 <body>
@@ -72,42 +71,78 @@
             <button class="arrow arrow-right">&#9654;</button>
         </div>
 
-        <div class="dashboard-grid">
-            <div class="card">
-                <h3 class="card-title">Servidores com CPU Debilitada</h3>
+        <div class="dashboard-lista">
+            <div class="cartao">
+                <h3 class="cartao-titulo">Servidores com CPU Debilitada (top 5)</h3>
                 <div id="bar-chart"></div>
                 <table>
                     <thead>
                         <tr>
                             <th>NOME</th>
-                            <th>ALERTAS</th>
+                            <th>ALERTAS ATUAIS</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>SV1</td>
-                            <td><span class="alert-count">12</span></td>
+                            <td><span class="alerta-contagem">12</span></td>
                         </tr>
                         <tr>
                             <td>SV2</td>
-                            <td><span class="alert-count">7</span></td>
+                            <td><span class="alerta-contagem">7</span></td>
                         </tr>
                         <tr>
                             <td>SV3</td>
-                            <td><span class="alert-count">10</span></td>
+                            <td><span class="alerta-contagem">10</span></td>
                         </tr>
                         <tr>
                             <td>SV4</td>
-                            <td><span class="alert-count">9</span></td>
+                            <td><span class="alerta-contagem">9</span></td>
                         </tr>
                         <tr>
                             <td>SV5</td>
-                            <td><span class="alert-count">3</span></td>
+                            <td><span class="alerta-contagem">3</span></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
 
+            <div class="cartao">
+                <h3 class="cartao-titulo">Gastos estimados para troca da CPU</h3>
+                <div class="caixasumario">
+                    <div class="textovalor">Total de ≈ R$ 65.900,00</div>
+                    <div class="valorporServidor">= R$ 13.900,00 por servidor</div>
+                </div>
+
+
+                <div id="line-chart"></div>
+                
+                <div class="gauge-container">
+                    <div id="gauge-chart"></div>
+                </div>
+            </div>
+        </div>
+                        
+                        <!-- Linha do gráfico -->
+                        <polyline
+                            points="50,130 150,90 250,90 350,90 450,110 550,140 650,50"
+                            fill="none"
+                            stroke="#14589c"
+                            stroke-width="3"
+                        />
+                        
+                        <!-- Pontos do gráfico -->
+                        <circle cx="50" cy="130" r="5" fill="#14589c"/>
+                        <circle cx="150" cy="90" r="5" fill="#14589c"/>
+                        <circle cx="250" cy="90" r="5" fill="#14589c"/>
+                        <circle cx="350" cy="90" r="5" fill="#14589c"/>
+                        <circle cx="450" cy="110" r="5" fill="#14589c"/>
+                        <circle cx="550" cy="140" r="5" fill="#14589c"/>
+                        <circle cx="650" cy="50" r="5" fill="#14589c"/>
+                        
+                        <!-- Título do gráfico -->
+                        <text x="400" y="30" fill="#333" font-size="14" text-anchor="middle"></text>
+    
 
     
 
@@ -130,11 +165,11 @@
         ul_links.classList.toggle('nav-links-expanded')
     }
 
-    const menu = document.querySelector('.nav-links')
-    const burger = document.querySelector('.nav-burger')
-    const linha1 = document.querySelector('#linha1')
-    const linha2 = document.querySelector('#linha2')
-    const linha3 = document.querySelector('#linha3')
+    var menu = document.querySelector('.nav-links')
+    var burger = document.querySelector('.nav-burger')
+    var linha1 = document.querySelector('#linha1')
+    var linha2 = document.querySelector('#linha2')
+    var linha3 = document.querySelector('#linha3')
     burger.addEventListener('click', () => {
 
         linha1.classList.toggle('linha1-active')
@@ -145,6 +180,298 @@
     })
 
 
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        
+        var tabs = document.querySelectorAll('.tab');
+        var arrowLeft = document.querySelector('.arrow-left');
+        var arrowRight = document.querySelector('.arrow-right');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                var activeTab = document.querySelector('.tab.active');
+                if (activeTab) activeTab.classList.remove('active');
+                tab.classList.add('active');
+               
+            });
+        });
+
+        if (arrowLeft) {
+            arrowLeft.addEventListener('click', () => {
+                var activeTab = document.querySelector('.tab.active');
+                var activeIndex = Array.from(tabs).indexOf(activeTab);
+                if (activeIndex > 0) {
+                    tabs[activeIndex - 1].click();
+                }
+            });
+        }
+
+        if (arrowRight) {
+            arrowRight.addEventListener('click', () => {
+                var activeTab = document.querySelector('.tab.active');
+                var activeIndex = Array.from(tabs).indexOf(activeTab);
+                if (activeIndex < tabs.length - 1) {
+                    tabs[activeIndex + 1].click();
+                }
+            });
+        }
+
+        // Gráfico de Linha - Previsão de Gastos com CPU
+        var lineOptions = {
+            series: [{
+                name: 'Gastos com CPU',
+                data: [7500, 12000, 12000, 12000, 9000, 7000, 15000]
+            }],
+            chart: {
+                height: 280,
+                type: 'line',
+                zoom: { enabled: false },
+                toolbar: { show: false },
+                fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif',
+                dropShadow: {
+                    enabled: true,
+                    opacity: 0.2,
+                    blur: 5,
+                    left: 0,
+                    top: 5
+                }
+            },
+            colors: ['#14589c'],
+            dataLabels: { enabled: false },
+            stroke: {
+                curve: 'smooth',
+                width: 3
+            },
+            title: {
+                text: 'Previsão de Gastos com CPU',
+                align: 'left',
+                style: {
+                    fontSize: '16px',
+                    fontWeight: 500,
+                    color: '#14589c'
+                }
+            },
+            grid: {
+                borderColor: '#e7e7e7',
+                row: {
+                    colors: ['#f3f3f3', 'transparent'],
+                    opacity: 0.5
+                }
+            },
+            xaxis: {
+                categories: ['Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Janeiro'],
+                labels: {
+                    style: {
+                        colors: '#666',
+                        fontSize: '12px'
+                    }
+                },
+                axisBorder: { show: false },
+                axisTicks: { show: false }
+            },
+            yaxis: {
+                title: {
+                    text: 'Valor (R$)',
+                    style: {
+                        color: '#666',
+                        fontSize: '12px',
+                        fontWeight: 400
+                    }
+                },
+                labels: {
+                    formatter: val => 'R$ ' + val.toLocaleString('pt-BR'),
+                    style: {
+                        colors: '#666',
+                        fontSize: '12px'
+                    }
+                },
+                min: 0,
+                max: 20000
+            },
+            markers: {
+                size: 5,
+                colors: ['#14589c'],
+                strokeColors: '#fff',
+                strokeWidth: 2,
+                hover: { size: 7 }
+            },
+            tooltip: {
+                y: {
+                    formatter: val => 'R$ ' + val.toLocaleString('pt-BR')
+                }
+            },
+            legend: {
+                position: 'top',
+                horizontalAlign: 'right',
+                floating: true,
+                offsetY: -25,
+                offsetX: -5
+            }
+        };
+
+        // Gráfico de Barras - Alertas
+        var barOptions = {
+            series: [{
+                name: 'Alertas',
+                data: [12, 7, 10, 9, 3]
+            }],
+            chart: {
+                type: 'bar',
+                height: 280,
+                toolbar: { show: false },
+                fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif',
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    borderRadius: 5,
+                    dataLabels: { position: 'top' }
+                }
+            },
+            colors: ['blue'],
+            dataLabels: {
+                enabled: true,
+                formatter: val => val,
+                offsetY: -20,
+                style: {
+                    fontSize: '12px',
+                    colors: ["#333"]
+                }
+            },
+            grid: {
+                borderColor: '#e7e7e7',
+                row: {
+                    colors: ['#f3f3f3', 'transparent'],
+                    opacity: 0.5
+                }
+            },
+            xaxis: {
+                categories: ['SV1', 'SV2', 'SV3', 'SV4', 'SV5'],
+                labels: {
+                    style: {
+                        colors: '#666',
+                        fontSize: '12px'
+                    }
+                },
+                axisBorder: { show: false },
+                axisTicks: { show: false }
+            },
+            yaxis: {
+                title: {
+                    text: 'Número de alertas',
+                    style: {
+                        color: '#666',
+                        fontSize: '12px',
+                        fontWeight: 400
+                    }
+                },
+                labels: {
+                    style: {
+                        colors: '#666',
+                        fontSize: '12px'
+                    }
+                },
+                min: 0,
+                max: 15
+            },
+            fill: {
+                opacity: 1,
+                type: 'gradient',
+                gradient: {
+                    shade: 'light',
+                    type: "vertical",
+                    shadeIntensity: 0.3,
+                    opacityFrom: 1,
+                    opacityTo: 0.8,
+                    stops: [0, 90, 100]
+                }
+            },
+            tooltip: {
+                y: {
+                    formatter: val => val + " alertas"
+                }
+            }
+        };
+
+        // Gráfico Gauge - Utilização de CPU
+        var gaugeOptions = {
+            series: [67],
+            chart: {
+                height: 250,
+                type: 'radialBar',
+                fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif',
+                toolbar: { show: false }
+            },
+            plotOptions: {
+                radialBar: {
+                    startAngle: -135,
+                    endAngle: 135,
+                    hollow: {
+                        margin: 0,
+                        size: '70%',
+                        background: '#fff',
+                        dropShadow: {
+                            enabled: true,
+                            top: 3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.24
+                        }
+                    },
+                    track: {
+                        background: '#fff',
+                        strokeWidth: '67%',
+                        dropShadow: {
+                            enabled: true,
+                            top: -3,
+                            left: 0,
+                            blur: 4,
+                            opacity: 0.35
+                        }
+                    },
+                    dataLabels: {
+                        show: true,
+                        name: {
+                            offsetY: -10,
+                            show: true,
+                            color: '#666',
+                            fontSize: '17px'
+                        },
+                        value: {
+                            formatter: val => parseInt(val) + '%',
+                            color: '#111',
+                            fontSize: '36px',
+                            show: true
+                        }
+                    }
+                }
+            },
+            fill: {
+                type: 'gradient',
+                gradient: {
+                    shade: 'dark',
+                    type: 'horizontal',
+                    shadeIntensity: 0.5,
+                    gradientToColors: ['#e74c3c'],
+                    opacityFrom: 1,
+                    opacityTo: 1,
+                    stops: [0, 100]
+                }
+            },
+            stroke: {
+                lineCap: 'round'
+            },
+            labels: ['Utilização média']
+        };
+
+        // Renderização dos gráficos
+        new ApexCharts(document.querySelector("#line-chart"), lineOptions).render();
+        new ApexCharts(document.querySelector("#bar-chart"), barOptions).render();
+        new ApexCharts(document.querySelector("#gauge-chart"), gaugeOptions).render();
+    });
 </script>
 
 <!-- <script>
