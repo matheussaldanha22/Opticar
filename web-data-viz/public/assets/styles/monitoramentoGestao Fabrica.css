@@ -236,6 +236,14 @@
   h1{
     margin-left: 6%;
   }
+  h2{
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+    margin-left: 2%;
+    font-size: 1.25vw;
+  }
+
 
   /* select*/
 
@@ -261,20 +269,20 @@
             background: none;
             position: relative;
             transition: all 0.3s ease;
-            border-radius: 50px;
+            border-radius: 5px;
         }
         
         .tab.active {
             color: white;
             font-weight: 500;
-            background-color: #14589c;
+            background-color: #011f27;
         }
         
         .arrow {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background-color: #14589c;
+            background-color: #011f27;
             color: white;
             width: 36px;
             height: 36px;
@@ -315,7 +323,6 @@
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
             padding: 25px;
-            transition: transform 0.3s, box-shadow 0.3s;
             height: 100%;
             display: flex;
             flex-direction: column;
@@ -334,7 +341,7 @@
         
         table {
             width: 100%;
-            border-collapse: collapse;
+            
             margin-top: 10px;
         }
         
@@ -351,9 +358,7 @@
             border-radius: 4px;
         }
         
-        tbody tr:hover {
-            background-color: #f5f5f5;
-        }
+        
         
         .alerta-contagem{
             background-color: #aa1201;
@@ -372,7 +377,6 @@
             margin-top: 20px;
             padding: 25px;
             background-color: #f8f9fa;
-            
             border-left: 5px solid #0b335c;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
@@ -380,7 +384,7 @@
         .textovalor {
             font-size: 32px;
             font-weight: 700;
-            color: #e74c3c;
+            color: #ac1100;
             margin: 15px 0;
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
