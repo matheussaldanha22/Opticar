@@ -50,45 +50,82 @@ function mostrarData() {
 
 
 
-//MODAL FILTRAR
-function abrirModal(componente) {
+function abrirModal(componente, idDestino) {
   Swal.fire({
     title: `Filtrar gráfico <u style="color:#2C3E50;">${componente}</u>`,
     html: `
-    <div class="modal-test">
-        <div class="containerPeriodo">
-            <h3>Escolha o período especifico:</h3>
-            <p class="labelSlt"><b>De:</b> <input type="text" class="iptFiltrar" placeholder="Ex:10/10/2023"></p>
-            <p class="labelSlt"><b>Até:</b><input type="text" class="iptFiltrar" placeholder="Ex:10/10/2023"></p>
-           
-        </div>
-
+      <div class="modal-test">
         <div class="containerVisualizacao">
-            <h3>Mudar visualização</h3>
-            <p class="labelSlt"><b>Visualização em:
-                <select name="" id="sltFiltrar">
-                    <option value="">Geral (Média aos anos)</option>
-                    <option value="">Anual (Média aos meses)</option>
-                </select></b>
-            </p>
-
+          <h3>Mudar visualização</h3>
+          <p class="labelSlt"><b>Visualização em:
+            <select id="sltFiltrar">
+              <option value="geral">Geral (Média aos anos)</option>
+              <option value="anual">Anual (Média aos meses)</option>
+            </select></b>
+          </p>
+          <div id="containerAno" style="display:none; margin-top:10px;">
+            <label for="sltAno"><b>Escolha o ano:</b></label>
+            <select id="sltAno" class="sltRoxo">
+              <option value="2021">2021</option>
+              <option value="2022">2022</option>
+              <option value="2023">2023</option>
+              <option value="2024">2024</option>
+              <option value="2025" selected>2025</option>
+            </select>
+          </div>
         </div>
-  </div>
-`,
+      </div>
+    `,
     showCancelButton: true,
     cancelButtonText: "Fechar",
-    customClass: "alertaModal",
+    confirmButtonText: "Confirmar",
     confirmButtonColor: '#2C3E50',
-  })
+    customClass: "alertaModal"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const sltFiltrar = document.getElementById("sltFiltrar");
+      const sltAno = document.getElementById("sltAno");
+
+      const tipoFiltro = document.getElementById(`tipoFiltro-${idDestino}`);
+      const descFiltro = document.getElementById(`periodo-${idDestino}`);
+
+      if (sltFiltrar && tipoFiltro && descFiltro) {
+        if (sltFiltrar.value === "anual") {
+          tipoFiltro.innerHTML = "Anual";
+          descFiltro.innerHTML = sltAno.value;
+        } else {
+          tipoFiltro.innerHTML = "Geral";
+          descFiltro.innerHTML = "Todos os anos";
+        }
+      }
+    }
+  });
+
+  // Mostrar/esconder o select de ano enquanto o usuário interage
+  setTimeout(() => {
+    const sltFiltrar = document.getElementById("sltFiltrar");
+    const containerAno = document.getElementById("containerAno");
+
+    sltFiltrar.addEventListener("change", function () {
+      if (this.value === "anual") {
+        containerAno.style.display = "block";
+      } else {
+        containerAno.style.display = "none";
+      }
+    });
+  }, 100);
 }
+
+
 //GRAF VALORES
 let data2 = new Date;
-let mesAtual= data2.getMonth()
+let mesAtual = data2.getMonth()
 const mesesSeguintes = [];
 for (let i = 1; i <= 6; i++) {
   mesesSeguintes.push(nomeMeses[(mesAtual + i) % 12]);
 }
 document.getElementById("kpiMes").innerHTML = `(${nomeMeses[mesAtual]})`
+document.getElementById("kpiMes2").innerHTML = `(${nomeMeses[mesAtual]})`
 
 
 
@@ -185,7 +222,7 @@ function renderChart(tipo) {
 
   let options;
   if (tipo === 'alertas') {
-    titleElement.innerText = `Número de alertas previstos - CPU (Prox. Mês - ${nomeMeses[mesAtual+1]})`;
+    titleElement.innerText = `Número de alertas previstos - CPU (Prox. Mês - ${nomeMeses[mesAtual + 1]})`;
     options = {
       chart: { type: 'line', height: 300, toolbar: { show: false } },
       series: [{ name: 'Alertas', data: chartData.alertas }],

@@ -12,6 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script src="assets/Scripts/graficosAnaliseDados.js" defer></script>
+
 
 
 
@@ -91,7 +93,8 @@
                             </select>
                         </div>
                         <!-- data -->
-                        <div style="display: flex; align-items: center; gap: 10px; margin-left: 10vw; color: gray;height: 5vh;">
+                        <div
+                            style="display: flex; align-items: center; gap: 10px; margin-left: 10vw; color: gray;height: 5vh;">
                             <i class='bx bxs-time' style="font-size: 20px;"></i>
                             <p id="dataInfo"></p>
                         </div>
@@ -113,7 +116,8 @@
                 <!-- USO CPU -->
                 <div class="kpiIdv">
                     <div class="tituloKpi">
-                        <h2 style="display: flex; gap: 3px;">Percentual de alertas críticos <p id="kpiMes"></p></h2>
+                        <h2 style="display: flex; gap: 3px;">Percentual de alertas críticos <p id="kpiMes"></p>
+                        </h2>
                     </div>
                     <span class="txtKpi">
                         <p class="dadoKpi" id="probFalha" style="color: red;">72%</p>
@@ -125,7 +129,7 @@
                 <!-- USO RAM -->
                 <div class="kpiIdv">
                     <div class="tituloKpi">
-                        <h2>Tempo em sobrecarga (Ultimo mês)</h2>
+                        <h2 style="display: flex; gap: 3px;">Tempo em sobrecarga <p id="kpiMes2"></p></h2>
                     </div>
                     <span class="txtKpi">
                         <p class="dadoKpi" id="usoRam">18h 23min</p>
@@ -163,16 +167,17 @@
                 <div class="graficos">
                     <div class="grafBox">
                         <div class="grafContainer">
-                            <h4 style="display: flex; justify-content: space-between;width: 26vw;">Uso Médio vs Limite - CPU
-                                <p style="border-bottom: solid 1px gray; color: gray;"> 
-                                    <i class='bx bx-filter-alt'> </i>
-                                    <span id="tipoFiltro"> Anual </span>-
-                                    <span id="periodo">2025</span>
+                            <h4 style="display: flex; justify-content: space-between;width: 26vw;">
+                                Uso Médio vs Limite - CPU
+                                <p style="border-bottom: solid 1px gray; color: gray;">
+                                    <i class='bx bx-filter-alt'></i>
+                                    <span id="tipoFiltro-uso">Anual</span> -
+                                    <span id="periodo-uso">2025</span>
                                 </p>
                             </h4>
                             <div class="filtrar">
                                 <h3>Filtrar:</h3>
-                                <div class="iconeFiltro" onclick="abrirModal('CPU')">
+                                <div class="iconeFiltro" onclick="abrirModal('CPU', 'uso')">
                                     <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
                                 </div>
                             </div>
@@ -183,16 +188,17 @@
                     <!-- GRAFICO ALERTAS -->
                     <div class="grafBox">
                         <div class="grafContainer">
-                            <h4 style="display: flex; justify-content: space-between;width: 26vw;">Distribuição de alertas - CPU
-                                <p style="border-bottom: solid 1px gray; color: gray;"> 
-                                    <i class='bx bx-filter-alt'> </i>
-                                    <span id="tipoFiltro"> Anual </span>-
-                                    <span id="periodo">2025</span>
+                            <h4 style="display: flex; justify-content: space-between;width: 26vw;">
+                                Distribuição de alertas - CPU
+                                <p style="border-bottom: solid 1px gray; color: gray;">
+                                    <i class='bx bx-filter-alt'></i>
+                                    <span id="tipoFiltro-alertas">Anual</span> -
+                                    <span id="periodo-alertas">2025</span>
                                 </p>
                             </h4>
                             <div class="filtrar">
                                 <h3>Filtrar:</h3>
-                                <div class="iconeFiltro" onclick="abrirModal('CPU')">
+                                <div class="iconeFiltro" onclick="abrirModal('CPU', 'alertas')">
                                     <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
                                 </div>
                             </div>
@@ -242,11 +248,3 @@
 
 </html>
 
-<script>
-
-
-
-
-</script>
-
-<script src="assets/Scripts/graficosAnaliseDados.js"></script>
