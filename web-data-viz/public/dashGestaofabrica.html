@@ -35,14 +35,14 @@
 
     <div class="dashgestao">
         <!-- Cabeçalho -->
-        <div class="cabecalho">
+         <div class="cabecalho">
             <div class="empresa">
-
-                <i class='bx bxs-business'></i>
-
+                <div class="circuloEmp">
+                    <i class='bx bxs-business'></i>
+                </div>
                 <div class="txtInfo">
                     <p id="empresaNome">Nissan</p>
-
+                    <p class="endereco"> Rua Haddock Lobo, 595</p>
                 </div>
             </div>
 
@@ -50,13 +50,14 @@
                 <i class='bx bxs-user-circle' style="font-size: 4vw;"></i>
                 <div class="txtInfo">
                     <div class="txt">
-                        <p id="usuarioNome">Ana Silva</p>
-                        <p class="endereco" id="usuarioEmail"> ana.silva@gmail.com</p>
+                        <p id="empresaNome">Jose</p>
+                        <p class="endereco"> jose@gmail.com</p>
                     </div>
                     <i class='bx bx-chevron-down' style="font-size: 3vw;"></i>
                 </div>
             </div>
         </div>
+
     </div>
 
     <h1>Gestão da Infraestrutura</h1>
@@ -68,14 +69,13 @@
             <button class="tab active">CPU</button>
             <button class="tab">DISCO</button>
             <button class="tab">REDE</button>
-            <button class="tab">PROCESSOS</button>
             <button class="arrow arrow-right">&#9654;</button>
         </div>
 
         <div class="dashboard-lista">
             <div class="cartao">
                 <h3 class="cartao-titulo">Servidores com CPU Debilitada (top 5)</h3>
-                <div id="bar-chart"></div>
+               
                 <table>
                     <thead>
                         <tr>
@@ -106,6 +106,13 @@
                         </tr>
                     </tbody>
                 </table>
+
+                <h3 class="cartao-titulo2">Prioridade do componente na infraestrutura (recomendada)</h3>
+
+                 <div class="caixasumario2">
+                    <div class="textovalor2">Nivel 1 de prioridade ⚠ </div>
+                
+                </div>
             </div>
 
             <div class="cartao">
@@ -115,8 +122,12 @@
                     <div class="valorporServidor">= R$ 13.900,00 por servidor</div>
                 </div>
 
+        
+
 
                 <div id="line-chart"></div>
+
+                <h3 class="cartao-titulo">Precisão dos preços</h3>
                 
                 <div class="gauge-container">
                     <div id="gauge-chart"></div>
@@ -316,7 +327,7 @@
         var barOptions = {
             series: [{
                 name: 'Alertas',
-                data: [12, 7, 10, 9, 3]
+                data: [20, 10, 11]
             }],
             chart: {
                 type: 'bar',
@@ -326,19 +337,20 @@
             },
             plotOptions: {
                 bar: {
+                    distributed: true,
                     horizontal: false,
                     columnWidth: '55%',
-                    borderRadius: 5,
+                    borderRadius: 1,
                     dataLabels: { position: 'top' }
                 }
             },
-            colors: ['blue'],
+            colors: ['yellow', 'orange' , 'red'],
             dataLabels: {
                 enabled: true,
                 formatter: val => val,
-                offsetY: -20,
+                offsetY: -28,
                 style: {
-                    fontSize: '12px',
+                    fontSize: '17px',
                     colors: ["#333"]
                 }
             },
@@ -350,7 +362,7 @@
                 }
             },
             xaxis: {
-                categories: ['SV1', 'SV2', 'SV3', 'SV4', 'SV5'],
+                categories: ['Leves', 'Moderados', 'Criticos'],
                 labels: {
                     style: {
                         colors: '#666',
@@ -376,7 +388,7 @@
                     }
                 },
                 min: 0,
-                max: 15
+                max: 25
             },
             fill: {
                 opacity: 1,
@@ -465,10 +477,10 @@
             stroke: {
                 lineCap: 'round'
             },
-            labels: ['Utilização média']
+            labels: ['Acertividade no preço']
         };
 
-        // Renderização dos gráficos
+        
         new ApexCharts(document.querySelector("#line-chart"), lineOptions).render();
         new ApexCharts(document.querySelector("#bar-chart"), barOptions).render();
         new ApexCharts(document.querySelector("#gauge-chart"), gaugeOptions).render();
