@@ -1,3 +1,33 @@
+document.addEventListener("DOMContentLoaded", function() {
+  const botao = document.getElementById('btnMostrarGrafico');
+
+  const grafico = document.getElementById('graficoConsumoCpuVendas');
+  //colocar função de plotar o grafico depois
+//   const graficoCriado = false;
+  
+  botao.addEventListener('click', function() {
+    
+    if (grafico.style.display === 'none') {
+      grafico.style.display = 'block';
+      
+      botao.innerHTML = 'Ocultar Gráfico';
+    
+      grafico.scrollIntoView({ behavior: 'smooth' });
+      
+      if (!graficoCriado) {
+        //colocar função de plotar o grafico depois
+        graficoCriado = true;
+      }
+    } 
+    else {
+
+      grafico.style.display = 'none';
+        botao.innerHTML = '<i class="bx bx-line-chart"></i> Mostrar Correlação';
+    }
+  });
+});
+
+
 const switchModal = () => {
     const modal = document.querySelector('.modal')
     const actualStyle = modal.style.display
@@ -17,6 +47,8 @@ window.onclick = function(event){
         switchModal()
     }
 }
+
+
 
 
 function listarServidores() {
