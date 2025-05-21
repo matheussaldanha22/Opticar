@@ -22,7 +22,35 @@ WHERE
     return database.executarFRIO(instrucaoSql)
 }
 
+function obterTempoMtbf(idMaquina, componente) {
+    var instrucaoSql = `
+SELECT 
+    TIMESTAMPDIFF(MINUTE, MIN(cd.data), MAX(cd.data)) AS minutos_operacao,
+    (SELECT COUNT(a.idAlerta) 
+     FROM alerta a 
+     JOIN capturaDados cd2 ON a.fkCapturaDados = cd2.idCapturaDados
+     JOIN componenteServidor cs2 ON cd2.fkComponenteServidor = cs2.idcomponenteServidor
+     WHERE cs2.fkMaquina = ${idMaquina}
+     AND c.tipo = '${componente}'
+     AND YEAR(a.dataHora) = YEAR(CURDATE())
+     AND MONTH(a.dataHora) = MONTH(CURDATE())) AS qtd_alertas
+FROM 
+    capturaDados cd
+    JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
+    JOIN componente c ON cs.fkComponente = c.idcomponente
+WHERE 
+    c.tipo = '${componente}'
+    AND cs.fkMaquina = ${idMaquina}
+    AND YEAR(cd.data) = YEAR(CURDATE())
+    AND MONTH(cd.data) = MONTH(CURDATE());
+
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarFRIO(instrucaoSql)
+}
+
 
 module.exports = {
-    obterAlertasMes
+    obterAlertasMes,
+    obterTempoMtbf
 }

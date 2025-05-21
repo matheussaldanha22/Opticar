@@ -13,7 +13,8 @@ function expand() {
 
 function carregaPagina() {
   mostrarData();
-  listarServidores()
+  listarServidores();
+  atualizarDados();
 
 }
 
@@ -21,10 +22,8 @@ document.addEventListener("DOMContentLoaded", () => {
   carregaPagina();
 });
 
-//NOME KPI
 
-
-//EXIBE DATA
+//-----------------------------DADOS UTEIS PARA GRAFICOS E KPIS
 const nomeDias = [
   "Domingo",
   "Segunda-Feira",
@@ -35,9 +34,23 @@ const nomeDias = [
   "Sábado"
 ]
 
-const nomeMeses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+const nomeMeses = [
+  'Janeiro',
+  'Fevereiro',
+  'Março',
+  'Abril',
+  'Maio',
+  'Junho',
+  'Julho',
+  'Agosto',
+  'Setembro',
+  'Outubro',
+  'Novembro',
+  'Dezembro'
+];
 
 
+//-----------------------------FUNÇÃO PLOTAR DATAS
 function obterData() {
   let data = new Date();
   return `${nomeDias[data.getDay()]} - ${data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`;
@@ -49,24 +62,121 @@ function mostrarData() {
   }, 1000);
 }
 
-function listarServidores() {
-    const servidores = JSON.parse(sessionStorage.getItem('SERVIDORES'));
-    const selectServidores = document.getElementById("sltServidor");
 
-    if (servidores && servidores.length > 0) {
-        servidores.forEach(servidor => {
-            const option = document.createElement("option");
-            option.value = servidor.idMaquina;
-            option.textContent = `SV${servidor.idMaquina}`;
-            selectServidores.appendChild(option);
-        });
-    } else {
-        console.log("Sem servidores no sessionstorage");
-    }
+//-----------------------------CARREGAR SERVIDORES NO SLT
+function listarServidores() {
+  const servidores = JSON.parse(sessionStorage.getItem('SERVIDORES'));
+  const selectServidores = document.getElementById("sltServidor");
+
+  if (servidores && servidores.length > 0) {
+    servidores.forEach(servidor => {
+      const option = document.createElement("option");
+      option.value = servidor.idMaquina;
+      option.textContent = `SV${servidor.idMaquina}`;
+      selectServidores.appendChild(option);
+    });
+  } else {
+    console.log("Sem servidores no sessionstorage");
+  }
 }
 
 
 
+//-----------------------------KPIS
+
+//KPI % ALERTA
+function obterAlertasMes(idMaquina, componente) {
+  return fetch(`/dashComponentes/obterAlertasMes/${idMaquina}/${componente}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(res => res.json())
+    .then(alertaMes => {
+      console.log("Alertas do mês:", alertaMes);
+      let totalAlertas = alertaMes.totalAlertas
+      let alertasCriticos = Number(alertaMes.alertasCriticos)
+      let porcentagemCritico = parseFloat((alertasCriticos / totalAlertas) * 100).toFixed(2)
+
+      document.getElementById("probFalha").innerHTML = `${porcentagemCritico}%`
+      document.getElementById("qtdAlertasTotal").innerHTML = totalAlertas
+
+    })
+    .catch(erro => {
+      console.error("Erro ao buscar alertas:", erro);
+    });
+}
+
+
+
+
+//KPI MTBF
+function obterTempoMtbf(idMaquina, componente) {
+  return fetch(`/dashComponentes/obterTempoMtbf/${idMaquina}/${componente}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(res => res.json())
+    .then(tempoAlerta => {
+      console.log("Tempo dos alertas:", tempoAlerta);
+      let minOperacao = tempoAlerta.minutos_operacao;
+      let qtdAlertas = tempoAlerta.qtd_alertas;
+      let mtbf = Math.floor(minOperacao / qtdAlertas)
+      let metrica = "Min"
+
+      //validação descobrir faixa
+      if (mtbf < 60) {
+        document.getElementById("classificacaoMtbf").innerHTML = `Ruim`
+        document.getElementById("classificacaoMtbf").style.color = 'red'
+      } else if (mtbf < 240) {
+        document.getElementById("classificacaoMtbf").innerHTML = `Atenção`
+        document.getElementById("classificacaoMtbf").style.color = 'yellow'
+      } else {
+        document.getElementById("classificacaoMtbf").innerHTML = `Ótimo`
+        document.getElementById("classificacaoMtbf").style.color = 'yellow'
+      }
+
+      // se tiver mais de 60 min ele vira hora
+     if (mtbf > 60) {
+        mtbf = parseFloat((minOperacao / qtdAlertas).toFixed(1))
+        metrica = "Hrs"
+      }
+
+
+
+      document.getElementById("mtbf").innerHTML = `${mtbf} ${metrica}`
+
+    })
+    .catch(erro => {
+      console.error("Erro ao buscar MTBF:", erro);
+    });
+}
+
+
+
+//FUNÇÃO PARA ATUALIZAR DADOS DE ACORDO COM O FILTRO SLTS
+const sltServidor = document.getElementById("sltServidor");
+const sltComponente = document.getElementById("sltComponente");
+
+function atualizarDados() {
+  const idMaquina = sltServidor.value;
+  const componente = sltComponente.value;
+  if (idMaquina && componente) {
+    obterAlertasMes(idMaquina, componente);
+    obterTempoMtbf(idMaquina, componente);
+  }
+}
+
+sltServidor.addEventListener("change", atualizarDados);
+sltComponente.addEventListener("change", atualizarDados);
+
+
+
+
+//-----------------------------MODAL FILTROS GRAFICOS
 function abrirModal(componente, idDestino) {
   Swal.fire({
     title: `Filtrar gráfico <u style="color:#2C3E50;">${componente}</u>`,
@@ -118,7 +228,6 @@ function abrirModal(componente, idDestino) {
     }
   });
 
-  // Mostrar/esconder o select de ano enquanto o usuário interage
   setTimeout(() => {
     const sltFiltrar = document.getElementById("sltFiltrar");
     const containerAno = document.getElementById("containerAno");
@@ -134,6 +243,8 @@ function abrirModal(componente, idDestino) {
 }
 
 
+
+//-----------------------------CHARTS
 //GRAF VALORES
 let data2 = new Date;
 let mesAtual = data2.getMonth()
