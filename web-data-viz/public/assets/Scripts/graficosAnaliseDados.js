@@ -13,7 +13,8 @@ function expand() {
 
 function carregaPagina() {
   mostrarData();
-  document.getElementById("infoData").innerHTML = obterData()
+  listarServidores()
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -46,6 +47,22 @@ function mostrarData() {
   setInterval(() => {
     document.getElementById("dataInfo").innerHTML = obterData()
   }, 1000);
+}
+
+function listarServidores() {
+    const servidores = JSON.parse(sessionStorage.getItem('SERVIDORES'));
+    const selectServidores = document.getElementById("sltServidor");
+
+    if (servidores && servidores.length > 0) {
+        servidores.forEach(servidor => {
+            const option = document.createElement("option");
+            option.value = servidor.idMaquina;
+            option.textContent = `SV${servidor.idMaquina}`;
+            selectServidores.appendChild(option);
+        });
+    } else {
+        console.log("Sem servidores no sessionstorage");
+    }
 }
 
 
@@ -156,23 +173,19 @@ function renderGraficoUso(periodo = 'ano') {
       categorias: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
       dados: [52, 61, 60, 45, 100, 80, 50, 55, 28, 53, 55, 12]
     },
-    '6m': {
-      categorias: ['Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      dados: [50, 55, 28, 53, 55, 12]
-    },
-    '3m': {
-      categorias: ['Out', 'Nov', 'Dez'],
-      dados: [53, 55, 12]
+    mes: {
+      categorias: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
+      dados: [50, 55, 28, 53, 55]
     }
   };
 
-  const parametroAlerta = 70;
+  const parametroAlerta = 70; //parametro do componente
   const { categorias, dados } = usoPorPeriodo[periodo];
   const options = {
     chart: { type: 'line', height: 300, toolbar: { show: false } },
     series: [
       { name: 'Uso médio (%)', data: dados },
-      { name: 'Parâmetro de alerta', data: new Array(categorias.length).fill(parametroAlerta), stroke: { dashArray: 5 } }
+      { name: 'Parâmetro de alerta crítico', data: new Array(categorias.length).fill(parametroAlerta), stroke: { dashArray: 5 } }
     ],
     xaxis: { categories: categorias, labels: { style: { colors: '#000' } } },
     yaxis: { max: 100, labels: { style: { colors: '#000' } } },
@@ -198,7 +211,7 @@ function renderSeveridade(periodo = 'mensal') {
     chart: { type: 'bar', stacked: true, height: 300 },
     series: [
       { name: 'Crítico', data: dados.critico },
-      { name: 'Atenção', data: dados.atencao }
+      { name: 'Médio', data: dados.atencao }
     ],
     xaxis: { categories: dados.categorias, labels: { style: { colors: '#000' } } },
     colors: ['#011f4b', '#0077b6'],
@@ -233,7 +246,7 @@ function renderChart(tipo) {
       colors: ['#0077b6']
     };
   } else if (tipo === 'risco') {
-    titleElement.innerText = `Probabilidade de Sobrecarga - CPU (Próx.Semestre)`;
+    titleElement.innerText = `Percentual de alertas críticos - CPU (Próx.Semestre)`;
     const dados = chartData.risco;
     const options = {
       chart: { type: 'bar', stacked: false, height: 300 },
