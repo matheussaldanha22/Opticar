@@ -71,9 +71,26 @@ function dadosGraficoUsoSemanal(idMaquina, componente, anoEscolhido, mesEscolhid
     return database.executarFRIO(instrucaoSql)
 }
 
+function dadosGraficoUsoMensal(idMaquina, componente, anoEscolhido) {
+    var instrucaoSql = `
+    select month(capturaDados.data) as mes,AVG(capturaDados.valor) as mediaUtilizacao FROM capturaDados
+    JOIN componenteServidor ON fkComponenteServidor = idComponenteServidor
+    JOIN componente c ON fkComponente = idcomponente
+        JOIN servidor_maquina ON idMaquina = fkMaquina
+    WHERE 
+        c.tipo = '${componente}' 
+        AND servidor_maquina.idMaquina = ${idMaquina}
+        AND year(capturaDados.data) = ${anoEscolhido}
+        group by month(capturaDados.data);
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarFRIO(instrucaoSql)
+}
+
 
 module.exports = {
     obterAlertasMes,
     obterTempoMtbf,
-    dadosGraficoUsoSemanal
+    dadosGraficoUsoSemanal,
+    dadosGraficoUsoMensal
 }

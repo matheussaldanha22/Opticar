@@ -100,6 +100,15 @@ function obterAlertasMes(idMaquina, componente) {
       let porcentagemCritico = parseFloat((alertasCriticos / totalAlertas) * 100).toFixed(2)
 
       document.getElementById("probFalha").innerHTML = `${porcentagemCritico}%`
+
+      if (porcentagemCritico < 40) {
+        document.getElementById("probFalha").style.color = "white"
+      } else if (porcentagemCritico < 60) {
+        document.getElementById("probFalha").style.color = "yellow"
+      } else {
+        document.getElementById("probFalha").style.color = "red"
+      }
+
       document.getElementById("qtdAlertasTotal").innerHTML = totalAlertas
 
     })
@@ -140,7 +149,7 @@ function obterTempoMtbf(idMaquina, componente) {
       }
 
       // se tiver mais de 60 min ele vira hora
-     if (mtbf > 60) {
+      if (mtbf > 60) {
         mtbf = parseFloat((minOperacao / qtdAlertas).toFixed(1))
         metrica = "Hrs"
       }
@@ -176,28 +185,39 @@ sltComponente.addEventListener("change", atualizarDados);
 
 
 
-//-----------------------------MODAL FILTROS GRAFICOS
-function abrirModal(componente, idDestino) {
+//-----------------------------MODAL FILTRO USO
+function filtrarUso() {
   Swal.fire({
-    title: `Filtrar gráfico <u style="color:#2C3E50;">${componente}</u>`,
+    title: `Filtrar gráfico <u style="color:#2C3E50;">Uso</u>`,
     html: `
       <div class="modal-test">
         <div class="containerVisualizacao">
           <h3>Mudar visualização</h3>
           <p class="labelSlt"><b>Visualização em:
             <select id="sltFiltrar">
-              <option value="geral">Geral (Média aos anos)</option>
-              <option value="anual">Anual (Média aos meses)</option>
+            <option value="anual">Anual (Média aos meses)</option>
+            <option value="mensal">Mensal (Média da semana)</option>
             </select></b>
           </p>
-          <div id="containerAno" style="display:none; margin-top:10px;">
-            <label for="sltAno"><b>Escolha o ano:</b></label>
+          
+          <label for="sltAno"><b>Escolha o ano:</b></label>
             <select id="sltAno" class="sltRoxo">
               <option value="2021">2021</option>
               <option value="2022">2022</option>
               <option value="2023">2023</option>
               <option value="2024">2024</option>
               <option value="2025" selected>2025</option>
+          </select>
+
+
+          <div id="containerMes" style="display:none; margin-top:10px;">
+            <label for="sltMes"><b>Escolha o Mês:</b></label>
+            <select id="sltMes" class="sltRoxo">
+              <option value="1">Janeiro</option>
+              <option value="2">Fevereiro</option>
+              <option value="3">Março</option>
+              <option value="4">Abril</option>
+              <option value="5" selected>Maio</option>
             </select>
           </div>
         </div>
@@ -208,21 +228,25 @@ function abrirModal(componente, idDestino) {
     confirmButtonText: "Confirmar",
     confirmButtonColor: '#2C3E50',
     customClass: "alertaModal"
-  }).then((result) => {
-    if (result.isConfirmed) {
+  }).then((res) => {
+    if (res.isConfirmed) {
+      const tipoFiltro = document.getElementById("tipoFiltro-uso")
+      const periodo = document.getElementById("periodo-uso")
+
+
+
       const sltFiltrar = document.getElementById("sltFiltrar");
       const sltAno = document.getElementById("sltAno");
+      const sltMes = document.getElementById("sltMes");
 
-      const tipoFiltro = document.getElementById(`tipoFiltro-${idDestino}`);
-      const descFiltro = document.getElementById(`periodo-${idDestino}`);
 
-      if (sltFiltrar && tipoFiltro && descFiltro) {
-        if (sltFiltrar.value === "anual") {
-          tipoFiltro.innerHTML = "Anual";
-          descFiltro.innerHTML = sltAno.value;
+      if (sltFiltrar && sltAno && sltMes) {
+        if (sltFiltrar.value === "mensal") {
+          tipoFiltro.innerHTML = "Mensal";
+          periodo.innerHTML = `${nomeMeses[sltMes.value]}`
         } else {
-          tipoFiltro.innerHTML = "Geral";
-          descFiltro.innerHTML = "Todos os anos";
+          tipoFiltro.innerHTML = "Anual";
+          periodo.innerHTML = sltAno.value
         }
       }
     }
@@ -230,13 +254,13 @@ function abrirModal(componente, idDestino) {
 
   setTimeout(() => {
     const sltFiltrar = document.getElementById("sltFiltrar");
-    const containerAno = document.getElementById("containerAno");
+    const containerMes = document.getElementById("containerMes");
 
     sltFiltrar.addEventListener("change", function () {
-      if (this.value === "anual") {
-        containerAno.style.display = "block";
+      if (this.value === "mensal") {
+        containerMes.style.display = "block";
       } else {
-        containerAno.style.display = "none";
+        containerMes.style.display = "none";
       }
     });
   }, 100);
@@ -245,6 +269,75 @@ function abrirModal(componente, idDestino) {
 
 
 //-----------------------------CHARTS
+
+// CHART USO SEMANAL
+function dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido) {
+  let categorias = []
+  let dados = []
+
+  //if escolhido for igual a mes
+  // FALTA ISSO
+
+
+  //if escolhido for igual semanal
+  fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      anoEscolhido: anoEscolhido,
+      mesEscolhido: mesEscolhido,
+    }),
+  })
+    .then(function (res) {
+      if (!res.ok) {
+        console.log(res)
+        throw new Error(`Erro na resposta: ${res.status}`);
+      }
+      return res.json();
+    }).then(function (informacoes) {
+
+      informacoes.forEach((item) => {
+        categorias.push(`Semana ${item.semana_do_mes}`);
+        dados.push(item.media_utilizacao);
+      });
+
+      renderGraficoUso(categorias, dados)
+    }).catch(erro => {
+      console.error("Erro ao buscar dados do grafico semanal:", erro);
+    });
+
+
+}
+
+function renderGraficoUso(categorias, dados) {
+
+  const parametroAlerta = 70;
+
+  const options = {
+    chart: { type: 'line', height: 300, toolbar: { show: false } },
+    series: [
+      { name: 'Uso médio (%)', data: dados },
+      { name: 'Limite crítico', data: new Array(categorias.length).fill(parametroAlerta), stroke: { dashArray: 5 } }
+    ],
+    xaxis: { categories: categorias },
+    yaxis: { max: 100 },
+    colors: ['#000', '#e63946'],
+    stroke: { curve: 'smooth', width: [3, 2] }
+  };
+
+  if (window.chartUso) window.chartUso.destroy();
+  window.chartUso = new ApexCharts(document.querySelector("#graficoUsoComponente"), options);
+  window.chartUso.render();
+}
+
+
+//CHART USO MENSAL
+
+
+
+
 //GRAF VALORES
 let data2 = new Date;
 let mesAtual = data2.getMonth()
@@ -278,42 +371,42 @@ const chartData = {
 };
 
 //GRAF USO
-function renderGraficoUso(periodo = 'ano') {
-  const usoPorPeriodo = {
-    ano: {
-      categorias: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      dados: [52, 61, 60, 45, 100, 80, 50, 55, 28, 53, 55, 12]
-    },
-    mes: {
-      categorias: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
-      dados: [50, 55, 28, 53, 55]
-    }
-  };
+// function renderGraficoUso(periodo = 'ano') {
+//   const usoPorPeriodo = {
+//     ano: {
+//       categorias: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+//       dados: [52, 61, 60, 45, 100, 80, 50, 55, 28, 53, 55, 12]
+//     },
+//     semanal: {
+//       categorias: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
+//       dados: [50, 55, 28, 53, 55]
+//     }
+//   };
 
-  const parametroAlerta = 70; //parametro do componente
-  const { categorias, dados } = usoPorPeriodo[periodo];
-  const options = {
-    chart: { type: 'line', height: 300, toolbar: { show: false } },
-    series: [
-      { name: 'Uso médio (%)', data: dados },
-      { name: 'Parâmetro de alerta crítico', data: new Array(categorias.length).fill(parametroAlerta), stroke: { dashArray: 5 } }
-    ],
-    xaxis: { categories: categorias, labels: { style: { colors: '#000' } } },
-    yaxis: { max: 100, labels: { style: { colors: '#000' } } },
-    colors: ['#000', '#e63946'],
-    stroke: { curve: 'smooth', width: [3, 2] },
-    legend: { labels: { colors: '#000' } },
-    tooltip: { theme: 'light' },
-    grid: { borderColor: '#ccc' }
-  };
+//   const parametroAlerta = 70; //parametro do componente
+//   const { categorias, dados } = usoPorPeriodo[periodo];
+//   const options = {
+//     chart: { type: 'line', height: 300, toolbar: { show: false } },
+//     series: [
+//       { name: 'Uso médio (%)', data: dados },
+//       { name: 'Parâmetro de alerta crítico', data: new Array(categorias.length).fill(parametroAlerta), stroke: { dashArray: 5 } }
+//     ],
+//     xaxis: { categories: categorias, labels: { style: { colors: '#000' } } },
+//     yaxis: { max: 100, labels: { style: { colors: '#000' } } },
+//     colors: ['#000', '#e63946'],
+//     stroke: { curve: 'smooth', width: [3, 2] },
+//     legend: { labels: { colors: '#000' } },
+//     tooltip: { theme: 'light' },
+//     grid: { borderColor: '#ccc' }
+//   };
 
-  if (window.chartUso) {
-    window.chartUso.destroy();
-  }
+//   if (window.chartUso) {
+//     window.chartUso.destroy();
+//   }
 
-  window.chartUso = new ApexCharts(document.querySelector("#graficoUsoComponente"), options);
-  window.chartUso.render();
-}
+//   window.chartUso = new ApexCharts(document.querySelector("#graficoUsoComponente"), options);
+//   window.chartUso.render();
+// }
 
 //GRAF DISTRIBUIÇÃO
 function renderSeveridade(periodo = 'mensal') {
@@ -394,7 +487,7 @@ document.getElementById("tipo").addEventListener("change", () => {
   renderChart(document.getElementById("tipo").value);
 });
 
-renderGraficoUso();
+dadosGraficoUso(1, "Cpu", 2025, 5);
 renderSeveridade();
 renderChart("alertas");
 

@@ -17,5 +17,9 @@ router.post("/dadosGraficoUsoSemanal/:idMaquina/:componente", function (req, res
   dashComponenteController.dadosGraficoUsoSemanal(req, res)
 })
 
+router.post("/dadosGraficoUsoMensal/:idMaquina/:componente", function (req, res) {
+  dashComponenteController.dadosGraficoUsoMensal(req, res)
+})
+
 
 module.exports = router

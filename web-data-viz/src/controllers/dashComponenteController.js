@@ -67,6 +67,30 @@ function dadosGraficoUsoSemanal(req, res) {
   }
 }
 
+function dadosGraficoUsoMensal(req, res) {
+  var idMaquina = req.params.idMaquina
+  var componente = req.params.componente
+  var anoEscolhido = req.body.anoEscolhido;
+
+  if (anoEscolhido == undefined) {
+    res.status(400).send("undefined ano");
+  } else {
+    dashComponenteModel.dadosGraficoUsoMensal(idMaquina,componente,anoEscolhido)
+      .then(function (resultado) {
+        if (resultado.length > 0) {
+          res.status(200).json(resultado)
+        } else {
+          res.status(204).send("Sem resultados para grafico semanal")
+        }
+      })
+      .catch(function (erro) {
+        console.log(erro)
+        console.log("Houve um erro ao buscar as informações.", erro.sqlMessage)
+        res.status(500).json(erro.sqlMessage)
+      })
+  }
+}
+
 
 
 
@@ -74,5 +98,6 @@ function dadosGraficoUsoSemanal(req, res) {
 module.exports = {
   obterAlertasMes,
   obterTempoMtbf,
-  dadosGraficoUsoSemanal
+  dadosGraficoUsoSemanal,
+  dadosGraficoUsoMensal
 }
