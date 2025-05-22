@@ -138,16 +138,16 @@ function kpiTempoMaiorResolucao(fabricaComMaisAlerta, informacoes) {
         
         if (dadosTempoResolucao.tempoMedioResolucao >= 60) {
             tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 60;
-            mediaAlerta.innerHTML = `${tempoMedio.toFixed(2)}(Horas)`;
+            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(Horas)`;
         } else if (dadosTempoResolucao.tempoMedioResolucao >= 1440) { 
             tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 1440;
-            mediaAlerta.innerHTML = `${tempoMedio.toFixed(2)}(Dias)`;
+            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(Dias)`;
         } else {
             tempoMedio = dadosTempoResolucao.tempoMedioResolucao;
-            mediaAlerta.innerHTML = `${tempoMedio.toFixed(2)}(Minutos)`;
+            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(Minutos)`;
         }
 
-        nomeFabricaTempo.innerHTML = informacoes[0].nomeFabrica
+        mediaAlerta.innerHTML = informacoes[0].nomeFabrica;
     })
     .catch(function (erro) {
         console.error(`#ERRO: ${erro}`);

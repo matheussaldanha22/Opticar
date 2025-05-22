@@ -37,7 +37,7 @@ function plotarGraficoAlerta(dadosAlerta, ) {
     }
 
     var qtdFabricasCriticas = document.querySelector("#qtdFabricasCriticas");
-    qtdFabricasCriticas.innerHTML = `${fabricasG.length} Fábricas`
+    qtdFabricasCriticas.innerHTML = `${fabricasG.length}`
     const larguraGrafico = Math.max(fabricasG.length * 105, 400);
 
     var optionsBar = {
