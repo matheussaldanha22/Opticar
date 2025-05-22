@@ -362,6 +362,7 @@
         
         
         .cartao-titulo{
+          margin-top: 10%;
             font-size: 18px;
             font-weight: 500;
             margin-bottom: 3px;
@@ -371,7 +372,7 @@
         }
 
         .cartao-titulo2{
-          margin-top: 10%;
+          margin-top: 1%;
            font-size: 18px;
             font-weight: 500;
             margin-bottom: 3px;
@@ -417,6 +418,7 @@
 
         .caixasumario {
             margin-top: 20px;
+             margin-bottom: 20px;
             padding: 25px;
             background-color: #f8f9fa;
             border-left: 5px solid #0b335c;
