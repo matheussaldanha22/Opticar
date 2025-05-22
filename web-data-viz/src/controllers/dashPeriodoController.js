@@ -11,7 +11,18 @@ function obterSemana(req,res) {
     
 }
 
+function obterComponente(req, res) {
+    var ano = req.params.ano
+    var mes = req.params.mes
+    var idFabrica = req.params.idFabrica
+
+    dashComponenteModel.obterComponente(idFabrica, ano, mes).then((resultado) => {
+        res.status(200).send(resultado)
+    })
+}
+
 module.exports ={
-    obterSemana
+    obterSemana,
+    obterComponente
 }
 

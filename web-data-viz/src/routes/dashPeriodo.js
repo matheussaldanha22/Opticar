@@ -7,4 +7,8 @@ router.get("/obterSemana/:idFabrica/:ano/:mes", function (req,res) {
     dashPeriodoController.obterSemana(req,res);
 })
 
+router.get("/obterComponente/:idFabrica/:ano/:mes", function (req,res) {
+    dashPeriodoController.obterComponente(req,res)
+})
+
 module.exports = router;

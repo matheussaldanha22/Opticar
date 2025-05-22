@@ -19,6 +19,31 @@ function obterSemana(idFabrica, ano, mes){
     return database.executarFRIO(instrucaoSql)
 }
 
+function obterComponente(idFabrica, ano, mes) {
+    var instrucaoSql = `select componente, count(idAlerta) as alerta, hour(dataHora) as hora,
+    case 
+	when hour(dataHora)  > 5 and hour(dataHora) <12 then 'Manhã'
+    when hour(dataHora)  > 11 and hour(dataHora) <18 then 'Tarde'
+    when hour(dataHora)  > 18 and hour(dataHora) <24 then 'Noite'
+    else 'Madrugada'
+    end as periodo
+    from alerta
+    join capturaDados as cap
+    on alerta.fkCapturaDados=cap.idCapturaDados
+    join componenteServidor as comp
+    on cap.fkcomponenteServidor=comp.idcomponenteServidor
+    join servidor_maquina as maq
+    on  comp.fkMaquina=maq.idMaquina
+    where year(dataHora) = ${ano} and month(dataHora) = ${mes} and fkFabrica = ${idFabrica}
+    group by hora, componente, periodo
+    order by componente desc
+    limit 1; `
+
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarFRIO(instrucaoSql)
+}
+
 module.exports ={
-    obterSemana
+    obterSemana,
+    obterComponente
 }

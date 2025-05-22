@@ -127,5 +127,29 @@ function obterSemana(ano,mes) {
 
 }
 
+function obterComponente(ano,mes) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  const d = new Date();
+  var ano = d.getFullYear();
+  var mes = d.getMonth() + 1;
+
+  fetch(`/dashPeriodo/obterComponente/${idFabrica}/${ano}/${mes}`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+  }).then((resultado)=>{
+    resultado.json().then((json)=>{ //coloca .then pq é uma funcao precisa ()
+      console.log(json)
+
+      
+      document.getElementById('componente').innerHTML = json[0].componente
+      document.getElementById('periodo').innerHTML = json[0].periodo
+      document.getElementById('qtdAlertaComp').innerHTML = json[0].alerta
+    })
+  })
+}
+
+obterComponente()
 obterSemana()
 
