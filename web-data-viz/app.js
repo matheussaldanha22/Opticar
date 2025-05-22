@@ -27,6 +27,7 @@ var alertasRouter = require("./src/routes/alertas")
 var adminRouter = require("./src/routes/admin")
 var jiraRouter = require("./src/routes/jira")
 var dashComponentesRouter = require("./src/routes/dashComponentes")
+var dashPeriodoRouter = require("./src/routes/dashPeriodo")
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -46,6 +47,7 @@ app.use("/alertas", alertasRouter)
 app.use("/admin", adminRouter)
 app.use("/jira", jiraRouter)
 app.use("/dashComponentes", dashComponentesRouter)
+app.use("/dashPeriodo", dashPeriodoRouter)
 
 app.listen(PORTA_APP, function () {
   console.log(`

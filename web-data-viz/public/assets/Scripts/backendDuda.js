@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function() {
   const botao = document.getElementById('btnMostrarGrafico');
 
@@ -86,4 +87,45 @@ function listarMes(){
 
 listarMes()
 
+function obterSemana(ano,mes) {
+  console.log("to aqui")
+  const idFabrica = sessionStorage.FABRICA_ID;
+  const d = new Date();
+  var ano = d.getFullYear();
+  var mes = d.getMonth() + 1;
+
+    fetch(`/dashPeriodo/obterSemana/${idFabrica}/${ano}/${mes}`,{
+      
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+        },
+    }).then((resultado)=>{
+      console.log("to no fetch")
+      resultado.json().then((json)=>{
+        semanaAlerta = json
+        let maior = 0
+        let maisAlerta = null;
+
+        for (let i = 0; i < semanaAlerta.length; i++) {
+          semanaAlerta[i].posicaoNoMes = i + 1;
+          if (semanaAlerta[i].quantidadeAlertas > maior) {
+            maior = semanaAlerta[i].quantidadeAlertas;
+            maisAlerta = semanaAlerta[i].posicaoNoMes;
+          }
+
+          
+          
+        }
+        console.log("exibir")
+        document.getElementById('semanaAlerta').innerHTML = `${maisAlerta}`
+        document.getElementById('qtdAlerta').innerHTML = `${maior}`
+
+      })
+    })
+
+
+}
+
+obterSemana()
 
