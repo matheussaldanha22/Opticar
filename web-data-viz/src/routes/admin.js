@@ -15,4 +15,8 @@ router.post("/informacaoFabrica", function (req, res) {
   adminController.informacaoFabrica(req, res)
 })
 
+router.post("/informacaoFabricaPadrao", function (req, res) {
+  adminController.informacaoFabricaPadrao(req, res)
+})
+
 module.exports = router

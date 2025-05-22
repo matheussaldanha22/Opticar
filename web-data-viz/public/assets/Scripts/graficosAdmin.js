@@ -5,7 +5,7 @@
 var dadosFabricas = [];
 
 
-function plotarGraficoAlerta(dadosAlerta) {
+function plotarGraficoAlerta(dadosAlerta, ) {
   fetch("/admin/dadosFabrica", {
     method: "GET",
   })
@@ -36,6 +36,8 @@ function plotarGraficoAlerta(dadosAlerta) {
       }
     }
 
+    var qtdFabricasCriticas = document.querySelector("#qtdFabricasCriticas");
+    qtdFabricasCriticas.innerHTML = `${fabricasG.length} Fábricas`
     const larguraGrafico = Math.max(fabricasG.length * 105, 400);
 
     var optionsBar = {
@@ -215,6 +217,8 @@ for (let i = 1; i <= 131; i++) {
   });
 }
 
+var contadorSelecionado = 0;
+
 function mostrarFabricas() {
   const grade = document.getElementById("grade-fabricas");
 
@@ -244,10 +248,15 @@ function mostrarFabricas() {
     divFabrica.appendChild(divId);
 
     divFabrica.addEventListener("click", function () {
+
       if (divFabrica.classList.contains("div-selecionada")) {
         divFabrica.classList.remove("div-selecionada")
-      } else {
+        contadorSelecionado--
+      } else if (contadorSelecionado < 5) {
         divFabrica.classList.add("div-selecionada")
+        contadorSelecionado++
+      } else {
+        Swal.fire('Erro!', 'Por favor, selecione somente 5 fábricas.', 'error');
       }
     });
 
