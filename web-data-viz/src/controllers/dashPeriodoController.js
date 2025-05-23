@@ -21,8 +21,31 @@ function obterComponente(req, res) {
     })
 }
 
+function obterPeriodo(req,res) {
+    var ano = req.params.ano
+    var mes = req.params.mes
+    var idFabrica = req.params.idFabrica
+
+    dashComponenteModel.obterPeriodo(idFabrica, ano, mes).then((resultado) =>{
+        res.status(200).send(resultado)
+    })
+}
+
+function obterDia(req,res) {
+    var ano = req.params.ano
+    var mes = req.params.mes
+    var idFabrica = req.params.idFabrica
+
+    dashComponenteModel.obterDia(idFabrica, ano, mes).then((resultado) => {
+        res.status(200).send(resultado)
+    })
+}
+
 module.exports ={
     obterSemana,
-    obterComponente
+    obterComponente,
+    obterPeriodo,
+    obterDia
+    
 }
 

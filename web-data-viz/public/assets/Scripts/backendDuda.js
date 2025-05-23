@@ -150,6 +150,46 @@ function obterComponente(ano,mes) {
   })
 }
 
+function obterPeriodo(ano, mes) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  const d = new Date();
+  var ano = d.getFullYear();
+  var mes = d.getMonth() + 1;
+
+  fetch(`/dashPeriodo/obterDia/${idFabrica}/${ano}/${mes}`, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    resultado.json().then((json) =>{
+      document.getElementById('periodoAlerta').innerHTML = json[0].periodo
+      document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
+    })
+  })
+}
+
+function obterDia(ano, mes) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  const d = new Date();
+  var ano = d.getFullYear();
+  var mes = d.getMonth() + 1;
+
+  fetch(`/dashPeriodo/obterDia/${idFabrica}/${ano}/${mes}` , {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    resultado.json().then((json) =>{
+      document.getElementById('DiaAlerta').json[0].diaalerta
+      document.getElementById('qtdDiaAlerta').json[0]. qtd
+    })
+  }
+  )
+
+}
 obterComponente()
 obterSemana()
-
+obterPeriodo()
+obterDia()
