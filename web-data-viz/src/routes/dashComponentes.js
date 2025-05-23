@@ -3,6 +3,14 @@ var router = express.Router()
 
 var dashComponenteController = require("../controllers/dashComponenteController")
 
+router.get("/obterAnosDisponiveis/:idMaquina/:componente", function (req, res) {
+  dashComponenteController.obterAnosDisponiveis(req, res)
+})
+
+router.get("/obterMesesDisponiveis/:idMaquina/:componente/:ano", function (req, res) {
+  dashComponenteController.obterMesesDisponiveis(req, res)
+})
+
 router.get("/obterAlertasMes/:idMaquina/:componente", function (req, res) {
   dashComponenteController.obterAlertasMes(req, res)
 })
@@ -17,8 +25,8 @@ router.post("/dadosGraficoUsoSemanal/:idMaquina/:componente", function (req, res
   dashComponenteController.dadosGraficoUsoSemanal(req, res)
 })
 
-router.post("/dadosGraficoUsoMensal/:idMaquina/:componente", function (req, res) {
-  dashComponenteController.dadosGraficoUsoMensal(req, res)
+router.post("/dadosGraficoUsoAnual/:idMaquina/:componente", function (req, res) {
+  dashComponenteController.dadosGraficoUsoAnual(req, res)
 })
 
 

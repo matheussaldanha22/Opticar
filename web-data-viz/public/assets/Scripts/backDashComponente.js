@@ -49,11 +49,13 @@ const nomeMeses = [
   'Dezembro'
 ];
 
+let data = new Date;
+let mesAtual = data.getMonth()
 
 //-----------------------------FUNÇÃO PLOTAR DATAS
 function obterData() {
-  let data = new Date();
-  return `${nomeDias[data.getDay()]} - ${data.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`;
+  let dataExibir = new Date;
+  return `${nomeDias[dataExibir.getDay()]} - ${dataExibir.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`;
 }
 
 function mostrarData() {
@@ -102,8 +104,8 @@ function obterAlertasMes(idMaquina, componente) {
       document.getElementById("probFalha").innerHTML = `${porcentagemCritico}%`
 
       if (porcentagemCritico < 40) {
-        document.getElementById("probFalha").style.color = "white"
-      } else if (porcentagemCritico < 60) {
+        document.getElementById("probFalha").style.color = "limegreen"
+      } else if (porcentagemCritico < 70) {
         document.getElementById("probFalha").style.color = "yellow"
       } else {
         document.getElementById("probFalha").style.color = "red"
@@ -145,7 +147,7 @@ function obterTempoMtbf(idMaquina, componente) {
         document.getElementById("classificacaoMtbf").style.color = 'yellow'
       } else {
         document.getElementById("classificacaoMtbf").innerHTML = `Ótimo`
-        document.getElementById("classificacaoMtbf").style.color = 'yellow'
+        document.getElementById("classificacaoMtbf").style.color = 'limegreen'
       }
 
       // se tiver mais de 60 min ele vira hora
@@ -166,26 +168,21 @@ function obterTempoMtbf(idMaquina, componente) {
 
 
 
-//FUNÇÃO PARA ATUALIZAR DADOS DE ACORDO COM O FILTRO SLTS
-const sltServidor = document.getElementById("sltServidor");
-const sltComponente = document.getElementById("sltComponente");
 
-function atualizarDados() {
-  const idMaquina = sltServidor.value;
-  const componente = sltComponente.value;
-  if (idMaquina && componente) {
-    obterAlertasMes(idMaquina, componente);
-    obterTempoMtbf(idMaquina, componente);
-  }
-}
-
-sltServidor.addEventListener("change", atualizarDados);
-sltComponente.addEventListener("change", atualizarDados);
 
 
 
 
 //-----------------------------MODAL FILTRO USO
+
+let anoVar //variavel global para levar pro atualiza dados
+let mesVar
+let filtroGraf = "mensal"
+
+//caso nao escolha vai mostrar o mensal ---- Texto filtro
+document.getElementById("tipoFiltro-uso").innerHTML = "Mensal"
+document.getElementById("periodo-uso").innerHTML = `${nomeMeses[mesAtual]} de ${data.getFullYear()}`
+
 function filtrarUso() {
   Swal.fire({
     title: `Filtrar gráfico <u style="color:#2C3E50;">Uso</u>`,
@@ -195,8 +192,8 @@ function filtrarUso() {
           <h3>Mudar visualização</h3>
           <p class="labelSlt"><b>Visualização em:
             <select id="sltFiltrar">
-            <option value="anual">Anual (Média aos meses)</option>
             <option value="mensal">Mensal (Média da semana)</option>
+            <option value="anual">Anual (Média aos meses)</option>
             </select></b>
           </p>
           
@@ -210,7 +207,7 @@ function filtrarUso() {
           </select>
 
 
-          <div id="containerMes" style="display:none; margin-top:10px;">
+          <div id="containerMes" style="display:block; margin-top:10px;">
             <label for="sltMes"><b>Escolha o Mês:</b></label>
             <select id="sltMes" class="sltRoxo">
               <option value="1">Janeiro</option>
@@ -235,6 +232,7 @@ function filtrarUso() {
 
 
 
+
       const sltFiltrar = document.getElementById("sltFiltrar");
       const sltAno = document.getElementById("sltAno");
       const sltMes = document.getElementById("sltMes");
@@ -243,12 +241,19 @@ function filtrarUso() {
       if (sltFiltrar && sltAno && sltMes) {
         if (sltFiltrar.value === "mensal") {
           tipoFiltro.innerHTML = "Mensal";
-          periodo.innerHTML = `${nomeMeses[sltMes.value]}`
+          periodo.innerHTML = `${nomeMeses[sltMes.value - 1]} de ${sltAno.value}`
+          filtroGraf = "mensal"
         } else {
           tipoFiltro.innerHTML = "Anual";
           periodo.innerHTML = sltAno.value
+          filtroGraf = "anual"
         }
       }
+
+      anoVar = sltAno.value
+      mesVar = sltMes.value
+
+      atualizarDados()
     }
   });
 
@@ -257,10 +262,10 @@ function filtrarUso() {
     const containerMes = document.getElementById("containerMes");
 
     sltFiltrar.addEventListener("change", function () {
-      if (this.value === "mensal") {
-        containerMes.style.display = "block";
-      } else {
+      if (this.value === "anual") {
         containerMes.style.display = "none";
+      } else {
+        containerMes.style.display = "block";
       }
     });
   }, 100);
@@ -279,34 +284,76 @@ function dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido) {
   // FALTA ISSO
 
 
-  //if escolhido for igual semanal
-  fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      anoEscolhido: anoEscolhido,
-      mesEscolhido: mesEscolhido,
-    }),
-  })
-    .then(function (res) {
-      if (!res.ok) {
-        console.log(res)
-        throw new Error(`Erro na resposta: ${res.status}`);
-      }
-      return res.json();
-    }).then(function (informacoes) {
+  //if escolhido for igual mensal
+  if (filtroGraf === "mensal") {
+    console.log("fetch mensal")
+    fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        anoEscolhido: anoEscolhido,
+        mesEscolhido: mesEscolhido,
+      }),
+    })
+      .then(function (res) {
+        if (!res.ok) {
+          console.log(res)
+          throw new Error(`Erro na resposta: ${res.status}`);
+        }
+        return res.json();
+      }).then(function (informacoes) {
 
-      informacoes.forEach((item) => {
-        categorias.push(`Semana ${item.semana_do_mes}`);
-        dados.push(item.media_utilizacao);
+        console.log("dados uso mensal obtidos!")
+
+        informacoes.forEach((item) => {
+
+          categorias.push(`Semana ${item.semana_do_mes}`);
+          dados.push(item.media_utilizacao);
+
+        });
+
+        renderGraficoUso(categorias, dados)
+
+      }).catch(erro => {
+        console.error("Erro ao buscar dados do grafico mensal:", erro);
       });
 
-      renderGraficoUso(categorias, dados)
-    }).catch(erro => {
-      console.error("Erro ao buscar dados do grafico semanal:", erro);
-    });
+  }else{ // se tipo do grafico for anual
+    fetch(`/dashComponentes/dadosGraficoUsoAnual/${idMaquina}/${componente}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        anoEscolhido: anoEscolhido,
+      }),
+    })
+      .then(function (res) {
+        if (!res.ok) {
+          console.log(res)
+          throw new Error(`Erro na resposta: ${res.status}`);
+        }
+        return res.json();
+      }).then(function (informacoes) {
+
+        console.log("dados uso anual obtidos!")
+
+        informacoes.forEach((item) => {
+
+          categorias.push(`${nomeMeses[item.mes-1]}`);
+          dados.push(item.media_utilizacao);
+
+        });
+
+        renderGraficoUso(categorias, dados)
+
+      }).catch(erro => {
+        console.error("Erro ao buscar dados do grafico anual:", erro);
+      });
+
+  }
 
 
 }
@@ -339,8 +386,7 @@ function renderGraficoUso(categorias, dados) {
 
 
 //GRAF VALORES
-let data2 = new Date;
-let mesAtual = data2.getMonth()
+
 const mesesSeguintes = [];
 for (let i = 1; i <= 6; i++) {
   mesesSeguintes.push(nomeMeses[(mesAtual + i) % 12]);
@@ -369,6 +415,35 @@ const chartData = {
     }
   }
 };
+
+//FUNÇÃO PARA ATUALIZAR DADOS DE ACORDO COM O FILTRO SLTS
+const sltServidor = document.getElementById("sltServidor");
+const sltComponente = document.getElementById("sltComponente");
+
+function atualizarDados() {
+  const idMaquina = sltServidor.value;
+  const componente = sltComponente.value;
+  let anoEscolhido = anoVar;
+  let mesEscolhido = mesVar;
+
+  const nomesComponente = document.querySelectorAll('.nomeComponente')
+  nomesComponente.forEach(i => {i.innerHTML = componente});
+
+  //atribuindo que se nao filtrar por padrão puxa o mes e ano atual
+  if (!anoEscolhido || !mesEscolhido) {
+    anoEscolhido = data.getFullYear()
+    mesEscolhido = data.getMonth() + 1
+  }
+
+  if (idMaquina && componente) {
+    obterAlertasMes(idMaquina, componente);
+    obterTempoMtbf(idMaquina, componente);
+    dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido)
+  }
+}
+
+sltServidor.addEventListener("change", atualizarDados);
+sltComponente.addEventListener("change", atualizarDados);
 
 //GRAF USO
 // function renderGraficoUso(periodo = 'ano') {
@@ -487,7 +562,6 @@ document.getElementById("tipo").addEventListener("change", () => {
   renderChart(document.getElementById("tipo").value);
 });
 
-dadosGraficoUso(1, "Cpu", 2025, 5);
 renderSeveridade();
 renderChart("alertas");
 

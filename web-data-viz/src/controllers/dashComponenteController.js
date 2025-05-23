@@ -1,5 +1,48 @@
 var dashComponenteModel = require("../models/dashComponenteModel")
 
+function obterAnosDisponiveis(req, res) {
+  var idMaquina = req.params.idMaquina
+  var componente = req.params.componente
+
+  dashComponenteModel
+    .obterAnosDisponiveis(idMaquina, componente)
+    .then(function (resultado) {
+      if (resultado.length > 0) {
+        res.status(200).json(resultado)
+      } else {
+        res.status(204).send("Nenhum resultado encontrado!")
+      }
+    })
+    .catch(function (erro) {
+      console.log(erro)
+      console.log("Houve um erro ao buscar os anos.", erro.sqlMessage)
+      res.status(500).json(erro.sqlMessage)
+    })
+}
+
+function obterMesesDisponiveis(req, res) {
+  var idMaquina = req.params.idMaquina
+  var componente = req.params.componente
+  var ano = req.params.ano
+
+  dashComponenteModel
+    .obterMesesDisponiveis(idMaquina, componente, ano)
+    .then(function (resultado) {
+      if (resultado.length > 0) {
+        res.status(200).json(resultado)
+      } else {
+        res.status(204).send("Nenhum resultado encontrado!")
+      }
+    })
+    .catch(function (erro) {
+      console.log(erro)
+      console.log("Houve um erro ao buscar os anos.", erro.sqlMessage)
+      res.status(500).json(erro.sqlMessage)
+    })
+}
+
+
+
 function obterAlertasMes(req, res) {
   var idMaquina = req.params.idMaquina
   var componente = req.params.componente
@@ -67,7 +110,7 @@ function dadosGraficoUsoSemanal(req, res) {
   }
 }
 
-function dadosGraficoUsoMensal(req, res) {
+function dadosGraficoUsoAnual(req, res) {
   var idMaquina = req.params.idMaquina
   var componente = req.params.componente
   var anoEscolhido = req.body.anoEscolhido;
@@ -75,7 +118,7 @@ function dadosGraficoUsoMensal(req, res) {
   if (anoEscolhido == undefined) {
     res.status(400).send("undefined ano");
   } else {
-    dashComponenteModel.dadosGraficoUsoMensal(idMaquina,componente,anoEscolhido)
+    dashComponenteModel.dadosGraficoUsoAnual(idMaquina,componente,anoEscolhido)
       .then(function (resultado) {
         if (resultado.length > 0) {
           res.status(200).json(resultado)
@@ -96,8 +139,10 @@ function dadosGraficoUsoMensal(req, res) {
 
 
 module.exports = {
+  obterAnosDisponiveis,
+  obterMesesDisponiveis,
   obterAlertasMes,
   obterTempoMtbf,
   dadosGraficoUsoSemanal,
-  dadosGraficoUsoMensal
+  dadosGraficoUsoAnual
 }

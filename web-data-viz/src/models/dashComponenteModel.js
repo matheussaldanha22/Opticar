@@ -1,5 +1,39 @@
 var database = require("../database/config")
 
+function obterAnosDisponiveis(idMaquina, componente) {
+    var instrucaoSql = `
+    SELECT DISTINCT YEAR(c.data) AS ano
+    FROM capturaDados c
+    JOIN componenteServidor cs ON c.fkComponenteServidor = cs.idcomponenteServidor
+    JOIN componente comp ON cs.fkComponente = comp.idcomponente
+    JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
+    WHERE sm.idMaquina = ${idMaquina}
+    AND comp.tipo = '${componente}'
+    ORDER BY ano DESC;
+
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarFRIO(instrucaoSql)
+}
+
+function obterMesesDisponiveis(idMaquina, componente, ano) {
+    var instrucaoSql = `
+    SELECT DISTINCT MONTH(c.data) AS mes
+    FROM capturaDados c
+    JOIN componenteServidor cs ON c.fkComponenteServidor = cs.idcomponenteServidor
+    JOIN componente comp ON cs.fkComponente = comp.idcomponente
+    JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
+    WHERE YEAR(c.data) = ${ano}
+    AND sm.idMaquina = ${idMaquina}
+    AND comp.tipo = '${componente}'   
+    ORDER BY mes;
+
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarFRIO(instrucaoSql)
+}
+
+
 function obterAlertasMes(idMaquina, componente) {
     var instrucaoSql = `
         SELECT 
@@ -71,9 +105,9 @@ function dadosGraficoUsoSemanal(idMaquina, componente, anoEscolhido, mesEscolhid
     return database.executarFRIO(instrucaoSql)
 }
 
-function dadosGraficoUsoMensal(idMaquina, componente, anoEscolhido) {
+function dadosGraficoUsoAnual(idMaquina, componente, anoEscolhido) {
     var instrucaoSql = `
-    select month(capturaDados.data) as mes,AVG(capturaDados.valor) as mediaUtilizacao FROM capturaDados
+    select month(capturaDados.data) as mes,ROUND(AVG(capturaDados.valor),2) as media_utilizacao FROM capturaDados
     JOIN componenteServidor ON fkComponenteServidor = idComponenteServidor
     JOIN componente c ON fkComponente = idcomponente
         JOIN servidor_maquina ON idMaquina = fkMaquina
@@ -81,7 +115,8 @@ function dadosGraficoUsoMensal(idMaquina, componente, anoEscolhido) {
         c.tipo = '${componente}' 
         AND servidor_maquina.idMaquina = ${idMaquina}
         AND year(capturaDados.data) = ${anoEscolhido}
-        group by month(capturaDados.data);
+        group by mes
+        order by mes;
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
     return database.executarFRIO(instrucaoSql)
@@ -89,8 +124,10 @@ function dadosGraficoUsoMensal(idMaquina, componente, anoEscolhido) {
 
 
 module.exports = {
+    obterAnosDisponiveis,
+    obterMesesDisponiveis,
     obterAlertasMes,
     obterTempoMtbf,
     dadosGraficoUsoSemanal,
-    dadosGraficoUsoMensal
+    dadosGraficoUsoAnual
 }
