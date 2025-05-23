@@ -69,26 +69,50 @@ async function listarAlertasPorId(req, res) {
     };
 
     const response = await axios.request(config);
-    const alertas = [];
+    let somaDosTempos = 0;  
+    let quantidadeDeAlertas = 0; 
 
-    for (let i = 0; i < response.data.issues.length; i++) {
+    for (var i = 0; i < response.data.issues.length; i++) {
       const issue = response.data.issues[i];
       if (issue.fields.customfield_10157 == idFabrica) {
-      alertas.push({
-        summary: issue.fields.summary,
-        status: issue.fields.status.name,
-        created: issue.fields.created,
-        resolutionDate: issue.fields.resolutiondate || "Não concluído",
-        urgency: issue.fields.customfield_10124 || "Não disponível",
-        idFabrica: issue.fields.customfield_10157 || "Não disponível"
-      });
+        let dataConclusao = null;
+        if (issue.changelog && issue.changelog.histories) {
+          for (const history of issue.changelog.histories) {
+            for (const item of history.items) {
+              if (item.field === 'status' && item.toString === 'Done') {
+                dataConclusao = new Date(history.created);
+                break;
+              }
+            }
+          }
+        }
+        
+        if (dataConclusao) {
+          const dataCriacao = new Date(issue.fields.created);
+          const tempoGasto = dataConclusao - dataCriacao;
+        
+          somaDosTempos += tempoGasto;
+          quantidadeDeAlertas++;
+        }
       }
     }
 
-    res.status(200).json(alertas);
+    let tempoMedio = 0;
+    if (quantidadeDeAlertas > 0) {
+      let media = somaDosTempos / quantidadeDeAlertas;
+      tempoMedio = media / (1000 * 60)
+    }
+
+    const resultado = {
+      idFabrica: idFabrica,
+      tempoMedioResolucao: tempoMedio.toFixed(2), 
+      totalAlertas: quantidadeDeAlertas
+    };
+    
+    res.status(200).json(resultado);
   } catch (error) {
-    console.log("Erro ao listar alertas do Jira:", error.message);
-    res.status(500).json({ error: "Erro ao obter alertas do Jira" });
+    console.log("Erro ao calcular tempo médio:", error.message);
+    res.status(500).json({ error: "Erro ao calcular tempo médio" });
   }
 }
 

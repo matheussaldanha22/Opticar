@@ -2,10 +2,9 @@
 // const larguraGrafico = Math.max(fabricasG.length * 105, 400);
 
 //GRÁFICO ALERTAS
-var dadosFabricas = [];
+var dadosFabricasGrave = [];
 
-
-function plotarGraficoAlerta(dadosAlerta, ) {
+function plotarGraficoAlerta(dadosAlerta) {
   fetch("/admin/dadosFabrica", {
     method: "GET",
   })
@@ -16,6 +15,7 @@ function plotarGraficoAlerta(dadosAlerta, ) {
     return resposta.json();
   })
   .then(function (dadosFabrica) {
+
     const idFabrica = [];
     const fabricasG = [];
     const alertasEmAberto = [];
@@ -28,6 +28,10 @@ function plotarGraficoAlerta(dadosAlerta, ) {
       for (let j = 0; j < dadosAlerta.length; j++) {
         const alerta = dadosAlerta[j];
         if (alerta.fkFabrica === fabrica.idFabrica) {
+          var quantidade = alerta.qtd_to_do + alerta.qtd_in_progress;
+          if (quantidade > dadosFabrica.limiteAtencao) {
+            dadosFabricasGrave.push(dadosFabrica[i])
+          }
           fabricasG.push(fabrica.nomeFabrica);
           idFabrica.push(fabrica.idFabrica)
           alertasEmAberto[i] = alerta.qtd_to_do;
@@ -116,152 +120,105 @@ fechar.addEventListener("click", () => {
   bg.classList.remove("ativoBg")
 });
 
-//GRÁFICO PREDIÇÃO
-
-var options = {
-  chart: {
-    type: "line",
-    height: 350,
-    width: 1300,
-    toolbar: {
-      show: true,
-    },
-    background: "#FFFFF",  
-  },
-  series: [
-    {
-      name: "Série 1",
-      data: [10, 15, 7, 30, 25, 40, 20],
-    },
-    {
-      name: "Série 2",
-      data: [20, 25, 15, 35, 30, 45, 30],
-    },
-  ],
-  stroke: {
-    curve: "smooth",  
-    width: 3,  
-  },
-  colors: ["#4ecdc4", "#6c8ebf"], 
-  xaxis: {
-    categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-    labels: {
-      style: {
-        colors: "#555555",  
-        fontSize: "14px",
-      },
-    },
-  },
-  yaxis: {
-    labels: {
-      style: {
-        colors: "#555555", 
-        fontSize: "14px",
-      },
-    },
-  },
-  grid: {
-    borderColor: "#e0e0e0", 
-    strokeDashArray: 4,
-  },
-  markers: {
-    size: 5,
-    colors: ["#4ecdc4", "#6c8ebf"],  
-    strokeColors: "#FFFFFF",  
-    strokeWidth: 2,
-  },
-  dataLabels: {
-    enabled: false, 
-    style: {
-      fontSize: "12px",
-      colors: ["#555555"],
-    },
-    background: {
-      enabled: true,
-      foreColor: "#555555",
-      borderRadius: 2,
-      padding: 4,
-      opacity: 0.9,
-      borderWidth: 1,
-      borderColor: "#e0e0e0",
-    },
-  },
-  tooltip: {
-    theme: "light", 
-    marker: {
-      show: true,
-    },
-  },
-  theme: {
-    mode: "light", 
-  }
-};
-
-var chartPred = new ApexCharts(
-  document.querySelector("#graficoPredicao"),
-  options
-);
-chartPred.render();
-
 const fabricasPorPagina = 12;
-
-let paginaAtual = 1;
-
-const fabricas = [];
-
-for (let i = 1; i <= 131; i++) {
-  fabricas.push({
-    id: i,
-    nome: "Fábrica " + i, 
-    critica: Math.random() < 0.3,
-  });
-}
-
+var paginaAtual = 1;
+var fabricas = [];
 var contadorSelecionado = 0;
 
 function mostrarFabricas() {
-  const grade = document.getElementById("grade-fabricas");
-
-  grade.innerHTML = "";
-
-  const inicio = (paginaAtual - 1) * fabricasPorPagina;
-  const fim = inicio + fabricasPorPagina;
-
-  for (let i = inicio; i < fim && i < fabricas.length; i++) {
-    const fabrica = fabricas[i];
-
-    const divFabrica = document.createElement("div");
-    divFabrica.className = "fabrica";
-
-    if (fabrica.critica) {
-      divFabrica.classList.add("fabrica-critica");
-    }
-
-    const divNome = document.createElement("div");
-    divNome.className = "nome-fabrica";
-    divNome.textContent = fabrica.nome;
-    divFabrica.appendChild(divNome);
-
-    const divId = document.createElement("div");
-    divId.className = "id-fabrica";
-    divId.textContent = "ID: " + fabrica.id;
-    divFabrica.appendChild(divId);
-
-    divFabrica.addEventListener("click", function () {
-
-      if (divFabrica.classList.contains("div-selecionada")) {
-        divFabrica.classList.remove("div-selecionada")
-        contadorSelecionado--
-      } else if (contadorSelecionado < 5) {
-        divFabrica.classList.add("div-selecionada")
-        contadorSelecionado++
-      } else {
-        Swal.fire('Erro!', 'Por favor, selecione somente 5 fábricas.', 'error');
-      }
+    fetch("/admin/dadosFabricaModal", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(function (resposta) {
+        if (resposta.ok) {
+           return resposta.json()
+        }
+        throw new Error("Não foi possivél pegar os dados")
+    }).then(dadosFabrica => {
+      return fetch("/admin/dadosGraficoAlerta", {
+        method: "GET",
+        headers: {"Content-Type": "application/json"}
+      }).then(resposta => {
+        if (resposta.ok) {
+          return resposta.json()
+        }
+        throw new Error("Não foi possível pegar os alertas")
+      }).then(dadosAlerta => {
+        fabricas.length = 0;
+        for(i = 0; i < dadosAlerta.length; i ++) {
+          for(j = 0; j < dadosFabrica.length; j++) {
+            if (dadosFabrica[j].idFabrica == dadosAlerta[i].fkFabrica) {
+              var totalAlertasAgora = dadosAlerta[i].qtd_to_do + dadosAlerta[i].qtd_in_progress;
+              var isCritica = false;
+              if (dadosFabrica[j].limiteAtencao <= totalAlertasAgora) {
+                isCritica = true;
+              }
+              fabricas.push({
+                id: dadosFabrica[j].idFabrica,
+                nome: dadosFabrica[j].nomeFabrica,
+                critica: isCritica
+              })
+            }
+          }
+        }
+        renderizarGrade()
+      })
+    })
+    .catch(function (error) {
+        console.error("Erro ao realizar fetch:", error);
     });
+}
 
-    grade.appendChild(divFabrica);
-  }
+
+function renderizarGrade() {
+    const grade = document.getElementById("grade-fabricas");
+    grade.innerHTML = "";
+
+    const inicio = (paginaAtual - 1) * fabricasPorPagina;
+    const fim = inicio + fabricasPorPagina;
+
+    for (let i = inicio; i < fim && i < fabricas.length; i++) {
+        const fabrica = fabricas[i];
+
+        const divFabrica = document.createElement("div");
+        divFabrica.className = "fabrica";
+        divFabrica.dataset.id = fabrica.id
+        divFabrica.dataset.nome = fabrica.nome;
+
+        if (fabrica.critica) {
+            divFabrica.classList.add("fabrica-critica");
+        }
+        
+        const divNome = document.createElement("div");
+        divNome.className = "nome-fabrica";
+        divNome.textContent = fabrica.nome;
+        divFabrica.appendChild(divNome);
+
+        const divId = document.createElement("div");
+        divId.className = "id-fabrica";
+        divId.textContent = "ID: " + fabrica.id;
+        divFabrica.appendChild(divId);
+
+        divFabrica.addEventListener("click", function () {
+            if (divFabrica.classList.contains("div-selecionada")) {
+                divFabrica.classList.remove("div-selecionada");
+                contadorSelecionado--;
+            } else if (contadorSelecionado < 5) {
+                var idFabrica = divFabrica.getAttribute("data-id")
+                var nomeFabrica = divFabrica.getAttribute("data-nome")
+                dadoFabricaSelecionada(idFabrica, nomeFabrica)
+                divFabrica.classList.add("div-selecionada");
+                contadorSelecionado++;
+            } else {
+                Swal.fire('Erro!', 'Por favor, selecione somente 5 fábricas.', 'error');
+            }
+        });
+
+        grade.appendChild(divFabrica);
+    }
+    criarBotoesPaginacao();
 }
 
 function criarBotoesPaginacao() {
@@ -277,7 +234,7 @@ function criarBotoesPaginacao() {
   btnAnterior.disabled = paginaAtual === 1; 
   btnAnterior.addEventListener("click", function() {
     paginaAtual = paginaAtual - 1;
-    mostrarFabricas();
+    // mostrarFabricas();
     criarBotoesPaginacao();
   });
   paginacao.appendChild(btnAnterior);
@@ -293,7 +250,7 @@ function criarBotoesPaginacao() {
   btnProximo.disabled = paginaAtual === totalPaginas; 
   btnProximo.addEventListener("click", function() {
     paginaAtual = paginaAtual + 1;
-    mostrarFabricas();
+    // mostrarFabricas();
     criarBotoesPaginacao();
   });
   paginacao.appendChild(btnProximo);

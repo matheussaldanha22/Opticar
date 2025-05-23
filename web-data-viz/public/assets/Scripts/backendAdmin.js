@@ -163,10 +163,215 @@ function kpiFabricaCritica(fabricaComMaisAlerta, informacoes) {
     quantidadeAlertasKpi.innerHTML = `Quantidade de alertas em aberto: ${fabricaComMaisAlerta.qtd_to_do + fabricaComMaisAlerta.qtd_in_progress}`
 }
 
+var fabricasSelecionadas = [];
+
+function dadoFabricaSelecionada(idFabrica, nomeFabrica) {
+    fetch(`/admin/dadosFabricaSelecionada/${idFabrica}`, {
+      method: "GET",
+      headers: {"Content-Type": "application/json"}
+    })
+    .then(resposta => {
+      if (resposta.ok) {
+        console.log(resposta)
+        return resposta.json();
+      }
+      throw new Error("Erro ao buscar dados da fábrica");
+    })
+    .then(dadosFabrica => {
+        console.log(dadosFabrica)
+        return fetch(`/admin/mtbf/${idFabrica}`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json"}
+        })
+        .then(resposta => {
+            if (resposta.ok) {
+                console.log(resposta)
+                return resposta.json();
+            }
+            throw new Error("Erro ao buscar MTBF");
+        })
+        .then(dadosMtbf => {
+            console.log(dadosMtbf)
+            return fetch(`/jira/listarAlertasPorId/${idFabrica}`, {
+                method: "GET",
+                headers: {"Content-Type": "application/json"}
+            })
+            .then(resposta => {
+                if (resposta.ok) {
+                    console.log(resposta)
+                    return resposta.json();
+                }
+                throw new Error("Erro ao buscar tempo de resolução");
+            })
+            .then(dadosJira => {
+                console.log(dadosJira)
+                var mtbf = 0;
+                if (dadosMtbf[0].minutos_operacao && dadosMtbf[0].qtd_alertas > 0) {
+                    mtbf = dadosMtbf[0].minutos_operacao / dadosMtbf[0].qtd_alertas;
+                }
+                fabricasSelecionadas.push({
+                    "idFabrica": idFabrica,
+                    "nome": nomeFabrica,
+                    "tempoResolucao": dadosJira.tempoMedioResolucao || 0,
+                    "quantidadeAlertas": (dadosFabrica[0].qtd_to_do || 0) + (dadosFabrica[0].qtd_in_progress || 0),
+                    "MTBF": mtbf
+                });
+                console.log("Fábrica adicionada com sucesso:", fabricasSelecionadas);
+                predicao()
+            });
+        });
+    })
+    .catch(error => {
+        console.error("Erro ao processar dados da fábrica:", error);
+    });
+}
+
+var chartPred;
+
+function inicializarGrafico() {
+    var options = {
+    chart: {
+        type: "line",
+        height: 350,
+        width: 1300,
+        toolbar: {
+        show: true,
+        },
+        background: "#FFFFF",  
+    },
+    series: [
+        {
+        name: "Série 1",
+        data: [10, 15, 7, 30, 25, 40, 20],
+        },
+        {
+        name: "Série 2",
+        data: [20, 25, 15, 35, 30, 45, 30],
+        },
+    ],
+    stroke: {
+        curve: "smooth",  
+        width: 3,  
+    },
+    colors: ["#4ecdc4", "#6c8ebf"], 
+    xaxis: {
+        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+        labels: {
+        style: {
+            colors: "#555555",  
+            fontSize: "14px",
+        },
+        },
+    },
+    yaxis: {
+        labels: {
+        style: {
+            colors: "#555555", 
+            fontSize: "14px",
+        },
+        },
+    },
+    grid: {
+        borderColor: "#e0e0e0", 
+        strokeDashArray: 4,
+    },
+    markers: {
+        size: 5,
+        colors: ["#4ecdc4", "#6c8ebf"],  
+        strokeColors: "#FFFFFF",  
+        strokeWidth: 2,
+    },
+    dataLabels: {
+        enabled: false, 
+        style: {
+        fontSize: "12px",
+        colors: ["#555555"],
+        },
+        background: {
+        enabled: true,
+        foreColor: "#555555",
+        borderRadius: 2,
+        padding: 4,
+        opacity: 0.9,
+        borderWidth: 1,
+        borderColor: "#e0e0e0",
+        },
+    },
+    tooltip: {
+        theme: "light", 
+        marker: {
+        show: true,
+        },
+    },
+    theme: {
+        mode: "light", 
+    }
+    };
+
+    chartPred = new ApexCharts(
+    document.querySelector("#graficoPredicao"),
+    options
+    );
+    chartPred.render();
+}
+
+function predicao() {
+    var seriesPred = [];
+    var categoriesPred = [];
+    var coresPred = [];
+    var hoje = new Date();
+    for (var i = 0; i < 30; i++) {
+        var dia = new Date(hoje);
+        dia.setDate(hoje.getDate() + i)
+        var dataFormatada = dia.toLocaleDateString('pt-BR');
+        categoriesPred.push(dataFormatada)
+    }
+
+    fabricasSelecionadas.forEach(fabrica => {
+        coresPred.push(gerarCorAleatoria())
+        var dados = [];
+        var totalAlertas = fabrica.quantidadeAlertas;
+        console.log(totalAlertas)
+        var alertasPorDia = 1440 / fabrica.MTBF;
+        console.log(alertasPorDia)
+        var alertasResolvidosPorDia = 1440 / fabrica.tempoResolucao;
+        console.log(alertasResolvidosPorDia)
+
+        for(var i = 0; i < 30; i++) {
+            totalAlertas += alertasPorDia - alertasResolvidosPorDia;
+            dados.push(Number(totalAlertas.toFixed(0)))
+        }
+
+        seriesPred.push({
+            name: fabrica.nome,
+            data: dados
+        })
+    })
+
+    chartPred.updateOptions({
+        series: seriesPred,
+        xaxis: { categories: categoriesPred },
+        colors: coresPred,
+        markers: {
+            size: 5,
+            colors: coresPred,  
+            strokeColors: "#FFFFFF",  
+            strokeWidth: 2,
+        }
+    });
+}
+
+function gerarCorAleatoria() {
+  const r = Math.floor(Math.random() * 255);
+  const g = Math.floor(Math.random() * 255);
+  const b = Math.floor(Math.random() * 255);
+  return `rgb(${r}, ${g}, ${b})`;
+}
 
 
 window.onload = function () {
   dadosGraficoAlerta();
   mostrarFabricas();
   criarBotoesPaginacao();
+  inicializarGrafico();
 };
