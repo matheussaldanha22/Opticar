@@ -41,6 +41,11 @@
   transition: 0.7s;
 }
 
+.nav-active {
+  transform: translateX(0%);
+  transition: 1s;
+}
+
 .linha1-active {
   transform: rotate(44deg);
   transition: 0.7s;
@@ -60,11 +65,6 @@
   cursor: pointer;
 }
 
-.nav-active {
-  transform: translateX(0%);
-  transition: 1s;
-  margin: 0;
-}
 
 .nav-links {
   display: flex;
@@ -76,7 +76,7 @@
   font-size: 12vw;
 }
 
-/* ========== MEDIA QUERY ========== */
+/*  MEDIA QUERY */
 @media only screen and (min-width: 702px) {
   .menu {
     width: 5%;
@@ -94,20 +94,28 @@
     width: 100%;
     display: flex;
     align-items: center;
+    /* transition: all 1s; */
+    & li i {
+      font-size: 40px;
+    }
+    & span {
+      display: none;
+    }
+
+    & ul {
+      width: 100%;
+    }
+
+    & li {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
   }
 
-  .nav-links li i {
-    font-size: 40px;
-  }
-
-  .nav-links li {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  }
 
   .nav-links .li-active::after {
     width: 70%;
@@ -125,19 +133,23 @@
     left: 0 !important;
   }
 
-  .nav-links-expanded li {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 1em;
-  }
+  .nav-links-expanded {
+    /* animation: expandir 10s linear; */
+    margin-left: 5px;
+    & li {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 1em;
 
-  .nav-links-expanded li span {
-    color: #fff;
-    font-family: "Montserrat";
-    font-size: 1.5vw;
-    font-weight: 550;
-    display: flex;
+      & span {
+        color: #fff;
+        font-family: "Montserrat";
+        font-size: 1.5vw;
+        font-weight: 550;
+        display: flex;
+      }
+    }
   }
 
   .menu-expand {
