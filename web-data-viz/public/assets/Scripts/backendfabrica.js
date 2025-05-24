@@ -77,9 +77,11 @@ function listarFabricas() {
             const tabela = document.querySelector(".fabricaContainer table");
             tabela.innerHTML = "";
             tabela.innerHTML = `<thead class ="tituloTabela">
-                                  <tr >
+                                  <tr>
                                       <th>ID Fabrica</th>
                                       <th>Nome</th>
+                                      <th>Limite Atenção</th>
+                                      <th>Limite Crítico</th>
                                       <th>Status/Parâmetro</th>
                                       <th>Gestor</th>
                                       <th>Ações</th>
@@ -109,6 +111,8 @@ function listarFabricas() {
                           <tbody>
                             <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
                             <td data-label = "Nome">${fabrica.nomeFabrica}</td>
+                            <td data-label = "Limite Grave">${fabrica.limiteCritico}</td>
+                            <td data-label = "Limite atenção">${fabrica.limiteAtencao}</td>
                             <td data-label = "Status/Parâmetro" class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
                             <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
                             <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
@@ -120,6 +124,8 @@ function listarFabricas() {
                           <tbody>
                             <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
                             <td data-label = "Nome">${fabrica.nomeFabrica}</td>
+                            <td data-label = "Limite Grave">${fabrica.limiteCritico}</td>
+                            <td data-label = "Limite atenção">${fabrica.limiteAtencao}</td>
                             <td data-label = "Status/Parâmetro" class="atencao">Atenção <i class='bx bx-error-circle atencao'></i></td>
                             <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
                             <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
@@ -131,6 +137,8 @@ function listarFabricas() {
                           <tbody>
                             <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
                             <td data-label = "Nome">${fabrica.nomeFabrica}</td>
+                            <td data-label = "Limite Grave">${fabrica.limiteCritico}</td>
+                            <td data-label = "Limite atenção">${fabrica.limiteAtencao}</td>
                             <td data-label = "Status/Parâmetro" class="critico">Crítico <i class='bx bx-error critico'></i></td>
                             <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
                             <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
@@ -143,6 +151,8 @@ function listarFabricas() {
                       <tbody>
                         <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
                         <td data-label = "Nome">${fabrica.nomeFabrica}</td>
+                        <td data-label = "Limite Grave">${fabrica.limiteCritico}</td>
+                        <td data-label = "Limite atenção">${fabrica.limiteAtencao}</td>
                         <td data-label = "Status/Parâmetro" class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
                         <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
                         <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>

@@ -1,9 +1,6 @@
-DROP database opticar;
-CREATE database opticar;
-use opticar;
-
-select * from servidor_maquina;
-select * from usuario;
+DROP database opticarFrio;
+CREATE database opticarFrio;
+use opticarFrio;
 
 CREATE TABLE usuario (
     idusuario INT PRIMARY KEY AUTO_INCREMENT,
@@ -27,6 +24,7 @@ CREATE TABLE fabrica (
     idfabrica INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45) unique,
     funcao varchar(100),
+    telefone char(10),
     limiteAtencao INT,
     limiteCritico INT,
     fkEmpresa INT,
@@ -97,11 +95,11 @@ VALUES
     ('SmartEng Mecânica', '45678912000177');
 
 -- Inserindo 3 fábricas associadas às empresas
-INSERT INTO fabrica (nome, funcao, limiteAtencao, limiteCritico, fkEmpresa)
+INSERT INTO fabrica (nome, telefone, funcao, limiteAtencao, limiteCritico, fkEmpresa)
 VALUES 
-    ('Fábrica Norte', 'Produção de peças automotivas', 50, 100, 1),
-    ('Fábrica Sul', 'Montagem de motores', 40, 90, 2),
-    ('Fábrica Leste', 'Testes e validação', 30, 80, 3);
+    ('Fábrica Norte', '1134567890', 'Produção de peças automotivas', 50, 100, 1),
+    ('Fábrica Sul', '1123456789', 'Montagem de motores', 40, 90, 2),
+    ('Fábrica Leste', '1145678901', 'Testes e validação', 30, 80, 3);
 
 -- Atualizando os gestores para associá-los às fábricas
 UPDATE usuario SET fkFabrica = 1 WHERE idusuario = 1;
@@ -163,27 +161,63 @@ insert into componenteServidor values
 (default, 14, 1, "intel", "45", "59"),
 (default, 15, 1, "intel", "45", "59");
 
-select * from usuario;
-
-select * from componenteservidor;
-
-select * from servidor_Maquina;
-
-SELECT * FROM componenteServidor JOIN servidor_maquina ON componenteServidor.fkMaquina = servidor_maquina.idMaquina
-				JOIN componente ON componenteServidor.fkComponente = componente.idComponente
-                WHERE servidor_maquina.Mac_Address = 251776438657434;
-                
-select * from capturaDados;
-
-SELECT * FROM servidor_maquina WHERE Mac_Address = 251776438657434;
-
-SELECT * FROM componenteServidor WHERE fkMaquina = (SELECT idMaquina FROM servidor_maquina WHERE Mac_Address = 251776438657434);
-
-SELECT * FROM componenteServidor JOIN servidor_maquina ON componenteServidor.fkMaquina = servidor_maquina.idMaquina
-				JOIN componente ON componenteServidor.fkComponente = componente.idComponente
-                WHERE servidor_maquina.Mac_Address = 251776438657434;
-                
-SELECT f.idfabrica AS idFabrica, f.nome AS nomeFabrica, f.limiteAtencao, f.limiteCritico, u.nome AS nomeGestorFabrica  FROM fabrica AS f 
-LEFT JOIN usuario AS u ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorFabrica';
-
+-- #######################################################################################################################################################################################
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- MODEL ADMIN
+select fabrica.idFabrica, fabrica.telefone, fabrica.nome as nomeFabrica, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
+                        from fabrica JOIN usuario on fkFabrica = idfabrica;
+select fabrica.idFabrica, fabrica.telefone, fabrica.nome as nomeFabrica, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
+                        from fabrica JOIN usuario on fkFabrica = idfabrica;
+select fabrica.idFabrica, fabrica.nome as nomeFabrica, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
+                        from fabrica JOIN usuario on fkFabrica = idfabrica WHERE fabrica.nome = 'Fábrica Norte';
+select fabrica.idFabrica, fabrica.nome as nomeFabrica, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
+                        from fabrica JOIN usuario on fkFabrica = idfabrica WHERE fabrica.idFabrica = '2';
+-- COMPONENTE MODEL
+SELECT DISTINCT tipo FROM componente;
+SELECT DISTINCT medida FROM componente WHERE tipo = 'CPU';
+select idcomponente from componente WHERE tipo = "CPU" && medida = "Porcentagem";
+SELECT cs.idcomponenteServidor, cs.fkMaquina, c.tipo, c.medida, c.indicador, cs.modelo, cs.limiteCritico, cs.limiteAtencao 
+						FROM componenteServidor AS cs JOIN componente AS c ON cs.fkComponente = c.idcomponente WHERE fkMaquina = 1;
+-- FABRICA MODEL
+SELECT * FROM fabrica where fkEmpresa = 1;
+SELECT f.idfabrica AS idFabrica, f.nome AS nomeFabrica, f.limiteAtencao, f.limiteCritico, u.nome AS nomeGestorFabrica 
+						FROM fabrica AS f LEFT JOIN usuario AS u ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorFabrica';
 select * from fabrica where idFabrica = 1;
+-- LISTASERVIDORES MODEL
+SELECT sm.idMaquina, sm.ip, COUNT(cs.idcomponenteServidor) AS componentes
+						FROM servidor_maquina sm
+						LEFT JOIN componenteServidor cs ON sm.idMaquina = cs.fkMaquina
+						JOIN fabrica f ON sm.fkFabrica = f.idFabrica
+						WHERE f.idFabrica = 1
+						GROUP BY sm.idMaquina, sm.ip;
+select * from servidor_maquina where idMaquina = 1;
+SELECT servidor_maquina.idMaquina, servidor_maquina.sistema_operacional, servidor_maquina.ip,
+						servidor_maquina.Mac_Address,
+						servidor_maquina.hostname,
+						empresa.idempresa AS empresaId
+						FROM servidor_maquina JOIN fabrica ON servidor_maquina.fkFabrica = fabrica.idfabrica
+						JOIN empresa ON fabrica.fkEmpresa = empresa.idempresa
+						WHERE empresa.idempresa = 1;
+-- USUARIO MODEL
+SELECT usuario.idusuario AS id, usuario.nome, usuario.email,
+						usuario.cargo,
+						empresa.idempresa AS empresaId,
+						empresa.nome AS empresaNome,
+						usuario.fkFabrica AS idFabrica,
+						fabrica.nome AS nomeFabrica
+						FROM usuario LEFT JOIN 
+						fabrica ON usuario.fkFabrica = fabrica.idfabrica
+						LEFT JOIN empresa ON (fabrica.fkEmpresa = empresa.idempresa
+						OR empresa.fkGestorEmpresa = usuario.idusuario)
+						WHERE usuario.email = 'carlos@opticar.com' AND usuario.senha = 'senha123';
+SELECT usuario.nome, usuario.cargo FROM usuario WHERE idUsuario = 1;
+SELECT usuario.idusuario, usuario.nome, usuario.email, usuario.cpf,  usuario.cargo, empresa.nome AS nomeEmpresa, fabrica.nome AS nomeFabrica from usuario
+						JOIN fabrica on usuario.fkFabrica = idFabrica
+						JOIN empresa on fabrica.fkEmpresa = empresa.idempresa
+						WHERE empresa.idempresa = 1 AND usuario.cargo = 'GestorFabrica';
+SELECT usuario.idusuario, usuario.nome, usuario.email, usuario.cpf,  usuario.cargo, fabrica.nome AS nomeFabrica from usuario
+						JOIN fabrica on usuario.fkFabrica = idFabrica
+						JOIN empresa on fabrica.fkEmpresa = empresa.idempresa
+						WHERE fabrica.idFabrica = 1 AND usuario.cargo != 'GestorFabrica' AND usuario.cargo != 'GestorEmpresa';
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-- #######################################################################################################################################################################################

@@ -15,7 +15,7 @@
     <title>Lista de Componentes</title>
 </head>
 
-<body onload="listarComponente()">
+<body onload="verificaIdMaquina(), listarComponente()">
     <!-- NavBar -->
     <div class="mainContainer">
         <div id="div_menu" class="menu ">
@@ -55,8 +55,7 @@
             </div>
 
             <div class="titleContainer">
-                <h1>Lista de Componentes - <p>SV001</p>
-                </h1>
+                <h1>Lista de Componentes - <p id="codigoMaquina">SV001</p></h1>
             </div>
 
             <button class="btn-add" onclick="abrirModalAdd()">Adicionar componente<i class='bx bx-add-to-queue'
@@ -69,10 +68,11 @@
                         <th>ID Componente</th>
                         <th>Tipo do componente</th>
                         <th>Tipo de medida</th>
+                        <th>Indicador</th>
+                        <th>Modelo</th>
                         <th>Limite grave</th>
                         <th>Limite atenção</th>
-                        <th></th>
-                       
+                        <th>Excluir</th>
                     </tr>
                 </thead>
                 </table>

@@ -202,7 +202,9 @@ function cadastrarPedidoFrio(codigoPedido) {
 }
 
 function listarComponente() {
+    var codigoMaquina = document.querySelector("#codigoMaquina");
     var idMaquinaVar = sessionStorage.idMaquinaSelecionada
+    codigoMaquina.innerHTML = `SV00${idMaquinaVar}`
     fetch("/componentes/listarComponentes", {
         method: "POST",
         headers: {
@@ -222,11 +224,12 @@ function listarComponente() {
                                 <tr>
                                     <th>ID Componente</th>
                                     <th>Tipo do componente</th>
-                                    <th>Modelo</th>
                                     <th>Tipo de medida</th>
+                                    <th>Indicador</th>
+                                    <th>Modelo</th>
                                     <th>Limite grave</th>
                                     <th>Limite atenção</th>
-                                    <th></th>
+                                    <th>Excluir</th>
                                 </tr>
                               </thead>`;
 
@@ -237,11 +240,12 @@ function listarComponente() {
                     <tbody>
                       <td data-label = "ID Componente">${componente.idcomponenteServidor}</td>
                       <td data-label = "Tipo componente">${componente.tipo}</td>
-                      <td data-label = "Modelo">${componente.modelo}</td>
                       <td data-label = "Tipo de medida">${componente.medida}</td>
-                      <td data-label = "Limite frave">${componente.limiteCritico}</td>
+                      <td data-label = "Indicador">${componente.indicador}</td>
+                      <td data-label = "Modelo">${componente.modelo}</td>
+                      <td data-label = "Limite Grave">${componente.limiteCritico}</td>
                       <td data-label = "Limite atenção">${componente.limiteAtencao}</td>
-                      <td data-label = "Ações"><button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bxs-trash'></i></button></td>
+                      <td data-label = "Excluir"><button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bxs-trash'></i></button></td>
                     </tbody>
                 `;
                 tabela.appendChild(linha);
@@ -312,4 +316,12 @@ function excluirComponenteFrio(idVar) {
       .catch(function (resposta) {
         console.log(`#ERRO: ${resposta}`);
       });     
+}
+
+function verificaIdMaquina() {
+  var idMaquinaVar = sessionStorage.idMaquinaSelecionada
+  console.log(idMaquinaVar)
+  if (idMaquinaVar == undefined) {
+    window.location.href = "/listadeservidores.html";
+  }
 }

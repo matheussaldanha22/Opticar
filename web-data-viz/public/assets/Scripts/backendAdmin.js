@@ -138,13 +138,13 @@ function kpiTempoMaiorResolucao(fabricaComMaisAlerta, informacoes) {
         
         if (dadosTempoResolucao.tempoMedioResolucao >= 60) {
             tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 60;
-            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(Horas)`;
+            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(H)`;
         } else if (dadosTempoResolucao.tempoMedioResolucao >= 1440) { 
             tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 1440;
-            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(Dias)`;
+            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(D)`;
         } else {
             tempoMedio = dadosTempoResolucao.tempoMedioResolucao;
-            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(Minutos)`;
+            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(M)`;
         }
 
         mediaAlerta.innerHTML = informacoes[0].nomeFabrica;
@@ -239,23 +239,14 @@ function inicializarGrafico() {
         },
         background: "#FFFFF",  
     },
-    series: [
-        {
-        name: "Série 1",
-        data: [10, 15, 7, 30, 25, 40, 20],
-        },
-        {
-        name: "Série 2",
-        data: [20, 25, 15, 35, 30, 45, 30],
-        },
-    ],
+    series: [],
     stroke: {
         curve: "smooth",  
         width: 3,  
     },
     colors: ["#4ecdc4", "#6c8ebf"], 
     xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+        categories: [],
         labels: {
         style: {
             colors: "#555555",  
@@ -318,7 +309,7 @@ function inicializarGrafico() {
 function predicao() {
     var seriesPred = [];
     var categoriesPred = [];
-    var coresPred = [];
+    var coresPred = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
     var hoje = new Date();
     for (var i = 0; i < 30; i++) {
         var dia = new Date(hoje);
@@ -339,6 +330,9 @@ function predicao() {
 
         for(var i = 0; i < 30; i++) {
             totalAlertas += alertasPorDia - alertasResolvidosPorDia;
+            if (alertasResolvidosPorDia > alertasPorDia) {
+                totalAlertas = 0
+            }
             dados.push(Number(totalAlertas.toFixed(0)))
         }
 
@@ -360,14 +354,6 @@ function predicao() {
         }
     });
 }
-
-function gerarCorAleatoria() {
-  const r = Math.floor(Math.random() * 255);
-  const g = Math.floor(Math.random() * 255);
-  const b = Math.floor(Math.random() * 255);
-  return `rgb(${r}, ${g}, ${b})`;
-}
-
 
 window.onload = function () {
   dadosGraficoAlerta();

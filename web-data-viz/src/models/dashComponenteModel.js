@@ -41,7 +41,6 @@ function obterMesesDisponiveis(idMaquina, componente, ano) {
     AND sm.idMaquina = ${idMaquina}
     AND comp.tipo = '${componente}'   
     ORDER BY mes;
-
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
     return database.executarFRIO(instrucaoSql)
@@ -114,7 +113,6 @@ function dadosGraficoUsoSemanal(idMaquina, componente, anoEscolhido, mesEscolhid
     AND MONTH(cd.data) = ${mesEscolhido}
     GROUP BY CEIL(DAY(cd.data) / 7)
     ORDER BY semana_do_mes;
-
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
     return database.executarFRIO(instrucaoSql)

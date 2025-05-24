@@ -69,13 +69,13 @@ async function listarAlertasPorId(req, res) {
     };
 
     const response = await axios.request(config);
-    let somaDosTempos = 0;  
-    let quantidadeDeAlertas = 0; 
+    var somaDosTempos = 0;  
+    var quantidadeDeAlertas = 0; 
 
     for (var i = 0; i < response.data.issues.length; i++) {
       const issue = response.data.issues[i];
       if (issue.fields.customfield_10157 == idFabrica) {
-        let dataConclusao = null;
+        var dataConclusao = null;
         if (issue.changelog && issue.changelog.histories) {
           for (const history of issue.changelog.histories) {
             for (const item of history.items) {
@@ -97,9 +97,9 @@ async function listarAlertasPorId(req, res) {
       }
     }
 
-    let tempoMedio = 0;
+    var tempoMedio = 0;
     if (quantidadeDeAlertas > 0) {
-      let media = somaDosTempos / quantidadeDeAlertas;
+      var media = somaDosTempos / quantidadeDeAlertas;
       tempoMedio = media / (1000 * 60)
     }
 
@@ -133,13 +133,13 @@ async function kpiTempoMaiorResolucao(req, res) {
     };
 
     const response = await axios.request(config);
-    let somaDosTempos = 0;  
-    let quantidadeDeAlertas = 0; 
+    var somaDosTempos = 0;  
+    var quantidadeDeAlertas = 0; 
 
     for (var i = 0; i < response.data.issues.length; i++) {
       const issue = response.data.issues[i];
       if (issue.fields.customfield_10157 == idFabrica) {
-        let dataConclusao = null;
+        var dataConclusao = null;
         if (issue.changelog && issue.changelog.histories) {
           for (const history of issue.changelog.histories) {
             for (const item of history.items) {
@@ -161,9 +161,9 @@ async function kpiTempoMaiorResolucao(req, res) {
       }
     }
 
-    let tempoMedio = 0;
+    var tempoMedio = 0;
     if (quantidadeDeAlertas > 0) {
-      let media = somaDosTempos / quantidadeDeAlertas;
+      var media = somaDosTempos / quantidadeDeAlertas;
       tempoMedio = media / (1000 * 60)
     }
 

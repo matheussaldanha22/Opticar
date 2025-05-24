@@ -308,14 +308,15 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #012027;
-  background: linear-gradient(270deg, #012027, #04708d);
+  background: white;
+  /* background: linear-gradient(270deg, #012027, #04708d); */
+  border-bottom: 5px solid #04708d;
   border-radius: 12px;
   padding: 1vw;
   width: 25vw;
   height: fit-content;
   font-size: 18px;
-  color: #fffafa;
+  color: #04708d;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
   font-weight: bold;
   gap: 5px;
@@ -410,18 +411,19 @@ body {
 }
 
 .informaçõesFábrica {
-  color: white;
-  background: linear-gradient(270deg, #012027, #04708d);
+  color: #04708d;
+  font-weight: 700;
+  background: white;
   border-radius: 7px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 30%;
+  width: 35%;
 }
 
 .informaçõesFábrica h1 {
-  color: white;
+  color: #04708d;
 }
 
 .titulo {

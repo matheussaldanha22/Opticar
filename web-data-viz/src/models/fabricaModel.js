@@ -3,7 +3,6 @@ var database = require("../database/config")
 function listarFabricasEmpresa(idEmpresa) {
   var instrucaoSql = `
       SELECT * FROM fabrica where fkEmpresa = ${idEmpresa}
-
     `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executar(instrucaoSql)
@@ -11,9 +10,8 @@ function listarFabricasEmpresa(idEmpresa) {
 
 function cadastrarGestorFabrica(idGestor, idFabrica) {
   var instrucaoSql = `
-  UPDATE fabrica SET fkGestorFabrica = ${idGestor} WHERE idfabrica = ${idFabrica}
+      UPDATE fabrica SET fkGestorFabrica = ${idGestor} WHERE idfabrica = ${idFabrica}
   `
-
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executar(instrucaoSql)
 }

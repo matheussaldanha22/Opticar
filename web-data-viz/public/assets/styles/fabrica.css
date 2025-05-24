@@ -347,11 +347,6 @@ table {
   thead {
     background-color: #011f27;
     color: white;
-    border-radius: 8px;
-  }
-
-  tr {
-    border-radius: 8px;
   }
   
   th,
@@ -369,17 +364,6 @@ table {
   tbody tr:nth-child(even) {
     background-color: #f9f9f9;
   }
-
-.tituloTabela {
-    background-color: #011f27;
-    color: white;
-    border-radius: 8px;
-}
-
-.cor {
-    background: linear-gradient(270deg, #012027, #04708D);
-    color: white;
-}
 
 .cor i {
     width: 10px;

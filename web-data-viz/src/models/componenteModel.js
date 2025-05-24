@@ -16,22 +16,22 @@ function verificar(tipo, medida) {
 }
 
 function cadastrar(codigo, modelo, limiteA, limiteG, idMaquina) {
-    var instrucaoSql = `insert into componenteservidor (fkcomponente, fkmaquina, modelo, limitecritico, limiteatencao) values
+    var instrucaoSql = `insert into componenteServidor (fkcomponente, fkmaquina, modelo, limiteCritico, limiteAtencao) values
     (${codigo}, ${idMaquina}, '${modelo}', '${limiteG}', '${limiteA}')`;
 
     return database.executar(instrucaoSql);
 }
 
 function cadastrarFrio(codigo, modelo, limiteA, limiteG, idMaquina) {
-    var instrucaoSql = `insert into componenteservidor (fkcomponente, fkmaquina, modelo, limitecritico, limiteatencao) values
+    var instrucaoSql = `insert into componenteServidor (fkcomponente, fkmaquina, modelo, limiteCritico, limiteAtencao) values
     (${codigo}, ${idMaquina}, '${modelo}', '${limiteG}', '${limiteA}')`;
 
     return database.executarFRIO(instrucaoSql);
 }
 
 function listarComponentes(idMaquina) {
-    var instrucaoSql = `SELECT cs.idcomponenteServidor, cs.fkMaquina, c.tipo, c.medida, cs.modelo, cs.limiteCritico, cs.limiteAtencao 
-                        FROM componenteServidor AS cs JOIN componente AS c ON cs.fkComponente = c.idcomponente WHERE fkMaquina = ${idMaquina} ;`
+    var instrucaoSql = `SELECT cs.idcomponenteServidor, cs.fkMaquina, c.tipo, c.medida, c.indicador, cs.modelo, cs.limiteCritico, cs.limiteAtencao 
+FROM componenteServidor AS cs JOIN componente AS c ON cs.fkComponente = c.idcomponente WHERE fkMaquina = ${idMaquina} ;`
     
     return database.executar(instrucaoSql);
 }
