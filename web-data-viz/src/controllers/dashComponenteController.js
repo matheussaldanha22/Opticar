@@ -1,23 +1,43 @@
 var dashComponenteModel = require("../models/dashComponenteModel")
 
-function obterAnosDisponiveis(req, res) {
+function obterParametrosComponente(req, res) {
   var idMaquina = req.params.idMaquina
   var componente = req.params.componente
 
   dashComponenteModel
-    .obterAnosDisponiveis(idMaquina, componente)
+    .obterParametrosComponente(idMaquina, componente)
     .then(function (resultado) {
       if (resultado.length > 0) {
-        res.status(200).json(resultado)
+        res.status(200).json(resultado[0])
       } else {
         res.status(204).send("Nenhum resultado encontrado!")
       }
     })
     .catch(function (erro) {
       console.log(erro)
-      console.log("Houve um erro ao buscar os anos.", erro.sqlMessage)
+      console.log("Houve um erro ao buscar os parametros.", erro.sqlMessage)
       res.status(500).json(erro.sqlMessage)
     })
+}
+
+function obterAnosDisponiveis(req, res) {
+  var idMaquina = req.params.idMaquina;
+  var componente = req.params.componente;
+
+  dashComponenteModel
+    .obterAnosDisponiveis(idMaquina, componente)
+    .then(function (resultado) {
+      if (resultado.length > 0) {
+        res.status(200).json(resultado);
+      } else {
+        res.status(204).send("Nenhum resultado encontrado!");
+      }
+    })
+    .catch(function (erro) {
+      console.log(erro);
+      console.log("Houve um erro ao buscar os anos.", erro.sqlMessage);
+      res.status(500).json(erro.sqlMessage);
+    });
 }
 
 function obterMesesDisponiveis(req, res) {
@@ -36,7 +56,7 @@ function obterMesesDisponiveis(req, res) {
     })
     .catch(function (erro) {
       console.log(erro)
-      console.log("Houve um erro ao buscar os anos.", erro.sqlMessage)
+      console.log("Houve um erro ao buscar os meses.", erro.sqlMessage)
       res.status(500).json(erro.sqlMessage)
     })
 }
@@ -79,7 +99,7 @@ function obterTempoMtbf(req, res) {
     })
     .catch(function (erro) {
       console.log(erro)
-      console.log("Houve um erro ao buscar os alertas.", erro.sqlMessage)
+      console.log("Houve um erro ao buscar o mtbf", erro.sqlMessage)
       res.status(500).json(erro.sqlMessage)
     })
 
@@ -104,7 +124,7 @@ function dadosGraficoUsoSemanal(req, res) {
       })
       .catch(function (erro) {
         console.log(erro)
-        console.log("Houve um erro ao buscar as informações.", erro.sqlMessage)
+        console.log("Houve um erro ao buscar as informações semanal.", erro.sqlMessage)
         res.status(500).json(erro.sqlMessage)
       })
   }
@@ -128,7 +148,7 @@ function dadosGraficoUsoAnual(req, res) {
       })
       .catch(function (erro) {
         console.log(erro)
-        console.log("Houve um erro ao buscar as informações.", erro.sqlMessage)
+        console.log("Houve um erro ao buscar as informações anual.", erro.sqlMessage)
         res.status(500).json(erro.sqlMessage)
       })
   }
@@ -139,6 +159,7 @@ function dadosGraficoUsoAnual(req, res) {
 
 
 module.exports = {
+  obterParametrosComponente,
   obterAnosDisponiveis,
   obterMesesDisponiveis,
   obterAlertasMes,

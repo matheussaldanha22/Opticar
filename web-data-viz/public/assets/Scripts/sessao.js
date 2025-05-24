@@ -31,7 +31,7 @@ function alertasPagina() {
 
 function dashAnalise() {
   pagina = 5
-  window.location.href = "./dashComponente.html"
+  window.location.href = "./dashAnalise.html"
   document.getElementById("dashAnalise").className = "li-active"
 }
 

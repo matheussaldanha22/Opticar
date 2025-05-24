@@ -1,5 +1,19 @@
 var database = require("../database/config")
 
+function obterParametrosComponente(idMaquina, componente) {
+    var instrucaoSql = `
+    SELECT ROUND(AVG(cs.limiteCritico),2) as limiteCritico, ROUND(AVG(cs.limiteAtencao),2) as limiteAtencao FROM componenteServidor cs
+    JOIN componente c ON cs.fkComponente = c.idcomponente
+    JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
+    WHERE c.tipo = '${componente}' 
+    AND sm.idMaquina = ${idMaquina}
+    AND c.medida = 'Porcentagem';
+
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarFRIO(instrucaoSql)
+}
+
 function obterAnosDisponiveis(idMaquina, componente) {
     var instrucaoSql = `
     SELECT DISTINCT YEAR(c.data) AS ano
@@ -94,6 +108,7 @@ function dadosGraficoUsoSemanal(idMaquina, componente, anoEscolhido, mesEscolhid
     JOIN servidor_maquina AS sm ON cs.fkMaquina = sm.idMaquina
     WHERE
     c.tipo = '${componente}'
+    AND c.medida = 'Porcentagem'
     AND sm.idMaquina = ${idMaquina}
     AND YEAR(cd.data) = ${anoEscolhido}
     AND MONTH(cd.data) = ${mesEscolhido}
@@ -113,6 +128,7 @@ function dadosGraficoUsoAnual(idMaquina, componente, anoEscolhido) {
         JOIN servidor_maquina ON idMaquina = fkMaquina
     WHERE 
         c.tipo = '${componente}' 
+        AND c.medida = 'Porcentagem'
         AND servidor_maquina.idMaquina = ${idMaquina}
         AND year(capturaDados.data) = ${anoEscolhido}
         group by mes
@@ -124,6 +140,7 @@ function dadosGraficoUsoAnual(idMaquina, componente, anoEscolhido) {
 
 
 module.exports = {
+    obterParametrosComponente,
     obterAnosDisponiveis,
     obterMesesDisponiveis,
     obterAlertasMes,

@@ -131,10 +131,10 @@ function obterTempoMtbf(idMaquina, componente) {
     }
   })
     .then(res => res.json())
-    .then(tempoAlerta => {
-      console.log("Tempo dos alertas:", tempoAlerta);
-      let minOperacao = tempoAlerta.minutos_operacao;
-      let qtdAlertas = tempoAlerta.qtd_alertas;
+    .then(tempos => {
+      console.log("Desempenho:", tempos);
+      let minOperacao = tempos.minutos_operacao;
+      let qtdAlertas = tempos.qtd_alertas;
       let mtbf = Math.floor(minOperacao / qtdAlertas)
       let metrica = "Min"
 
@@ -175,15 +175,20 @@ function obterTempoMtbf(idMaquina, componente) {
 
 //-----------------------------MODAL FILTRO USO
 
-let anoVar //variavel global para levar pro atualiza dados
+let anoVar //variaveis global para levar pro atualiza dados
 let mesVar
-let filtroGraf = "mensal"
+let filtroGraf = "anual"
+let optionAnos = ""
 
-//caso nao escolha vai mostrar o mensal ---- Texto filtro
-document.getElementById("tipoFiltro-uso").innerHTML = "Mensal"
-document.getElementById("periodo-uso").innerHTML = `${nomeMeses[mesAtual]} de ${data.getFullYear()}`
+//caso nao escolha vai mostrar o ano atual ---- Texto filtro
+document.getElementById("tipoFiltro-uso").innerHTML = "Anual"
+document.getElementById("periodo-uso").innerHTML = ` ${data.getFullYear()} (Padrão)`
+
 
 function filtrarUso() {
+  let idMaquina = sltServidor.value
+  let componente = sltComponente.value
+
   Swal.fire({
     title: `Filtrar gráfico <u style="color:#2C3E50;">Uso</u>`,
     html: `
@@ -199,22 +204,11 @@ function filtrarUso() {
           
           <label for="sltAno"><b>Escolha o ano:</b></label>
             <select id="sltAno" class="sltRoxo">
-              <option value="2021">2021</option>
-              <option value="2022">2022</option>
-              <option value="2023">2023</option>
-              <option value="2024">2024</option>
-              <option value="2025" selected>2025</option>
-          </select>
-
+            </select>
 
           <div id="containerMes" style="display:block; margin-top:10px;">
             <label for="sltMes"><b>Escolha o Mês:</b></label>
             <select id="sltMes" class="sltRoxo">
-              <option value="1">Janeiro</option>
-              <option value="2">Fevereiro</option>
-              <option value="3">Março</option>
-              <option value="4">Abril</option>
-              <option value="5" selected>Maio</option>
             </select>
           </div>
         </div>
@@ -224,29 +218,100 @@ function filtrarUso() {
     cancelButtonText: "Fechar",
     confirmButtonText: "Confirmar",
     confirmButtonColor: '#2C3E50',
-    customClass: "alertaModal"
+    customClass: "alertaModal",
+    didOpen: () => { //#############EXECUTA OS COMANDOS ASSIM Q MODAL ABRE SWEETALERT
+
+
+      selectAno = document.getElementById("sltAno")
+      selectMes = document.getElementById("sltMes")
+
+      fetch(`/dashComponentes/obterAnosDisponiveis/${idMaquina}/${componente}`, { //fetch para add anos nos selects
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(res => res.json())
+        .then(res => {
+
+          res.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.ano;
+            option.textContent = item.ano;
+            selectAno.appendChild(option);
+          });
+
+
+        })
+        .catch(erro => {
+          console.error("Erro ao buscar anos", erro);
+        });
+
+      //#######FETCH QUE POR PADRÃO LISTA OS MESES DO ANO ATUAL
+      let ano = data.getFullYear()
+      fetch(`/dashComponentes/obterMesesDisponiveis/${idMaquina}/${componente}/${ano}`, { //fetch para add anos nos selects
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(res => res.json())
+        .then(res => {
+          selectMes.innerHTML = ''
+          res.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.mes;
+            option.textContent = `${nomeMeses[item.mes - 1]}`;
+            selectMes.appendChild(option);
+          });
+
+
+        })
+        .catch(erro => {
+          console.error("Erro ao buscar meses", erro);
+        });
+
+
+      //#######EVENTO NO SELECT PARA OBTER MESES CORRESPONDENTES DO MES
+      selectAno.addEventListener("change", function () { //fetch nos meses quando muda o ano
+
+        let ano = selectAno.value
+        fetch(`/dashComponentes/obterMesesDisponiveis/${idMaquina}/${componente}/${ano}`, { //fetch para add anos nos selects
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(res => res.json())
+          .then(res => {
+            selectMes.innerHTML = ''
+            res.forEach(item => {
+              const option = document.createElement("option");
+              option.value = item.mes;
+              option.textContent = `${nomeMeses[item.mes - 1]}`;
+              selectMes.appendChild(option);
+            });
+
+
+          })
+          .catch(erro => {
+            console.error("Erro ao buscar meses", erro);
+          });
+      });
+
+    }
   }).then((res) => {
     if (res.isConfirmed) {
       const tipoFiltro = document.getElementById("tipoFiltro-uso")
       const periodo = document.getElementById("periodo-uso")
 
-
-
-
       const sltFiltrar = document.getElementById("sltFiltrar");
       const sltAno = document.getElementById("sltAno");
       const sltMes = document.getElementById("sltMes");
-
 
       if (sltFiltrar && sltAno && sltMes) {
         if (sltFiltrar.value === "mensal") {
           tipoFiltro.innerHTML = "Mensal";
           periodo.innerHTML = `${nomeMeses[sltMes.value - 1]} de ${sltAno.value}`
-          filtroGraf = "mensal"
+          filtroGraf = sltFiltrar.value
         } else {
           tipoFiltro.innerHTML = "Anual";
           periodo.innerHTML = sltAno.value
-          filtroGraf = "anual"
+          filtroGraf = sltFiltrar.value
         }
       }
 
@@ -275,98 +340,70 @@ function filtrarUso() {
 
 //-----------------------------CHARTS
 
-// CHART USO SEMANAL
-function dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido) {
-  let categorias = []
-  let dados = []
-
-  //if escolhido for igual a mes
-  // FALTA ISSO
+// #######CHART USO SEMANAL
 
 
-  //if escolhido for igual mensal
-  if (filtroGraf === "mensal") {
-    console.log("fetch mensal")
-    fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        anoEscolhido: anoEscolhido,
-        mesEscolhido: mesEscolhido,
-      }),
+function obterParametroComponente(idMaquina, componente) {
+  return fetch(`/dashComponentes/obterParametrosComponente/${idMaquina}/${componente}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  })
+    .then(res => res.json())
+    .then(res => {
+      return res.limiteCritico;
     })
-      .then(function (res) {
-        if (!res.ok) {
-          console.log(res)
-          throw new Error(`Erro na resposta: ${res.status}`);
-        }
-        return res.json();
-      }).then(function (informacoes) {
-
-        console.log("dados uso mensal obtidos!")
-
-        informacoes.forEach((item) => {
-
-          categorias.push(`Semana ${item.semana_do_mes}`);
-          dados.push(item.media_utilizacao);
-
-        });
-
-        renderGraficoUso(categorias, dados)
-
-      }).catch(erro => {
-        console.error("Erro ao buscar dados do grafico mensal:", erro);
-      });
-
-  }else{ // se tipo do grafico for anual
-    fetch(`/dashComponentes/dadosGraficoUsoAnual/${idMaquina}/${componente}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        anoEscolhido: anoEscolhido,
-      }),
-    })
-      .then(function (res) {
-        if (!res.ok) {
-          console.log(res)
-          throw new Error(`Erro na resposta: ${res.status}`);
-        }
-        return res.json();
-      }).then(function (informacoes) {
-
-        console.log("dados uso anual obtidos!")
-
-        informacoes.forEach((item) => {
-
-          categorias.push(`${nomeMeses[item.mes-1]}`);
-          dados.push(item.media_utilizacao);
-
-        });
-
-        renderGraficoUso(categorias, dados)
-
-      }).catch(erro => {
-        console.error("Erro ao buscar dados do grafico anual:", erro);
-      });
-
-  }
-
-
+    .catch(erro => {
+      console.error("Erro ao buscar parâmetros", erro);
+    });
 }
 
-function renderGraficoUso(categorias, dados) {
+function dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido) {
+  obterParametroComponente(idMaquina, componente) // BUSCA OS PARAMETROS DO GRAFICO E SÓ DEPOIS BUSCA OS DADOS
+    .then((parametro) => {
+      let categorias = [];
+      let dados = [];
 
-  const parametroAlerta = 70;
+      if (filtroGraf === "mensal") {
+        fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ anoEscolhido, mesEscolhido })
+        })
+          .then(res => res.json())
+          .then(informacoes => {
+            informacoes.forEach(item => {
+              categorias.push(`Semana ${item.semana_do_mes}`);
+              dados.push(item.media_utilizacao);
+            });
+            renderGraficoUso(categorias, dados, parametro); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
+          });
+      } else {
+        fetch(`/dashComponentes/dadosGraficoUsoAnual/${idMaquina}/${componente}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ anoEscolhido })
+        })
+          .then(res => res.json())
+          .then(informacoes => {
+            informacoes.forEach(item => {
+              categorias.push(`${nomeMeses[item.mes - 1]}`);
+              dados.push(item.media_utilizacao);
+            });
+            renderGraficoUso(categorias, dados, parametro); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
+          });
+      }
+    })
+    .catch(erro => console.error("Erro:", erro));
+}
+
+function renderGraficoUso(categorias, dados, parametro) {
+  console.log("parametro do gráfico:", parametro);
 
   const options = {
     chart: { type: 'line', height: 300, toolbar: { show: false } },
     series: [
       { name: 'Uso médio (%)', data: dados },
-      { name: 'Limite crítico', data: new Array(categorias.length).fill(parametroAlerta), stroke: { dashArray: 5 } }
+      { name: 'Limite crítico', data: new Array(categorias.length).fill(parametro), stroke: { dashArray: 5 } }
     ],
     xaxis: { categories: categorias },
     yaxis: { max: 100 },
@@ -374,11 +411,13 @@ function renderGraficoUso(categorias, dados) {
     stroke: { curve: 'smooth', width: [3, 2] }
   };
 
-  if (window.chartUso) window.chartUso.destroy();
+  if (window.chartUso) { //se já tiver um grafico destroi p plotar o outro
+    window.chartUso.destroy()
+  };
+
   window.chartUso = new ApexCharts(document.querySelector("#graficoUsoComponente"), options);
   window.chartUso.render();
 }
-
 
 //CHART USO MENSAL
 
@@ -416,6 +455,7 @@ const chartData = {
   }
 };
 
+// -----------------------TROCA DE COMPONENTE
 //FUNÇÃO PARA ATUALIZAR DADOS DE ACORDO COM O FILTRO SLTS
 const sltServidor = document.getElementById("sltServidor");
 const sltComponente = document.getElementById("sltComponente");
@@ -427,7 +467,7 @@ function atualizarDados() {
   let mesEscolhido = mesVar;
 
   const nomesComponente = document.querySelectorAll('.nomeComponente')
-  nomesComponente.forEach(i => {i.innerHTML = componente});
+  nomesComponente.forEach(i => { i.innerHTML = componente });
 
   //atribuindo que se nao filtrar por padrão puxa o mes e ano atual
   if (!anoEscolhido || !mesEscolhido) {
@@ -438,7 +478,7 @@ function atualizarDados() {
   if (idMaquina && componente) {
     obterAlertasMes(idMaquina, componente);
     obterTempoMtbf(idMaquina, componente);
-    dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido)
+    dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido);
   }
 }
 

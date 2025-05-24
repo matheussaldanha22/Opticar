@@ -3,6 +3,10 @@ var router = express.Router()
 
 var dashComponenteController = require("../controllers/dashComponenteController")
 
+router.get("/obterParametrosComponente/:idMaquina/:componente", function (req, res) {
+  dashComponenteController.obterParametrosComponente(req, res)
+})
+
 router.get("/obterAnosDisponiveis/:idMaquina/:componente", function (req, res) {
   dashComponenteController.obterAnosDisponiveis(req, res)
 })
