@@ -27,6 +27,7 @@ function obterPeriodo(req,res) {
     var idFabrica = req.params.idFabrica
 
     dashComponenteModel.obterPeriodo(idFabrica, ano, mes).then((resultado) =>{
+        
         res.status(200).send(resultado)
     })
 }

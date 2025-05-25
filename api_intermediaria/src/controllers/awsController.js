@@ -47,6 +47,7 @@ async function enviarParaS3(macAddress, dadosJson) {
     }
 }
 
+
 module.exports = {
     dadosBucket
 };

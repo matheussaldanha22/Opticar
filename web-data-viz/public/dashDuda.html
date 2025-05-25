@@ -87,7 +87,7 @@
                         <h3></h3>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi"  style="color: white; text-shadow: 2px 2px 4px red;"><span id="semanaAlerta">x</span> semana</p>
+                        <p class="dadoKpi"  style="color: white; text-shadow: 2px 2px 4px red;"><span id="semanaAlerta">x</span> ° semana</p>
                     </span>
                     <h3><b id="parametroCpu"  style="color: red; font-size: 14px;"><span id="qtdAlerta">x</span>Alertas</b></h3>
                 </div>
@@ -114,7 +114,7 @@
                     <span class="txtKpi">
                         <p class="dadoKpi" id="usoDisco" style="color: white; text-shadow: 2px 2px 4px red;"> <span id="periodoAlerta">xxxx</span> </p>
                     </span>
-                    <h3><b id="parametroDisco" style="color: red; font-size: 14px;"> <span id="qtdPeriodoAlerta"> 30 alertas</span></b></h3>
+                    <h3><b id="parametroDisco" style="color: red; font-size: 14px;"> <span id="qtdPeriodoAlerta"> 30 </span> alertas</b></h3>
                 </div>
                 <div class="kpiUso">
                     <div class="tituloKpi">
@@ -123,7 +123,7 @@
                     <span class="txtKpi">
                     <p class="dadoKpi"  style="color: white; text-shadow: 2px 2px 4px red;"> <span id="DiaAlerta">xxxx</span> </p>
                     </span>
-                    <h3><b  style="color: red; font-size: 14px;"> <span id="qtdDiaAlerta"> 30 alertas</span></b></h3>
+                    <h3><b  style="color: red; font-size: 14px;"> <span id="qtdDiaAlerta"> 30 </span> alertas</b></h3>
                     
                     </span>
     
@@ -158,44 +158,44 @@
 
                 <table id="tabela-alertas" class="componentesContainer">
                 <tr>
-                        <th>Id</th>
                         <th>Nome</th>
                         <th>Périodo</th>
-                        <th>Quantidade</th>
+                        <th>CPU</th>
+                        <th>RAM</th>
                     </tr>
                     <tr>
-                        <td>1</td>
                         <td>chrome</td>
                         <td>Tarde</td>
-                        <td>10</td>
+                        <td>10%</td>
+                        <td>60%</td>
         
                     </tr>
                     <tr>
-                        <td>1</td>
                         <td>chrome</td>
-                        <td>Tarde</td>
-                        <td>10</td>
+                        <td>Noite</td>
+                        <td>10%</td>
+                        <td>60%</td>
         
                     </tr>
                     <tr>
-                        <td>1</td>
-                        <td>chrome</td>
-                        <td>Tarde</td>
-                        <td>10</td>
+                       <td>chrome</td>
+                        <td>manhã</td>
+                        <td>10%</td>
+                        <td>60%</td>
         
                     </tr>
                     <tr>
-                        <td>1</td>
-                        <td>chrome</td>
-                        <td>Tarde</td>
-                        <td>10</td>
+                       <td>chrome</td>
+                        <td>Madrugada</td>
+                        <td>10%</td>
+                        <td>60%</td>
         
                     </tr>
                     <tr>
-                        <td>1</td>
-                        <td>chrome</td>
+                         <td>chrome</td>
                         <td>Tarde</td>
-                        <td>10</td>
+                        <td>10%</td>
+                        <td>60%</td>
         
                     </tr>
                     
@@ -205,10 +205,11 @@
            <div id="graficoConsumoCpuVendas" class="containerGraficoCpuVendas" style="display: none;">
             <div class="graficoRelacao">
                 <div class="titulo">
-                <h3>Consumo de CPU x Vendas de Carros</h3>
+                <h3>Consumo de CPU x PIX    </h3>
         
             </div>
             <div class="chartRelacao" id="chartCpuVendas"></div>
+            
         </div>
 </div>     
 

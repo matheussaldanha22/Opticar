@@ -156,13 +156,14 @@ function obterPeriodo(ano, mes) {
   var ano = d.getFullYear();
   var mes = d.getMonth() + 1;
 
-  fetch(`/dashPeriodo/obterDia/${idFabrica}/${ano}/${mes}`, {
+  fetch(`/dashPeriodo/obterPeriodo/${idFabrica}/${ano}/${mes}`, {
     method: 'GET',
     headers: {
         'Content-Type': 'application/json'
     },
   }).then((resultado) => {
     resultado.json().then((json) =>{
+      console.log("ESTOU NO OBTER PERIODOOOOOOOOOOOOOOO PORRA" + json)
       document.getElementById('periodoAlerta').innerHTML = json[0].periodo
       document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
     })
@@ -175,6 +176,12 @@ function obterDia(ano, mes) {
   var ano = d.getFullYear();
   var mes = d.getMonth() + 1;
 
+  console.log(idFabrica)
+  console.log(ano)
+  console.log(mes)
+
+
+
   fetch(`/dashPeriodo/obterDia/${idFabrica}/${ano}/${mes}` , {
       method: 'GET',
       headers: {
@@ -182,8 +189,9 @@ function obterDia(ano, mes) {
     },
   }).then((resultado) => {
     resultado.json().then((json) =>{
-      document.getElementById('DiaAlerta').json[0].diaalerta
-      document.getElementById('qtdDiaAlerta').json[0]. qtd
+
+      document.getElementById('DiaAlerta').innerHTML = json[0].dia
+      document.getElementById('qtdDiaAlerta').innerHTML = json[0].qtdalerta
     })
   }
   )
