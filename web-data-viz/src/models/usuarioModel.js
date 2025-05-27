@@ -39,7 +39,7 @@ function autenticar(email, senha) {
             AND usuario.senha = '${senha}';
     `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 // Coloque os mesmos parâmetros aqui. Vá para a var instrucaoSql
@@ -60,7 +60,7 @@ function cadastrar(nome, email, cpf, cargo, senha, fkFabrica) {
         INSERT INTO usuario (nome, email, cpf, cargo, senha, fkFabrica) VALUES ('${nome}', '${email}', '${cpf}', '${cargo}',  '${senha}', '${fkFabrica}');
     `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function listarPorId(idUsuario) {
@@ -79,7 +79,7 @@ function listarPorEmpresa(idEmpresa) {
     WHERE empresa.idempresa = ${idEmpresa} AND usuario.cargo = 'GestorFabrica';
   `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function listarPorFabrica(idFabrica) {
@@ -90,7 +90,7 @@ function listarPorFabrica(idFabrica) {
     WHERE fabrica.idFabrica = ${idFabrica} AND usuario.cargo != 'GestorFabrica' AND usuario.cargo != 'GestorEmpresa';
   `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function atualizarUsuario(idUsuario, nome, email, cpf, cargo) {
@@ -100,7 +100,7 @@ SET nome = '${nome}', email = '${email}', cpf='${cpf}', cargo='${cargo}'
 WHERE idusuario = ${idUsuario};
 `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function atualizarUsuarioFabrica(
@@ -117,7 +117,7 @@ SET nome = '${nome}', email = '${email}', cpf='${cpf}', cargo='${cargo}', fkFabr
 WHERE idusuario = ${idUsuario};
 `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 module.exports = {

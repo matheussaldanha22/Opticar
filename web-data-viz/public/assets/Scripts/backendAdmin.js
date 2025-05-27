@@ -138,13 +138,13 @@ function kpiTempoMaiorResolucao(fabricaComMaisAlerta, informacoes) {
         
         if (dadosTempoResolucao.tempoMedioResolucao >= 60) {
             tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 60;
-            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(H)`;
+            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(0)}:00(h)`;
         } else if (dadosTempoResolucao.tempoMedioResolucao >= 1440) { 
             tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 1440;
-            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(D)`;
+            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(0)}(d)`;
         } else {
             tempoMedio = dadosTempoResolucao.tempoMedioResolucao;
-            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(1)}(M)`;
+            nomeFabricaTempo.innerHTML = `00:${tempoMedio.toFixed(0)}(m)`;
         }
 
         mediaAlerta.innerHTML = informacoes[0].nomeFabrica;
@@ -319,7 +319,6 @@ function predicao() {
     }
 
     fabricasSelecionadas.forEach(fabrica => {
-        coresPred.push(gerarCorAleatoria())
         var dados = [];
         var totalAlertas = fabrica.quantidadeAlertas;
         console.log(totalAlertas)

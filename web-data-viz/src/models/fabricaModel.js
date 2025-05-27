@@ -37,25 +37,25 @@ function listarFabricas() {
   var instrucaoSql = `SELECT f.idfabrica AS idFabrica, f.nome AS nomeFabrica, f.limiteAtencao, f.limiteCritico, u.nome AS nomeGestorFabrica 
     FROM fabrica AS f LEFT JOIN usuario AS u ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorFabrica';`
 
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function excluirFabrica(id) {
   var instrucaoSql = `DELETE FROM fabrica WHERE idfabrica = ${id}`
 
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function excluirFabricaFrio(id) {
   var instrucaoSql = `DELETE FROM servidor_maquina WHERE fkFabrica = ${id};`
 
-  return database.executarFRIO(instrucaoSql)
+  return database.executarQUENTE(instrucaoSql)
 }
 
 function modalUpdate(id) {
   var instrucaoSql = `select * from fabrica where idFabrica = ${id};`
 
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 
@@ -63,7 +63,7 @@ function updateFabrica(id, nome, funcao, limiteA, limiteG) {
   var instrucaoSql = `UPDATE fabrica SET nome = '${nome}', funcao = '${funcao}', limiteAtencao = ${limiteA}, limiteCritico = ${limiteG} WHERE idfabrica = ${id};`;
 
   console.log("SQL:", instrucaoSql);
-  return database.executar(instrucaoSql);
+  return database.executarFRIO(instrucaoSql);
   
 }
 

@@ -425,6 +425,21 @@ END$$
 
 DELIMITER ;
 
+CREATE TABLE alerta (
+    idAlerta INT PRIMARY KEY AUTO_INCREMENT,
+    dataHora DATETIME DEFAULT CURRENT_TIMESTAMP,
+    valor FLOAT NOT NULL,
+    titulo VARCHAR(100) NOT NULL COMMENT 'Resumo do alerta para o campo Summary no JIRA',
+    descricao TEXT COMMENT 'Detalhes para o campo Description no JIRA',
+    prioridade VARCHAR(45) DEFAULT 'Média' COMMENT 'Mapeia para Priority no JIRA',
+    tipo_incidente VARCHAR(50) COMMENT 'Mapeia para Issue Type no JIRA',
+    componente VARCHAR(50) COMMENT 'Para o campo Component no JIRA',
+    statusAlerta VARCHAR(45) DEFAULT 'To Do' COMMENT 'Status do alerta',
+    fkCapturaDados INT NOT NULL COMMENT 'Referência à tabela capturaDados',
+    jira_issue_key VARCHAR(20) COMMENT 'Chave do ticket criado no JIRA (ex: PROJ-123)',
+    FOREIGN KEY (fkCapturaDados) REFERENCES capturaDados(idCapturaDados) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 INSERT INTO capturaDados (fkComponenteServidor, valor, data)
 VALUES (1, 80, NOW());
 

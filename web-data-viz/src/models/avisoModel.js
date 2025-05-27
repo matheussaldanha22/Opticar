@@ -17,7 +17,7 @@ function listar() {
                 ON a.fk_usuario = u.id;
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    return database.executarFRIO(instrucaoSql);
 }
 
 function pesquisarDescricao(texto) {
@@ -38,7 +38,7 @@ function pesquisarDescricao(texto) {
         WHERE a.descricao LIKE '${texto}';
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    return database.executarFRIO(instrucaoSql);
 }
 
 function listarPorUsuario(idUsuario) {
@@ -59,7 +59,7 @@ function listarPorUsuario(idUsuario) {
         WHERE u.id = ${idUsuario};
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    return database.executarFRIO(instrucaoSql);
 }
 
 function publicar(titulo, descricao, idUsuario) {
@@ -68,7 +68,7 @@ function publicar(titulo, descricao, idUsuario) {
         INSERT INTO aviso (titulo, descricao, fk_usuario) VALUES ('${titulo}', '${descricao}', ${idUsuario});
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    return database.executarFRIO(instrucaoSql);
 }
 
 function editar(novaDescricao, idAviso) {
@@ -77,7 +77,7 @@ function editar(novaDescricao, idAviso) {
         UPDATE aviso SET descricao = '${novaDescricao}' WHERE id = ${idAviso};
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    return database.executarFRIO(instrucaoSql);
 }
 
 function deletar(idAviso) {
@@ -86,7 +86,7 @@ function deletar(idAviso) {
         DELETE FROM aviso WHERE id = ${idAviso};
     `;
     console.log("Executando a instrução SQL: \n" + instrucaoSql);
-    return database.executar(instrucaoSql);
+    return database.executarFRIO(instrucaoSql);
 }
 
 module.exports = {

@@ -1,23 +1,23 @@
 var mysql = require("mysql2");
 
 // CONEXÃO DO BANCO MYSQL SERVER
-var mySqlConfig = {
-    host: process.env.DB_HOST,
-    database: process.env.DB_DATABASE,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT
-};
-
-var mySqlConfigFrio = {
-    host: process.env.DB_HOST_FRIO,
+var mySqlConfigFRIO = {
+host: process.env.DB_HOST_FRIO,
     database: process.env.DB_DATABASE_FRIO,
     user: process.env.DB_USER_FRIO,
     password: process.env.DB_PASSWORD_FRIO,
     port: process.env.DB_PORT_FRIO
 };
 
-function executar(instrucao) {
+var mySqlConfigQUENTE = {
+    host: process.env.DB_HOST_QUENTE,
+    database: process.env.DB_DATABASE_QUENTE,
+    user: process.env.DB_USER_QUENTE,
+    password: process.env.DB_PASSWORD_QUENTE,
+    port: process.env.DB_PORT_QUENTE
+};
+
+function executarFRIO(instrucao) {
 
     if (process.env.AMBIENTE_PROCESSO !== "producao" && process.env.AMBIENTE_PROCESSO !== "desenvolvimento") {
         console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM .env OU dev.env OU app.js\n");
@@ -25,7 +25,7 @@ function executar(instrucao) {
     }
 
     return new Promise(function (resolve, reject) {
-        var conexao = mysql.createConnection(mySqlConfig);
+        var conexao = mysql.createConnection(mySqlConfigFRIO);
         conexao.connect();
         conexao.query(instrucao, function (erro, resultados) {
             conexao.end();
@@ -41,7 +41,7 @@ function executar(instrucao) {
     });
 }
 
-function executarFRIO(instrucao) {
+function executarQUENTE(instrucao) {
 
     if (process.env.AMBIENTE_PROCESSO !== "producao" && process.env.AMBIENTE_PROCESSO !== "desenvolvimento") {
         console.log("\nO AMBIENTE (produção OU desenvolvimento) NÃO FOI DEFINIDO EM .env OU dev.env OU app.js\n");
@@ -49,7 +49,7 @@ function executarFRIO(instrucao) {
     }
 
     return new Promise(function (resolve, reject) {
-        var conexao = mysql.createConnection(mySqlConfigFrio);
+        var conexao = mysql.createConnection(mySqlConfigQUENTE);
         conexao.connect();
         conexao.query(instrucao, function (erro, resultados) {
             conexao.end();
@@ -66,6 +66,6 @@ function executarFRIO(instrucao) {
 }
 
 module.exports = {
-    executar,
-    executarFRIO
+    executarFRIO,
+    executarQUENTE
 };

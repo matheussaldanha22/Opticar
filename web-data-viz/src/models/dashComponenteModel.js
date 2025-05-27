@@ -11,7 +11,7 @@ function obterParametrosComponente(idMaquina, componente) {
 
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 function obterAnosDisponiveis(idMaquina, componente) {
@@ -27,7 +27,7 @@ function obterAnosDisponiveis(idMaquina, componente) {
 
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 function obterMesesDisponiveis(idMaquina, componente, ano) {
@@ -43,7 +43,7 @@ function obterMesesDisponiveis(idMaquina, componente, ano) {
     ORDER BY mes;
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 
@@ -66,7 +66,7 @@ function obterAlertasMes(idMaquina, componente) {
 
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 function obterTempoMtbf(idMaquina, componente) {
@@ -93,7 +93,7 @@ function obterTempoMtbf(idMaquina, componente) {
 
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 function dadosGraficoUsoSemanal(idMaquina, componente, anoEscolhido, mesEscolhido) {
@@ -115,7 +115,7 @@ function dadosGraficoUsoSemanal(idMaquina, componente, anoEscolhido, mesEscolhid
     ORDER BY semana_do_mes;
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 function dadosGraficoUsoAnual(idMaquina, componente, anoEscolhido) {
@@ -133,7 +133,7 @@ function dadosGraficoUsoAnual(idMaquina, componente, anoEscolhido) {
         order by mes;
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 

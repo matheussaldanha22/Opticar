@@ -11,4 +11,8 @@ router.post("/dadosCapturados", function (req, res) {
   mysqlController.dadosCapturados(req, res)
 })
 
+router.post("/inserirAlerta", function (req, res) {
+  mysqlController.inserirAlerta(req, res)
+})
+
 module.exports = router

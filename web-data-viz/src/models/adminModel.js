@@ -1,19 +1,18 @@
 var database = require("../database/config")
 
 function dadosGraficoAlerta() {
-  var instrucaoSql = `SELECT servidor.fkFabrica, 
-                      COUNT(CASE WHEN alerta.statusAlerta = 'To Do' THEN 1 END) AS qtd_to_do,
-                      COUNT(CASE WHEN alerta.statusAlerta = 'In Progress' THEN 1 END) AS qtd_in_progress,
-                      COUNT(CASE WHEN alerta.statusAlerta = 'Done' THEN 1 END) AS qtd_done
-                      FROM servidor_maquina AS servidor
-                      LEFT JOIN componenteServidor ON servidor.idMaquina = componenteServidor.fkMaquina
-                      LEFT JOIN capturaDados AS captura ON componenteServidor.idcomponenteServidor = captura.fkComponenteServidor
-                      LEFT JOIN alerta ON captura.idCapturaDados = alerta.fkCapturaDados
-                      GROUP BY servidor.fkFabrica
-                      ORDER BY qtd_to_do + qtd_in_progress DESC;`
+  var instrucaoSql = `SELECT servidor.fkFabrica, COUNT(CASE WHEN alerta.statusAlerta = 'To Do' THEN 1 END) AS qtd_to_do,
+							   COUNT(CASE WHEN alerta.statusAlerta = 'In Progress' THEN 1 END) AS qtd_in_progress,
+							   COUNT(CASE WHEN alerta.statusAlerta = 'Done' THEN 1 END) AS qtd_done
+								FROM servidor_maquina AS servidor
+								LEFT JOIN componenteServidor ON servidor.idMaquina = componenteServidor.fkMaquina
+								LEFT JOIN capturaDados AS captura ON componenteServidor.idcomponenteServidor = captura.fkComponenteServidor
+								INNER JOIN alerta ON captura.idCapturaDados = alerta.fkCapturaDados
+								GROUP BY servidor.fkFabrica
+								ORDER BY qtd_to_do + qtd_in_progress DESC;`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executarFRIO(instrucaoSql)
+  return database.executarQUENTE(instrucaoSql)
 }
 
 function dadosFabrica() {
@@ -21,7 +20,7 @@ function dadosFabrica() {
                         from fabrica JOIN usuario on fkFabrica = idfabrica;`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function dadosFabricaModal() {
@@ -29,7 +28,7 @@ function dadosFabricaModal() {
                         from fabrica JOIN usuario on fkFabrica = idfabrica;`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function informacaoFabrica(nomeFabrica) {
@@ -37,7 +36,7 @@ function informacaoFabrica(nomeFabrica) {
                         from fabrica JOIN usuario on fkFabrica = idfabrica WHERE fabrica.nome = '${nomeFabrica}';`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function informacaoFabricaPadrao(idFabrica) {
@@ -45,7 +44,7 @@ function informacaoFabricaPadrao(idFabrica) {
                         from fabrica JOIN usuario on fkFabrica = idfabrica WHERE fabrica.idFabrica = '${idFabrica}';`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function dadosFabricaSelecionada(idFabrica) {
@@ -59,7 +58,7 @@ function dadosFabricaSelecionada(idFabrica) {
                       LEFT JOIN alerta ON captura.idCapturaDados = alerta.fkCapturaDados WHERE fkFabrica = ${idFabrica};`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executarFRIO(instrucaoSql)
+  return database.executarQUENTE(instrucaoSql)
 }
 
 function mtbf(idFabrica) {
@@ -85,7 +84,7 @@ function mtbf(idFabrica) {
                             AND MONTH(cd.data) = MONTH(CURDATE());`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executarFRIO(instrucaoSql)
+  return database.executarQUENTE(instrucaoSql)
 }
 
 module.exports = {

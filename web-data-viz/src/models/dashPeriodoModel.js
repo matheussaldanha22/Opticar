@@ -18,7 +18,7 @@ function obterSemana(idFabrica, ano, mes){
     `
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 function obterComponente(idFabrica, ano, mes) {
@@ -44,7 +44,7 @@ function obterComponente(idFabrica, ano, mes) {
     limit 1; `
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 function obterPeriodo(idFabrica, ano, mes) {
@@ -73,7 +73,7 @@ function obterPeriodo(idFabrica, ano, mes) {
     limit 1;
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 function obterDia(idFabrica, ano, mes) {
@@ -96,7 +96,7 @@ function obterDia(idFabrica, ano, mes) {
     limit 1;
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
-    return database.executarFRIO(instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
 }
 
 module.exports ={
