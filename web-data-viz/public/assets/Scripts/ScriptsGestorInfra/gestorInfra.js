@@ -37,97 +37,99 @@
         //----------------------------------------------------------------------------------------
 
         // Gráfico de Linha - Previsão de Gastos com CPU
-        var lineOptions = {
-            series: [{
-                name: 'Gastos com CPU',
-                data: [7500, 12000, 12000, 12000, 9000, 7000, 15000]
-            }],
-            chart: {
-                height: 280,
-                type: 'line',
-                zoom: { enabled: true },
-                toolbar: { show: true },
-                fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif',
-                dropShadow: {
-                    enabled: true,
-                    opacity: 0.2,
-                    blur: 5,
-                    left: 0,
-                    top: 5
-                }
-            },
-            colors: ['#14589c'],
-            dataLabels: { enabled: false },
-            stroke: {
-                curve: 'smooth',
-                width: 3
-            },
-            title: {
-                text: 'Previsão de Gastos com CPU',
-                align: 'left',
-                style: {
-                    fontSize: '16px',
-                    fontWeight: 500,
-                    color: '#14589c'
-                }
-            },
-            grid: {
-                borderColor: '#e7e7e7',
-                row: {
-                    colors: ['#f3f3f3', 'transparent'],
-                    opacity: 0.5
-                }
-            },
-            xaxis: {
-                categories: ['Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Janeiro'],
-                labels: {
-                    style: {
-                        colors: '#666',
-                        fontSize: '12px'
-                    }
-                },
-                axisBorder: { show: false },
-                axisTicks: { show: false }
-            },
-            yaxis: {
-                title: {
-                    text: 'Valor (R$)',
-                    style: {
-                        color: '#666',
-                        fontSize: '12px',
-                        fontWeight: 400
-                    }
-                },
-                labels: {
-                    formatter: val => 'R$ ' + val.toLocaleString('pt-BR'),
-                    style: {
-                        colors: '#666',
-                        fontSize: '12px'
-                    }
-                },
-                min: 0,
-                max: 20000
-            },
-            markers: {
-                size: 5,
-                colors: ['#14589c'],
-                strokeColors: '#fff',
-                strokeWidth: 2,
-                hover: { size: 7 }
-            },
-            tooltip: {
-                y: {
-                    formatter: val => 'R$ ' + val.toLocaleString('pt-BR')
-                }
-            },
-            legend: {
-                position: 'top',
-                horizontalAlign: 'right',
-                floating: true,
-                offsetY: -25,
-                offsetX: -5
+var lineOptions = {
+    series: [{
+        name: 'Gastos com CPU',
+        data: [7500, 12000, 12000, 12000, 9000, 7000, 15000]
+    }],
+    chart: {
+        height: 280,
+        type: 'line',
+        zoom: { enabled: true },
+        toolbar: { show: true },
+        fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif',
+        dropShadow: {
+            enabled: true,
+            opacity: 0.2,
+            blur: 5,
+            left: 0,
+            top: 5
+        }
+    },
+    colors: ['#14589c'],
+    dataLabels: { enabled: false },
+    stroke: {
+        curve: 'smooth',
+        width: 3,
+        dashArray: 6 // 👈 isso torna a linha pontilhada
+    },
+    title: {
+        text: 'Previsão de Gastos com CPU',
+        align: 'left',
+        style: {
+            fontSize: '16px',
+            fontWeight: 500,
+            color: '#14589c'
+        }
+    },
+    grid: {
+        borderColor: '#e7e7e7',
+        row: {
+            colors: ['#f3f3f3', 'transparent'],
+            opacity: 0.5
+        }
+    },
+    xaxis: {
+        categories: ['Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro', 'Janeiro'],
+        labels: {
+            style: {
+                colors: '#666',
+                fontSize: '12px'
             }
-        };
+        },
+        axisBorder: { show: false },
+        axisTicks: { show: false }
+    },
+    yaxis: {
+        title: {
+            text: 'Valor (R$)',
+            style: {
+                color: '#666',
+                fontSize: '12px',
+                fontWeight: 400
+            }
+        },
+        labels: {
+            formatter: val => 'R$ ' + val.toLocaleString('pt-BR'),
+            style: {
+                colors: '#666',
+                fontSize: '12px'
+            }
+        },
+        min: 0,
+        max: 20000
+    },
+    markers: {
+        size: 5,
+        colors: ['#14589c'],
+        strokeColors: '#fff',
+        strokeWidth: 2,
+        hover: { size: 7 }
+    },
+    tooltip: {
+        y: {
+            formatter: val => 'R$ ' + val.toLocaleString('pt-BR')
+        }
+    },
+    legend: {
+        position: 'top',
+        horizontalAlign: 'right',
+        floating: true,
+        offsetY: -25,
+        offsetX: -5
+    }
+};
+
 
 
 
@@ -138,93 +140,76 @@
          //----------------------------------------------------------------------------------------
 
 
-        // Gráfico de Barras - Alertas
-        var barOptions = {
-            series: [{
-                name: 'Alertas',
-                data: [20, 10, 11]
-            }],
-            chart: {
-                type: 'bar',
-                height: 280,
-                toolbar: { show: false },
-                fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif',
-            },
-            plotOptions: {
-                bar: {
-                    distributed: true,
-                    
-                    columnWidth: '55%',
-                    borderRadius: 1,
-                    dataLabels: { position: 'top' }
-                }
-            },
-            colors: ['yellow', 'orange' , 'red'],
-            dataLabels: {
-                enabled: true,
-                formatter: val => val,
-                offsetY: -28,
-                style: {
-                    fontSize: '17px',
-                    colors: ["#333"]
-                }
-            },
-            grid: {
-                borderColor: '#e7e7e7',
-                row: {
-                    colors: ['#f3f3f3', 'transparent'],
-                    opacity: 0.5
-                }
-            },
-            xaxis: {
-                categories: ['Leves', 'Moderados', 'Criticos'],
-                labels: {
-                    style: {
-                        colors: '#666',
-                        fontSize: '12px'
-                    }
-                },
-                axisBorder: { show: false },
-                axisTicks: { show: false }
-            },
-            yaxis: {
-                title: {
-                    text: 'Número de alertas',
-                    style: {
-                        color: '#666',
-                        fontSize: '12px',
-                        fontWeight: 400
-                    }
-                },
-                labels: {
-                    style: {
-                        colors: '#666',
-                        fontSize: '12px'
-                    }
-                },
-                min: 0,
-                max: 25
-            },
-            fill: {
-                opacity: 1,
-                type: 'gradient',
-                gradient: {
-                    shade: 'light',
-                    type: "vertical",
-                    shadeIntensity: 0.3,
-                    opacityFrom: 1,
-                    opacityTo: 0.8,
-                    stops: [0, 90, 100]
-                }
-            },
-            tooltip: {
-                y: {
-                    formatter: val => val + " alertas"
-                }
+        // Gráfico de Barras Empilhadas - Alertas Resolvidos vs Não Resolvidos por Dia
+var barOptions = {
+    series: [{
+        name: 'Alertas totais',
+        data: [6, 12, 5, 10, 7]
+    }, {
+        name: 'Não Resolvidos',
+        data: [3, 2, 3, 2, 2]  // Total - Resolvidos
+    }],
+    chart: {
+        type: 'bar',
+        height: 280,
+        stacked: true,
+        toolbar: { show: false },
+        fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif'
+    },
+    plotOptions: {
+        bar: {
+            horizontal: false,
+            columnWidth: '50%',
+            borderRadius: 3
+        }
+    },
+    dataLabels: {
+        enabled: true,
+        style: {
+            fontSize: '13px'
+        }
+    },
+    colors: ["#2C3E50", "#22B4D1"], 
+    xaxis: {
+        categories: ['20/05', '21/05', '22/05', '23/05', '24/05'],
+        labels: {
+            style: {
+                colors: '#666',
+                fontSize: '12px'
             }
-        };
-
-
+        }
+    },
+    yaxis: {
+        title: {
+            text: 'Quantidade de Alertas',
+            style: {
+                color: '#666',
+                fontSize: '12px'
+            }
+        },
+        labels: {
+            style: {
+                colors: '#666',
+                fontSize: '12px'
+            }
+        }
+    },
+    tooltip: {
+        y: {
+            formatter: val => val + " alertas"
+        }
+    },
+    legend: {
+        position: 'top',
+        horizontalAlign: 'center',
+        labels: {
+            colors: '#666'
+        }
+    },
+    fill: {
+        opacity: 1
+    }
+};
 
 
          //----------------------------------------------------------------------------------------
@@ -236,7 +221,7 @@
         var gaugeOptions = {
             series: [67],
             chart: {
-                height: 250,
+                height: 150,
                 type: 'radialBar',
                 fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif',
                 toolbar: { show: true }
