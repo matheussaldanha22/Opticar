@@ -99,9 +99,37 @@ function obterDia(idFabrica, ano, mes) {
     return database.executarQUENTE(instrucaoSql)
 }
 
+function alertasPeriodo(idFabrica, ano, mes) {
+    var instrucaoSql = `
+    SELECT  COUNT(idAlerta) as qtdalertas, 
+		componente,
+		CASE 
+        WHEN HOUR(dataHora) >= 6 AND HOUR(dataHora) < 12 THEN 'Manhã'
+        WHEN HOUR(dataHora) >= 12 AND HOUR(dataHora) < 18 THEN 'Tarde'
+        WHEN HOUR(dataHora) >= 18 AND HOUR(dataHora) < 24 THEN 'Noite'
+        ELSE 'Madrugada'
+		END as periodo
+		FROM alerta
+		JOIN capturaDados as cap 
+        ON alerta.fkCapturaDados = cap.idCapturaDados
+		JOIN componenteServidor as comp 
+        ON cap.fkcomponenteServidor = comp.idcomponenteServidor
+		JOIN servidor_maquina as maq 
+		ON comp.fkMaquina = maq.idMaquina
+		WHERE YEAR(dataHora) = ${ano}
+		AND MONTH(dataHora) = ${mes}
+		AND fkFabrica = ${idFabrica}
+		GROUP BY componente, periodo
+		ORDER BY periodo;
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarFRIO(instrucaoSql)
+}
+
 module.exports ={
     obterSemana,
     obterComponente,
     obterPeriodo,
-    obterDia
+    obterDia,
+    alertasPeriodo
 }

@@ -10,7 +10,6 @@
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
     <link rel="stylesheet" href="assets/styles/dashDuda.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="./assets/Scripts/graficosDuda.js" defer></script>
     <script src="./assets/Scripts/backendDuda.js" defer></script>
 </head>
 <body>
@@ -65,11 +64,14 @@
                    
                     </select>
 
-
                     <select id="slt_mes">
                         <option selected value="">Mês Atual</option>
                        
                     </select>
+
+                    <div class="iconeFiltro">
+                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                    </div>
 
                      <button id="btnMostrarGrafico" class="botaoGrafico">
                         <i class='bx bx-line-chart'></i>
@@ -89,7 +91,7 @@
                     <span class="txtKpi">
                         <p class="dadoKpi"  style="color: white; text-shadow: 2px 2px 4px red;"><span id="semanaAlerta">x</span> ° semana</p>
                     </span>
-                    <h3><b id="parametroCpu"  style="color: red; font-size: 14px;"><span id="qtdAlerta">x</span>Alertas</b></h3>
+                    <h3><b id="parametroCpu"  style="color: red; font-size: 14px;"><span id="qtdAlerta">x</span> Alertas</b></h3>
                 </div>
 
                 <div class="kpiUso">
@@ -135,9 +137,7 @@
                     <div class="graficoPeriodo">
                         <div class="titulo">
                             <h3>Quantidade de alerta por componente - Período do Dia</h3>
-                            <button class="iconeFiltro">
-                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
-                            </button>
+                            
                         </div>
                         <div class="modal">
                             <div class="content">
@@ -150,10 +150,7 @@
 
                     <div class="tabelaProcessos">
                         <div class="titulo">
-                            <h3>Processos </h3>
-                            <button class="iconeFiltro">
-                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
-                            </button>
+                            <h3>Processos com mais Consumo durante o mês </h3>
                         </div>
 
                 <table id="tabela-alertas" class="componentesContainer">

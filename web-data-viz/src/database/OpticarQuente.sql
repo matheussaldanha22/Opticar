@@ -1,4 +1,4 @@
-drop database opticarQuente;
+
 create database opticarQuente;
 use opticarQuente;
 
@@ -56,6 +56,8 @@ CREATE TABLE alerta (
     jira_issue_key VARCHAR(20) COMMENT 'Chave do ticket criado no JIRA (ex: PROJ-123)',
     FOREIGN KEY (fkCapturaDados) REFERENCES capturaDados(idCapturaDados) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+drop table alerta;
 
 INSERT INTO componente (tipo, medida, indicador, codigo) VALUES
 ('Cpu', 'Porcentagem', '%', 'round(psutil.cpu_percent(interval=1), 2)'),
@@ -282,7 +284,7 @@ select componente, count(idAlerta) as alerta, hour(dataHora) as hora,
 								join servidor_maquina as maq
 								on  comp.fkMaquina=maq.idMaquina
 								where year(dataHora) = 2025
-								and month(dataHora) = 5
+								
 								and fkFabrica = 1
 								group by hora, componente, periodo
 								order by componente desc limit 1;
@@ -319,6 +321,47 @@ select count(idAlerta) as qtdalerta,
 								and fkFabrica = 1
 								group by dia
 								order by qtdalerta desc limit 1;
+                                
+SELECT  COUNT(idAlerta) as quantidade_alertas, 
+		componente,
+		CASE 
+        WHEN HOUR(dataHora) >= 6 AND HOUR(dataHora) < 12 THEN 'Manhã'
+        WHEN HOUR(dataHora) >= 12 AND HOUR(dataHora) < 18 THEN 'Tarde'
+        WHEN HOUR(dataHora) >= 18 AND HOUR(dataHora) < 24 THEN 'Noite'
+        ELSE 'Madrugada'
+		END as periodo
+		FROM alerta
+		JOIN capturaDados as cap 
+        ON alerta.fkCapturaDados = cap.idCapturaDados
+		JOIN componenteServidor as comp 
+        ON cap.fkcomponenteServidor = comp.idcomponenteServidor
+		JOIN servidor_maquina as maq 
+		ON comp.fkMaquina = maq.idMaquina
+		WHERE YEAR(dataHora) = 2025
+		AND MONTH(dataHora) = 5
+		AND fkFabrica = 1
+		GROUP BY componente, periodo
+		ORDER BY periodo;
+
+SELECT 
+    COUNT(idAlerta) as quantidade_alertas,
+    componente,
+    CASE 
+        WHEN HOUR(dataHora) >= 6 AND HOUR(dataHora) < 12 THEN 'Manhã'
+        WHEN HOUR(dataHora) >= 12 AND HOUR(dataHora) < 18 THEN 'Tarde'
+        WHEN HOUR(dataHora) >= 18 AND HOUR(dataHora) < 24 THEN 'Noite'
+        ELSE 'Madrugada'
+    END as periodo
+FROM alerta
+JOIN capturaDados as cap ON alerta.fkCapturaDados = cap.idCapturaDados
+JOIN componenteServidor as comp ON cap.fkcomponenteServidor = comp.idcomponenteServidor
+JOIN servidor_maquina as maq ON comp.fkMaquina = maq.idMaquina
+WHERE YEAR(dataHora) = 2025
+    AND MONTH(dataHora) = 5
+    AND fkFabrica = 1
+GROUP BY componente, periodo
+ORDER BY periodo;
+
 -- FABRICA MODEL
 SELECT sm.fkFabrica, COUNT(a.idAlerta) AS quantidade_alertas FROM servidor_maquina sm
 								LEFT JOIN componenteServidor cs ON cs.fkMaquina = sm.idMaquina
@@ -453,3 +496,125 @@ SELECT * FROM alerta;
 
 INSERT INTO capturaDados (fkComponenteServidor, valor, data)
 VALUES (1, 85, NOW());
+
+
+-- insert maio alerta
+
+INSERT INTO alerta (valor, titulo, descricao, prioridade, tipo_incidente, componente, statusAlerta, fkCapturaDados, dataHora)
+VALUES
+-- Semana 1 (1-7 de maio)
+-- CPU
+(75.2, 'Uso elevado de CPU', 'CPU atingiu 75% de utilização', 'Média', 'Performance', 'CPU', 'To Do', 1, '2025-05-01 09:15:00'),
+(82.5, 'Pico de CPU', 'Processo consumindo 45% da CPU', 'Alta', 'Processo', 'CPU', 'In Progress', 1, '2025-05-03 14:30:00'),
+-- RAM
+(85.7, 'Alto uso de memória', 'RAM em 85% de utilização', 'Alta', 'Consumo', 'RAM', 'Done', 1, '2025-05-02 11:20:00'),
+(90.3, 'RAM crítica', 'Apenas 10% de memória livre', 'Crítica', 'Falta de Memória', 'RAM', 'To Do', 1, '2025-05-04 16:45:00'),
+-- Disco
+(88.4, 'Disco quase cheio', '85% do espaço utilizado', 'Alta', 'Armazenamento', 'Disco', 'In Progress', 1, '2025-05-05 10:10:00'),
+(92.1, 'Disco crítico', 'Apenas 8% livre', 'Crítica', 'Espaço', 'Disco', 'Done', 1, '2025-05-07 13:25:00'),
+-- Rede
+(78.6, 'Latência alta', 'Ping médio de 120ms', 'Média', 'Conexão', 'Rede', 'To Do', 1, '2025-05-06 08:40:00'),
+(83.2, 'Alto uso de banda', '83% da banda utilizada', 'Alta', 'Tráfego', 'Rede', 'In Progress', 1, '2025-05-07 17:15:00'),
+
+-- Semana 2 (8-14 de maio)
+-- CPU
+(79.8, 'CPU em alerta', 'Uso sustentado em 80%', 'Alta', 'Performance', 'CPU', 'Done', 1, '2025-05-08 10:30:00'),
+(84.3, 'Superaquecimento', 'Temperatura da CPU em 84°C', 'Crítica', 'Temperatura', 'CPU', 'To Do', 1, '2025-05-10 15:20:00'),
+-- RAM
+(87.5, 'Vazamento de memória', 'Aumento progressivo', 'Alta', 'Vazamento', 'RAM', 'In Progress', 1, '2025-05-09 12:45:00'),
+(91.8, 'RAM esgotando', 'Apenas 8% livre', 'Crítica', 'Falta de Memória', 'RAM', 'Done', 1, '2025-05-12 09:10:00'),
+-- Disco
+(89.7, 'Disco lento', 'Tempo de resposta alto', 'Alta', 'Performance', 'Disco', 'To Do', 1, '2025-05-11 14:35:00'),
+(93.5, 'Espaço crítico', 'Apenas 6% livre', 'Crítica', 'Armazenamento', 'Disco', 'In Progress', 1, '2025-05-14 11:50:00'),
+-- Rede
+(76.4, 'Pacotes perdidos', '3% de perda', 'Média', 'Estabilidade', 'Rede', 'Done', 1, '2025-05-13 08:05:00'),
+(85.0, 'Congestionamento', '85% da banda em uso', 'Alta', 'Tráfego', 'Rede', 'To Do', 1, '2025-05-14 16:30:00'),
+
+-- Semana 3 (15-21 de maio)
+-- CPU
+(81.6, 'CPU sobrecarregada', 'Uso acima de 80%', 'Alta', 'Performance', 'CPU', 'In Progress', 1, '2025-05-15 09:25:00'),
+(77.3, 'CPU em observação', 'Picos frequentes', 'Média', 'Monitoramento', 'CPU', 'Done', 1, '2025-05-18 13:40:00'),
+-- RAM
+(88.9, 'RAM em alerta', 'Uso em 89%', 'Alta', 'Consumo', 'RAM', 'To Do', 1, '2025-05-16 10:55:00'),
+(92.5, 'RAM crítica', 'Apenas 7% livre', 'Crítica', 'Falta de Memória', 'RAM', 'In Progress', 1, '2025-05-19 15:10:00'),
+-- Disco
+(90.2, 'Disco quase cheio', '90% utilizado', 'Alta', 'Armazenamento', 'Disco', 'Done', 1, '2025-05-17 11:25:00'),
+(94.8, 'Disco crítico', 'Apenas 5% livre', 'Crítica', 'Espaço', 'Disco', 'To Do', 1, '2025-05-20 14:40:00'),
+-- Rede
+(79.1, 'Rede instável', 'Flutuações na conexão', 'Média', 'Estabilidade', 'Rede', 'In Progress', 1, '2025-05-21 08:55:00'),
+(86.7, 'Alto tráfego', '87% da banda utilizada', 'Alta', 'Tráfego', 'Rede', 'Done', 1, '2025-05-21 17:20:00'),
+
+-- Semana 4 (22-31 de maio)
+-- CPU
+(83.9, 'CPU em risco', 'Uso em 84%', 'Alta', 'Performance', 'CPU', 'To Do', 1, '2025-05-22 10:05:00'),
+(78.4, 'Temperatura elevada', 'CPU em 78°C', 'Média', 'Temperatura', 'CPU', 'In Progress', 1, '2025-05-25 14:20:00'),
+-- RAM
+(86.3, 'Uso alto de RAM', '86% de utilização', 'Alta', 'Consumo', 'RAM', 'Done', 1, '2025-05-23 11:35:00'),
+(93.1, 'RAM crítica', 'Apenas 7% livre', 'Crítica', 'Falta de Memória', 'RAM', 'To Do', 1, '2025-05-27 09:50:00'),
+-- Disco
+(91.5, 'Disco em alerta', '91% utilizado', 'Alta', 'Armazenamento', 'Disco', 'In Progress', 1, '2025-05-24 15:05:00'),
+(95.2, 'Espaço esgotando', 'Apenas 5% livre', 'Crítica', 'Espaço', 'Disco', 'Done', 1, '2025-05-28 12:20:00'),
+-- Rede
+(77.8, 'Problemas de latência', 'Ping alto', 'Média', 'Conexão', 'Rede', 'To Do', 1, '2025-05-26 08:35:00'),
+(88.4, 'Pico de tráfego', '88% da banda em uso', 'Alta', 'Tráfego', 'Rede', 'In Progress', 1, '2025-05-29 16:50:00'),
+-- Final do mês
+(80.2, 'CPU em alerta final', 'Uso em 80%', 'Alta', 'Performance', 'CPU', 'Done', 1, '2025-05-30 09:15:00'),
+(89.7, 'RAM alta final', '90% de uso', 'Alta', 'Consumo', 'RAM', 'To Do', 1, '2025-05-31 13:30:00');
+
+INSERT INTO alerta (valor, titulo, descricao, prioridade, tipo_incidente, componente, statusAlerta, fkCapturaDados, dataHora)
+VALUES
+-- Semana 1 (1-7 de maio)
+-- Manhã (06:00-11:59)
+(72.3, 'CPU Matinal', 'Uso elevado no início do dia', 'Média', 'Performance', 'CPU', 'To Do', 1, '2025-05-01 08:30:00'),
+(84.1, 'RAM Manhã', 'Pico de memória após login', 'Alta', 'Consumo', 'RAM', 'In Progress', 1, '2025-05-02 10:15:00'),
+-- Tarde (12:00-17:59)
+(88.5, 'Disco Tarde', 'IOPS alto no horário de pico', 'Alta', 'Performance', 'Disco', 'Done', 1, '2025-05-03 14:20:00'),
+(76.2, 'Rede Tarde', 'Latência aumentando', 'Média', 'Conexão', 'Rede', 'To Do', 1, '2025-05-04 15:45:00'),
+-- Noite (18:00-23:59)
+(91.8, 'CPU Noite', 'Processos noturnos consumindo', 'Crítica', 'Processo', 'CPU', 'In Progress', 1, '2025-05-05 20:30:00'),
+(83.4, 'Disco Noite', 'Backup noturno iniciado', 'Alta', 'Armazenamento', 'Disco', 'Done', 1, '2025-05-06 22:15:00'),
+-- Madrugada (00:00-05:59)
+(68.7, 'RAM Madrugada', 'Uso baixo mas com vazamento', 'Média', 'Vazamento', 'RAM', 'To Do', 1, '2025-05-07 03:10:00'),
+
+-- Semana 2 (8-14 de maio)
+-- Manhã
+(79.2, 'CPU Manhã', 'Serviços iniciando', 'Média', 'Inicialização', 'CPU', 'In Progress', 1, '2025-05-08 09:20:00'),
+(87.9, 'Disco Manhã', 'Sincronização de arquivos', 'Alta', 'IO', 'Disco', 'Done', 1, '2025-05-09 11:05:00'),
+-- Tarde
+(94.3, 'RAM Tarde', 'Aplicações pesadas ativas', 'Crítica', 'Alocação', 'RAM', 'To Do', 1, '2025-05-10 13:50:00'),
+(81.6, 'Rede Tarde', 'Downloads pesados', 'Alta', 'Tráfego', 'Rede', 'In Progress', 1, '2025-05-11 16:25:00'),
+-- Noite
+(85.7, 'CPU Noite', 'Processamento em lote', 'Alta', 'Batch', 'CPU', 'Done', 1, '2025-05-12 19:40:00'),
+(90.2, 'Disco Noite', 'Compactação de logs', 'Alta', 'Manutenção', 'Disco', 'To Do', 1, '2025-05-13 21:30:00'),
+-- Madrugada
+(73.5, 'Rede Madrugada', 'Atualizações automáticas', 'Média', 'Atualização', 'Rede', 'In Progress', 1, '2025-05-14 02:15:00'),
+
+-- Semana 3 (15-21 de maio)
+-- Manhã
+(82.4, 'RAM Manhã', 'Vazamento no serviço X', 'Alta', 'Vazamento', 'RAM', 'Done', 1, '2025-05-15 07:45:00'),
+(77.8, 'CPU Manhã', 'Uso crescente', 'Média', 'Trend', 'CPU', 'To Do', 1, '2025-05-16 10:30:00'),
+-- Tarde
+(93.7, 'Disco Tarde', 'Pico de escrita', 'Crítica', 'IO', 'Disco', 'In Progress', 1, '2025-05-17 14:15:00'),
+(79.3, 'Rede Tarde', 'Conferência remota', 'Alta', 'Videoconf', 'Rede', 'Done', 1, '2025-05-18 17:00:00'),
+-- Noite
+(89.1, 'CPU Noite', 'Análise noturna', 'Alta', 'Processamento', 'CPU', 'To Do', 1, '2025-05-19 20:45:00'),
+(84.6, 'RAM Noite', 'Cache acumulado', 'Alta', 'Cache', 'RAM', 'In Progress', 1, '2025-05-20 23:30:00'),
+-- Madrugada
+(71.2, 'Disco Madrugada', 'Limpeza temporária', 'Média', 'Manutenção', 'Disco', 'Done', 1, '2025-05-21 04:20:00'),
+
+-- Semana 4 (22-31 de maio)
+-- Manhã
+(86.3, 'Rede Manhã', 'Sincronização cloud', 'Alta', 'Cloud', 'Rede', 'To Do', 1, '2025-05-22 08:10:00'),
+(80.5, 'CPU Manhã', 'Processos agendados', 'Alta', 'Agendado', 'CPU', 'In Progress', 1, '2025-05-23 11:55:00'),
+-- Tarde
+(95.1, 'Disco Tarde', 'Espaço crítico', 'Crítica', 'Armazenamento', 'Disco', 'Done', 1, '2025-05-24 13:40:00'),
+(78.9, 'RAM Tarde', 'Fragmentação', 'Média', 'Fragmentação', 'RAM', 'To Do', 1, '2025-05-25 16:25:00'),
+-- Noite
+(92.4, 'CPU Noite', 'Relatórios noturnos', 'Crítica', 'Report', 'CPU', 'In Progress', 1, '2025-05-26 19:10:00'),
+(83.7, 'Rede Noite', 'Backup remoto', 'Alta', 'Backup', 'Rede', 'Done', 1, '2025-05-27 22:45:00'),
+-- Madrugada
+(69.8, 'Disco Madrugada', 'Desfragmentação', 'Média', 'Manutenção', 'Disco', 'To Do', 1, '2025-05-28 01:30:00'),
+(87.5, 'RAM Madrugada', 'Pré-carregamento', 'Alta', 'Otimização', 'RAM', 'In Progress', 1, '2025-05-29 04:15:00'),
+-- Final do mês
+(81.9, 'CPU Final', 'Últimos processos', 'Alta', 'Fechamento', 'CPU', 'Done', 1, '2025-05-30 09:00:00'),
+(89.2, 'Disco Final', 'Relatório mensal', 'Alta', 'Report', 'Disco', 'To Do', 1, '2025-05-31 12:00:00');

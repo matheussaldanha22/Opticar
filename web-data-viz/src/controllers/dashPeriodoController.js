@@ -42,11 +42,22 @@ function obterDia(req,res) {
     })
 }
 
+function alertasPeriodo(req,res) {
+    var ano = req.params.ano;
+    var mes = req.params.mes;
+    var idFabrica = req.params.idFabrica;
+
+    dashComponenteModel.alertasPeriodo(idFabrica, ano, mes).then((resultado) => {
+        res.status(200).send(resultado)
+    })
+}
+
 module.exports ={
     obterSemana,
     obterComponente,
     obterPeriodo,
-    obterDia
+    obterDia,
+    alertasPeriodo
     
 }
 

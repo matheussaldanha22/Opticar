@@ -19,4 +19,8 @@ router.get("/obterDia/:idFabrica/:ano/:mes", function (req,res) {
     dashPeriodoController.obterDia(req,res)
 })
 
+router.get("/alertasPeriodo/:idFabrica/:ano/:mes", function (req,res) {
+    dashPeriodoController.alertasPeriodo(req,res)
+})
+
 module.exports = router;
