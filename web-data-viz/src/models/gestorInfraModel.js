@@ -12,7 +12,7 @@ function buscarAlertasCPU() {
         GROUP BY DATE(cd.data)
         ORDER BY DATE(cd.data);
     `;
-    return database.executarFRIO(instrucaoSql);
+    return database.executarQUENTE(instrucaoSql);
 }
 
 module.exports = {

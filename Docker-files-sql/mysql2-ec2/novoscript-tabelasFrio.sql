@@ -105,9 +105,9 @@ INSERT INTO servidor_maquina (sistema_operacional, ip, fkFabrica, Mac_Address, h
 select * from servidor_maquina;
 
 INSERT INTO componente (tipo, medida, indicador) VALUES
-('Temperatura', '°C', 'Sensor A'),
-('Pressão', 'bar', 'Sensor B'),
-('Velocidade', 'rpm', 'Sensor C');
+('Temperatura', '°C', 'RAM'),
+('Pressão', 'bar', 'DISCO'),
+('Velocidade', 'rpm', 'CPU');
 
 INSERT INTO componenteServidor (fkComponente, fkMaquina, modelo, limiteCritico, limiteAtencao) VALUES
 (1, 1, 'Modelo A', '80', '50'),
@@ -124,42 +124,42 @@ select * from capturaDados;
 -- 5 alertas para fkFabrica = 1
 INSERT INTO alerta (valor, titulo, descricao, prioridade, tipo_incidente, componente, statusAlerta, fkCapturaDados)
 VALUES 
-(77.5, 'Alerta 1', 'Temperatura elevada', 'Crítica', 'Superaquecimento', 'Sensor A', 'To Do', 1),
-(78.2, 'Alerta 2', 'Temperatura alta', 'Média', 'Monitoramento', 'Sensor A', 'In Progress', 1),
-(79.9, 'Alerta 3', 'Risco de superaquecimento', 'Crítica', 'Emergência', 'Sensor A', 'Done', 1),
-(80.1, 'Alerta 4', 'Temperatura no limite crítico', 'Crítica', 'Prevenção', 'Sensor A', 'To Do', 1),
-(81.5, 'Alerta 5', 'Temperatura acima do limite', 'Média', 'Observação', 'Sensor A', 'In Progress', 1);
+(77.5, 'Alerta 1', 'Temperatura elevada', 'Crítica', 'Superaquecimento', 'RAM', 'To Do', 1),
+(78.2, 'Alerta 2', 'Temperatura alta', 'Média', 'Monitoramento', 'RAM', 'In Progress', 1),
+(79.9, 'Alerta 3', 'Risco de superaquecimento', 'Crítica', 'Emergência', 'RAM', 'Done', 1),
+(80.1, 'Alerta 4', 'Temperatura no limite crítico', 'Crítica', 'Prevenção', 'RAM', 'To Do', 1),
+(81.5, 'Alerta 5', 'Temperatura acima do limite', 'Média', 'Observação', 'RAM', 'In Progress', 1);
 
 -- 11 alertas para fkFabrica = 2
 INSERT INTO alerta (valor, titulo, descricao, prioridade, tipo_incidente, componente, statusAlerta, fkCapturaDados)
 VALUES 
-(115, 'Alerta 6', 'Pressão alta', 'Média', 'Monitoramento', 'Sensor B', 'To Do', 2),
-(117, 'Alerta 7', 'Pressão subindo', 'Crítica', 'Emergência', 'Sensor B', 'In Progress', 2),
-(118, 'Alerta 8', 'Pressão no limite', 'Média', 'Prevenção', 'Sensor B', 'Done', 2),
-(119, 'Alerta 9', 'Pressão crítica', 'Crítica', 'Supervisão', 'Sensor B', 'To Do', 2),
-(120, 'Alerta 10', 'Pressão extrema', 'Crítica', 'Falha iminente', 'Sensor B', 'In Progress', 2),
-(121, 'Alerta 11', 'Pressão instável', 'Média', 'Diagnóstico', 'Sensor B', 'Done', 2),
-(122, 'Alerta 12', 'Pressão oscilante', 'Crítica', 'Teste em andamento', 'Sensor B', 'To Do', 2),
-(123, 'Alerta 13', 'Pressão no pico', 'Crítica', 'Análise requerida', 'Sensor B', 'In Progress', 2),
-(124, 'Alerta 14', 'Pressão elevada contínua', 'Média', 'Precaução', 'Sensor B', 'Done', 2),
-(125, 'Alerta 15', 'Pressão perigosa', 'Crítica', 'Verificação urgente', 'Sensor B', 'To Do', 2),
-(126, 'Alerta 16', 'Pressão descontrolada', 'Crítica', 'Correção imediata', 'Sensor B', 'In Progress', 2);
+(115, 'Alerta 6', 'Pressão alta', 'Média', 'Monitoramento', 'DISCO', 'To Do', 2),
+(117, 'Alerta 7', 'Pressão subindo', 'Crítica', 'Emergência', 'DISCO', 'In Progress', 2),
+(118, 'Alerta 8', 'Pressão no limite', 'Média', 'Prevenção', 'DISCO', 'Done', 2),
+(119, 'Alerta 9', 'Pressão crítica', 'Crítica', 'Supervisão', 'DISCO', 'To Do', 2),
+(120, 'Alerta 10', 'Pressão extrema', 'Crítica', 'Falha iminente', 'DISCO', 'In Progress', 2),
+(121, 'Alerta 11', 'Pressão instável', 'Média', 'Diagnóstico', 'DISCO', 'Done', 2),
+(122, 'Alerta 12', 'Pressão oscilante', 'Crítica', 'Teste em andamento', 'DISCO', 'To Do', 2),
+(123, 'Alerta 13', 'Pressão no pico', 'Crítica', 'Análise requerida', 'DISCO', 'In Progress', 2),
+(124, 'Alerta 14', 'Pressão elevada contínua', 'Média', 'Precaução', 'DISCO', 'Done', 2),
+(125, 'Alerta 15', 'Pressão perigosa', 'Crítica', 'Verificação urgente', 'DISCO', 'To Do', 2),
+(126, 'Alerta 16', 'Pressão descontrolada', 'Crítica', 'Correção imediata', 'DISCO', 'In Progress', 2);
 
 -- 20 alertas para fkFabrica = 3
 INSERT INTO alerta (valor, titulo, descricao, prioridade, tipo_incidente, componente, statusAlerta, fkCapturaDados)
 VALUES 
-(170, 'Alerta 17', 'Velocidade elevada', 'Média', 'Monitoramento', 'Sensor C', 'To Do', 3),
-(175, 'Alerta 18', 'Velocidade no limite', 'Crítica', 'Prevenção', 'Sensor C', 'In Progress', 3),
-(178, 'Alerta 19', 'Velocidade perigosa', 'Crítica', 'Atenção', 'Sensor C', 'Done', 3),
-(180, 'Alerta 20', 'Velocidade máxima atingida', 'Crítica', 'Falha iminente', 'Sensor C', 'To Do', 3),
-(182, 'Alerta 21', 'Velocidade instável', 'Média', 'Revisão necessária', 'Sensor C', 'In Progress', 3),
-(185, 'Alerta 22', 'Velocidade acima da média', 'Crítica', 'Diagnóstico solicitado', 'Sensor C', 'Done', 3),
-(187, 'Alerta 23', 'Velocidade fora dos padrões', 'Crítica', 'Precaução urgente', 'Sensor C', 'To Do', 3),
-(190, 'Alerta 24', 'Velocidade crítica contínua', 'Crítica', 'Falha operacional', 'Sensor C', 'In Progress', 3),
-(193, 'Alerta 25', 'Velocidade variável crítica', 'Média', 'Teste solicitado', 'Sensor C', 'Done', 3),
-(195, 'Alerta 26', 'Velocidade irregular', 'Crítica', 'Correção emergencial', 'Sensor C', 'To Do', 3),
-(198, 'Alerta 27', 'Velocidade fora da margem', 'Média', 'Investigação', 'Sensor C', 'In Progress', 3),
-(200, 'Alerta 28', 'Velocidade extrema', 'Crítica', 'Manutenção requerida', 'Sensor C', 'Done', 3);
+(170, 'Alerta 17', 'Velocidade elevada', 'Média', 'Monitoramento', 'CPU', 'To Do', 3),
+(175, 'Alerta 18', 'Velocidade no limite', 'Crítica', 'Prevenção', 'CPU', 'In Progress', 3),
+(178, 'Alerta 19', 'Velocidade perigosa', 'Crítica', 'Atenção', 'CPU', 'Done', 3),
+(180, 'Alerta 20', 'Velocidade máxima atingida', 'Crítica', 'Falha iminente', 'CPU', 'To Do', 3),
+(182, 'Alerta 21', 'Velocidade instável', 'Média', 'Revisão necessária', 'CPU', 'In Progress', 3),
+(185, 'Alerta 22', 'Velocidade acima da média', 'Crítica', 'Diagnóstico solicitado', 'CPU', 'Done', 3),
+(187, 'Alerta 23', 'Velocidade fora dos padrões', 'Crítica', 'Precaução urgente', 'CPU', 'To Do', 3),
+(190, 'Alerta 24', 'Velocidade crítica contínua', 'Crítica', 'Falha operacional', 'CPU', 'In Progress', 3),
+(193, 'Alerta 25', 'Velocidade variável crítica', 'Média', 'Teste solicitado', 'CPU', 'Done', 3),
+(195, 'Alerta 26', 'Velocidade irregular', 'Crítica', 'Correção emergencial', 'CPU', 'To Do', 3),
+(198, 'Alerta 27', 'Velocidade fora da margem', 'Média', 'Investigação', 'CPU', 'In Progress', 3),
+(200, 'Alerta 28', 'Velocidade extrema', 'Crítica', 'Manutenção requerida', 'CPU', 'Done', 3);
 
 
 

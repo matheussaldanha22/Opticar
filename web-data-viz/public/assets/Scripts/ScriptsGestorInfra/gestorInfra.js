@@ -141,14 +141,15 @@ var lineOptions = {
 
 
         // Gráfico de Barras Empilhadas - Alertas Resolvidos vs Não Resolvidos por Dia
-// Configurações fixas do gráfico, como você pediu
+
 var barOptions = {
     series: [{
         name: 'Alertas totais',
-        data: [6, 12, 5, 10, 7]  // Esses valores vão ser sobrescritos
+        data: [6, 12, 5, 10, 7]  // mocado dps desmoca
     }, {
         name: 'Não Resolvidos',
-        data: [3, 2, 3, 2, 2]    // Esses também
+        data: [3, 2, 3, 2, 2]  // mema coisa
+        
     }],
     chart: {
         type: 'bar',
@@ -170,9 +171,9 @@ var barOptions = {
             fontSize: '13px'
         }
     },
-    colors: ["#2C3E50", "#22B4D1"],
+    colors: ["#2C3E50", "#FF0000"],
     xaxis: {
-        categories: ['20/05', '21/05', '22/05', '23/05', '24/05'], // Isso aqui será sobrescrito
+        categories: ['20/05', '21/05', '22/05', '23/05', '24/05'], // mocado, NO fetch desmoca
         labels: {
             style: {
                 colors: '#666',
