@@ -58,7 +58,7 @@ function plotarGraficoAlerta(dadosAlerta) {
             const fabricaNome = optionsBar.xaxis.categories[config.dataPointIndex];
             const valorAberto = optionsBar.series[0].data[config.dataPointIndex];
             const valorAndamento = optionsBar.series[1].data[config.dataPointIndex];
-            informacaoFabrica(fabricaNome, serieNome, valorAberto, valorAndamento);
+            informacaoFabrica(fabricaNome, serieNome, valorAberto, valorAndamento, );
           }
         }
       },

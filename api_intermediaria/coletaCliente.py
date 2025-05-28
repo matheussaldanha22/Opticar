@@ -10,31 +10,34 @@ def pegando_mac_address():
     return uuid.getnode()
 
 def pegar_top_processo():
-    time.sleep(1)
     lista = []
     for processo in psutil.process_iter():
         try:
-            uso = processo.cpu_percent()
+            uso = processo.cpu_percent(interval=None, percpu=False)#interval=0.5
             lista.append((processo, uso))
-        except (psutil.NoSuchProcess, psutil.AccessDenied):
+        except Exception as e:
             continue
     maior_uso = 0
     processo = None
     for item in lista:
         if item[1] > maior_uso:
             maior_uso = item[1]
-            processo = item
+            if maior_uso > 100.0:
+                maior_uso = 100.0
+            processo = item 
     if processo:
         proc = processo[0]
-        uso_cpu = processo[1]
+        uso_cpu = maior_uso
         try:
             uso_ram = proc.memory_percent()
-        except (psutil.NoSuchProcess, psutil.AccessDenied):
+        except Exception as e:
+            print(f"Não foi encontrado a ram {e}")
             uso_ram = 0
         try:
             io = proc.io_counters()
             uso_disco = io.read_bytes + io.write_bytes
-        except (psutil.NoSuchProcess, psutil.AccessDenied, AttributeError):
+        except Exception as e:
+            print(f"Não foi encontrado o disco {e}")
             uso_disco = 0
         return {
             "nome": proc.name(),
@@ -51,6 +54,7 @@ def pegar_top_processo():
         }
 
 def obterPedidos(mac_address):
+    
     try:
         fetch_pedido = "http://localhost:3333/mysql/pedidosCliente"
         resposta = requests.post(fetch_pedido, json={"mac_address": mac_address})
@@ -131,9 +135,11 @@ def monitorar():
         "dataAtual": datetime.datetime.now().isoformat(),
         "leitura": []
     }
-
+    contador_loop = 0
     while True:
         print("Conexao com o intermediário")
+        contador_loop += 1
+        print(f"Iniciando loop #{contador_loop}")
 
         try:
             pedidos = obterPedidos(mac_address)
@@ -183,15 +189,14 @@ def monitorar():
                                        componente, processo, processoCPU, processoRAM, processoDISCO)
                 except Exception as e:
                     print(f"Erro ao processar pedido: {e}")
-                    # limiteCritico VARCHAR(45),
-                    # limiteAtencao VARCHAR(45)
+                    
 
             tempo_passado = (datetime.datetime.now() - ultimo_envio_s3).total_seconds()
             if tempo_passado >= intervalo_envio_s3:
                 dadosBucket(dadosS3, mac_address)
                 ultimo_envio_s3 = datetime.datetime.now()
 
-            time.sleep(5)
+            time.sleep(1)
 
         except Exception as e:
             print(f"Erro: {e}")

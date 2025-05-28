@@ -32,7 +32,7 @@ function dadosFabricaModal() {
 }
 
 function informacaoFabrica(nomeFabrica) {
-  var instrucaoSql = `select fabrica.idFabrica, fabrica.nome as nomeFabrica, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
+  var instrucaoSql = `select fabrica.idFabrica, fabrica.telefone, fabrica.nome as nomeFabrica, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
                         from fabrica JOIN usuario on fkFabrica = idfabrica WHERE fabrica.nome = '${nomeFabrica}';`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
@@ -40,7 +40,7 @@ function informacaoFabrica(nomeFabrica) {
 }
 
 function informacaoFabricaPadrao(idFabrica) {
-  var instrucaoSql = `select fabrica.idFabrica, fabrica.nome as nomeFabrica, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
+  var instrucaoSql = `select fabrica.idFabrica, fabrica.telefone, fabrica.nome as nomeFabrica, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
                         from fabrica JOIN usuario on fkFabrica = idfabrica WHERE fabrica.idFabrica = '${idFabrica}';`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
