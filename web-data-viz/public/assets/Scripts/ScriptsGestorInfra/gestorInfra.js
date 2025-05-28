@@ -141,13 +141,14 @@ var lineOptions = {
 
 
         // Gráfico de Barras Empilhadas - Alertas Resolvidos vs Não Resolvidos por Dia
+// Configurações fixas do gráfico, como você pediu
 var barOptions = {
     series: [{
         name: 'Alertas totais',
-        data: [6, 12, 5, 10, 7]
+        data: [6, 12, 5, 10, 7]  // Esses valores vão ser sobrescritos
     }, {
         name: 'Não Resolvidos',
-        data: [3, 2, 3, 2, 2]  // Total - Resolvidos
+        data: [3, 2, 3, 2, 2]    // Esses também
     }],
     chart: {
         type: 'bar',
@@ -169,9 +170,9 @@ var barOptions = {
             fontSize: '13px'
         }
     },
-    colors: ["#2C3E50", "#22B4D1"], 
+    colors: ["#2C3E50", "#22B4D1"],
     xaxis: {
-        categories: ['20/05', '21/05', '22/05', '23/05', '24/05'],
+        categories: ['20/05', '21/05', '22/05', '23/05', '24/05'], // Isso aqui será sobrescrito
         labels: {
             style: {
                 colors: '#666',
@@ -210,6 +211,32 @@ var barOptions = {
         opacity: 1
     }
 };
+
+// Faz a requisição e atualiza os dados no gráfico
+fetch("http://localhost:3333/gestorInfra/dados-cpu")
+    .then(res => res.json())
+    .then(dados => {
+        // Atualizando os dados com base na resposta do backend
+        barOptions.series = [
+            {
+                name: 'Alertas totais',
+                data: dados.totais
+            },
+            {
+                name: 'Não Resolvidos',
+                data: dados.toDos
+            }
+        ];
+        barOptions.xaxis.categories = dados.categorias;
+
+        // Renderiza o gráfico 
+        var chart =  new ApexCharts(document.querySelector("#bar-chart"), barOptions);
+        chart.render();
+    })
+    .catch(err => {
+        console.error("Erro ao carregar dados do gráfico:", err);
+    });
+
 
 
          //----------------------------------------------------------------------------------------
@@ -290,6 +317,6 @@ var barOptions = {
 
         
         new ApexCharts(document.querySelector("#line-chart"), lineOptions).render();
-        new ApexCharts(document.querySelector("#bar-chart"), barOptions).render();
+    
         new ApexCharts(document.querySelector("#gauge-chart"), gaugeOptions).render();
     });
