@@ -132,6 +132,21 @@ var options = {
   }
 }
 
+var options2 = {
+  chart: {
+    height: '100%',
+    width: '100%',
+      type: 'radialBar',
+  },
+  colors: ['#01627B', '#eee'],
+  series: [60],
+  labels: ['Uso'],
+}
+
 var chart = new ApexCharts(document.querySelector("#chart"), options);
 
 chart.render();
+
+
+var grafico = new ApexCharts(document.getElementById("chartDisco"), options2)
+grafico.render()

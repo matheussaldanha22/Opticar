@@ -478,12 +478,8 @@ table i:hover {
   max-height: inherit;
   max-width: inherit;
   width: 70%;
-  /* margin: 2% 2%; */
     background: linear-gradient(270deg, #012027, #04708d);
     border-radius: 10px;
-  /* color: #fff; */
-  
-
 }
 
 .chartsContainer{
@@ -512,6 +508,10 @@ table i:hover {
 }
 
 .cpuChart{
+  width: 100%;
+}
+
+.discoChart{
   width: 100%;
 }
 
@@ -550,6 +550,17 @@ table i:hover {
 #utilizacaoInfo{
   color: #04708D;
   font-weight: 1000;
+}
+
+.textoGrafico #utilizacaoInfoDisco{
+  margin-top: 20%;
+  color: #04708D;
+  font-weight: 1000;
+  font-size: 1.5vw;
+}
+
+#chartDisco{
+  width: 100%;
 }
 
 

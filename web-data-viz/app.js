@@ -29,6 +29,7 @@ var jiraRouter = require("./src/routes/jira")
 var dashComponentesRouter = require("./src/routes/dashComponentes")
 var dashPeriodoRouter = require("./src/routes/dashPeriodo")
 var gestorInfraRouter = require("./src/routes/gestorInfra");
+var dashMonitoramentoRouter = require("./src/routes/dashMonitoramento")
 
 
 
@@ -52,6 +53,7 @@ app.use("/jira", jiraRouter)
 app.use("/dashComponentes", dashComponentesRouter)
 app.use("/dashPeriodo", dashPeriodoRouter)
 app.use("/gestorInfra", gestorInfraRouter);
+app.use("/dashMonitoramento", dashMonitoramentoRouter)
 
 app.listen(PORTA_APP, function () {
   console.log(`
