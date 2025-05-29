@@ -27,8 +27,30 @@ function inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusA
   return database.executarQuente(instrucaoSql);
 }
 
+function verificarIP(mac_address) {
+  const instrucaoSql = `SELECT ip FROM servidor_maquina WHERE Mac_Address = ${mac_address};`
+
+  return database.executarQuente(instrucaoSql);
+}
+
+function updateIP(mac_address, ip) {
+  const instrucaoSql = `UPDATE servidor_maquina SET ip = '${ip}' WHERE Mac_address = ${mac_address};`
+
+  return database.executarQuente(instrucaoSql);
+}
+
+function updateIPFRIO(mac_address, ip) {
+  const instrucaoSql = `UPDATE servidor_maquina SET ip = '${ip}' WHERE Mac_address = ${mac_address};`
+
+  return database.executarFrio(instrucaoSql);
+}
+
+
 module.exports = {
     pedidosCliente,
     dadosCapturados,
-    inserirAlerta
+    inserirAlerta,
+    verificarIP,
+    updateIP,
+    updateIPFRIO
 }

@@ -32,8 +32,61 @@ function dadosCapturados(req, res) {
             res.status(200).json(resultado);
     }).catch((erro) => {
         console.error("Erro ao capturar os dados:", erro);
-        res.status(500).json({ erro: erro.message || "Erro desconhecido no servidor" });
+        res.status(500).json({ erro: erro.message});
     });
+}
+
+function verificarIP(req, res) {
+    var mac_address = req.body.mac_address
+
+    if(!mac_address) {
+        return res.status(400).json({mensagem: "mac_address não encontrado"})
+    }
+
+    mysqlModel.verificarIP(mac_address).then((resultado) => {
+        res.status(200).json(resultado);
+    }).catch((erro) => {
+        console.error("Erro ao verificar IP:", erro);
+        res.status(500).json({erro: erro.message})
+    })
+}
+
+function updateIP(req, res) {
+    var mac_address = req.body.mac_address;
+    var ip = req.body.ip;
+
+    if(!mac_address || !ip) {
+        return res.status(400).json({mensagem: "Dados não encontrados"})
+    }
+
+    mysqlModel.updateIP(mac_address, ip).then((resultado) => {
+        res.status(200).json({
+            mensagem: "Update realizado com sucesso",
+            resultado: resultado
+        });
+    }).catch((erro) => {
+        console.error("Erro ao realizar update:", erro);
+        res.status(500).json({ erro: erro.message});
+    })
+}
+
+function updateIPFRIO(req, res) {
+    var mac_address = req.body.mac_address;
+    var ip = req.body.ip;
+
+    if(!mac_address || !ip) {
+        return res.status(400).json({mensagem: "Dados não encontrados"})
+    }
+
+    mysqlModel.updateIPFRIO(mac_address, ip).then((resultado) => {
+        res.status(200).json({
+            mensagem: "Update realizado com sucesso",
+            resultado: resultado
+        });
+    }).catch((erro) => {
+        console.error("Erro ao realizar update:", erro);
+        res.status(500).json({ erro: erro.message});
+    })
 }
 
 function inserirAlerta(req, res) {
@@ -74,7 +127,7 @@ function inserirAlerta(req, res) {
         });
     }).catch((erro) => {
         console.error("Erro ao inserir alerta:", erro);
-        res.status(500).json({ erro: erro.message || "Erro desconhecido no servidor" });
+        res.status(500).json({ erro: erro.message});
     });
 }
 
@@ -83,5 +136,8 @@ function inserirAlerta(req, res) {
 module.exports = {
   pedidosCliente,
   dadosCapturados,
-  inserirAlerta
+  inserirAlerta,
+  verificarIP,
+  updateIP,
+  updateIPFRIO
 };

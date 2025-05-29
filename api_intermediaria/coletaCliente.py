@@ -52,9 +52,56 @@ def pegar_top_processo():
             "ram": 0,
             "disco": 0
         }
+    
+def obterIP(mac_address):
+    try:
+        fetch_pedido = "http://localhost:3333/mysql/verificarIP"
+        resposta = requests.post(fetch_pedido, json={"mac_address": mac_address})
+
+        if resposta.status_code == 200:
+            ip = resposta.json()
+            print("IP RECEBIDO:" + ip)
+            if len(ip) > 0:
+                return ip
+            else:
+                return ""
+        else:
+            print(f"Erro ao acessar API: {resposta.status_code}")
+            return ""
+    except Exception as e:
+        print(f"Erro ao conectar ROTA PEDIDO: {e}")
+        return ""
+
+def updateIP(ip_publico, mac_address):
+    try:
+        fetch_pedido = "http://localhost:3333/mysql/updateIP"
+        resposta = requests.post(fetch_pedido, json={"mac_address": mac_address,
+                                                     "ip": ip_publico})
+        updateIPFRIO(ip_publico, mac_address)
+        if resposta.status_code == 200:
+            print("Dados enviados com sucesso")
+            print(resposta.json())
+        else:
+            print(f"Erro ao enviar os dados: {resposta.status_code}")
+            print(resposta.text)
+    except Exception as e:
+        print(f"Erro ao conectar ROTA PEDIDO: {e}")
+
+def updateIPFRIO(ip_publico, mac_address):
+    try:
+        fetch_pedido = "http://localhost:3333/mysql/updateIP"
+        resposta = requests.post(fetch_pedido, json={"mac_address": mac_address,
+                                                     "ip": ip_publico})
+        if resposta.status_code == 200:
+            print("Dados enviados com sucesso")
+            print(resposta.json())
+        else:
+            print(f"Erro ao enviar os dados: {resposta.status_code}")
+            print(resposta.text)
+    except Exception as e:
+        print(f"Erro ao conectar ROTA PEDIDO: {e}")               
 
 def obterPedidos(mac_address):
-    
     try:
         fetch_pedido = "http://localhost:3333/mysql/pedidosCliente"
         resposta = requests.post(fetch_pedido, json={"mac_address": mac_address})
@@ -127,6 +174,8 @@ def dadosBucket(dadosS3, mac_address):
 
 def monitorar():
     mac_address = pegando_mac_address()
+    
+
     print(f"Iniciando monitoramento nesse mac_address: {mac_address}")
     intervalo_envio_s3 = 5  # 1 hora
     ultimo_envio_s3 = datetime.datetime.now()
@@ -137,6 +186,10 @@ def monitorar():
     }
     contador_loop = 0
     while True:
+        verficarIP = obterIP(mac_address)
+        ip_publico = requests.get('https://api.ipify.org').text
+        if verficarIP != ip_publico :
+            updateIP(ip_publico, mac_address) 
         print("Conexao com o intermediário")
         contador_loop += 1
         print(f"Iniciando loop #{contador_loop}")

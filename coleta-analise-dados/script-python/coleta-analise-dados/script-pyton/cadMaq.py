@@ -2,6 +2,8 @@ import mysql.connector
 import platform
 import socket
 import uuid
+import requests
+
 
 conexao = mysql.connector.connect(
     host="localhost",
@@ -22,7 +24,7 @@ conexao2 = mysql.connector.connect(
 cursor = conexao.cursor()
 cursor2 = conexao2.cursor()
 so = platform.system()
-ip = socket.gethostbyname(socket.gethostname())
+ip_publico = requests.get('https://api.ipify.org').text
 hostname = socket.gethostname()
 mac = uuid.getnode()
 fabrica = 1 
@@ -32,12 +34,12 @@ print(mac)
 cursor.execute("""
     INSERT INTO servidor_maquina (sistema_operacional, ip, fkFabrica, Mac_Address, hostname)
     VALUES (%s, %s, %s, %s, %s)
-""", (so, ip, fabrica, mac, hostname))
+""", (so, ip_publico, fabrica, mac, hostname))
 
 cursor2.execute("""
     INSERT INTO servidor_maquina (sistema_operacional, ip, fkFabrica, Mac_Address, hostname)
     VALUES (%s, %s, %s, %s, %s)
-""", (so, ip, fabrica, mac, hostname))
+""", (so, ip_publico, fabrica, mac, hostname))
 
 
 conexao.commit()
