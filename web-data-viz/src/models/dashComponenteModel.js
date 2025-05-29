@@ -136,6 +136,29 @@ function dadosGraficoUsoAnual(idMaquina, componente, anoEscolhido) {
     return database.executarQUENTE(instrucaoSql)
 }
 
+function dadosGraficoAlertaAnual(idMaquina, componente, anoEscolhido) {
+    var instrucaoSql = `
+    SELECT 
+    MONTH(dataHora) AS mes,
+    SUM(CASE WHEN prioridade = 'Média' THEN 1 ELSE 0 END) AS alertasMedios,
+    SUM(CASE WHEN prioridade = 'Crítica' THEN 1 ELSE 0 END) AS alertasCriticos
+FROM 
+    alerta
+    JOIN capturaDados ON fkCapturaDados = idCapturaDados
+    JOIN componenteServidor ON fkComponenteServidor = idComponenteServidor
+	JOIN componente c ON fkComponente = idcomponente
+    JOIN servidor_maquina ON idMaquina = fkMaquina
+    WHERE 
+    c.tipo = '${componente}' AND servidor_maquina.idMaquina = ${idMaquina}
+    AND YEAR(dataHora) = ${anoEscolhido}
+GROUP BY 
+    MONTH(dataHora)
+    ORDER BY month(dataHora);
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
+}
+
 
 module.exports = {
     obterParametrosComponente,
@@ -144,5 +167,6 @@ module.exports = {
     obterAlertasMes,
     obterTempoMtbf,
     dadosGraficoUsoSemanal,
-    dadosGraficoUsoAnual
+    dadosGraficoUsoAnual,
+    dadosGraficoAlertaAnual
 }

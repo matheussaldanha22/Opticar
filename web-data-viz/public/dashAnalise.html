@@ -127,11 +127,12 @@
                 <!-- USO RAM -->
                 <div class="kpiIdv">
                     <div class="tituloKpi">
-                        <h2 style="display: flex; gap: 3px;">Tempo em sobrecarga <p id="kpiMes2"></p></h2>
+                        <h2 style="display: flex; gap: 3px;">Pico de uso máximo <p id="kpiMes2"></p></h2>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoRam">18h 23min</p>
+                        <p class="dadoKpi" id="usoRam">60%</p>
                     </span>
+                    <h3>Quantidade de alerta total: <p id="parametroAlerta">00</p>
                 </div>
 
                 <!-- USO DISCO -->
@@ -198,7 +199,7 @@
                             </h4>
                             <div class="filtrar">
                                 <h3>Filtrar:</h3>
-                                <div class="iconeFiltro" onclick="abrirModal('CPU', 'alertas')">
+                                <div class="iconeFiltro" onclick="filtrarAlerta()">
                                     <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
                                 </div>
                             </div>

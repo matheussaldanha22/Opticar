@@ -178,11 +178,17 @@ function obterTempoMtbf(idMaquina, componente) {
 let anoVar //variaveis global para levar pro atualiza dados
 let mesVar
 let filtroGraf = "anual"
-let optionAnos = ""
+
+// ------------- VARIAVEIS FILTRO ALERTA
+let anoVarAlerta
+let filtroGrafAlerta = "anual"
 
 //caso nao escolha vai mostrar o ano atual ---- Texto filtro
 document.getElementById("tipoFiltro-uso").innerHTML = "Anual"
 document.getElementById("periodo-uso").innerHTML = ` ${data.getFullYear()} (Padrão)`
+
+document.getElementById("tipoFiltro-alertas").innerHTML = "Anual"
+document.getElementById("periodo-alertas").innerHTML = ` ${data.getFullYear()} (Padrão)`
 
 
 function filtrarUso() {
@@ -337,12 +343,108 @@ function filtrarUso() {
 }
 
 
+//FILTRAR GRAFICO ALERTA
+function filtrarAlerta() {
+  let idMaquina = sltServidor.value
+  let componente = sltComponente.value
+
+  Swal.fire({
+    title: `Filtrar gráfico <u style="color:#2C3E50;">Alerta</u>`,
+    html: `
+      <div class="modal-test">
+        <div class="containerVisualizacao">
+          <h3>Mudar visualização</h3>
+          <p class="labelSlt"><b>Visualização em:
+            <select id="sltFiltrar">
+            <option value="anual">Anual (Média aos meses)</option>
+            <option value="geral">Geral (Média aos anos)</option>
+            </select></b>
+          </p>
+
+          <div id="containerAno" style="display:block; margin-top:10px;">
+          <label for="sltAno"><b>Escolha o ano:</b></label>
+            <select id="sltAno" class="sltRoxo">
+            </select>
+          </div>
+
+        </div>
+      </div>
+    `,
+    showCancelButton: true,
+    cancelButtonText: "Fechar",
+    confirmButtonText: "Confirmar",
+    confirmButtonColor: '#2C3E50',
+    customClass: "alertaModal",
+    didOpen: () => { //#############EXECUTA OS COMANDOS ASSIM Q MODAL ABRE SWEETALERT
+
+
+      selectAno = document.getElementById("sltAno")
+
+      fetch(`/dashComponentes/obterAnosDisponiveis/${idMaquina}/${componente}`, { //fetch para add anos nos selects
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      })
+        .then(res => res.json())
+        .then(res => {
+
+          res.forEach(item => {
+            const option = document.createElement("option");
+            option.value = item.ano;
+            option.textContent = item.ano;
+            selectAno.appendChild(option);
+          });
+
+
+        })
+        .catch(erro => {
+          console.error("Erro ao buscar anos", erro);
+        });
+
+    }
+  }).then((res) => {
+    if (res.isConfirmed) {
+      const tipoFiltro = document.getElementById("tipoFiltro-uso")
+      const periodo = document.getElementById("periodo-uso")
+
+      const sltFiltrar = document.getElementById("sltFiltrar");
+      const sltAno = document.getElementById("sltAno");
+
+      if (sltFiltrar && sltAno && sltMes) {
+        if (sltFiltrar.value === "geral") {
+          tipoFiltro.innerHTML = "Geral";
+          periodo.innerHTML = `Todos os anos`
+          filtroGrafAlerta = sltFiltrar.value
+        } else {
+          tipoFiltro.innerHTML = "Anual";
+          periodo.innerHTML = sltAno.value
+          filtroGrafAlerta = sltFiltrar.value
+        }
+      }
+
+      anoVarAlerta = sltAno.value
+
+      atualizarDados()
+    }
+  });
+
+  setTimeout(() => {
+    const sltFiltrar = document.getElementById("sltFiltrar");
+    const containerAno = document.getElementById("containerAno");
+
+    sltFiltrar.addEventListener("change", function () {
+      if (this.value === "geral") {
+        containerAno.style.display = "none";
+      } else {
+        containerAno.style.display = "block";
+      }
+    });
+  }, 100);
+}
+
 
 //-----------------------------CHARTS
 
-// #######CHART USO SEMANAL
-
-
+// #######CHART USO
 function obterParametroComponente(idMaquina, componente) {
   return fetch(`/dashComponentes/obterParametrosComponente/${idMaquina}/${componente}`, {
     method: 'GET',
@@ -419,7 +521,62 @@ function renderGraficoUso(categorias, dados, parametro) {
   window.chartUso.render();
 }
 
-//CHART USO MENSAL
+// #######CHART ALERTA
+function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
+
+  let categorias = [];
+  let dadosCritico = [];
+  let dadosMedio = [];
+
+  if (filtroGrafAlerta === "geral") {
+    // fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ anoEscolhido, mesEscolhido })
+    // })
+    //   .then(res => res.json())
+    //   .then(informacoes => {
+    //     informacoes.forEach(item => {
+    //       categorias.push(`Semana ${item.semana_do_mes}`);
+    //       dados.push(item.media_utilizacao);
+    //     });
+    //     renderGraficoUso(categorias, dados, parametro); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
+    //   });
+  } else {
+    fetch(`/dashComponentes/dadosGraficoAlertaAnual/${idMaquina}/${componente}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ anoEscolhido })
+    })
+      .then(res => res.json())
+      .then(informacoes => {
+        informacoes.forEach(item => {
+          categorias.push(`${nomeMeses[item.mes - 1]}`);
+          dadosCritico.push(item.alertasCriticos);
+          dadosMedio.push(item.alertasMedios);
+        });
+        renderGraficoAlerta(categorias, dadosCritico,dadosMedio); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
+      });
+  }
+}
+
+function renderGraficoAlerta(categorias, dadosCritico,dadosMedio){
+const options = {
+    chart: { type: 'bar', stacked: true, height: 300 },
+    series: [
+      { name: 'Crítico', data: dadosCritico },
+      { name: 'Médio', data: dadosMedio}
+    ],
+    xaxis: { categories: categorias, labels: { style: { colors: '#000' } } },
+    colors: ['#011f4b', '#0077b6'],
+    legend: { labels: { colors: '#000' } },
+    tooltip: { theme: 'light' }
+  };
+
+  if (window.chartSeveridade) window.chartSeveridade.destroy();
+  window.chartSeveridade = new ApexCharts(document.querySelector("#distribuicaoSeveridade"), options);
+  window.chartSeveridade.render();
+}
 
 
 
@@ -466,6 +623,7 @@ function atualizarDados() {
   let anoEscolhido = anoVar;
   let mesEscolhido = mesVar;
 
+
   const nomesComponente = document.querySelectorAll('.nomeComponente')
   nomesComponente.forEach(i => { i.innerHTML = componente });
 
@@ -479,69 +637,12 @@ function atualizarDados() {
     obterAlertasMes(idMaquina, componente);
     obterTempoMtbf(idMaquina, componente);
     dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido);
+    dadosGraficoAlerta(idMaquina, componente, anoEscolhido)
   }
 }
 
 sltServidor.addEventListener("change", atualizarDados);
 sltComponente.addEventListener("change", atualizarDados);
-
-//GRAF USO
-// function renderGraficoUso(periodo = 'ano') {
-//   const usoPorPeriodo = {
-//     ano: {
-//       categorias: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-//       dados: [52, 61, 60, 45, 100, 80, 50, 55, 28, 53, 55, 12]
-//     },
-//     semanal: {
-//       categorias: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
-//       dados: [50, 55, 28, 53, 55]
-//     }
-//   };
-
-//   const parametroAlerta = 70; //parametro do componente
-//   const { categorias, dados } = usoPorPeriodo[periodo];
-//   const options = {
-//     chart: { type: 'line', height: 300, toolbar: { show: false } },
-//     series: [
-//       { name: 'Uso médio (%)', data: dados },
-//       { name: 'Parâmetro de alerta crítico', data: new Array(categorias.length).fill(parametroAlerta), stroke: { dashArray: 5 } }
-//     ],
-//     xaxis: { categories: categorias, labels: { style: { colors: '#000' } } },
-//     yaxis: { max: 100, labels: { style: { colors: '#000' } } },
-//     colors: ['#000', '#e63946'],
-//     stroke: { curve: 'smooth', width: [3, 2] },
-//     legend: { labels: { colors: '#000' } },
-//     tooltip: { theme: 'light' },
-//     grid: { borderColor: '#ccc' }
-//   };
-
-//   if (window.chartUso) {
-//     window.chartUso.destroy();
-//   }
-
-//   window.chartUso = new ApexCharts(document.querySelector("#graficoUsoComponente"), options);
-//   window.chartUso.render();
-// }
-
-//GRAF DISTRIBUIÇÃO
-function renderSeveridade(periodo = 'mensal') {
-  const dados = chartData.severidade[periodo];
-  const options = {
-    chart: { type: 'bar', stacked: true, height: 300 },
-    series: [
-      { name: 'Crítico', data: dados.critico },
-      { name: 'Médio', data: dados.atencao }
-    ],
-    xaxis: { categories: dados.categorias, labels: { style: { colors: '#000' } } },
-    colors: ['#011f4b', '#0077b6'],
-    legend: { labels: { colors: '#000' } },
-    tooltip: { theme: 'light' }
-  };
-
-  if (window.chartSeveridade) window.chartSeveridade.destroy();
-  window.chartSeveridade = new ApexCharts(document.querySelector("#distribuicaoSeveridade"), options);
-  window.chartSeveridade.render();
-}
 
 //PREDICAO
 let currentChart;
@@ -602,7 +703,7 @@ document.getElementById("tipo").addEventListener("change", () => {
   renderChart(document.getElementById("tipo").value);
 });
 
-renderSeveridade();
+// renderSeveridade();
 renderChart("alertas");
 
 

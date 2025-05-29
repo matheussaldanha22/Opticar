@@ -204,8 +204,7 @@ def create_jira_issue(alert):
         'description': alert["description"] + f"\n\n**Fábrica:** {fabrica['nome']} (ID: {fabrica['idfabrica']})",
         'issuetype': {'name': issue_type},  # Mude para um tipo da listagem
         'priority': {'name': alert["priority"]},
-        'customfield_10124': {'value': urgency},
-        'customfield_10157': int(idFabrica)
+        'customfield_10057': idFabrica
     }
       # Adiciona campo personalizado para fábrica se ele existir no Jira
     # try:

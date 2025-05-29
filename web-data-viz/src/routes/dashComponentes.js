@@ -25,12 +25,18 @@ router.get("/obterTempoMtbf/:idMaquina/:componente", function (req, res) {
   dashComponenteController.obterTempoMtbf(req, res)
 })
 
+//grafico de uso
 router.post("/dadosGraficoUsoSemanal/:idMaquina/:componente", function (req, res) {
   dashComponenteController.dadosGraficoUsoSemanal(req, res)
 })
 
 router.post("/dadosGraficoUsoAnual/:idMaquina/:componente", function (req, res) {
   dashComponenteController.dadosGraficoUsoAnual(req, res)
+})
+
+//grafico alertas
+router.post("/dadosGraficoAlertaAnual/:idMaquina/:componente", function (req, res) {
+  dashComponenteController.dadosGraficoAlertaAnual(req, res)
 })
 
 
