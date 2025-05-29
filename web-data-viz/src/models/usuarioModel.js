@@ -68,7 +68,7 @@ function listarPorId(idUsuario) {
   SELECT usuario.nome, usuario.cargo FROM usuario WHERE idUsuario = ${idUsuario};
   `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function listarPorEmpresa(idEmpresa) {
