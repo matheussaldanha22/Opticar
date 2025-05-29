@@ -2,6 +2,40 @@ drop database opticarQuente;
 create database opticarQuente;
 use opticarQuente;
 
+    SELECT 
+            a.idAlerta AS id,
+            a.titulo AS title,
+            a.prioridade AS prioridade,
+            CONCAT(
+                '**Valor do Alerta:** ', a.valor, '\n',
+                '**Data/Hora:** ', DATE_FORMAT(a.dataHora, '%d/%m/%Y %H:%i:%s'), '\n',
+                '**Descrição:** ', a.descricao, '\n',
+                '**Componente:** ', IFNULL(a.componente, 'N/A'), '\n',
+                '**Dados Técnicos:** [Captura #', a.fkCapturaDados, ']'
+            ) AS description,
+            CASE 
+                WHEN a.prioridade = 'Crítica' THEN 'Highest'
+                WHEN a.prioridade = 'Média' THEN 'Medium'
+                ELSE 'Low'
+            END AS priority,
+            IFNULL(a.tipo_incidente, 'Incident') AS issue_type,
+            a.componente AS component,
+            sm.fkFabrica AS idFabrica  -- Adicionando idFabrica
+        FROM 
+            alerta a  -- Tabela alerta no banco opticarFrio
+        JOIN 
+            capturaDados cd ON cd.idCapturaDados = a.fkCapturaDados  -- Junção com capturaDados
+        JOIN 
+            componenteServidor cs ON cs.idComponenteServidor = cd.fkComponenteServidor  -- Junção com componenteServidor
+        JOIN 
+            servidor_maquina sm ON sm.idMaquina = cs.fkMaquina  -- Junção com servidor_maquina (no banco opticar)
+        WHERE 
+            a.idAlerta > %(alert_id)s
+            AND (a.jira_issue_key IS NULL OR a.jira_issue_key = '')
+            AND a.statusAlerta = 'To Do'
+        ORDER BY 
+            a.idAlerta ASC;
+
 
 CREATE TABLE servidor_maquina (
     idMaquina INT PRIMARY KEY auto_increment,
@@ -90,6 +124,8 @@ INSERT INTO servidor_maquina (sistema_operacional, ip, fkFabrica, Mac_Address, h
 ('Windows', '192.168.1.20', 2, 123456789012346, 'server-sul'),
 ('Linux', '192.168.1.30', 3, 123456789012347, 'server-leste');
 
+select * from servidor_maquina;
+
 insert into componenteServidor values
 (default, 1, 1, "intel", "45", "59"),
 (default, 2, 1, "intel", "45", "59"),
@@ -111,6 +147,9 @@ INSERT INTO capturaDados (fkComponenteServidor, valor, data) VALUES
 (1, 75.0, NOW()),
 (2, 110.0, NOW()),
 (3, 180.0, NOW());
+
+select * from capturaDados;
+select * from alerta;
 
 -- 5 alertas para fkFabrica = 1
 INSERT INTO alerta (valor, titulo, descricao, prioridade, tipo_incidente, componente, statusAlerta, fkCapturaDados)

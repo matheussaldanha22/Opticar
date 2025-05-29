@@ -10,10 +10,10 @@ load_dotenv()
 # Configurações (agora via variáveis de ambiente)
 DB_CONFIG = {
     'host': os.getenv('DB_HOST', 'localhost'),
-    'database': os.getenv('DB_NAME', 'opticarFrio'),
+    'database': os.getenv('DB_NAME', 'opticarQuente'),
     'user': os.getenv('DB_USER', 'root'),
-    'password': os.getenv('DB_PASSWORD', 'opticar123'),
-    'port': os.getenv('DB_PORT', '3307')
+    'password': os.getenv('DB_PASSWORD', 'matheus12'),
+    'port': os.getenv('DB_PORT', '3306')
 }
 
 # DB_HOST_FRIO=localhost
@@ -24,17 +24,17 @@ DB_CONFIG = {
 
 DB_CONFIG_FRIO = {
     'host': os.getenv('DB_HOST_FRIO', 'localhost'),
-    'database': os.getenv('DB_NAME_FRIO', 'opticar'),
+    'database': os.getenv('DB_NAME_FRIO', 'opticarFrio'),
     'user': os.getenv('DB_USER_FRIO', 'root'),
-    'password': os.getenv('DB_PASSWORD_FRIO', 'opticar123'),
-    'port': os.getenv('DB_PORT_FRIO', '3308')
+    'password': os.getenv('DB_PASSWORD_FRIO', 'matheus12'),
+    'port': os.getenv('DB_PORT_FRIO', '3306')
 }
 
 JIRA_CONFIG = {
     'server': os.getenv('JIRA_SERVER'),
     'email': os.getenv('JIRA_EMAIL'),
     'api_token': os.getenv('JIRA_API_TOKEN'),
-    'project_key': os.getenv('JIRA_PROJECT_KEY', 'OP')
+    'project_key': os.getenv('JIRA_PROJECT_KEY', 'MOT')
 }
 
 # Conecta ao JIRA
@@ -73,8 +73,8 @@ except Exception as e:
     exit(1)  # Encerra o script se o projeto for inválido
 # ----------------------------------------------
 
-issue_types = jira.issue_types_for_project('OP')
-print("\n🛠 Tipos de issues disponíveis no projeto OP:")
+issue_types = jira.issue_types_for_project('MOT')
+print("\n🛠 Tipos de issues disponíveis no projeto MOT:")
 for it in issue_types:
     print(f"- {it.name} (ID: {it.id})")
 
@@ -113,13 +113,13 @@ def get_new_alerts(last_checked_id):
             a.componente AS component,
             sm.fkFabrica AS idFabrica  -- Adicionando idFabrica
         FROM 
-            opticarFrio.alerta a  -- Tabela alerta no banco opticarFrio
+            alerta a  -- Tabela alerta no banco opticarFrio
         JOIN 
-            opticarFrio.capturaDados cd ON cd.idCapturaDados = a.fkCapturaDados  -- Junção com capturaDados
+            capturaDados cd ON cd.idCapturaDados = a.fkCapturaDados  -- Junção com capturaDados
         JOIN 
-            opticarFrio.componenteServidor cs ON cs.idComponenteServidor = cd.fkComponenteServidor  -- Junção com componenteServidor
+            componenteServidor cs ON cs.idComponenteServidor = cd.fkComponenteServidor  -- Junção com componenteServidor
         JOIN 
-            opticarFrio.servidor_maquina sm ON sm.idMaquina = cs.fkMaquina  -- Junção com servidor_maquina (no banco opticar)
+            servidor_maquina sm ON sm.idMaquina = cs.fkMaquina  -- Junção com servidor_maquina (no banco opticar)
         WHERE 
             a.idAlerta > %(alert_id)s
             AND (a.jira_issue_key IS NULL OR a.jira_issue_key = '')
@@ -199,7 +199,7 @@ def create_jira_issue(alert):
     print(f'Tipo fabrica: {type(idFabrica)}')
     
     issue_dict = {
-        'project': {'key': 'OP'},
+        'project': {'key': 'MOT'},
         'summary': f'[Alerta {alert["id"]}] {alert["title"]} - Fábrica: {fabrica["nome"]}({fabrica['idfabrica']})',
         'description': alert["description"] + f"\n\n**Fábrica:** {fabrica['nome']} (ID: {fabrica['idfabrica']})",
         'issuetype': {'name': issue_type},  # Mude para um tipo da listagem
@@ -264,7 +264,7 @@ def alertasBanco():
 
 
 def alertasJira():
-    jql_query = 'project = OP'
+    jql_query = 'project = MOT'
     issues = jira.search_issues(jql_query, maxResults=10)
     return issues
     # for issue in issues:

@@ -4,19 +4,19 @@ import socket
 import uuid
 
 conexao = mysql.connector.connect(
-    host="23.20.206.123",
-    user="admin",
-    password="admin123",
-    database="opticar",
+    host="localhost",
+    user="root",
+    password="matheus12",
+    database="opticarFrio",
     port="3306"
 )
 
 conexao2 = mysql.connector.connect(
-    host="23.20.206.123",
-    user="admin",
-    password="admin123",
-    database="opticarFrio",
-    port="3307"
+    host="localhost",
+    user="root",
+    password="matheus12",
+    database="opticarQuente",
+    port="3306"
 )
 
 cursor = conexao.cursor()

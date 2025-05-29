@@ -13,7 +13,7 @@ def pegar_top_processo():
     lista = []
     for processo in psutil.process_iter():
         try:
-            uso = processo.cpu_percent(interval=None, percpu=False)#interval=0.5
+            uso = processo.cpu_percent()#interval=0.5
             lista.append((processo, uso))
         except Exception as e:
             continue
