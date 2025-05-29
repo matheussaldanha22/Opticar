@@ -1,5 +1,43 @@
 var mysqlModel = require("../models/mysqlModel");
 
+function cadMaqFrio(req, res) {
+    var so = req.body.so; 
+    var ip_publico = req.body.ip_publico;
+    var hostname = req.body.hostname;
+    var mac = req.body.mac
+    var fabrica = req.body.fabrica
+
+    if (!so || !ip_publico || !hostname || !mac || !fabrica) {
+        return res.status(400).json({ mensagem: "Dados não fornecidos" });
+    }
+
+    mysqlModel.cadMaqFrio(so, ip_publico, hostname, mac, fabrica).then((resultado) => {
+            res.status(200).json(resultado);
+    }).catch((erro) => {
+        console.error("Erro ao cadastrar maquina fria:", erro);
+        res.status(500).json({ erro: erro.message});
+    });
+}
+
+function cadMaqQuente(req, res) {
+    var so = req.body.so; 
+    var ip_publico = req.body.ip_publico;
+    var hostname = req.body.hostname;
+    var mac = req.body.mac
+    var fabrica = req.body.fabrica
+
+    if (!so || !ip_publico || !hostname || !mac || !fabrica) {
+        return res.status(400).json({ mensagem: "Dados não fornecidos" });
+    }
+
+    mysqlModel.cadMaqQuente(so, ip_publico, hostname, mac, fabrica).then((resultado) => {
+            res.status(200).json(resultado);
+    }).catch((erro) => {
+        console.error("Erro ao cadastrar maquina quente:", erro);
+        res.status(500).json({ erro: erro.message});
+    });
+}
+
 function pedidosCliente(req, res) {
     var macAddress = req.body.mac_address;
 
@@ -131,13 +169,13 @@ function inserirAlerta(req, res) {
     });
 }
 
-
-
 module.exports = {
   pedidosCliente,
   dadosCapturados,
   inserirAlerta,
   verificarIP,
   updateIP,
-  updateIPFRIO
+  updateIPFRIO,
+  cadMaqFrio,
+  cadMaqQuente
 };

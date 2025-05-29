@@ -7,6 +7,14 @@ router.post("/pedidosCliente", function (req, res) {
   mysqlController.pedidosCliente(req, res)
 })
 
+router.post("/cadMaqFrio", function (req, res) {
+  mysqlController.cadMaqFrio(req, res)
+})
+
+router.post("/cadMaqQuente", function (req, res) {
+  mysqlController.cadMaqQuente(req, res)
+})
+
 router.post("/dadosCapturados", function (req, res) {
   mysqlController.dadosCapturados(req, res)
 })
@@ -24,7 +32,7 @@ router.post("/updateIP", function (req, res) {
 })
 
 router.post("/updateIPFRIO", function (req, res) {
-  mysqlController.updateIPFRIOw(req, res)
+  mysqlController.updateIPFRIO(req, res)
 })
 
 module.exports = router

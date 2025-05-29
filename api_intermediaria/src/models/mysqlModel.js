@@ -1,5 +1,19 @@
 var database = require("../database/config")
 
+function cadMaqFrio(so, ip_publico, hostname, mac, fabrica) {
+  const instrucaoSql = `INSERT INTO servidor_maquina (sistema_operacional, ip, fkFabrica, Mac_Address, hostname)
+                        VALUES ('${so}', '${ip_publico}', ${fabrica}, ${mac}, '${hostname}');`
+
+  return database.executarFrio(instrucaoSql)
+}
+
+function cadMaqQuente(so, ip_publico, hostname, mac, fabrica) {
+  const instrucaoSql = `INSERT INTO servidor_maquina (sistema_operacional, ip, fkFabrica, Mac_Address, hostname)
+                        VALUES ('${so}', '${ip_publico}', ${fabrica}, ${mac}, '${hostname}');`
+
+  return database.executarQuente(instrucaoSql)
+}
+
 function pedidosCliente(macAddress) {
   var instrucaoSql = `SELECT * FROM componenteServidor 
                         JOIN servidor_maquina ON componenteServidor.fkMaquina = servidor_maquina.idMaquina
@@ -52,5 +66,7 @@ module.exports = {
     inserirAlerta,
     verificarIP,
     updateIP,
-    updateIPFRIO
+    updateIPFRIO,
+    cadMaqFrio,
+    cadMaqQuente
 }
