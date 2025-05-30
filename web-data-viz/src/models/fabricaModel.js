@@ -5,7 +5,7 @@ function listarFabricasEmpresa(idEmpresa) {
       SELECT * FROM fabrica where fkEmpresa = ${idEmpresa}
     `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function cadastrarGestorFabrica(idGestor, idFabrica) {
@@ -13,14 +13,14 @@ function cadastrarGestorFabrica(idGestor, idFabrica) {
       UPDATE fabrica SET fkGestorFabrica = ${idGestor} WHERE idfabrica = ${idFabrica}
   `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
-  return database.executar(instrucaoSql)
+  return database.executarFRIO(instrucaoSql)
 }
 
 function cadastrar(nome, funcao, limiteA, limiteG) {
     var instrucaoSql = `insert into fabrica (nome, funcao, limitecritico, limiteatencao) values
     ('${nome}', '${funcao}', ${limiteG}, ${limiteA})`;
 
-    return database.executar(instrucaoSql);
+    return database.executarFRIO(instrucaoSql);
 }
 
 function verificaAlertas() {

@@ -213,32 +213,51 @@ var barOptions = {
     }
 };
 
+
+
+
+
+
 // Faz a requisição e atualiza os dados no gráfico
-fetch("http://localhost:3333/gestorInfra/dados-cpu")
-    .then(res => res.json())
-    .then(dados => {
-        // Atualizando os dados com base na resposta do backend
-        barOptions.series = [
-            {
-                name: 'Alertas totais',
-                data: dados.totais
-            },
-            {
-                name: 'Não Resolvidos',
-                data: dados.toDos
+
+var grafico = null;
+
+function carregarComponente(componente) {
+    var url = `http://localhost:3333/gestorInfra/dados-${componente.toLowerCase()}`;
+
+    fetch(url)
+        .then(res => res.json())
+        .then(dados => {
+            // PRA NÃO FICAR COISADO OS GRAFICO,pq ta ficando um encima dos outros
+            if (grafico !== null) {
+                grafico.destroy();
             }
-        ];
-        barOptions.xaxis.categories = dados.categorias;
 
-        // Renderiza o gráfico 
-        var chart =  new ApexCharts(document.querySelector("#bar-chart"), barOptions);
-        chart.render();
-    })
-    .catch(err => {
-        console.error("Erro ao carregar dados do gráfico:", err);
+            // Atualiza os dados do gráfico
+            barOptions.series = [
+                { name: 'Alertas totais', data: dados.totais },
+                { name: 'Não Resolvidos', data: dados.toDos }
+            ];
+            barOptions.xaxis.categories = dados.categorias;
+
+            
+            grafico = new ApexCharts(document.querySelector("#bar-chart"), barOptions);
+            grafico.render();
+        })
+        .catch(err => {
+            console.error("Erro ao carregar dados do gráfico:", err);
+        });
+}
+
+// PRATROCAR O JHONIS
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        var componente = tab.textContent.trim();
+        carregarComponente(componente);
     });
+});
 
-
+   
 
          //----------------------------------------------------------------------------------------
 
