@@ -181,14 +181,14 @@ let filtroGraf = "anual"
 
 // ------------- VARIAVEIS FILTRO ALERTA
 let anoVarAlerta
-let filtroGrafAlerta = "anual"
+let filtroGrafAlerta = "geral"
 
 //caso nao escolha vai mostrar o ano atual ---- Texto filtro
 document.getElementById("tipoFiltro-uso").innerHTML = "Anual"
 document.getElementById("periodo-uso").innerHTML = ` ${data.getFullYear()} (Padrão)`
 
-document.getElementById("tipoFiltro-alertas").innerHTML = "Anual"
-document.getElementById("periodo-alertas").innerHTML = ` ${data.getFullYear()} (Padrão)`
+document.getElementById("tipoFiltro-alertas").innerHTML = "Geral"
+document.getElementById("periodo-alertas").innerHTML = ` Todos os anos (Padrão)`
 
 
 function filtrarUso() {
@@ -356,12 +356,12 @@ function filtrarAlerta() {
           <h3>Mudar visualização</h3>
           <p class="labelSlt"><b>Visualização em:
             <select id="sltFiltrar">
-            <option value="anual">Anual (Média aos meses)</option>
             <option value="geral">Geral (Média aos anos)</option>
+            <option value="anual">Anual (Média aos meses)</option>
             </select></b>
           </p>
 
-          <div id="containerAno" style="display:block; margin-top:10px;">
+          <div id="containerAno" style="display:none; margin-top:10px;">
           <label for="sltAno"><b>Escolha o ano:</b></label>
             <select id="sltAno" class="sltRoxo">
             </select>
@@ -403,13 +403,13 @@ function filtrarAlerta() {
     }
   }).then((res) => {
     if (res.isConfirmed) {
-      const tipoFiltro = document.getElementById("tipoFiltro-uso")
-      const periodo = document.getElementById("periodo-uso")
+      const tipoFiltro = document.getElementById("tipoFiltro-alertas")
+      const periodo = document.getElementById("periodo-alertas")
 
       const sltFiltrar = document.getElementById("sltFiltrar");
       const sltAno = document.getElementById("sltAno");
 
-      if (sltFiltrar && sltAno && sltMes) {
+      if (sltFiltrar && sltAno) {
         if (sltFiltrar.value === "geral") {
           tipoFiltro.innerHTML = "Geral";
           periodo.innerHTML = `Todos os anos`
@@ -432,10 +432,10 @@ function filtrarAlerta() {
     const containerAno = document.getElementById("containerAno");
 
     sltFiltrar.addEventListener("change", function () {
-      if (this.value === "geral") {
-        containerAno.style.display = "none";
-      } else {
+      if (this.value === "anual") {
         containerAno.style.display = "block";
+      } else {
+        containerAno.style.display = "none";
       }
     });
   }, 100);
@@ -499,7 +499,7 @@ function dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido) {
 }
 
 function renderGraficoUso(categorias, dados, parametro) {
-  console.log("parametro do gráfico:", parametro);
+  console.log("parametro do componente:", parametro);
 
   const options = {
     chart: { type: 'line', height: 300, toolbar: { show: false } },
@@ -529,19 +529,22 @@ function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
   let dadosMedio = [];
 
   if (filtroGrafAlerta === "geral") {
-    // fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ anoEscolhido, mesEscolhido })
-    // })
-    //   .then(res => res.json())
-    //   .then(informacoes => {
-    //     informacoes.forEach(item => {
-    //       categorias.push(`Semana ${item.semana_do_mes}`);
-    //       dados.push(item.media_utilizacao);
-    //     });
-    //     renderGraficoUso(categorias, dados, parametro); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
-    //   });
+    fetch(`/dashComponentes/dadosGraficoAlertaGeral/${idMaquina}/${componente}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    })
+      .then(res => res.json())
+      .then(informacoes => {
+        informacoes.forEach(item => {
+          categorias.push(`${item.ano}`);
+          dadosCritico.push(item.alertasCriticos);
+          dadosMedio.push(item.alertasMedios);
+          
+        });
+        console.log("AAAAAAAAA",informacoes)
+        console.log("dados",dadosCritico)
+        renderGraficoAlerta(categorias, dadosCritico, dadosMedio);
+      });
   } else {
     fetch(`/dashComponentes/dadosGraficoAlertaAnual/${idMaquina}/${componente}`, {
       method: "POST",

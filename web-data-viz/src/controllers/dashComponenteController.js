@@ -114,7 +114,7 @@ function dadosGraficoUsoSemanal(req, res) {
   if (anoEscolhido == undefined || mesEscolhido == undefined) {
     res.status(400).send("undefined");
   } else {
-    dashComponenteModel.dadosGraficoUsoSemanal(idMaquina,componente,anoEscolhido,mesEscolhido)
+    dashComponenteModel.dadosGraficoUsoSemanal(idMaquina, componente, anoEscolhido, mesEscolhido)
       .then(function (resultado) {
         if (resultado.length > 0) {
           res.status(200).json(resultado)
@@ -138,7 +138,7 @@ function dadosGraficoUsoAnual(req, res) {
   if (anoEscolhido == undefined || componente == undefined || anoEscolhido == undefined) {
     res.status(400).send("undefined params");
   } else {
-    dashComponenteModel.dadosGraficoUsoAnual(idMaquina,componente,anoEscolhido)
+    dashComponenteModel.dadosGraficoUsoAnual(idMaquina, componente, anoEscolhido)
       .then(function (resultado) {
         if (resultado.length > 0) {
           res.status(200).json(resultado)
@@ -162,7 +162,7 @@ function dadosGraficoAlertaAnual(req, res) {
   if (anoEscolhido == undefined || componente == undefined || anoEscolhido == undefined) {
     res.status(400).send("undefined params");
   } else {
-    dashComponenteModel.dadosGraficoAlertaAnual(idMaquina,componente,anoEscolhido)
+    dashComponenteModel.dadosGraficoAlertaAnual(idMaquina, componente, anoEscolhido)
       .then(function (resultado) {
         if (resultado.length > 0) {
           res.status(200).json(resultado)
@@ -178,6 +178,27 @@ function dadosGraficoAlertaAnual(req, res) {
   }
 }
 
+function dadosGraficoAlertaGeral(req, res) {
+  var idMaquina = req.params.idMaquina
+  var componente = req.params.componente
+
+  dashComponenteModel
+    .dadosGraficoAlertaGeral(idMaquina, componente)
+    .then(function (resultado) {
+      if (resultado.length > 0) {
+        res.status(200).json(resultado)
+      } else {
+        res.status(204).send("Nenhum resultado encontrado!")
+      }
+    })
+    .catch(function (erro) {
+      console.log(erro)
+      console.log("Houve um erro ao buscar dados do graf geral alerta", erro.sqlMessage)
+      res.status(500).json(erro.sqlMessage)
+    })
+
+}
+
 
 
 
@@ -190,5 +211,6 @@ module.exports = {
   obterTempoMtbf,
   dadosGraficoUsoSemanal,
   dadosGraficoUsoAnual,
-  dadosGraficoAlertaAnual
+  dadosGraficoAlertaAnual,
+  dadosGraficoAlertaGeral
 }
