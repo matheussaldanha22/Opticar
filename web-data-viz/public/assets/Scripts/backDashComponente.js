@@ -152,7 +152,7 @@ function obterTempoMtbf(idMaquina, componente) {
 
       // se tiver mais de 60 min ele vira hora
       if (mtbf > 60) {
-        mtbf = parseFloat((minOperacao / qtdAlertas).toFixed(1))
+        mtbf = parseInt((minOperacao / qtdAlertas).toFixed(0))
         metrica = "Hrs"
       }
 
@@ -185,10 +185,10 @@ let filtroGrafAlerta = "geral"
 
 //caso nao escolha vai mostrar o ano atual ---- Texto filtro
 document.getElementById("tipoFiltro-uso").innerHTML = "Anual"
-document.getElementById("periodo-uso").innerHTML = ` ${data.getFullYear()} (Padrão)`
+document.getElementById("periodo-uso").innerHTML = ` ${data.getFullYear()}`
 
 document.getElementById("tipoFiltro-alertas").innerHTML = "Geral"
-document.getElementById("periodo-alertas").innerHTML = ` Todos os anos (Padrão)`
+document.getElementById("periodo-alertas").innerHTML = ` Todos os anos`
 
 
 function filtrarUso() {
@@ -539,10 +539,8 @@ function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
           categorias.push(`${item.ano}`);
           dadosCritico.push(item.alertasCriticos);
           dadosMedio.push(item.alertasMedios);
-          
+
         });
-        console.log("AAAAAAAAA",informacoes)
-        console.log("dados",dadosCritico)
         renderGraficoAlerta(categorias, dadosCritico, dadosMedio);
       });
   } else {
@@ -558,17 +556,19 @@ function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
           dadosCritico.push(item.alertasCriticos);
           dadosMedio.push(item.alertasMedios);
         });
-        renderGraficoAlerta(categorias, dadosCritico,dadosMedio); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
+        console.log("dados", informacoes)
+        console.log("ano do fetch", anoEscolhido)
+        renderGraficoAlerta(categorias, dadosCritico, dadosMedio); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
       });
   }
 }
 
-function renderGraficoAlerta(categorias, dadosCritico,dadosMedio){
-const options = {
+function renderGraficoAlerta(categorias, dadosCritico, dadosMedio) {
+  const options = {
     chart: { type: 'bar', stacked: true, height: 300 },
     series: [
       { name: 'Crítico', data: dadosCritico },
-      { name: 'Médio', data: dadosMedio}
+      { name: 'Médio', data: dadosMedio }
     ],
     xaxis: { categories: categorias, labels: { style: { colors: '#000' } } },
     colors: ['#011f4b', '#0077b6'],
@@ -623,24 +623,31 @@ const sltComponente = document.getElementById("sltComponente");
 function atualizarDados() {
   const idMaquina = sltServidor.value;
   const componente = sltComponente.value;
-  let anoEscolhido = anoVar;
-  let mesEscolhido = mesVar;
+  let anoEscolhidoUso = anoVar;
+  let mesEscolhidoUso = mesVar;
+
+  let anoEscolhidoAlerta = anoVarAlerta
 
 
   const nomesComponente = document.querySelectorAll('.nomeComponente')
   nomesComponente.forEach(i => { i.innerHTML = componente });
 
-  //atribuindo que se nao filtrar por padrão puxa o mes e ano atual
-  if (!anoEscolhido || !mesEscolhido) {
-    anoEscolhido = data.getFullYear()
-    mesEscolhido = data.getMonth() + 1
+  //atribuindo que se nao filtrar por padrão puxa o mes e ano atual --USO
+  if (!anoEscolhidoUso || !mesEscolhidoUso) {
+    anoEscolhidoUso = data.getFullYear()
+    mesEscolhidoUso = data.getMonth() + 1
+  }
+
+  //se filtro for anual 
+  if (!anoEscolhidoAlerta) {
+    anoEscolhidoAlerta = data.getFullYear();
   }
 
   if (idMaquina && componente) {
     obterAlertasMes(idMaquina, componente);
     obterTempoMtbf(idMaquina, componente);
-    dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido);
-    dadosGraficoAlerta(idMaquina, componente, anoEscolhido)
+    dadosGraficoUso(idMaquina, componente, anoEscolhidoUso, mesEscolhidoUso);
+    dadosGraficoAlerta(idMaquina, componente, anoEscolhidoAlerta)
   }
 }
 
