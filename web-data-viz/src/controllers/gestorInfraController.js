@@ -2,7 +2,9 @@ var gestorInfraModel = require("../models/gestorInfraModel");
 
 async function obterDadosComponente(req, res, tipo) {
     try {
+    
         let dados;
+        
 
         switch (tipo) {
             case 'CPU':
@@ -12,7 +14,7 @@ async function obterDadosComponente(req, res, tipo) {
                 dados = await gestorInfraModel.buscarAlertasRAM();
                 break;
             case 'DISCO':
-                dados = await gestorInfraModel.buscarAlertasDISCO();
+                dados = await gestorInfraModel.buscarAlertasDISCO()
                 break;
             default:
                 return res.status(400).json({ erro: 'Componente inválido' });
@@ -32,6 +34,8 @@ async function obterDadosComponente(req, res, tipo) {
         console.error(`Erro ao obter dados de ${tipo}:`, erro);
         res.status(500).json({ erro: erro.message });
     }
+
+
 }
 
 // puxando separado

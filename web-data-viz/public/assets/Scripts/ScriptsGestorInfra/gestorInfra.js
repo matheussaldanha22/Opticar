@@ -222,7 +222,10 @@ var barOptions = {
 
 var grafico = null;
 
+
+
 function carregarComponente(componente) {
+    
     var url = `http://localhost:3333/gestorInfra/dados-${componente.toLowerCase()}`;
 
     fetch(url)
@@ -249,7 +252,24 @@ function carregarComponente(componente) {
         });
 }
 
-// PRATROCAR O JHONIS
+
+//COMEÇA COM A CPU, E DA O INTERVALO PRA TODOS OS COMPONENTES
+window.addEventListener('DOMContentLoaded', () => {
+    carregarComponente('CPU')
+    setInterval(() => {
+        carregarComponente('CPU');
+    },10000)
+
+    setInterval(() => {
+        carregarComponente('RAM');
+    },10000)
+
+    setInterval(() => {
+        carregarComponente('DISCO');
+    },10000)
+})
+
+// PRATROCAR O JHONIS de cima 
 document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
         var componente = tab.textContent.trim();
