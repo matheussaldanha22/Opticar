@@ -123,7 +123,7 @@ def get_new_alerts(last_checked_id):
         WHERE 
             a.idAlerta > %(alert_id)s
             AND (a.jira_issue_key IS NULL OR a.jira_issue_key = '')
-            AND a.statusAlerta = 'To Do'
+            AND (a.statusAlerta = 'Aberto' OR a.statusAlerta = 'To Do')
         ORDER BY 
             a.idAlerta ASC;
         """
@@ -264,7 +264,10 @@ def alertasBanco():
 
 def alertasJira():
     jql_query = 'project = MOT'
-    issues = jira.search_issues(jql_query, maxResults=10)
+    # Explicitamente solicitar os campos necessários, incluindo status
+    issues = jira.search_issues(jql_query, fields="key,summary,status,priority", maxResults=10)
+
+    
     return issues
     # for issue in issues:
     #     print(f"ID: {issue.key}")
@@ -277,12 +280,13 @@ def alertasJira():
 def atualizar_alertas():
     dadosBanco = alertasBanco()
     dadosJira = alertasJira()
-
     for alerta in dadosJira:
+        jira_status = alerta.fields.status.name
+        print(f"Ticket {alerta.key} - Status no JIRA: '{jira_status}'")
         for alertaBanco in dadosBanco:
             # print('teste', alertaBanco[10] )
-            if alerta.key == alertaBanco[10]:
-                print(f'O {alerta.key} do JIRA é igual a {alertaBanco[10]} do banco')
+            if alerta.key == alertaBanco[14]:
+                print(f'O {alerta.key} do JIRA é igual a {alertaBanco[14]} do banco')
                 if alerta.fields.status.name != alertaBanco[8]:
                     conn = mysql.connector.connect(**DB_CONFIG)
                     cursor = conn.cursor()
