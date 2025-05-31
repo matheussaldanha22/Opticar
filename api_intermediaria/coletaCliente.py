@@ -134,6 +134,39 @@ def inserirDados(valor, idPedido):
     except Exception as e:
         print(f"Erro ao conectar ROTA INSERIR: {e}")
 
+
+
+def enviarDadosTempoReal(idMaquina, idFabrica, tipo, valor, medida, ipServidor):
+        try:
+
+
+            # dadosTempoReal = json={"idFabrica": idFabrica, "idMaquina": idMaquina, "valor": valor, "tipoComponente": tipo, "tipoMedida":medida, "ipServidor": ipServidor}
+
+            # dadosTempoReal = json.dumps(listaDados)
+
+            # enviarDadosTempoReal(idMaquina, idFabrica, tipo, valor, medida, ipServidor)
+
+            fetch_tempoReal = "http://localhost:8080/dashMonitoramento/dadosTempoReal"
+            resposta = requests.post(fetch_tempoReal, json={
+                "idFabrica": idFabrica,
+                "idMaquina": idMaquina,
+                "tipo": tipo,
+                "valor": valor,
+                "medida": medida,
+                "ipServidor": ipServidor
+            })
+
+            if resposta.status_code == 200:
+                print("Dados enviados em tempo real")
+                print(resposta.json())
+            else:
+                print(f"Erro ao enviar os dados em tempo real: {resposta.status_code}")
+                print(resposta.text)
+        except Exception as e:
+            print(f"Erro ao conectar na rota tempo real: {e}")
+
+
+
 def inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta, tipo_incidente, fkPedido, componente, processo, processoCPU, processoRAM, processoDISCO):
     try:
         fetch_inserirAlerta = "http://localhost:3333/mysql/inserirAlerta"
@@ -177,13 +210,20 @@ def monitorar():
     
 
     print(f"Iniciando monitoramento nesse mac_address: {mac_address}")
-    intervalo_envio_s3 = 5  # 1 hora
+    intervalo_envio_s3 = 500 # 1 hora
     ultimo_envio_s3 = datetime.datetime.now()
     dadosS3 = {
         "macAddress": mac_address,
         "dataAtual": datetime.datetime.now().isoformat(),
         "leitura": []
     }
+
+    # listaDados = {
+    #     "dados": []
+    # }
+
+    listaDados = []
+
     contador_loop = 0
     while True:
         verficarIP = obterIP(mac_address)
@@ -209,6 +249,22 @@ def monitorar():
                     })
                     print(f"Valor capturado: {valor} e id: {idPedido}")
                     inserirDados(valor, idPedido)
+
+                    idFabrica = pedido_cliente['fkFabrica']
+                    idMaquina = pedido_cliente['idMaquina']
+                    tipo = pedido_cliente['tipo']
+                    medida = pedido_cliente['medida']
+                    ipServidor = pedido_cliente['ip']
+
+                    # listaDados.append({
+                    #     "idFabrica": idFabrica,
+                    #     "idMaquina": idMaquina,
+                    #     "tipo": tipo,
+                    #     "medida": medida,
+                    #     "ipServidor" : ipServidor,
+                    #     "valor": valor
+                    # })
+                    enviarDadosTempoReal(idMaquina, idFabrica, tipo, valor, medida, ipServidor)
 
                     if valor > float(pedido_cliente['limiteCritico']) :
                         processoFunc = pegar_top_processo()
@@ -242,14 +298,17 @@ def monitorar():
                                        componente, processo, processoCPU, processoRAM, processoDISCO)
                 except Exception as e:
                     print(f"Erro ao processar pedido: {e}")
-                    
+                
 
+            enviarDadosTempoReal(listaDados)
+            listaDados["dados"].clear()
+            
             tempo_passado = (datetime.datetime.now() - ultimo_envio_s3).total_seconds()
             if tempo_passado >= intervalo_envio_s3:
                 dadosBucket(dadosS3, mac_address)
                 ultimo_envio_s3 = datetime.datetime.now()
 
-            time.sleep(1)
+            time.sleep(5)
 
         except Exception as e:
             print(f"Erro: {e}")

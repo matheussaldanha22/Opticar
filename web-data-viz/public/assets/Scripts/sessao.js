@@ -19,7 +19,7 @@ function componentes() {
 
 function dashMonitoramento() {
   pagina = 3
-  window.location.href = "./dashMonitoramento.html"
+  window.location.href = "./dashMonitoramento-vitor.html"
   document.getElementById("dashMonitoramento").className = "li-active"
 }
 

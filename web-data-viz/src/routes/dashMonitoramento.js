@@ -11,5 +11,9 @@ router.post("/dadosTempoReal", (req, res) =>{
     dashMonitoramentoController.dadosTempoReal(req, res)
 })
 
+router.get("/dadosRecebidos", (req, res) =>{
+    dashMonitoramentoController.dadosRecebidos(req, res)
+})
+
 
 module.exports = router

@@ -15,9 +15,11 @@ function obterSemana(req,res) {
     
 }
 
+let listaDados = []
 
 function dadosTempoReal(req, res) {
     const dados = req.body
+    listaDados.push(dados)
 
     console.log(`Dados recebidos do Python: ${JSON.stringify(dados)}`)
     try{
@@ -30,9 +32,15 @@ function dadosTempoReal(req, res) {
 
 }
 
+function dadosRecebidos(req, res){
+    res.status(200).send(listaDados)
+
+}
+
 module.exports ={
     obterSemana,
-    dadosTempoReal
+    dadosTempoReal,
+    dadosRecebidos
     
 }
 
