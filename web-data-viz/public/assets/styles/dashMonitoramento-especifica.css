@@ -478,11 +478,11 @@ table i:hover {
   max-height: inherit;
   max-width: inherit;
   width: 70%;
-    background: linear-gradient(270deg, #012027, #04708d);
-    border-radius: 10px;
+  background: linear-gradient(270deg, #012027, #04708d);
+  border-radius: 10px;
 }
 
-.chartsContainer{
+.chartsContainer {
   display: flex;
   /* border: 1px solid black; */
   width: inherit;
@@ -492,14 +492,14 @@ table i:hover {
   gap: 2%;
 }
 
-.sessao1Charts{
+.sessao1Charts {
   width: inherit;
   display: flex;
   height: 50%;
   gap: 2%;
 }
 
-.sessao2Charts{
+.sessao2Charts {
   width: inherit;
   display: flex;
   height: 50%;
@@ -507,25 +507,25 @@ table i:hover {
   margin-bottom: 40px;
 }
 
-.cpuChart{
+.cpuChart {
   width: 100%;
 }
 
-.discoChart{
+.discoChart {
   width: 100%;
 }
 
-.charts{
+.charts {
   width: 100%;
   height: 100%;
   /* border: 1px solid black; */
-  background-color: #EFEFEF;
+  background-color: #efefef;
   display: flex;
   padding: 1%;
   border-radius: 10px;
 }
 
-.textoGrafico{
+.textoGrafico {
   display: flex;
   flex-direction: column;
   width: 30%;
@@ -535,34 +535,51 @@ table i:hover {
   text-wrap: wrap;
 }
 
-.textoGrafico h4{
+.textoGrafico h4 {
   font-size: 2vw;
 }
 
-.textoGrafico div{
+.textoGrafico div {
   font-size: 2vw;
 }
 
-.textoGrafico div p{
+.textoGrafico div p {
   font-size: 4vw;
 }
 
-#utilizacaoInfo{
-  color: #04708D;
+#utilizacaoInfo {
+  color: #04708d;
   font-weight: 1000;
 }
 
-.textoGrafico #utilizacaoInfoDisco{
+.textoGrafico #utilizacaoInfoDisco {
   margin-top: 20%;
-  color: #04708D;
+  color: #04708d;
   font-weight: 1000;
   font-size: 1.5vw;
 }
 
-#chartDisco{
+#chartDisco {
   width: 100%;
 }
 
+.chartsContainer i {
+  border: 1px solid #011f27;
+  border-radius: 10px;
+  color: #011f27;
+}
+
+#chartRam {
+  max-height: inherit;
+  max-width: inherit;
+  width: 70%;
+  background: linear-gradient(270deg, #012027, #04708d);
+  border-radius: 10px;
+}
+
+.bx-sd-card {
+  font-size: 10px;
+}
 
 @media screen and (max-width: 700px) {
   body {

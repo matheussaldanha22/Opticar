@@ -74,7 +74,7 @@
                 <p>Acompanhe o consumo em tempo real</p>
             </div>
             <hr>
-            <div class="alertasContainer">  
+            <div class="alertasContainer">
 
                 <div class="tempoReal">
                     <div class="containerKpis">
@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="mainContainerTabela">
-                    <h2 class="tituloTabela">Servidores em alta utilização (crítico e atenção)</h2>
+                    <h2 class="tituloTabela">Principais processos (alto consumo)</h2>
                     <table id="tabela-alertas" class="tabelaContainer">
                         <thead>
                             <tr>
@@ -106,7 +106,7 @@
                                         onclick="redirecionarPagina()"></i>
                                 </td>
                             </tr>
-                                                        <tr>
+                            <tr>
                                 <td data-label="ID">2</td>
                                 <td data-label="Servidor">SV001</td>
                                 <td data-label="CPU">80%</td>
@@ -129,13 +129,13 @@
 
                     </table>
                     <div class="pagination" id="paginacao"></div>
-                </div>  
+                </div>
 
                 <div class="chartsContainer">
                     <div class="sessao1Charts">
                         <div class="cpuChart charts">
                             <div class="informacoesCPU textoGrafico">
-                                <h4>CPU</h4>
+                                <h4><i class='bx bx-chip'></i> CPU</h4>
                                 <div>
                                     <h5>Utilização</h5>
                                     <p id="utilizacaoInfo">100%</p>
@@ -145,10 +145,10 @@
                         </div>
                         <div class="discoChart charts">
                             <div class="informacoesCPU textoGrafico">
-                                <h4>Disco</h4>
+                                <h4><i class='bx  bx-folder'></i> Disco</h4>
                                 <div>
                                     <h5>Utilização</h5>
-                                    <p id="utilizacaoInfoDisco">8,23 / 22,12gb</p>
+                                    <p id="utilizacaoInfoDisco">60%</p>
                                 </div>
                             </div>
                             <div id="chartDisco"></div>
@@ -157,7 +157,16 @@
 
                     <div class="sessao2Charts">
                         <div class="redeChart charts"></div>
-                        <div class="ramChart charts"></div>
+                        <div class="ramChart charts">
+                            <div class="informacoesCPU textoGrafico">
+                                <h4><i class='bx  bx-credit-card-front'></i> RAM</h4>
+                                <div>
+                                    <h5>Utilização</h5>
+                                    <p id="utilizacaoInfo"> 100%</p>
+                                </div>
+                            </div>
+                            <div id="chartRam"></div>
+                        </div>
                     </div>
                 </div>
 

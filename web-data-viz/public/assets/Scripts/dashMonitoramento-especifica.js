@@ -6,14 +6,13 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("/alertas/listar")
     .then((res) => res.json())
     .then((dados) => {
-      alertas = dados
-      renderTabela(paginaAtual)
-      renderPaginacao()
+      // alertas = dados
+      // renderTabela(paginaAtual)
+      // renderPaginacao()
     })
     .catch((err) => {
       console.error("Erro ao carregar alertas:", err)
     })
-
 })
 
 function renderTabela(pagina) {
@@ -113,40 +112,61 @@ function abrirModal(id) {
   })
 }
 
-
-
 var options = {
   chart: {
-    type: 'line',
-    height: '100%',
-    width: '100%',
-    foreColor: '#fff'
+    type: "line",
+    height: "100%",
+    width: "100%",
+    foreColor: "#fff",
   },
-  series: [{
-    name: 'sales',
-    data: [30,40,45,50,49,60,70,91,125]
-  }],
-  colors: ['#fff'],
+  series: [
+    {
+      name: "sales",
+      data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
+    },
+  ],
+  colors: ["#fff"],
   xaxis: {
-    categories: [1991,1992,1993,1994,1995,1996,1997, 1998,1999]
-  }
+    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+  },
 }
 
 var options2 = {
   chart: {
-    height: '100%',
-    width: '100%',
-      type: 'radialBar',
+    height: "100%",
+    width: "100%",
+    type: "radialBar",
   },
-  colors: ['#01627B', '#eee'],
+  colors: ["#01627B", "#4b4b4b9c"],
   series: [60],
-  labels: ['Uso'],
+  labels: ["Uso"],
 }
 
-var chart = new ApexCharts(document.querySelector("#chart"), options);
+var options3 = {
+  chart: {
+    type: "line",
+    height: "100%",
+    width: "100%",
+    foreColor: "#fff",
+  },
+  series: [
+    {
+      name: "sales",
+      data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
+    },
+  ],
+  colors: ["#fff"],
+  xaxis: {
+    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+  },
+}
 
-chart.render();
+var chart = new ApexCharts(document.querySelector("#chart"), options)
 
+chart.render()
 
 var grafico = new ApexCharts(document.getElementById("chartDisco"), options2)
 grafico.render()
+
+var graficoRam = new ApexCharts(document.getElementById("chartRam"), options3)
+graficoRam.render()

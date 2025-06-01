@@ -42,7 +42,7 @@ function dadosRecebidos(req, res) {
 
   res.status(200).send(listaDados)
 
-  console.log(listaDados)
+  // console.log(`Dados recebidos do python Obrigatório: ${listaDados}`)
 }
 
 let listaDadosPedido
@@ -51,7 +51,7 @@ function dadosPedidoCliente(req, res) {
   const dados = req.body
   listaDadosPedido = dados
 
-  //   console.log(`Dados recebidos do Python: ${JSON.stringify(dados)}`)
+  // console.log(`Dados recebidos do Python: ${JSON.stringify(dados)}`)
   try {
     res.status(200).json({ mensagem: "Dados recebidos com sucesso" })
   } catch (error) {
@@ -64,7 +64,7 @@ function dadosPedidoRecebidos(req, res) {
   console.log(`Dados em tempo real python: ${JSON.stringify(listaDadosPedido)}`)
 
   res.status(200).send(listaDadosPedido)
-  console.log(listaDadosPedido)
+  console.log(`Dados recebidos do python pedido: ${listaDadosPedido}`)
 }
 
 function qtdServidoresPorFabrica(req, res) {

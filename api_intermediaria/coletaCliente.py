@@ -173,8 +173,8 @@ def dadosObrigatorios():
     uso_ram2 = psutil.virtual_memory().percent
     uso_disco2 = psutil.disk_usage('/').percent
     rede2 = psutil.net_io_counters()
-    mb_enviados2 = rede2.bytes_sent / (1024 * 1024)
-    mb_recebidos2 = rede2.bytes_recv / (1024 * 1024)
+    mb_enviados2 = round(rede2.bytes_sent / (1024 * 1024), 2)
+    mb_recebidos2 = round(rede2.bytes_recv / (1024 * 1024), 2)
     
     return uso_cpu2, uso_ram2, uso_disco2, mb_enviados2, mb_recebidos2
     
