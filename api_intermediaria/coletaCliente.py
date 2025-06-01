@@ -136,25 +136,13 @@ def inserirDados(valor, idPedido):
 
 
 
-def enviarDadosTempoReal(idMaquina, idFabrica, tipo, valor, medida, ipServidor):
+def enviarDadosTempoReal(listaDados):
         try:
+            listaDados = listaDados[-16:]
 
-
-            # dadosTempoReal = json={"idFabrica": idFabrica, "idMaquina": idMaquina, "valor": valor, "tipoComponente": tipo, "tipoMedida":medida, "ipServidor": ipServidor}
-
-            # dadosTempoReal = json.dumps(listaDados)
-
-            # enviarDadosTempoReal(idMaquina, idFabrica, tipo, valor, medida, ipServidor)
 
             fetch_tempoReal = "http://localhost:8080/dashMonitoramento/dadosTempoReal"
-            resposta = requests.post(fetch_tempoReal, json={
-                "idFabrica": idFabrica,
-                "idMaquina": idMaquina,
-                "tipo": tipo,
-                "valor": valor,
-                "medida": medida,
-                "ipServidor": ipServidor
-            })
+            resposta = requests.post(fetch_tempoReal, json=listaDados)
 
             if resposta.status_code == 200:
                 print("Dados enviados em tempo real")
@@ -218,10 +206,6 @@ def monitorar():
         "leitura": []
     }
 
-    # listaDados = {
-    #     "dados": []
-    # }
-
     listaDados = []
 
     contador_loop = 0
@@ -256,15 +240,18 @@ def monitorar():
                     medida = pedido_cliente['medida']
                     ipServidor = pedido_cliente['ip']
 
-                    # listaDados.append({
-                    #     "idFabrica": idFabrica,
-                    #     "idMaquina": idMaquina,
-                    #     "tipo": tipo,
-                    #     "medida": medida,
-                    #     "ipServidor" : ipServidor,
-                    #     "valor": valor
-                    # })
-                    enviarDadosTempoReal(idMaquina, idFabrica, tipo, valor, medida, ipServidor)
+                    print(f'idFabrica: {idFabrica}')
+
+                    listaDados.append({
+                        "idFabrica": idFabrica,
+                        "idMaquina": idMaquina,
+                        "tipo": tipo,
+                        "medida": medida,
+                        "ipServidor" : ipServidor,
+                        "valor": valor
+                    })
+                    # enviarDadosTempoReal(idMaquina, idFabrica, tipo, valor, medida, ipServidor)
+
 
                     if valor > float(pedido_cliente['limiteCritico']) :
                         processoFunc = pegar_top_processo()
@@ -301,7 +288,7 @@ def monitorar():
                 
 
             enviarDadosTempoReal(listaDados)
-            listaDados["dados"].clear()
+            listaDados.clear()
             
             tempo_passado = (datetime.datetime.now() - ultimo_envio_s3).total_seconds()
             if tempo_passado >= intervalo_envio_s3:
