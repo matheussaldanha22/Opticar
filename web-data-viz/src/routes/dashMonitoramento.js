@@ -22,4 +22,12 @@ router.get("/qtdServidoresPorFabrica/:idFabrica", (req, res) => {
   dashMonitoramentoController.qtdServidoresPorFabrica(req, res)
 })
 
+router.post("/dadosPedidoCliente", (req, res) => {
+  dashMonitoramentoController.dadosPedidoCliente(req, res)
+})
+
+router.get("/dadosPedidoRecebidos", (req, res) => {
+  dashMonitoramentoController.dadosPedidoRecebidos(req, res)
+})
+
 module.exports = router

@@ -5,6 +5,7 @@ let dadosTempoReal = []
 document.addEventListener("DOMContentLoaded", () => {
   setInterval(() => {
     renderPagina()
+    renderKpis()
   }, 5000)
 })
 
@@ -122,7 +123,8 @@ function renderKpis() {
   })
     .then((res) => res.json())
     .then((dados) => {
-      totalServidor.textContent = dados
+      totalServidor.textContent = dados[0].qtdServidores
+      console.log(`QtdServidoresMonitorados: ${dados[0].qtdServidores}`)
     })
 }
 

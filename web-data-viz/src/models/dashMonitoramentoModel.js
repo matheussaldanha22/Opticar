@@ -16,7 +16,7 @@ function obterParametrosComponente(idMaquina, componente) {
 
 function qtdServidoresPorFabrica(idFabrica) {
   var instrucaoSql = `
-  select count(*) from servidor_Maquina where fkFabrica = ${idFabrica};
+  select count(*) as qtdServidores from servidor_Maquina where fkFabrica = ${idFabrica};
   `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executarQUENTE(instrucaoSql)

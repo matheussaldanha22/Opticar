@@ -169,14 +169,14 @@ def pegar_top_processo():
 ############################################################################################################################################################################
 
 def dadosObrigatorios():
-    uso_cpu = psutil.cpu_percent()
-    uso_ram = psutil.virtual_memory().percent
-    uso_disco = psutil.disk_usage('/').percent
-    rede = psutil.net_io_counters()
-    mb_enviados = rede.bytes_sent / (1024 * 1024)
-    mb_recebidos = rede.bytes_recv / (1024 * 1024)
+    uso_cpu2 = psutil.cpu_percent()
+    uso_ram2 = psutil.virtual_memory().percent
+    uso_disco2 = psutil.disk_usage('/').percent
+    rede2 = psutil.net_io_counters()
+    mb_enviados2 = rede2.bytes_sent / (1024 * 1024)
+    mb_recebidos2 = rede2.bytes_recv / (1024 * 1024)
     
-    return uso_cpu, uso_ram, uso_disco, mb_enviados, mb_recebidos
+    return uso_cpu2, uso_ram2, uso_disco2, mb_enviados2, mb_recebidos2
     
 ############################################################################################################################################################################
 ############################################################################################################################################################################
@@ -200,11 +200,11 @@ def monitorar():
             pedidos = obterPedidos(mac_address)
             dados = dadosObrigatorios()
             listaTempoReal = {
-                "CPU" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor" : dados.uso_cpu},
-                "RAM" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados.uso_ram},
-                "DISCO" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados.uso_disco},
-                "RedeEnviada" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados.mb_enviados},
-                "RedeRecebida" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados.mb_recebidos}
+                "CPU" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor" : dados[0]},
+                "RAM" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[1]},
+                "DISCO" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[2]},
+                "RedeEnviada" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[3]},
+                "RedeRecebida" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[4]}
             }
             enviarDadosTempoReal(listaTempoReal)
 
@@ -224,6 +224,16 @@ def monitorar():
                         "componente": pedido_cliente['tipo'],
                         "medida": pedido_cliente['medida'],
                         "valor": valor
+                    })
+
+                    if tipo not in listaPedidoCliente:
+                        listaPedidoCliente[tipo] = []
+                    listaPedidoCliente[tipo].append({
+                        "idFabrica": idFabrica,
+                        "idMaquina": idMaquina,
+                        "Valor": valor,
+                        "Medida": medida,
+                        "mac_address": mac_address
                     })
 
                     listaPedidoCliente[tipo].append({"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida, "mac_address": mac_address})
