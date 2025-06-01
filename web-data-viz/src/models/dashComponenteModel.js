@@ -69,27 +69,45 @@ function obterAlertasMes(idMaquina, componente) {
     return database.executarQUENTE(instrucaoSql)
 }
 
-function obterTempoMtbf(idMaquina, componente) {
+function obterMediaUso(idMaquina, componente) {
     var instrucaoSql = `
-    SELECT 
-        TIMESTAMPDIFF(MINUTE, MIN(cd.data), MAX(cd.data)) AS minutos_operacao,
-        (SELECT COUNT(a.idAlerta) 
-        FROM alerta a 
-        JOIN capturaDados cd2 ON a.fkCapturaDados = cd2.idCapturaDados
-        JOIN componenteServidor cs2 ON cd2.fkComponenteServidor = cs2.idcomponenteServidor
-        WHERE cs2.fkMaquina = ${idMaquina}
-        AND c.tipo = '${componente}'
-        AND YEAR(a.dataHora) = YEAR(CURDATE())
-        AND MONTH(a.dataHora) = MONTH(CURDATE())) AS qtd_alertas
-    FROM 
-        capturaDados cd
+        SELECT
+        MONTH(cd.data) AS mes,
+        ROUND(AVG(cd.valor), 2) AS media_uso
+        FROM capturaDados cd
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
         JOIN componente c ON cs.fkComponente = c.idcomponente
-    WHERE 
-        c.tipo = '${componente}'
-        AND cs.fkMaquina = ${idMaquina}
+        JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
+        WHERE
+        sm.idMaquina = ${idMaquina} -- ID da máquina desejada
+        AND c.tipo = '${componente}' -- Tipo de componente
+        AND c.medida = 'Porcentagem'
         AND YEAR(cd.data) = YEAR(CURDATE())
-        AND MONTH(cd.data) = MONTH(CURDATE());
+        AND MONTH(cd.data) IN (MONTH(CURDATE()), MONTH(CURDATE()) - 1)
+        GROUP BY MONTH(cd.data)
+        ORDER BY mes DESC;
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
+}
+
+function obterTempoMtbf(idMaquina, componente) {
+    var instrucaoSql = `
+  SELECT 
+    TIMESTAMPDIFF(MINUTE, MIN(cd.data), MAX(cd.data)) AS minutos_operacao,
+    (SELECT COUNT(a.idAlerta) 
+     FROM alerta a 
+     JOIN capturaDados cd2 ON a.fkCapturaDados = cd2.idCapturaDados
+     JOIN componenteServidor cs2 ON cd2.fkComponenteServidor = cs2.idcomponenteServidor
+     WHERE cs2.fkMaquina = ${idMaquina}
+     AND c.tipo = '${componente}') AS qtd_alertas
+FROM 
+    capturaDados cd
+    JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
+    JOIN componente c ON cs.fkComponente = c.idcomponente
+WHERE 
+    c.tipo = '${componente}'
+    AND cs.fkMaquina = ${idMaquina};
 
     `
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
@@ -187,6 +205,7 @@ module.exports = {
     obterAnosDisponiveis,
     obterMesesDisponiveis,
     obterAlertasMes,
+    obterMediaUso,
     obterTempoMtbf,
     dadosGraficoUsoSemanal,
     dadosGraficoUsoAnual,

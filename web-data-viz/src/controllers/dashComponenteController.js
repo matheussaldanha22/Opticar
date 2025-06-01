@@ -84,6 +84,27 @@ function obterAlertasMes(req, res) {
 
 }
 
+function obterMediaUso(req, res) {
+  var idMaquina = req.params.idMaquina
+  var componente = req.params.componente
+
+  dashComponenteModel
+    .obterMediaUso(idMaquina, componente)
+    .then(function (resultado) {
+      if (resultado.length > 0) {
+        res.status(200).json(resultado)
+      } else {
+        res.status(204).send("Nenhum resultado encontrado!")
+      }
+    })
+    .catch(function (erro) {
+      console.log(erro)
+      console.log("Houve um erro ao buscar o USO", erro.sqlMessage)
+      res.status(500).json(erro.sqlMessage)
+    })
+
+}
+
 function obterTempoMtbf(req, res) {
   var idMaquina = req.params.idMaquina
   var componente = req.params.componente
@@ -208,6 +229,7 @@ module.exports = {
   obterAnosDisponiveis,
   obterMesesDisponiveis,
   obterAlertasMes,
+  obterMediaUso,
   obterTempoMtbf,
   dadosGraficoUsoSemanal,
   dadosGraficoUsoAnual,

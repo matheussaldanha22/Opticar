@@ -22,13 +22,19 @@ router.get("/obterAlertasMes/:idMaquina/:componente", function (req, res) {
   dashComponenteController.obterAlertasMes(req, res)
 })
 
-//KPI DE SOBRECARGA FALTA
+router.get("/obterMediaUso/:idMaquina/:componente", function (req, res) {
+  dashComponenteController.obterMediaUso(req, res)
+})
 
 router.get("/obterTempoMtbf/:idMaquina/:componente", function (req, res) {
   dashComponenteController.obterTempoMtbf(req, res)
 })
 
-//----------grafico de uso
+router.get("/obterTempoMtbf/:idMaquina/:componente", function (req, res) {
+  dashComponenteController.obterTempoMtbf(req, res)
+})
+
+//----------GRAFICO DE USO
 router.post("/dadosGraficoUsoSemanal/:idMaquina/:componente", function (req, res) {
   dashComponenteController.dadosGraficoUsoSemanal(req, res)
 })
@@ -37,7 +43,7 @@ router.post("/dadosGraficoUsoAnual/:idMaquina/:componente", function (req, res) 
   dashComponenteController.dadosGraficoUsoAnual(req, res)
 })
 
-//---------------grafico alertas
+//---------------GRAFICO ALERTAS
 router.post("/dadosGraficoAlertaAnual/:idMaquina/:componente", function (req, res) {
   dashComponenteController.dadosGraficoAlertaAnual(req, res)
 })

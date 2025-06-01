@@ -119,6 +119,39 @@ function obterAlertasMes(idMaquina, componente) {
     });
 }
 
+//KPI MEDIA USO
+function obterMediaUso(idMaquina, componente) {
+  return fetch(`/dashComponentes/obterMediaUso/${idMaquina}/${componente}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+    .then(res => res.json())
+    .then(resultado => {
+
+      let usoMesAtual = resultado[0].media_uso;
+      let usoMesPassado = resultado[1].media_uso;
+      let comparacao
+
+      document.getElementById('usoMedio').innerHTML = `${usoMesAtual}%`
+
+      if (usoMesAtual <= usoMesPassado) {
+        comparacao = usoMesPassado - usoMesAtual
+        document.getElementById('comparacaoUso').innerHTML = `-${comparacao}%`
+        document.getElementById('comparacaoUso').style.color = 'limegreen'
+      } else {
+        comparacao = usoMesAtual - usoMesPassado
+        document.getElementById('comparacaoUso').innerHTML = `+${comparacao}%`
+        document.getElementById('comparacaoUso').style.color = 'red'
+      }
+
+      console.log('EXECUTEI', resultado)
+    })
+    .catch(erro => {
+      console.error("Erro ao buscar USO:", erro);
+    });
+}
 
 
 
@@ -136,6 +169,7 @@ function obterTempoMtbf(idMaquina, componente) {
       let minOperacao = tempos.minutos_operacao;
       let qtdAlertas = tempos.qtd_alertas;
       let mtbf = Math.floor(minOperacao / qtdAlertas)
+
       let metrica = "Min"
 
       //validação descobrir faixa
@@ -152,7 +186,7 @@ function obterTempoMtbf(idMaquina, componente) {
 
       // se tiver mais de 60 min ele vira hora
       if (mtbf > 60) {
-        mtbf = parseInt((minOperacao / qtdAlertas).toFixed(0))
+        mtbf = Math.floor((minOperacao / 60) / qtdAlertas)
         metrica = "Hrs"
       }
 
@@ -199,20 +233,22 @@ function filtrarUso() {
     title: `Filtrar gráfico <u style="color:#2C3E50;">Uso</u>`,
     html: `
       <div class="modal-test">
-        <div class="containerVisualizacao">
+        <div class="containerVisualizacao" style="gap:10px">
           <h3>Mudar visualização</h3>
           <p class="labelSlt"><b>Visualização em:
             <select id="sltFiltrar">
-            <option value="mensal">Mensal (Média da semana)</option>
             <option value="anual">Anual (Média aos meses)</option>
+            <option value="mensal">Mensal (Média da semana)</option>
             </select></b>
           </p>
           
+          <div style="display:flex; gap:5px;">
           <label for="sltAno"><b>Escolha o ano:</b></label>
             <select id="sltAno" class="sltRoxo">
             </select>
+          </div>
 
-          <div id="containerMes" style="display:block; margin-top:10px;">
+          <div id="containerMes" style="display:none;">
             <label for="sltMes"><b>Escolha o Mês:</b></label>
             <select id="sltMes" class="sltRoxo">
             </select>
@@ -333,10 +369,10 @@ function filtrarUso() {
     const containerMes = document.getElementById("containerMes");
 
     sltFiltrar.addEventListener("change", function () {
-      if (this.value === "anual") {
-        containerMes.style.display = "none";
-      } else {
+      if (this.value === "mensal") {
         containerMes.style.display = "block";
+      } else {
+        containerMes.style.display = "none";
       }
     });
   }, 100);
@@ -502,7 +538,7 @@ function renderGraficoUso(categorias, dados, parametro) {
   console.log("parametro do componente:", parametro);
 
   const options = {
-    chart: { type: 'line', height: 300, toolbar: { show: false } },
+    chart: { type: 'line', height: 300, toolbar: { show: true } },
     series: [
       { name: 'Uso médio (%)', data: dados },
       { name: 'Limite crítico', data: new Array(categorias.length).fill(parametro), stroke: { dashArray: 5 } }
@@ -565,7 +601,7 @@ function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
 
 function renderGraficoAlerta(categorias, dadosCritico, dadosMedio) {
   const options = {
-    chart: { type: 'bar', stacked: true, height: 300 },
+    chart: { type: 'bar', stacked: true, height: 300, toolbar: { show: true } },
     series: [
       { name: 'Crítico', data: dadosCritico },
       { name: 'Médio', data: dadosMedio }
@@ -645,6 +681,7 @@ function atualizarDados() {
 
   if (idMaquina && componente) {
     obterAlertasMes(idMaquina, componente);
+    obterMediaUso(idMaquina, componente)
     obterTempoMtbf(idMaquina, componente);
     dadosGraficoUso(idMaquina, componente, anoEscolhidoUso, mesEscolhidoUso);
     dadosGraficoAlerta(idMaquina, componente, anoEscolhidoAlerta)
