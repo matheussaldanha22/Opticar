@@ -311,6 +311,7 @@ function predicao() {
     var categoriesPred = [];
     var coresPred = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
     var hoje = new Date();
+    
     for (var i = 0; i < 30; i++) {
         var dia = new Date(hoje);
         dia.setDate(hoje.getDate() + i)

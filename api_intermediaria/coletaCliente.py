@@ -9,11 +9,124 @@ import requests
 def pegando_mac_address():
     return uuid.getnode()
 
+############################################################################################################################################################################
+
+def obterPedidos(mac_address):
+    try:
+        fetch_pedido = "http://localhost:3333/mysql/pedidosCliente"
+        resposta = requests.post(fetch_pedido, json={"mac_address": mac_address})
+
+        if resposta.status_code == 200:
+            pedidos = resposta.json()
+            print("Pedidos recebidos da API:")
+            if len(pedidos) > 0:
+                return pedidos
+            else:
+                return []
+        else:
+            print(f"Erro ao acessar API: {resposta.status_code}")
+            return []
+    except Exception as e:
+        print(f"Erro ao conectar ROTA PEDIDO: {e}")
+        return []
+    
+############################################################################################################################################################################
+
+def inserirDados(valor, idPedido):
+    try:
+        fetch_inserirDados = "http://localhost:3333/mysql/dadosCapturados"
+        resposta = requests.post(fetch_inserirDados, json={"valor": valor, "idPedido": idPedido})
+
+        if resposta.status_code == 200:
+            print("Dados enviados com sucesso")
+            print(resposta.json())
+        else:
+            print(f"Erro ao enviar os dados: {resposta.status_code}")
+            print(resposta.text)
+    except Exception as e:
+        print(f"Erro ao conectar ROTA INSERIR: {e}")
+
+############################################################################################################################################################################
+
+def enviarDadosTempoReal(listaTempoReal):
+        try:
+            fetch_tempoReal = "http://localhost:8080/dashMonitoramento/dadosTempoReal"
+            resposta = requests.post(fetch_tempoReal, json=listaTempoReal)
+
+            if resposta.status_code == 200:
+                print("Dados enviados em tempo real")
+                print(resposta.json())
+            else:
+                print(f"Erro ao enviar os dados em tempo real: {resposta.status_code}")
+                print(resposta.text)
+        except Exception as e:
+            print(f"Erro ao conectar na rota tempo real: {e}")
+
+############################################################################################################################################################################
+
+def enviarDadosPedidoCliente(listaPedidoCliente):
+        try:
+            fetch_tempoReal = "http://localhost:8080/dashMonitoramento/dadosPedidoCliente"
+            resposta = requests.post(fetch_tempoReal, json=listaPedidoCliente)
+
+            if resposta.status_code == 200:
+                print("Dados enviados do pedido do cliente")
+                print(resposta.json())
+            else:
+                print(f"Erro ao enviar os dados do pedido do cliente: {resposta.status_code}")
+                print(resposta.text)
+        except Exception as e:
+            print(f"Erro ao conectar na rota dos pedidos do cliente: {e}")
+
+############################################################################################################################################################################
+
+def inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta, tipo_incidente, fkPedido, componente, processo, processoCPU, processoRAM, processoDISCO):
+    try:
+        fetch_inserirAlerta = "http://localhost:3333/mysql/inserirAlerta"
+        resposta = requests.post(fetch_inserirAlerta, json={"valor": valor,
+                                                            "titulo": titulo,
+                                                            "prioridadeAlerta": prioridadeAlerta,
+                                                            "descricaoAlerta": descricaoAlerta,
+                                                            "statusAlerta": statusAlerta,
+                                                            "tipo_incidente": tipo_incidente,
+                                                            "fkPedido": fkPedido,
+                                                            "componente" : componente,
+                                                            "processo": processo,
+                                                            "processoCPU": processoCPU,
+                                                            "processoRAM": processoRAM,
+                                                            "processoDISCO": processoDISCO})
+        if resposta.status_code == 200:
+            print("Alerta inserido com sucesso")
+            print(resposta.json())
+        else:
+            print(f"Erro ao inserir alerta: {resposta.status_code}")
+            print(resposta.text)
+    except Exception as e:
+        print(f"Erro ao conectar ROTA INSERIR: {e}")
+
+############################################################################################################################################################################
+
+def dadosBucket(dadosS3, mac_address):
+    try:
+        fetch_dadosS3 = "http://localhost:3333/aws/dadosS3"
+        resposta = requests.post(fetch_dadosS3, json={"mac_address": mac_address, "dadosS3": dadosS3})
+
+        if resposta.status_code == 200:
+            print("Dados enviados com sucesso")
+            print(resposta.json())
+        else:
+            print(f"Erro ao enviar os dados: {resposta.status_code}")
+            print(resposta.text)
+    except Exception as e:
+        print(f"Erro ao conectar ROTA AWS: {e}")
+
+############################################################################################################################################################################
+
 def pegar_top_processo():
     lista = []
     for processo in psutil.process_iter():
         try:
-            uso = processo.cpu_percent()#interval=0.5
+            uso = processo.cpu_percent()
             lista.append((processo, uso))
         except Exception as e:
             continue
@@ -52,151 +165,27 @@ def pegar_top_processo():
             "ram": 0,
             "disco": 0
         }
+
+############################################################################################################################################################################
+
+def dadosObrigatorios():
+    uso_cpu = psutil.cpu_percent()
+    uso_ram = psutil.virtual_memory().percent
+    uso_disco = psutil.disk_usage('/').percent
+    rede = psutil.net_io_counters()
+    mb_enviados = rede.bytes_sent / (1024 * 1024)
+    mb_recebidos = rede.bytes_recv / (1024 * 1024)
     
-def obterIP(mac_address):
-    try:
-        fetch_pedido = "http://localhost:3333/mysql/verificarIP"
-        resposta = requests.post(fetch_pedido, json={"mac_address": mac_address})
-
-        if resposta.status_code == 200:
-            ip = resposta.json()
-            print("IP RECEBIDO:" + ip)
-            if len(ip) > 0:
-                return ip
-            else:
-                return ""
-        else:
-            print(f"Erro ao acessar API: {resposta.status_code}")
-            return ""
-    except Exception as e:
-        print(f"Erro ao conectar ROTA PEDIDO: {e}")
-        return ""
-
-def updateIP(ip_publico, mac_address):
-    try:
-        fetch_pedido = "http://localhost:3333/mysql/updateIP"
-        resposta = requests.post(fetch_pedido, json={"mac_address": mac_address,
-                                                     "ip": ip_publico})
-        updateIPFRIO(ip_publico, mac_address)
-        if resposta.status_code == 200:
-            print("Dados enviados com sucesso")
-            print(resposta.json())
-        else:
-            print(f"Erro ao enviar os dados: {resposta.status_code}")
-            print(resposta.text)
-    except Exception as e:
-        print(f"Erro ao conectar ROTA PEDIDO: {e}")
-
-def updateIPFRIO(ip_publico, mac_address):
-    try:
-        fetch_pedido = "http://localhost:3333/mysql/updateIP"
-        resposta = requests.post(fetch_pedido, json={"mac_address": mac_address,
-                                                     "ip": ip_publico})
-        if resposta.status_code == 200:
-            print("Dados enviados com sucesso")
-            print(resposta.json())
-        else:
-            print(f"Erro ao enviar os dados: {resposta.status_code}")
-            print(resposta.text)
-    except Exception as e:
-        print(f"Erro ao conectar ROTA PEDIDO: {e}")               
-
-def obterPedidos(mac_address):
-    try:
-        fetch_pedido = "http://localhost:3333/mysql/pedidosCliente"
-        resposta = requests.post(fetch_pedido, json={"mac_address": mac_address})
-
-        if resposta.status_code == 200:
-            pedidos = resposta.json()
-            print("Pedidos recebidos da API:")
-            if len(pedidos) > 0:
-                return pedidos
-            else:
-                return []
-        else:
-            print(f"Erro ao acessar API: {resposta.status_code}")
-            return []
-    except Exception as e:
-        print(f"Erro ao conectar ROTA PEDIDO: {e}")
-        return []
-
-def inserirDados(valor, idPedido):
-    try:
-        fetch_inserirDados = "http://localhost:3333/mysql/dadosCapturados"
-        resposta = requests.post(fetch_inserirDados, json={"valor": valor, "idPedido": idPedido})
-
-        if resposta.status_code == 200:
-            print("Dados enviados com sucesso")
-            print(resposta.json())
-        else:
-            print(f"Erro ao enviar os dados: {resposta.status_code}")
-            print(resposta.text)
-    except Exception as e:
-        print(f"Erro ao conectar ROTA INSERIR: {e}")
-
-
-
-def enviarDadosTempoReal(listaDados):
-        try:
-            listaDados = listaDados[-16:]
-
-
-            fetch_tempoReal = "http://localhost:8080/dashMonitoramento/dadosTempoReal"
-            resposta = requests.post(fetch_tempoReal, json=listaDados)
-
-            if resposta.status_code == 200:
-                print("Dados enviados em tempo real")
-                print(resposta.json())
-            else:
-                print(f"Erro ao enviar os dados em tempo real: {resposta.status_code}")
-                print(resposta.text)
-        except Exception as e:
-            print(f"Erro ao conectar na rota tempo real: {e}")
-
-
-
-def inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta, tipo_incidente, fkPedido, componente, processo, processoCPU, processoRAM, processoDISCO):
-    try:
-        fetch_inserirAlerta = "http://localhost:3333/mysql/inserirAlerta"
-        resposta = requests.post(fetch_inserirAlerta, json={"valor": valor,
-                                                            "titulo": titulo,
-                                                            "prioridadeAlerta": prioridadeAlerta,
-                                                            "descricaoAlerta": descricaoAlerta,
-                                                            "statusAlerta": statusAlerta,
-                                                            "tipo_incidente": tipo_incidente,
-                                                            "fkPedido": fkPedido,
-                                                            "componente" : componente,
-                                                            "processo": processo,
-                                                            "processoCPU": processoCPU,
-                                                            "processoRAM": processoRAM,
-                                                            "processoDISCO": processoDISCO})
-        if resposta.status_code == 200:
-            print("Alerta inserido com sucesso")
-            print(resposta.json())
-        else:
-            print(f"Erro ao inserir alerta: {resposta.status_code}")
-            print(resposta.text)
-    except Exception as e:
-        print(f"Erro ao conectar ROTA INSERIR: {e}")
-
-def dadosBucket(dadosS3, mac_address):
-    try:
-        fetch_dadosS3 = "http://localhost:3333/aws/dadosS3"
-        resposta = requests.post(fetch_dadosS3, json={"mac_address": mac_address, "dadosS3": dadosS3})
-
-        if resposta.status_code == 200:
-            print("Dados enviados com sucesso")
-            print(resposta.json())
-        else:
-            print(f"Erro ao enviar os dados: {resposta.status_code}")
-            print(resposta.text)
-    except Exception as e:
-        print(f"Erro ao conectar ROTA AWS: {e}")
-
+    return uso_cpu, uso_ram, uso_disco, mb_enviados, mb_recebidos
+    
+############################################################################################################################################################################
+############################################################################################################################################################################
+############################################################################################################################################################################
+############################################################################################################################################################################
+############################################################################################################################################################################
 def monitorar():
     mac_address = pegando_mac_address()
     
-
     print(f"Iniciando monitoramento nesse mac_address: {mac_address}")
     intervalo_envio_s3 = 500 # 1 hora
     ultimo_envio_s3 = datetime.datetime.now()
@@ -206,23 +195,28 @@ def monitorar():
         "leitura": []
     }
 
-    listaDados = []
-
-    contador_loop = 0
     while True:
-        verficarIP = obterIP(mac_address)
-        ip_publico = requests.get('https://api.ipify.org').text
-        if verficarIP != ip_publico :
-            updateIP(ip_publico, mac_address) 
-        print("Conexao com o intermediário")
-        contador_loop += 1
-        print(f"Iniciando loop #{contador_loop}")
-
         try:
             pedidos = obterPedidos(mac_address)
+            dados = dadosObrigatorios()
+            listaTempoReal = {
+                "CPU" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor" : dados.uso_cpu},
+                "RAM" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados.uso_ram},
+                "DISCO" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados.uso_disco},
+                "RedeEnviada" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados.mb_enviados},
+                "RedeRecebida" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados.mb_recebidos}
+            }
+            enviarDadosTempoReal(listaTempoReal)
+
+            listaPedidoCliente = {}
+            
             for pedido_cliente in pedidos:
                 print((pedido_cliente['tipo'], pedido_cliente['medida']))
-
+                idFabrica = pedido_cliente['fkFabrica']
+                idMaquina = pedido_cliente['idMaquina']
+                tipo = pedido_cliente['tipo']
+                medida = pedido_cliente['medida']
+                
                 try:
                     valor = eval(pedido_cliente['codigo'])
                     idPedido = pedido_cliente['idcomponenteServidor']
@@ -231,27 +225,11 @@ def monitorar():
                         "medida": pedido_cliente['medida'],
                         "valor": valor
                     })
+
+                    listaPedidoCliente[tipo].append({"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida, "mac_address": mac_address})
+
                     print(f"Valor capturado: {valor} e id: {idPedido}")
                     inserirDados(valor, idPedido)
-
-                    idFabrica = pedido_cliente['fkFabrica']
-                    idMaquina = pedido_cliente['idMaquina']
-                    tipo = pedido_cliente['tipo']
-                    medida = pedido_cliente['medida']
-                    ipServidor = pedido_cliente['ip']
-
-                    print(f'idFabrica: {idFabrica}')
-
-                    listaDados.append({
-                        "idFabrica": idFabrica,
-                        "idMaquina": idMaquina,
-                        "tipo": tipo,
-                        "medida": medida,
-                        "ipServidor" : ipServidor,
-                        "valor": valor
-                    })
-                    # enviarDadosTempoReal(idMaquina, idFabrica, tipo, valor, medida, ipServidor)
-
 
                     if valor > float(pedido_cliente['limiteCritico']) :
                         processoFunc = pegar_top_processo()
@@ -266,8 +244,7 @@ def monitorar():
                         processoCPU = processoFunc['cpu']
                         processoRAM = processoFunc['ram']
                         processoDISCO = processoFunc['disco']
-                        inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta, tipo_incidente, fkPedido,
-                                       componente, processo, processoCPU, processoRAM, processoDISCO)
+                        inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta, tipo_incidente, fkPedido, componente, processo, processoCPU, processoRAM, processoDISCO)
                     elif valor > float(pedido_cliente['limiteAtencao']) :
                         processoFunc = pegar_top_processo()
                         titulo = f"{pedido_cliente['tipo']} está em atenção!"
@@ -281,19 +258,16 @@ def monitorar():
                         processoCPU = processoFunc['cpu']
                         processoRAM = processoFunc['ram']
                         processoDISCO = processoFunc['disco']
-                        inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta, tipo_incidente, fkPedido,
-                                       componente, processo, processoCPU, processoRAM, processoDISCO)
+                        inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta, tipo_incidente, fkPedido, componente, processo, processoCPU, processoRAM, processoDISCO)
                 except Exception as e:
                     print(f"Erro ao processar pedido: {e}")
-                
-
-            enviarDadosTempoReal(listaDados)
-            listaDados.clear()
             
             tempo_passado = (datetime.datetime.now() - ultimo_envio_s3).total_seconds()
             if tempo_passado >= intervalo_envio_s3:
                 dadosBucket(dadosS3, mac_address)
                 ultimo_envio_s3 = datetime.datetime.now()
+
+            enviarDadosPedidoCliente(listaPedidoCliente)
 
             time.sleep(5)
 

@@ -15,36 +15,26 @@ async function listarAlertas(req, res) {
 
     const config = {
       method: "get",
-      url: `${baseUrl}/rest/api/2/search?fields=summary,status,created,resolutiondate,customfield_10157,customfield_10124&expand=changelog`,
+      url: `${baseUrl}/rest/api/2/search?fields=summary,status,created,resolutiondate,customfield_10057&expand=changelog`,
       headers: { "Content-Type": "application/json" },
       auth: auth,
     };
 
     const response = await axios.request(config);
-    const alertas = [];
-
-    for (var i = 0; i < response.data.issues.length; i++) {
-      const issue = response.data.issues[i];          
-      if (issue.changelog && issue.changelog.histories) {
-        for (const history of issue.changelog.histories) {
-          for (const item of history.items) {
-            if (item.field === 'status' && item.toString === 'Done') {
-              dataConclusao = history.created;
-              break;
-            }
-          }
-        }
+    var alertas = [];
+    if (response.data && response.data.issues) {
+      for (var issue of response.data.issues) {
+        alertas.push({
+          summary: issue.fields.summary,
+          status: issue.fields.status.name,
+          created: issue.fields.created,
+          resolutionDate: issue.fields.resolutiondate,
+          urgency: issue.fields.urgency || "Não disponível",
+          idFabrica: issue.fields.customfield_10057 || "Não disponível"
+        });
       }
-      alertas.push({
-        summary: issue.fields.summary,
-        status: issue.fields.status.name,
-        created: issue.fields.created,
-        resolutionDate: dataConclusao,
-        urgency: issue.fields.customfield_10124 || "Não disponível",
-        idFabrica: issue.fields.customfield_10157 || "Não disponível"
-      });
     }
-
+    
     res.status(200).json(alertas);
   } catch (error) {
     console.log("Erro ao listar alertas do Jira:", error.message);
@@ -63,7 +53,7 @@ async function listarAlertasPorId(req, res) {
 
     const config = {
       method: "get",
-      url: `${baseUrl}/rest/api/2/search?fields=summary,status,created,resolutiondate,customfield_10157,customfield_10124&expand=changelog`,
+      url: `${baseUrl}/rest/api/2/search?fields=summary,status,created,resolutiondate,customfield_10057&expand=changelog`,
       headers: { "Content-Type": "application/json" },
       auth: auth,
     };
@@ -74,29 +64,18 @@ async function listarAlertasPorId(req, res) {
 
     for (var i = 0; i < response.data.issues.length; i++) {
       const issue = response.data.issues[i];
-      if (issue.fields.customfield_10157 == idFabrica) {
+      if (issue.fields.customfield_10057 == idFabrica) {
         var dataConclusao = null;
-        if (issue.changelog && issue.changelog.histories) {
-          for (const history of issue.changelog.histories) {
-            for (const item of history.items) {
-              if (item.field === 'status' && item.toString === 'Done') {
-                dataConclusao = new Date(history.created);
-                break;
-              }
-            }
-          }
-        }
-        
+        dataConclusao = issue.fields.resolutiondate;
         if (dataConclusao) {
-          const dataCriacao = new Date(issue.fields.created);
-          const tempoGasto = dataConclusao - dataCriacao;
-        
+          var dataCriacao = new Date(issue.fields.created);
+          var dataConclusaoFormatada = new Date(dataConclusao);
+          var tempoGasto = dataConclusaoFormatada - dataCriacao;
           somaDosTempos += tempoGasto;
           quantidadeDeAlertas++;
         }
       }
     }
-
     var tempoMedio = 0;
     if (quantidadeDeAlertas > 0) {
       var media = somaDosTempos / quantidadeDeAlertas;
@@ -119,7 +98,7 @@ async function listarAlertasPorId(req, res) {
 async function kpiTempoMaiorResolucao(req, res) {
   try {
     const baseUrl = `https://${domain}.atlassian.net`;
-    const idFabrica = req.body.idFabricaServer;
+    const idFabrica = req.body.idFabrica;
 
     if (!idFabrica) {
       return res.status(400).json({ error: "ID da fábrica não fornecido" });
@@ -127,7 +106,7 @@ async function kpiTempoMaiorResolucao(req, res) {
 
     const config = {
       method: "get",
-      url: `${baseUrl}/rest/api/2/search?fields=summary,status,created,resolutiondate,customfield_10157,customfield_10124&expand=changelog`,
+      url: `${baseUrl}/rest/api/2/search?fields=summary,status,created,resolutiondate,customfield_10057&expand=changelog`,
       headers: { "Content-Type": "application/json" },
       auth: auth,
     };
@@ -138,29 +117,18 @@ async function kpiTempoMaiorResolucao(req, res) {
 
     for (var i = 0; i < response.data.issues.length; i++) {
       const issue = response.data.issues[i];
-      if (issue.fields.customfield_10157 == idFabrica) {
+      if (issue.fields.customfield_10057 == idFabrica) {
         var dataConclusao = null;
-        if (issue.changelog && issue.changelog.histories) {
-          for (const history of issue.changelog.histories) {
-            for (const item of history.items) {
-              if (item.field === 'status' && item.toString === 'Done') {
-                dataConclusao = new Date(history.created);
-                break;
-              }
-            }
-          }
-        }
-        
+        dataConclusao = issue.fields.resolutiondate;
         if (dataConclusao) {
-          const dataCriacao = new Date(issue.fields.created);
-          const tempoGasto = dataConclusao - dataCriacao;
-        
+          var dataCriacao = new Date(issue.fields.created);
+          var dataConclusaoFormatada = new Date(dataConclusao);
+          var tempoGasto = dataConclusaoFormatada - dataCriacao;
           somaDosTempos += tempoGasto;
           quantidadeDeAlertas++;
         }
       }
     }
-
     var tempoMedio = 0;
     if (quantidadeDeAlertas > 0) {
       var media = somaDosTempos / quantidadeDeAlertas;
@@ -175,8 +143,8 @@ async function kpiTempoMaiorResolucao(req, res) {
     
     res.status(200).json(resultado);
   } catch (error) {
-    console.log("Erro ao calcular tempo médio:", error.message);
-    res.status(500).json({ error: "Erro ao calcular tempo médio" });
+    console.log("Erro ao calcular maior tempo de resolução:", error.message);
+    res.status(500).json({ error: "Erro ao calcular maior tempo de resolução" });
   }
 }
 
