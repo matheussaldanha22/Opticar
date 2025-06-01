@@ -236,8 +236,6 @@ def monitorar():
                         "mac_address": mac_address
                     })
 
-                    listaPedidoCliente[tipo].append({"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida, "mac_address": mac_address})
-
                     print(f"Valor capturado: {valor} e id: {idPedido}")
                     inserirDados(valor, idPedido)
 
