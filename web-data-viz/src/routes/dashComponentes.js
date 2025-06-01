@@ -47,4 +47,5 @@ router.get("/dadosGraficoAlertaGeral/:idMaquina/:componente", function (req, res
 })
 
 
+
 module.exports = router

@@ -1,4 +1,4 @@
-drop database opticarQuente;
+
 create database opticarQuente;
 use opticarQuente;
 
@@ -76,7 +76,166 @@ CREATE TABLE capturaDados (
     data DATETIME,
     FOREIGN KEY (fkComponenteServidor) REFERENCES componenteServidor(idcomponenteServidor) ON DELETE CASCADE
 );
-                        
+INSERT INTO alerta (
+    dataHora,
+    valor,
+    titulo,
+    descricao,
+    prioridade,
+    tipo_incidente,
+    componente,
+    statusAlerta,
+    fkCapturaDados,
+    processo,
+    processoCPU,
+    processoRAM,
+    processoDISCO,
+    jira_issue_key
+) VALUES (
+    '2025-05-12 10:45:00',                       -- dataHora
+    92.3,                                        -- valor
+    'Consumo excessivo de CPU no processo X',    -- titulo
+    'O processo X está utilizando mais de 90% da CPU por mais de 10 minutos consecutivos.', -- descricao
+    'Alta',                                      -- prioridade
+    'Performance',                               -- tipo_incidente
+    'cpu',                    -- componente
+    'To Do',                                     -- statusAlerta
+    1,                                           -- fkCapturaDados (substituir conforme seu dado real)
+    'ProcessoX',                                 -- processo
+    94.5,                                        -- processoCPU
+    70.2,                                        -- processoRAM
+    65.8,                                        -- processoDISCO
+    'PROJ-201'                                   -- jira_issue_key
+);
+
+INSERT INTO alerta (
+    dataHora,
+    valor,
+    titulo,
+    descricao,
+    prioridade,
+    tipo_incidente,
+    componente,
+    statusAlerta,
+    fkCapturaDados,
+    processo,
+    processoCPU,
+    processoRAM,
+    processoDISCO,
+    jira_issue_key
+) VALUES 
+(
+    '2025-05-14 08:20:00',
+    88.6,
+    'Uso elevado de memória RAM',
+    'O processo Y está utilizando mais de 85% da memória RAM por tempo prolongado.',
+    'Média',
+    'Incidente de Memória',
+    'cpu',
+    'In Progress',
+    1,
+    'ProcessoY',
+    55.1,
+    88.6,
+    40.3,
+    'PROJ-202'
+),
+(
+    '2025-05-17 13:40:00',
+    93.4,
+    'Sobrecarga de CPU e RAM no processo Z',
+    'O processo Z apresenta picos de uso de CPU e RAM simultaneamente, afetando a performance do sistema.',
+    'Alta',
+    'Performance',
+    'ram',
+    'To Do',
+    1,
+    'ProcessoZ',
+    95.8,
+    91.2,
+    47.5,
+    'PROJ-203'
+),
+(
+    '2025-05-20 11:10:00',
+    75.9,
+    'Uso excessivo de disco em processo A',
+    'O processo A está comprometendo a escrita em disco com uso superior a 85%.',
+    'Baixa',
+    'Infraestrutura',
+    'cpu',
+    'Resolved',
+    1,
+    'ProcessoA',
+    34.0,
+    48.1,
+    89.9,
+    'PROJ-204'
+),
+(
+    '2025-05-25 16:00:00',
+    98.7,
+    'Alerta crítico: recursos quase esgotados',
+    'O processo B está consumindo quase toda CPU, RAM e DISCO disponíveis. A instância corre risco de travamento.',
+    'Crítica',
+    'Incidente Crítico',
+    'cpu',
+    'In Review',
+    1,
+    'ProcessoB',
+    98.5,
+    96.3,
+    94.1,
+    'PROJ-205'
+);
+
+
+INSERT INTO alerta (
+    dataHora,
+    valor,
+    titulo,
+    descricao,
+    prioridade,
+    tipo_incidente,
+    componente,
+    statusAlerta,
+    fkCapturaDados,
+    processo,
+    processoCPU,
+    processoRAM,
+    processoDISCO,
+    jira_issue_key
+) VALUES
+-- CPU
+('2025-05-12 08:00:00', 92.3, 'Alerta CPU Manhã', 'Consumo alto de CPU durante a manhã.', 'Alta', 'Performance', 'cpu', 'To Do', 1, 'ProcessoCPU1', 92.3, 70.2, 65.8, 'CPU-001'),
+('2025-05-12 14:00:00', 88.0, 'Alerta CPU Tarde', 'Consumo alto de CPU durante a tarde.', 'Alta', 'Performance', 'cpu', 'To Do', 1, 'ProcessoCPU2', 88.0, 72.0, 60.0, 'CPU-002'),
+('2025-05-12 20:00:00', 85.1, 'Alerta CPU Noite', 'Consumo alto de CPU durante a noite.', 'Alta', 'Performance', 'cpu', 'To Do', 1, 'ProcessoCPU3', 85.1, 68.5, 59.9, 'CPU-003'),
+('2025-05-13 02:00:00', 90.2, 'Alerta CPU Madrugada', 'Consumo alto de CPU na madrugada.', 'Alta', 'Performance', 'cpu', 'To Do', 1, 'ProcessoCPU4', 90.2, 69.3, 63.4, 'CPU-004'),
+
+-- RAM
+('2025-05-12 08:00:00', 80.4, 'Alerta RAM Manhã', 'Consumo alto de RAM durante a manhã.', 'Média', 'Performance', 'ram', 'To Do', 1, 'ProcessoRAM1', 50.0, 80.4, 45.0, 'RAM-001'),
+('2025-05-12 14:00:00', 85.2, 'Alerta RAM Tarde', 'Consumo alto de RAM durante a tarde.', 'Média', 'Performance', 'ram', 'To Do', 1, 'ProcessoRAM2', 52.3, 85.2, 44.2, 'RAM-002'),
+('2025-05-12 20:00:00', 87.0, 'Alerta RAM Noite', 'Consumo alto de RAM durante a noite.', 'Alta', 'Performance', 'ram', 'To Do', 1, 'ProcessoRAM3', 49.1, 87.0, 47.5, 'RAM-003'),
+('2025-05-13 02:00:00', 83.3, 'Alerta RAM Madrugada', 'Consumo alto de RAM na madrugada.', 'Média', 'Performance', 'ram', 'To Do', 1, 'ProcessoRAM4', 48.0, 83.3, 46.8, 'RAM-004'),
+
+-- DISCO
+('2025-05-12 08:00:00', 75.0, 'Alerta Disco Manhã', 'Uso de disco elevado na manhã.', 'Média', 'Performance', 'disco', 'To Do', 1, 'ProcessoDISCO1', 40.0, 55.0, 75.0, 'DISCO-001'),
+('2025-05-12 14:00:00', 78.9, 'Alerta Disco Tarde', 'Uso de disco elevado na tarde.', 'Alta', 'Performance', 'disco', 'To Do', 1, 'ProcessoDISCO2', 41.5, 56.1, 78.9, 'DISCO-002'),
+('2025-05-12 20:00:00', 82.2, 'Alerta Disco Noite', 'Uso de disco elevado na noite.', 'Alta', 'Performance', 'disco', 'To Do', 1, 'ProcessoDISCO3', 42.3, 57.2, 82.2, 'DISCO-003'),
+('2025-05-13 02:00:00', 80.5, 'Alerta Disco Madrugada', 'Uso de disco elevado na madrugada.', 'Alta', 'Performance', 'disco', 'To Do', 1, 'ProcessoDISCO4', 43.1, 58.0, 80.5, 'DISCO-004'),
+
+-- REDE
+('2025-05-12 08:00:00', 95.0, 'Alerta Rede Manhã', 'Tráfego de rede intenso na manhã.', 'Alta', 'Segurança', 'rede', 'To Do', 1, 'ProcessoREDE1', 50.0, 60.0, 40.0, 'REDE-001'),
+('2025-05-12 14:00:00', 97.4, 'Alerta Rede Tarde', 'Tráfego de rede intenso na tarde.', 'Alta', 'Segurança', 'rede', 'To Do', 1, 'ProcessoREDE2', 52.0, 62.0, 42.0, 'REDE-002'),
+('2025-05-12 20:00:00', 93.6, 'Alerta Rede Noite', 'Tráfego de rede intenso na noite.', 'Alta', 'Segurança', 'rede', 'To Do', 1, 'ProcessoREDE3', 53.2, 63.4, 43.1, 'REDE-003'),
+('2025-05-13 02:00:00', 91.8, 'Alerta Rede Madrugada', 'Tráfego de rede intenso na madrugada.', 'Alta', 'Segurança', 'rede', 'To Do', 1, 'ProcessoREDE4', 54.0, 64.2, 44.3, 'REDE-004');
+
+
+SELECT * FROM alerta;
+drop table alerta;
+
+select * from alerta;
+
 CREATE TABLE alerta (
     idAlerta INT PRIMARY KEY AUTO_INCREMENT,
     dataHora DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -331,8 +490,45 @@ select componente, count(idAlerta) as alerta, hour(dataHora) as hora,
 								and fkFabrica = 1
 								group by hora, componente, periodo
 								order by componente desc limit 1;
-select count(*) as total_alertas,
-								case when hour(dataHora) > 5 and hour(dataHora) < 12 then 'Manhã'
+SELECT  COUNT(idAlerta) as qtdalertas, 
+		componente,
+		CASE 
+        WHEN HOUR(dataHora) >= 6 AND HOUR(dataHora) < 12 THEN 'Manhã'
+        WHEN HOUR(dataHora) >= 12 AND HOUR(dataHora) < 18 THEN 'Tarde'
+        WHEN HOUR(dataHora) >= 18 AND HOUR(dataHora) < 24 THEN 'Noite'
+        ELSE 'Madrugada'
+		END as periodo
+		FROM alerta
+		JOIN capturaDados as cap 
+        ON alerta.fkCapturaDados = cap.idCapturaDados
+		JOIN componenteServidor as comp 
+        ON cap.fkcomponenteServidor = comp.idcomponenteServidor
+		JOIN servidor_maquina as maq 
+		ON comp.fkMaquina = maq.idMaquina
+		WHERE YEAR(dataHora) = 2025
+		AND MONTH(dataHora) = 5
+		AND fkFabrica = 1
+		GROUP BY componente, periodo
+		ORDER BY periodo;
+        
+        
+select count(idAlerta) as qtdalerta, 
+								day(dataHora) as dia
+								from alerta
+								join capturaDados as cap
+								on alerta.fkCapturaDados=cap.idCapturaDados
+								join componenteServidor as comp
+								on cap.fkcomponenteServidor=comp.idcomponenteServidor
+								join servidor_maquina as maq
+								on  comp.fkMaquina=maq.idMaquina
+								where year(dataHora) = 2025
+								and month(dataHora) = 5
+								and fkFabrica = 1
+								group by dia
+								order by qtdalerta desc limit 1;
+		
+select date(dataHora) as data,processo,processoCPU,processoRAM,processoDISCO,
+								case when time(dataHora) > 5 and hour(dataHora) < 12 then 'Manhã'
 								when hour(dataHora) > 11 and hour(dataHora) < 18 then 'Tarde'
 								when hour(dataHora) > 17 and hour(dataHora) < 24 then 'Noite'
 								else 'Madrugada'
@@ -348,22 +544,31 @@ select count(*) as total_alertas,
 								year(dataHora) = 2025
 								and month(dataHora) = 5
 								and fkFabrica = 1
-								group by periodo
-								order by total_alertas desc limit 1;
-select count(idAlerta) as qtdalerta, 
-								day(dataHora) as dia
-								from alerta
-								join capturaDados as cap
-								on alerta.fkCapturaDados=cap.idCapturaDados
-								join componenteServidor as comp
-								on cap.fkcomponenteServidor=comp.idcomponenteServidor
-								join servidor_maquina as maq
-								on  comp.fkMaquina=maq.idMaquina
-								where year(dataHora) = 2025
-								and month(dataHora) = 5
-								and fkFabrica = 1
-								group by dia
-								order by qtdalerta desc limit 1;
+								order by processoCPU desc
+								limit 10;
+                               
+SELECT  COUNT(idAlerta) as qtdalertas, 
+		componente,
+		CASE 
+        WHEN HOUR(dataHora) >= 6 AND HOUR(dataHora) < 12 THEN 'Manhã'
+        WHEN HOUR(dataHora) >= 12 AND HOUR(dataHora) < 18 THEN 'Tarde'
+        WHEN HOUR(dataHora) >= 18 AND HOUR(dataHora) < 24 THEN 'Noite'
+        ELSE 'Madrugada'
+		END as periodo
+		FROM alerta
+		JOIN capturaDados as cap 
+        ON alerta.fkCapturaDados = cap.idCapturaDados
+		JOIN componenteServidor as comp 
+        ON cap.fkcomponenteServidor = comp.idcomponenteServidor
+		JOIN servidor_maquina as maq 
+		ON comp.fkMaquina = maq.idMaquina
+		WHERE YEAR(dataHora) = 2025
+		AND MONTH(dataHora) = 5
+		AND fkFabrica = 1
+        and idMaquina = 1
+		GROUP BY componente, periodo
+		ORDER BY periodo;
+
 -- FABRICA MODEL
 SELECT sm.fkFabrica, COUNT(a.idAlerta) AS quantidade_alertas FROM servidor_maquina sm
 								LEFT JOIN componenteServidor cs ON cs.fkMaquina = sm.idMaquina

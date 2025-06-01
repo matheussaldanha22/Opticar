@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,6 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="./assets/Scripts/backendDuda.js" defer></script>
 </head>
+
 <body>
     <div class="bg"></div>
 
@@ -53,170 +55,147 @@
             </div>
         </div>
 
-    <div class="painelDash">
-        <div class="tempoReal">
-            <div class="texto">
+        <div class="painelDash">
+            <div class="tempoReal">
+                <div class="texto">
                     <h1>Análise do mês de Maio</h1>
-            </div>
-            <div class="servidor">
+                </div>
+                <div class="servidor">
                     <select id="slt_servidor">
-                    <option selected value="">Todos os Servidores</option>
-                   
+                        <option selected value="todos">Todos os Servidores</option>
+
                     </select>
 
                     <select id="slt_mes">
-                        <option selected value="">Mês Atual</option>
-                       
+
                     </select>
 
                     <div class="iconeFiltro">
-                                <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                        <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
                     </div>
 
-                     <button id="btnMostrarGrafico" class="botaoGrafico">
+                    <button id="btnMostrarGrafico" class="botaoGrafico">
                         <i class='bx bx-line-chart'></i>
                         <span>Correlação consumo x Vendas</span>
                     </button>
 
-                   
-            </div>
-        </div>
 
-        <div class="containerKPI">
+                </div>
+            </div>
+
+            <div class="containerKPI">
                 <div class="kpiUso">
                     <div class="tituloKpi">
                         <h2>Semana do Mês com + alerta</h2>
                         <h3></h3>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi"  style="color: white; text-shadow: 2px 2px 4px red;"><span id="semanaAlerta">x</span> ° semana</p>
+                        <p class="dadoKpi" style="color: white; text-shadow: 2px 2px 4px red;"><span
+                                id="semanaAlerta">x</span> ° semana</p>
                     </span>
-                    <h3><b id="parametroCpu"  style="color: red; font-size: 14px;"><span id="qtdAlerta">x</span> Alertas</b></h3>
+                    <h3><b id="parametroCpu" style="color: red; font-size: 14px;"><span id="qtdAlerta">x</span>
+                            Alertas</b></h3>
                 </div>
 
                 <div class="kpiUso">
                     <div class="tituloKpi">
                         <h2>Componente com + alerta</h2>
-                    
+
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoRam" style="color: white; text-shadow: 2px 2px 4px red;"> <span id="componente"> CPU</span></p>
+                        <p class="dadoKpi" id="usoRam" style="color: white; text-shadow: 2px 2px 4px red;"> <span
+                                id="componente"> CPU</span></p>
                     </span>
-                    <h3>Périodo: <b style="color: red; font-size: 14px;"> <span id="periodo"> x</span></b> <b   style="color: white; font-size: 14px;">  <span id="qtdAlertaComp">xx</span> alertas</b></h3> 
+                    <h3>Périodo: <b style="color: red; font-size: 14px;"> <span id="periodo"> x</span></b> <b
+                            style="color: white; font-size: 14px;"> <span id="qtdAlertaComp">xx</span> alertas</b></h3>
 
-                    
+
                 </div>
 
                 <!-- USO DISCO -->
                 <div class="kpiUso">
                     <div class="tituloKpi">
                         <h2>Período com mais alertas</h2>
-                        
+
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoDisco" style="color: white; text-shadow: 2px 2px 4px red;"> <span id="periodoAlerta">xxxx</span> </p>
+                        <p class="dadoKpi" id="usoDisco" style="color: white; text-shadow: 2px 2px 4px red;"> <span
+                                id="periodoAlerta">xxxx</span> </p>
                     </span>
-                    <h3><b id="parametroDisco" style="color: red; font-size: 14px;"> <span id="qtdPeriodoAlerta"> 30 </span> alertas</b></h3>
+                    <h3><b id="parametroDisco" style="color: red; font-size: 14px;"> <span id="qtdPeriodoAlerta"> 30
+                            </span> alertas</b></h3>
                 </div>
                 <div class="kpiUso">
                     <div class="tituloKpi">
                         <h2>Dia do Mês com +alerta</h2>
                     </div>
                     <span class="txtKpi">
-                    <p class="dadoKpi"  style="color: white; text-shadow: 2px 2px 4px red;"> <span id="DiaAlerta">xxxx</span> </p>
+                        <p class="dadoKpi" style="color: white; text-shadow: 2px 2px 4px red;"> <span
+                                id="DiaAlerta">xxxx</span> </p>
                     </span>
-                    <h3><b  style="color: red; font-size: 14px;"> <span id="qtdDiaAlerta"> 30 </span> alertas</b></h3>
-                    
+                    <h3><b style="color: red; font-size: 14px;"> <span id="qtdDiaAlerta"> 30 </span> alertas</b></h3>
+
                     </span>
-    
+
                 </div>
             </div>
 
 
             <div class="containerGraficos">
-                    <div class="graficoPeriodo">
-                        <div class="titulo">
-                            <h3>Quantidade de alerta por componente - Período do Dia</h3>
-                            
+                <div class="graficoPeriodo">
+                    <div class="titulo">
+                        <h3>Quantidade de alerta por componente - Período do Dia</h3>
+
+                    </div>
+                    <div class="modal">
+                        <div class="content">
+                            <h1>teste</h1>
                         </div>
-                        <div class="modal">
-                            <div class="content">
-                                <h1>teste</h1>
-                            </div>
-                        </div>
-                        
-                        <div class="chartPeriodo" id="chart"></div>
                     </div>
 
-                    <div class="tabelaProcessos">
+                    <div class="chartPeriodo" id="chart"></div>
+                </div>
+
+                <div class="tabelaProcessos">
+                    <div class="titulo">
+                        <h3>Processos com mais Consumo durante o mês </h3>
+                    </div>
+                    <div class="componentesContainer">
+                        <table id="">
+                            <thead>
+                                <tr>
+                                    <th>Servidor</th>
+                                    <th>Componente(s)</th>
+                                    <th>IP</th>
+                                    <th>Visualizar</th>
+                                    <th></th>
+
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+                <div id="graficoConsumoCpuVendas" class="containerGraficoCpuVendas" style="display: none;">
+                    <div class="graficoRelacao">
                         <div class="titulo">
-                            <h3>Processos com mais Consumo durante o mês </h3>
+                            <h3>Consumo de CPU x PIX </h3>
+
                         </div>
+                        <div class="chartRelacao" id="chartCpuVendas"></div>
 
-                <table id="tabela-alertas" class="componentesContainer">
-                <tr>
-                        <th>Nome</th>
-                        <th>Périodo</th>
-                        <th>CPU</th>
-                        <th>RAM</th>
-                    </tr>
-                    <tr>
-                        <td>chrome</td>
-                        <td>Tarde</td>
-                        <td>10%</td>
-                        <td>60%</td>
-        
-                    </tr>
-                    <tr>
-                        <td>chrome</td>
-                        <td>Noite</td>
-                        <td>10%</td>
-                        <td>60%</td>
-        
-                    </tr>
-                    <tr>
-                       <td>chrome</td>
-                        <td>manhã</td>
-                        <td>10%</td>
-                        <td>60%</td>
-        
-                    </tr>
-                    <tr>
-                       <td>chrome</td>
-                        <td>Madrugada</td>
-                        <td>10%</td>
-                        <td>60%</td>
-        
-                    </tr>
-                    <tr>
-                         <td>chrome</td>
-                        <td>Tarde</td>
-                        <td>10%</td>
-                        <td>60%</td>
-        
-                    </tr>
-                    
-                </table>
+                    </div>
+                </div>
+
             </div>
-            </div>
-           <div id="graficoConsumoCpuVendas" class="containerGraficoCpuVendas" style="display: none;">
-            <div class="graficoRelacao">
-                <div class="titulo">
-                <h3>Consumo de CPU x PIX    </h3>
-        
-            </div>
-            <div class="chartRelacao" id="chartCpuVendas"></div>
-            
-        </div>
-</div>     
 
         </div>
 
-    </div>
-    
 </body>
+
 </html>
 <script>
+    //    document.getElementById("slt_mes").innerHTML = `<option value="${mes}/${ano}">Mês atual</option>`
+
     function expand() {
         if (div_menu.classList.contains('menu-expand')) {
             div_menu.style.animation = 'diminui 0.2s linear'
@@ -242,5 +221,16 @@
         menu.classList.toggle('nav-active')
 
     });
+
+    window.onload = function () {
+        listarMes()
+        listarServidores()
+        plotarGraficoPerido()
+
+
+        setTimeout(() => {
+            atualizarDados()
+        }, 1000);
+    }
 
 </script>

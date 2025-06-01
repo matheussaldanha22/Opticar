@@ -124,9 +124,6 @@ botaoComponente.addEventListener("click", () => {
     
 
 });
-
-
-
         });
     }).catch(erro => {
         console.error("Erro ao buscar servidor:", erro);

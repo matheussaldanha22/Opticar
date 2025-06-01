@@ -1,5 +1,4 @@
-
-document.addEventListener("DOMContentLoaded", function () {
+ document.addEventListener("DOMContentLoaded", function () {
   const botao = document.getElementById('btnMostrarGrafico');
 
   const grafico = document.getElementById('graficoConsumoCpuVendas');
@@ -49,19 +48,14 @@ window.onclick = function (event) {
   }
 }
 
-
-
-
 function listarServidores() {
   const servidores = JSON.parse(sessionStorage.SERVIDORES);
   for (let i = 0; i < servidores.length; i++) {
-    const idServidor = servidores[i].idMaquina;
-
+    const idServidor = servidores[i].idMaquina; 
     document.getElementById('slt_servidor').innerHTML += `<option value="${idServidor}">SV${idServidor}</option>`
 
   }
 }
-listarServidores()
 
 
 function listarMes() {
@@ -74,28 +68,29 @@ function listarMes() {
     resultado.json().then((json) => {
       alertaMes = json
 
+      var d = new Date();
+      var anoAtual = d.getFullYear()
+      var mesAtual = d.getMonth()
+
+
       for (let i = 0; i < alertaMes.length; i++) {
         const mes = alertaMes[i].mes;
         const ano = alertaMes[i].ano;
 
-        document.getElementById('slt_mes').innerHTML += `<option value="${mes}/${ano}"> ${mes}/${ano}</option>`
-
+        if (anoAtual == ano && mesAtual == mes) {
+          document.getElementById('slt_mes').innerHTML += `<option selected value="${mesAtual}/${anoAtual}">Mês Atual</option>`
+        } else{
+            document.getElementById('slt_mes').innerHTML += `<option value="${mes}/${ano}"> ${mes}/${ano}</option>`
+        }
       }
     })
   })
 }
+  
 
-listarMes()
-
-function obterSemana(ano, mes) {
-  console.log("to aqui")
+function obterSemana(ano,mes) {
   const idFabrica = sessionStorage.FABRICA_ID;
-  const d = new Date();
-  var ano = d.getFullYear();
-  var mes = d.getMonth() + 1;
-
   fetch(`/dashPeriodo/obterSemana/${idFabrica}/${ano}/${mes}`, {
-
     method: 'GET',
     headers: {
       'Content-Type': 'application/json'
@@ -113,14 +108,10 @@ function obterSemana(ano, mes) {
           maior = semanaAlerta[i].quantidadeAlertas;
           maisAlerta = semanaAlerta[i].posicaoNoMes;
         }
-
-
-
       }
       console.log("exibir")
       document.getElementById('semanaAlerta').innerHTML = `${maisAlerta}`
       document.getElementById('qtdAlerta').innerHTML = `${maior}`
-
     })
   })
 
@@ -129,9 +120,6 @@ function obterSemana(ano, mes) {
 
 function obterComponente(ano, mes) {
   const idFabrica = sessionStorage.FABRICA_ID;
-  const d = new Date();
-  var ano = d.getFullYear();
-  var mes = d.getMonth() + 1;
 
   fetch(`/dashPeriodo/obterComponente/${idFabrica}/${ano}/${mes}`, {
     method: 'GET',
@@ -141,8 +129,6 @@ function obterComponente(ano, mes) {
   }).then((resultado) => {
     resultado.json().then((json) => { //coloca .then pq é uma funcao precisa ()
       console.log(json)
-
-
       document.getElementById('componente').innerHTML = json[0].componente
       document.getElementById('periodo').innerHTML = json[0].periodo
       document.getElementById('qtdAlertaComp').innerHTML = json[0].alerta
@@ -152,9 +138,6 @@ function obterComponente(ano, mes) {
 
 function obterPeriodo(ano, mes) {
   const idFabrica = sessionStorage.FABRICA_ID;
-  const d = new Date();
-  var ano = d.getFullYear();
-  var mes = d.getMonth() + 1;
 
   fetch(`/dashPeriodo/obterPeriodo/${idFabrica}/${ano}/${mes}`, {
     method: 'GET',
@@ -163,7 +146,6 @@ function obterPeriodo(ano, mes) {
     },
   }).then((resultado) => {
     resultado.json().then((json) => {
-      console.log("ESTOU NO OBTER PERIODOOOOOOOOOOOOOOO PORRA" + json)
       document.getElementById('periodoAlerta').innerHTML = json[0].periodo
       document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
     })
@@ -172,16 +154,7 @@ function obterPeriodo(ano, mes) {
 
 function obterDia(ano, mes) {
   const idFabrica = sessionStorage.FABRICA_ID;
-  const d = new Date();
-  var ano = d.getFullYear();
-  var mes = d.getMonth() + 1;
-
-  console.log(idFabrica)
-  console.log(ano)
-  console.log(mes)
-
-
-
+  
   fetch(`/dashPeriodo/obterDia/${idFabrica}/${ano}/${mes}`, {
     method: 'GET',
     headers: {
@@ -197,148 +170,12 @@ function obterDia(ano, mes) {
   )
 
 }
-obterComponente()
-obterSemana()
-obterPeriodo()
-obterDia()
 
-function graficoPeriodo() {
+var chart;
 
-}
-
-graficoPeriodo()
-
-var bomba;
-
-function dadosGrafico(ano, mes) {
-  const idFabrica = 1;
-  const d = new Date();
-  var ano = d.getFullYear();
-  var mes = d.getMonth() + 1;
-
-
-  fetch(`/dashPeriodo/alertasPeriodo/${idFabrica}/${ano}/${mes}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  }).then((resultado) => {
-    resultado.json().then((json) => {
-      // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-      // console.log(json)
-      var cpu = []
-      var ram = []
-      var disco = []
-      var rede = []
-
-      // console.log(cpu)
-      // // console.log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-      // console.log(ram)
-
-    
-
-      for (let i = 0; i < json.length; i++) {
-        var alertaAtual = json[i]
-        console.log(alertaAtual.periodo)
-        var periodo = alertaAtual.periodo
-
-        if (alertaAtual.componente.toLowerCase() == "cpu") {
-            cpu.push({ [periodo]: alertaAtual.qtdalertas })
-          }
-          
-
-        if (alertaAtual.componente.toLowerCase() == "ram") {
-            ram.push({ [periodo]: alertaAtual.qtdalertas })
-        }
-
-        if (alertaAtual.componente.toLowerCase() == "disco") {
-            disco.push({ [periodo]: alertaAtual.qtdalertas })
-        }
-
-        if (alertaAtual.componente.toLowerCase() == "rede") {
-            rede.push({ [periodo]: alertaAtual.qtdalertas })
-        }
-      }
-
-      var dataCpu = [];
-      var dataRede = [];
-      var dataRam = [];
-      var dataDisco = [];
-
-      cpu.forEach(item => {
-        if (item["Manhã"]) {
-          dataCpu.push(item["Manhã"]);
-        } else if (item["Tarde"]) {
-          dataCpu.push(item["Tarde"]);
-        } else if (item["Noite"]) {
-          dataCpu.push(item["Noite"]);
-        } else if (item["Madrugada"]) {
-          dataCpu.push(item["Madrugada"]);
-        }
-      });
-
-        ram.forEach(item => {
-        if (item["Manhã"]) {
-          dataRam.push(item["Manhã"]);
-        } else if (item["Tarde"]) {
-          dataRam.push(item["Tarde"]);
-        } else if (item["Noite"]) {
-          dataRam.push(item["Noite"]);
-        } else if (item["Madrugada"]) {
-          dataRam.push(item["Madrugada"]);
-        }
-      });
-
-      
-      rede.forEach(item => {
-        if (item["Manhã"]) {
-          dataRede.push(item["Manhã"]);
-        } else if (item["Tarde"]) {
-          dataRede.push(item["Tarde"]);
-        } else if (item["Noite"]) {
-          dataRede.push(item["Noite"]);
-        } else if (item["Madrugada"]) {
-          dataRede.push(item["Madrugada"]);
-        }
-      });
-      
-        disco.forEach(item => {
-        if (item["Manhã"]) {
-          dataDisco.push(item["Manhã"]);
-        } else if (item["Tarde"]) {
-          dataDisco.push(item["Tarde"]);
-        } else if (item["Noite"]) {
-          dataDisco.push(item["Noite"]);
-        } else if (item["Madrugada"]) {
-          dataDisco.push(item["Madrugada"]);
-        }
-      });
-
-      plotarGraficoPerido(dataCpu,dataRam, dataDisco, dataRede)
-
-      console.log("estou em dataCPU" + dataCpu)
-   })
-  })
-}
-
-dadosGrafico()
-function plotarGraficoPerido(dataCpu, dataRam, dataDisco, dataRede) {
+function plotarGraficoPerido() {
   var options = {
-        series: [{
-          name: 'CPU',
-          data: dataCpu
-        }, {
-          name: 'RAM',
-          data: dataRam
-        },
-        {
-          name: 'Disco',
-          data: dataDisco
-        },
-        {
-          name: 'Rede',
-          data: dataRede
-        }],
+        series: [],
 
         chart: {
           type: 'bar',
@@ -350,13 +187,10 @@ function plotarGraficoPerido(dataCpu, dataRam, dataDisco, dataRede) {
             columnWidth: '40%',
             borderRadius: 5,
             borderRadiusApplication: 'end',
-
-
           },
         },
         dataLabels: {
           enabled: false,
-
         },
         stroke: {
           show: true,
@@ -364,7 +198,7 @@ function plotarGraficoPerido(dataCpu, dataRam, dataDisco, dataRede) {
           colors: ['transparent']
         },
         xaxis: {
-          categories: ['Manhã', 'Tarde', 'Noite', 'Madrugada'],
+          categories: [],
         },
         yaxis: {
           title: {
@@ -382,9 +216,445 @@ function plotarGraficoPerido(dataCpu, dataRam, dataDisco, dataRede) {
           }
         }
       };
-
-      var chart = new ApexCharts(document.getElementById("chart"), options);
-
+      chart = new ApexCharts(document.getElementById("chart"), options);
       chart.render()
+}
+
+function dadosGrafico(ano,mes) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  fetch(`/dashPeriodo/alertasPeriodo/${idFabrica}/${ano}/${mes}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    resultado.json().then((json) => {
+     
+      var cpu = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+      
+      var ram = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+      
+      var disco = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+      
+      var rede = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+  
+      for (let i = 0; i < json.length; i++) {
+        var alertaAtual = json[i]
+        console.log(alertaAtual.periodo)
+        var periodo = alertaAtual.periodo
+
+        if (alertaAtual.componente.toLowerCase() == "cpu") {
+            cpu[periodo] += alertaAtual.qtdalertas 
+        }
+
+        if (alertaAtual.componente.toLowerCase() == "ram") {
+            ram[periodo] += alertaAtual.qtdalertas 
+        }
+
+        if (alertaAtual.componente.toLowerCase() == "disco") {
+            disco[periodo] += alertaAtual.qtdalertas
+        }
+
+        if (alertaAtual.componente.toLowerCase() == "rede") {
+            rede[periodo] += alertaAtual.qtdalertas 
+        }
+      }
+
+      var dataCpu = [];
+      var dataRede = [];
+      var dataRam = [];
+      var dataDisco = [];
+      var categoriesChart = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
+
+  
+      for (let i = 0; i < categoriesChart.length; i++) {
+        var periodo = categoriesChart[i];
+        
+        dataCpu.push(cpu[periodo]);
+        dataRam.push(ram[periodo]);
+        dataDisco.push(disco[periodo]);
+        dataRede.push(rede[periodo]);
+      }
+
+  
+      var seriesChart = [];
+      var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
+      
+      seriesChart.push({
+            name: "CPU",
+            data: dataCpu
+        }, {
+            name: "RAM",
+            data: dataRam
+        },
+        {
+            name: "DISCO",
+            data: dataDisco
+        },
+        {
+            name: "REDE",
+            data: dataRede
+        })
+
+      chart.updateOptions({
+        series: seriesChart,
+        xaxis: { categories: categoriesChart },
+        colors: coresChart,
+        markers: {
+            size: 5,
+            colors: coresChart,  
+            strokeColors: "#FFFFFF",  
+            strokeWidth: 2,
+        }
+      });
+      console.log("estou em dataCPU" + dataCpu)
+   })
+  })
+}
+
+function tabelaProcesso(ano,mes) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  
+  fetch(`/dashPeriodo/tabelaProcesso/${idFabrica}/${ano}/${mes}`, {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado)=>{
+    resultado.json().then((json)=> {
+      processos = json
+       const tabela = document.querySelector(".componentesContainer table");
+      tabela.innerHTML = `<thead>
+                                <tr>
+                                    <td>Data</td>
+                                    <td>Processo</td>
+                                    <td>Periodo</td>
+                                    <td>Prioridade</td>
+                                    <td>Quantidade</td>
+                                </tr>
+                           </thead>`
+                           ;
+       processos.forEach(processo => {
+            const linha = document.createElement("tr");
+            linha.innerHTML = ""; 
+            linha.innerHTML += `
+                <tbody>
+                    <td data-label = "Data">${processo.dataP}</td>
+                    <td data-label = "Processo">${processo.processo}</td>
+                    <td data-label = "Periodo">${processo.periodo}</td>
+                   <td data-label = "prioriodade">${processo.prioridade}</td>
+                   <td data-label = "quantidae">${processo.alerta}</td>
+                </tbody>
+            `;
+            tabela.appendChild(linha);
+      });
+    })
+  })
 
 }
+
+function selectServidor(ano,mes) {
+  var idServidor = Number(slt_servidor.value)
+  console.log(idServidor)
+
+  const idFabrica = sessionStorage.FABRICA_ID;
+  fetch(`/dashPeriodo/servidorDados/${idFabrica}/${idServidor}/${ano}/${mes}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado)=>{
+    resultado.json().then((json)=>{
+
+      var cpu = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+      
+      var ram = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+      
+      var disco = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+      
+      var rede = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+  
+      for (let i = 0; i < json.length; i++) {
+        var alertaAtual = json[i]
+        console.log(alertaAtual.periodo)
+        var periodo = alertaAtual.periodo
+
+        if (alertaAtual.componente.toLowerCase() == "cpu") {
+            cpu[periodo] += alertaAtual.qtdalertas 
+        }
+
+        if (alertaAtual.componente.toLowerCase() == "ram") {
+            ram[periodo] += alertaAtual.qtdalertas 
+        }
+
+        if (alertaAtual.componente.toLowerCase() == "disco") {
+            disco[periodo] += alertaAtual.qtdalertas
+        }
+
+        if (alertaAtual.componente.toLowerCase() == "rede") {
+            rede[periodo] += alertaAtual.qtdalertas 
+        }
+      }
+
+      var dataCpu = [];
+      var dataRede = [];
+      var dataRam = [];
+      var dataDisco = [];
+      var categoriesChart = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
+
+  
+      for (let i = 0; i < categoriesChart.length; i++) {
+        var periodo = categoriesChart[i];
+        
+        dataCpu.push(cpu[periodo]);
+        dataRam.push(ram[periodo]);
+        dataDisco.push(disco[periodo]);
+        dataRede.push(rede[periodo]);
+      }
+
+  
+      var seriesChart = [];
+      var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
+      
+      seriesChart.push({
+            name: "CPU",
+            data: dataCpu
+        }, {
+            name: "RAM",
+            data: dataRam
+        },
+        {
+            name: "DISCO",
+            data: dataDisco
+        },
+        {
+            name: "REDE",
+            data: dataRede
+        })
+
+      chart.updateOptions({
+        series: seriesChart,
+        xaxis: { categories: categoriesChart },
+        colors: coresChart,
+        markers: {
+            size: 5,
+            colors: coresChart,  
+            strokeColors: "#FFFFFF",  
+            strokeWidth: 2,
+        }
+      });
+    })
+  })
+}
+
+
+function tabelaServidor(ano,mes) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  var idServidor = Number(slt_servidor.value)
+  fetch(`/dashPeriodo/tabelaServidor/${idFabrica}/${idServidor}/${ano}/${mes}`, {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado)=>{
+    resultado.json().then((json)=> {
+      processos = json
+      const tabela = document.querySelector(".componentesContainer table");
+      tabela.innerHTML = `<thead>
+                                <tr>
+                                    <td>Data</td>
+                                    <td>Processo</td>
+                                    <td>Periodo</td>
+                                    <td>Prioridade</td>
+                                    <td>Quantidade</td>
+                                </tr>
+                           </thead>`
+                           ;
+       processos.forEach(processo => {
+            const linha = document.createElement("tr");
+            linha.innerHTML = ""; 
+            linha.innerHTML += `
+                <tbody>
+                    <td data-label = "Data">${processo.dataP}</td>
+                    <td data-label = "Processo">${processo.processo}</td>
+                    <td data-label = "Periodo">${processo.periodo}</td>
+                   <td data-label = "prioriodade">${processo.prioridade}</td>
+                   <td data-label = "quantidae">${processo.alerta}</td>
+                </tbody>
+            `;
+            tabela.appendChild(linha);
+      });
+    })
+  })
+
+}
+
+function diaServidor(ano, mes) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  var idServidor = Number(slt_servidor.value)
+
+  fetch(`/dashPeriodo/diaServidor/${idFabrica}/${idServidor}/${ano}/${mes}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    resultado.json().then((json) => {
+
+      document.getElementById('DiaAlerta').innerHTML = json[0].dia
+      document.getElementById('qtdDiaAlerta').innerHTML = json[0].qtdalerta
+    })
+  }
+  )
+
+}
+
+
+function periodoServer(ano, mes) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  var idServidor = Number(slt_servidor.value)
+
+  fetch(`/dashPeriodo/periodoServer/${idFabrica}/${idServidor}/${ano}/${mes}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    resultado.json().then((json) => {
+      document.getElementById('periodoAlerta').innerHTML = json[0].periodo
+      document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
+    })
+  })
+}
+
+function componenteServer(ano, mes) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  var idServidor = Number(slt_servidor.value)
+  fetch(`/dashPeriodo/componenteServer/${idFabrica}/${idServidor}/${ano}/${mes}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    resultado.json().then((json) => { //coloca .then pq é uma funcao precisa ()
+      console.log(json)
+      document.getElementById('componente').innerHTML = json[0].componente
+      document.getElementById('periodo').innerHTML = json[0].periodo
+      document.getElementById('qtdAlertaComp').innerHTML = json[0].alerta
+    })
+  })
+}
+
+
+function semanaServer(ano,mes) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  var idServidor = Number(slt_servidor.value)
+  
+  fetch(`/dashPeriodo/semanaServer/${idFabrica}/${idServidor}/${ano}/${mes}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    console.log("to no fetch")
+    resultado.json().then((json) => {
+      semanaAlerta = json
+      let maior = 0
+      let maisAlerta = null;
+
+      for (let i = 0; i < semanaAlerta.length; i++) {
+        semanaAlerta[i].posicaoNoMes = i + 1;
+        if (semanaAlerta[i].quantidadeAlertas > maior) {
+          maior = semanaAlerta[i].quantidadeAlertas;
+          maisAlerta = semanaAlerta[i].posicaoNoMes;
+        }
+      }
+      console.log("exibir")
+      document.getElementById('semanaAlerta').innerHTML = `${maisAlerta}`
+      document.getElementById('qtdAlerta').innerHTML = `${maior}`
+    })
+  })
+
+
+}
+
+var sltServidor = document.getElementById("slt_servidor");
+var slt_Mes = document.getElementById("slt_mes")
+
+
+
+function atualizarDados() {
+  var valorSelect = document.getElementById('slt_mes').value
+  var valoresMesAno = valorSelect.split("/")
+
+
+  var ano = valoresMesAno[1]
+  var mes = valoresMesAno[0]
+
+  console.log(ano)
+  console.log(mes)
+
+
+  if (sltServidor.value != "todos") {
+    selectServidor(ano,mes) //gerar grafico de servidor especifico
+    tabelaServidor(ano,mes) //tabela de processo de um servidor
+    diaServidor(ano, mes) //kpi do servidor especifico com dia com mais alerta
+    periodoServer(ano, mes) //kpi do servidor especifico com periodo com mais alerta
+    componenteServer(ano, mes) //kpi do servidor especifico com componente com mais alerta
+    semanaServer(ano,mes) //kpi do servidor especifico com semana com mais alerta
+     console.log("azul")
+
+  }else{
+     //grafico de todos os servidores
+     console.log("rosa")
+    obterDia(ano, mes) //kpi dia 
+    obterSemana(ano,mes) //kpi semana
+    obterComponente(ano,mes) //kpi componente
+    obterPeriodo(ano,mes) // kpi periodo
+    tabelaProcesso(ano,mes) //tabela processos
+    dadosGrafico(ano,mes)
+  }
+}
+
+sltServidor.addEventListener("change", atualizarDados);
+slt_mes.addEventListener("change", atualizarDados)

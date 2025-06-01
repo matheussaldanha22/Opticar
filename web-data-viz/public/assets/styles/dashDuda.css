@@ -378,7 +378,7 @@ body {
 .containerGraficos {
   display: flex;
   align-items: center;
-  width: 98%;
+  width: 100%;
   gap: 1vw;
   align-items: center;
   height: 100%;
@@ -386,7 +386,7 @@ body {
 
 
 .graficoPeriodo{
-  width: 65%;
+  width: 70%;
   background-color: #EDEDED;
   padding: 0.5vw;
   border-radius: 1vw;
@@ -402,14 +402,14 @@ body {
   padding: 0.5vw;
   border-radius: 1vw;
   height: 400px;
-  width: 35%;
-  gap: 0.8vw;
+  width: 40%;
+  gap: 1vw;
 
 }
 
 .componentesContainer {
     width: 100%;
-    background-color: #ffffff3a;
+    /* background-color: #ffffff3a; */
     border-radius: 10px;
     border-spacing: 0 10px;
   }
@@ -427,11 +427,12 @@ body {
   thead {
     background-color: #011f27;
     color: white;
+    /* border-radius: %; */
   }
   
   th,
   td {
-    padding: 12px 15px;
+    padding: 5px 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
   }
@@ -448,6 +449,7 @@ body {
   .componentesContainer td:nth-child(7) {
     cursor: pointer;
     /* font-size: 30px; */
+    border-radius: 10%;
   }
 
  .titulo{

@@ -19,8 +19,39 @@ router.get("/obterDia/:idFabrica/:ano/:mes", function (req,res) {
     dashPeriodoController.obterDia(req,res)
 })
 
+router.get("/tabelaProcesso/:idFabrica/:ano/:mes", function (req,res) {
+    dashPeriodoController.tabelaProcesso(req,res)
+})
+
 router.get("/alertasPeriodo/:idFabrica/:ano/:mes", function (req,res) {
     dashPeriodoController.alertasPeriodo(req,res)
 })
 
+router.get("/servidorDados/:idFabrica/:idServidor/:ano/:mes", function (req,res) {
+    dashPeriodoController.servidorDados(req,res)
+})
+
+router.get("/tabelaServidor/:idFabrica/:idServidor/:ano/:mes", function (req, res) {
+    dashPeriodoController.tabelaServidor(req,res)
+})
+
+router.get("/alertaServidor/:idFabrica/:idServidor/:ano/:mes", function (req, res) {
+    dashPeriodoController.alertaServidor(req,res)
+})
+
+router.get("/diaServidor/:idFabrica/:idServidor/:ano/:mes", function (req, res) {
+    dashPeriodoController.diaServidor(req,res)
+})
+
+router.get("/periodoServer/:idFabrica/:idServidor/:ano/:mes", function (req, res) {
+    dashPeriodoController.periodoServer(req,res)
+})
+
+router.get("/componenteServer/:idFabrica/:idServidor/:ano/:mes", function (req, res) {
+    dashPeriodoController.componenteServer(req,res)
+})
+
+router.get("/semanaServer/:idFabrica/:idServidor/:ano/:mes", function (req, res) {
+    dashPeriodoController.semanaServer(req,res)
+})
 module.exports = router;
