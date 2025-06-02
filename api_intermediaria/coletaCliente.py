@@ -199,13 +199,13 @@ def monitorar():
         try:
             pedidos = obterPedidos(mac_address)
             dados = dadosObrigatorios()
-            listaTempoReal = {
+            listaTempoReal = { "{mac_address}" : {
                 "CPU" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor" : dados[0]},
                 "RAM" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[1]},
                 "DISCO" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[2]},
                 "RedeEnviada" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[3]},
                 "RedeRecebida" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[4]}
-                }
+                }}
             enviarDadosTempoReal(listaTempoReal)
 
             listaPedidoCliente = {}
@@ -226,14 +226,10 @@ def monitorar():
                         "valor": valor
                     })
 
-                    if tipo not in listaPedidoCliente:
-                        listaPedidoCliente[tipo] = []
-                    listaPedidoCliente[tipo].append({
-                        "idFabrica": idFabrica,
-                        "idMaquina": idMaquina,
-                        "Valor": valor,
-                        "Medida": medida,
-                        "mac_address": mac_address
+                    if mac_address not in listaPedidoCliente:
+                        listaPedidoCliente[mac_address] = []
+                    listaPedidoCliente[mac_address].append({
+                        "{tipo}":{"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida, "mac_address": mac_address}
                     })
 
                     print(f"Valor capturado: {valor} e id: {idPedido}")
