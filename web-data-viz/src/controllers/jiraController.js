@@ -84,7 +84,7 @@ async function listarAlertasPorId(req, res) {
 
     const resultado = {
       idFabrica: idFabrica,
-      tempoMedioResolucao: tempoMedio.toFixed(2), 
+      tempoMedioResolucao: Number(tempoMedio.toFixed(2)), 
       totalAlertas: quantidadeDeAlertas
     };
     
@@ -95,62 +95,7 @@ async function listarAlertasPorId(req, res) {
   }
 }
 
-async function kpiTempoMaiorResolucao(req, res) {
-  try {
-    const baseUrl = `https://${domain}.atlassian.net`;
-    const idFabrica = req.body.idFabrica;
-
-    if (!idFabrica) {
-      return res.status(400).json({ error: "ID da fábrica não fornecido" });
-    }
-
-    const config = {
-      method: "get",
-      url: `${baseUrl}/rest/api/2/search?fields=summary,status,created,resolutiondate,customfield_10057&expand=changelog`,
-      headers: { "Content-Type": "application/json" },
-      auth: auth,
-    };
-
-    const response = await axios.request(config);
-    var somaDosTempos = 0;  
-    var quantidadeDeAlertas = 0; 
-
-    for (var i = 0; i < response.data.issues.length; i++) {
-      const issue = response.data.issues[i];
-      if (issue.fields.customfield_10057 == idFabrica) {
-        var dataConclusao = null;
-        dataConclusao = issue.fields.resolutiondate;
-        if (dataConclusao) {
-          var dataCriacao = new Date(issue.fields.created);
-          var dataConclusaoFormatada = new Date(dataConclusao);
-          var tempoGasto = dataConclusaoFormatada - dataCriacao;
-          somaDosTempos += tempoGasto;
-          quantidadeDeAlertas++;
-        }
-      }
-    }
-    var tempoMedio = 0;
-    if (quantidadeDeAlertas > 0) {
-      var media = somaDosTempos / quantidadeDeAlertas;
-      tempoMedio = media / (1000 * 60)
-    }
-
-    const resultado = {
-      idFabrica: idFabrica,
-      tempoMedioResolucao: tempoMedio.toFixed(2), 
-      totalAlertas: quantidadeDeAlertas
-    };
-    
-    res.status(200).json(resultado);
-  } catch (error) {
-    console.log("Erro ao calcular maior tempo de resolução:", error.message);
-    res.status(500).json({ error: "Erro ao calcular maior tempo de resolução" });
-  }
-}
-
-
 module.exports = {
   listarAlertas,
   listarAlertasPorId,
-  kpiTempoMaiorResolucao
 };

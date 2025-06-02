@@ -2,9 +2,10 @@
 // const larguraGrafico = Math.max(fabricasG.length * 105, 400);
 
 //GRÁFICO ALERTAS
-var dadosFabricasGrave = [];
+var fabricaCriticaLista = []
 
 function plotarGraficoAlerta(dadosAlerta) {
+  fabricaCriticaLista = []
   fetch("/admin/dadosFabrica", {
     method: "GET",
   })
@@ -16,33 +17,101 @@ function plotarGraficoAlerta(dadosAlerta) {
   })
   .then(function (dadosFabrica) {
 
-    const idFabrica = [];
-    const fabricasG = [];
-    const alertasEmAberto = [];
-    const alertasEmAndamento = [];
+    var nivelCriticidade;
+    var estado;
 
     for (let i = 0; i < dadosFabrica.length; i++) {
       const fabrica = dadosFabrica[i];
-      alertasEmAberto.push(0);     
-      alertasEmAndamento.push(0);   
       for (let j = 0; j < dadosAlerta.length; j++) {
         const alerta = dadosAlerta[j];
         if (alerta.fkFabrica === fabrica.idFabrica) {
           var quantidade = alerta.qtd_to_do + alerta.qtd_in_progress;
-          if (quantidade > dadosFabrica.limiteAtencao) {
-            dadosFabricasGrave.push(dadosFabrica[i])
+          if (quantidade >= fabrica.limiteCritico) {
+            nivelCriticidade = quantidade - fabrica.limiteCritico;
+            estado = "critico"
+            fabricaCriticaLista.push({nome: fabrica.nomeFabrica,
+                                      id: fabrica.idFabrica,
+                                      qtd_to_do: alerta.qtd_to_do,
+                                      qtd_in_progress: alerta.qtd_in_progress,
+                                      quantidade,
+                                      estado,
+                                      nivelCriticidade
+                                      })
+          } else if (quantidade >= fabrica.limiteAtencao) {
+            nivelCriticidade = quantidade - fabrica.limiteAtencao;
+            estado = "atencao"
+            fabricaCriticaLista.push({nome: fabrica.nomeFabrica,
+                                      id: fabrica.idFabrica,
+                                      qtd_to_do: alerta.qtd_to_do,
+                                      qtd_in_progress: alerta.qtd_in_progress,
+                                      quantidade,
+                                      estado,
+                                      nivelCriticidade
+                                      })
+          } else {
+            nivelCriticidade = 0;
+            estado = "ok"
+            fabricaCriticaLista.push({nome: fabrica.nomeFabrica,
+                                      id: fabrica.idFabrica,
+                                      qtd_to_do: alerta.qtd_to_do,
+                                      qtd_in_progress: alerta.qtd_in_progress,
+                                      quantidade,
+                                      estado,
+                                      nivelCriticidade
+                                      })
           }
-          fabricasG.push(fabrica.nomeFabrica);
-          idFabrica.push(fabrica.idFabrica)
-          alertasEmAberto[i] = alerta.qtd_to_do;
-          alertasEmAndamento[i] = alerta.qtd_in_progress;
         }
       }
     }
 
-    var qtdFabricasCriticas = document.querySelector("#qtdFabricasCriticas");
-    qtdFabricasCriticas.innerHTML = `${fabricasG.length}`
-    const larguraGrafico = Math.max(fabricasG.length * 300, 400);
+    fabricaCriticaLista.sort((a, b) => b.nivelCriticidade - a.nivelCriticidade);
+    if (fabricaCriticaLista.length > 0) {
+      var qtdFabricasCriticas = document.querySelector("#qtdFabricasCriticas");
+      qtdFabricasCriticas.innerHTML = `${fabricaCriticaLista.length} Fábricas`
+    } else {
+      qtdFabricasCriticas.innerHTML = `Nenhuma Fábrica em estado crítico`
+    }
+    const larguraGrafico = Math.max(fabricaCriticaLista.length * 300, 400);
+    var nomeFabricaCritica = fabricaCriticaLista[0].nome;
+    var idFabricaCritica = fabricaCriticaLista[0].id;
+    var coresBorda = fabricaCriticaLista.map(fabrica => {
+      if (fabrica.estado === 'critico') return '#FF0000';
+      if (fabrica.estado === 'atencao') return '#FFD700';
+      return '#00000000';
+    });
+    kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica)
+
+    // KPI FABRICA MAIS CRITICA ####################################################
+    var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
+    var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas");
+    var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica");
+    if (fabricaCriticaLista.length > 0) {
+      if (fabricaCriticaLista[0].estado == 'critico') {
+        fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome;
+        quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+        statusKpiCriticaKpi.innerHTML = `Status: Crítico`
+        fabricaCriticaKpi.classList.add("cor-critica")
+        statusKpiCriticaKpi.classList.add("cor-critica")
+      } else if (fabricaCriticaLista[0].estado == 'atencao') {
+        fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome;
+        quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+        statusKpiCriticaKpi.innerHTML = `Status: Atenção`
+        fabricaCriticaKpi.classList.add("cor-atencao")
+        statusKpiCriticaKpi.classList.add("cor-atencao")
+      } else {
+        fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome;
+        quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+        statusKpiCriticaKpi.innerHTML = `Status: Ok`
+        fabricaCriticaKpi.classList.add("cor-ok")
+        statusKpiCriticaKpi.classList.add("cor-ok")
+      }
+    } else {
+      fabricaCriticaKpi.innerHTML = `Nenhuma fabrica crítica`;
+      quantidadeAlertasKpi.innerHTML = `Nenhum alerta encontrado`
+      statusKpiCriticaKpi.innerHTML = ``
+    }
+    // #############################################################################
+    
 
     var optionsBar = {
       chart: {
@@ -58,7 +127,7 @@ function plotarGraficoAlerta(dadosAlerta) {
             const fabricaNome = optionsBar.xaxis.categories[config.dataPointIndex];
             const valorAberto = optionsBar.series[0].data[config.dataPointIndex];
             const valorAndamento = optionsBar.series[1].data[config.dataPointIndex];
-            informacaoFabrica(fabricaNome, serieNome, valorAberto, valorAndamento, );
+            informacaoFabrica(fabricaNome, serieNome, valorAberto, valorAndamento);
           }
         }
       },
@@ -66,34 +135,41 @@ function plotarGraficoAlerta(dadosAlerta) {
         bar: {
           columnWidth: "30%",
           horizontal: false,
+          distributed: true
         },
+      },
+      stroke: {
+        width: 3,
+        colors: coresBorda
       },
       series: [
         {
           name: "Alertas em Aberto",
-          data: alertasEmAberto,
+          data: fabricaCriticaLista.map(f => f.qtd_to_do),
           color: "#22B4D1",
         },
         {
           name: "Alertas em Andamento",
-          data: alertasEmAndamento,
+          data: fabricaCriticaLista.map(f => f.qtd_in_progress),
           color: "#04708D",
         },
       ],
       xaxis: {
-        categories: fabricasG,
+        categories: fabricaCriticaLista.map(f => f.nome),
       },
       fill: {
         opacity: 1,
       },
     };
 
-    var chartBar = new ApexCharts(
+    if (window.chartBar) {
+      window.chartBar.destroy();
+    }
+    window.chartBar = new ApexCharts(
       document.querySelector("#graficoAlertaFabricas"),
       optionsBar
     );
-
-    chartBar.render();
+    window.chartBar.render();
   })
   .catch(function (erro) {
     console.error(`#ERRO: ${erro}`);
@@ -120,7 +196,7 @@ fechar.addEventListener("click", () => {
   bg.classList.remove("ativoBg")
 });
 
-const fabricasPorPagina = 12;
+const fabricasPorPagina = 10;
 var paginaAtual = 1;
 var fabricas = [];
 var contadorSelecionado = 0;
@@ -152,13 +228,17 @@ function mostrarFabricas() {
             if (dadosFabrica[j].idFabrica == dadosAlerta[i].fkFabrica) {
               var totalAlertasAgora = dadosAlerta[i].qtd_to_do + dadosAlerta[i].qtd_in_progress;
               var isCritica = false;
-              if (dadosFabrica[j].limiteAtencao <= totalAlertasAgora) {
+              var isAtencao = false
+              if (dadosFabrica[j].limiteCritico <= totalAlertasAgora) {
                 isCritica = true;
+              } else if (dadosFabrica[j].limiteAtencao <= totalAlertasAgora) {
+                isAtencao = true;
               }
               fabricas.push({
                 id: dadosFabrica[j].idFabrica,
                 nome: dadosFabrica[j].nomeFabrica,
-                critica: isCritica
+                critica: isCritica,
+                atencao: isAtencao
               })
             }
           }
@@ -188,7 +268,9 @@ function renderizarGrade() {
         divFabrica.dataset.nome = fabrica.nome;
 
         if (fabrica.critica) {
-            divFabrica.classList.add("fabrica-critica");
+          divFabrica.classList.add("fabrica-critica");
+        } else if (fabrica.atencao) {
+          divFabrica.classList.add("fabrica-atencao");
         }
         
         const divNome = document.createElement("div");
@@ -204,6 +286,7 @@ function renderizarGrade() {
         divFabrica.addEventListener("click", function () {
             if (divFabrica.classList.contains("div-selecionada")) {
                 divFabrica.classList.remove("div-selecionada");
+                
                 contadorSelecionado--;
             } else if (contadorSelecionado < 5) {
                 var idFabrica = divFabrica.getAttribute("data-id")
@@ -215,7 +298,6 @@ function renderizarGrade() {
                 Swal.fire('Erro!', 'Por favor, selecione somente 5 fábricas.', 'error');
             }
         });
-
         grade.appendChild(divFabrica);
     }
     criarBotoesPaginacao();

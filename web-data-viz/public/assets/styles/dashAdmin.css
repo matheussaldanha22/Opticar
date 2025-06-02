@@ -13,6 +13,7 @@
 }
 
 body {
+  background-color: #f5f1f1;
   height: 100vh;
   overflow-x: hidden;
 }
@@ -25,6 +26,7 @@ body {
   } */
 
 .mainContainer {
+  background-color: #f5f1f1;
   display: flex;
   flex-direction: column;
   width: 94vw;
@@ -238,12 +240,10 @@ body {
   width: inherit;
   justify-content: space-between;
   background-color: #fff;
-
   height: 10%;
   border-radius: 15px;
   align-items: center;
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.75);
-
   margin-top: 2%;
 }
 
@@ -294,7 +294,6 @@ body {
   padding: 10px;
   border-radius: 10px;
   height: fit-content;
-  box-shadow: 5px 2px 10px rgb(161, 160, 160);
 }
 
 .containerKPI {
@@ -447,6 +446,10 @@ body {
   text-decoration: none;
 }
 
+.areaPredicao {
+  color: #04708d;
+}
+
 #fabricas:hover {
   color: #04708d;
   cursor: pointer;
@@ -522,8 +525,24 @@ h1 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.cor-critica {
+  color: red;
+}
+
+.cor-atencao {
+  color: yellow;
+}
+
+.cor-ok {
+  color: green;
+}
+
 .fabrica-critica {
   border-top: 4px solid red;
+}
+
+.fabrica-atencao {
+  border-top: 4px solid yellow;
 }
 
 .nome-fabrica {

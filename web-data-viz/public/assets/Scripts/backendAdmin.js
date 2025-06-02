@@ -9,10 +9,7 @@ function dadosGraficoAlerta() {
         return resposta.json();
     })
     .then(function (dadosAlerta) {
-        var fabricaComMaisAlerta = dadosAlerta[0];
         plotarGraficoAlerta(dadosAlerta)
-        // kpiTempoMaiorResolucao(fabricaComMaisAlerta)
-        infoFabricaPadrão(fabricaComMaisAlerta)
     })
     .catch(function (erro) {
         console.error(`#ERRO: ${erro}`);
@@ -36,8 +33,6 @@ function infoFabricaPadrão(fabricaComMaisAlerta) {
         }
         return resposta.json();
     }).then(function (informacoes) {
-        kpiTempoMaiorResolucao(fabricaComMaisAlerta, informacoes)
-        kpiFabricaCritica(fabricaComMaisAlerta, informacoes)
         var nome = document.querySelector("#pNome");
         var gestor = document.querySelector("#pGestor");
         var telefone = document.querySelector("#pTelefone");
@@ -113,15 +108,12 @@ function informacaoFabrica(fabricaNome, serieNome, valorAndamento, valorAberto) 
     });
 }
 
-function kpiTempoMaiorResolucao(fabricaComMaisAlerta, informacoes) {
-    fetch(`/jira/kpiTempoMaiorResolucao`, {
-        method: "POST",
+function kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica) {
+    fetch(`/listarAlertasPorId/:${idFabricaCritica}`, {
+        method: "GET",
         headers: {
             "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-            idFabricaServer: fabricaComMaisAlerta.fkFabrica
-        }),
     })
     .then(function (resposta) {
         if (!resposta.ok) {
@@ -135,32 +127,28 @@ function kpiTempoMaiorResolucao(fabricaComMaisAlerta, informacoes) {
         mediaAlerta = document.querySelector("#mediaAlerta");
         nomeFabricaTempo = document.querySelector("#nomeFabricaTempo");
         statusFabricaTempo = document.querySelector("#statusFabricaTempo");
-        
-        if (dadosTempoResolucao.tempoMedioResolucao >= 60) {
-            tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 60;
-            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(0)}:00(h)`;
-        } else if (dadosTempoResolucao.tempoMedioResolucao >= 1440) { 
-            tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 1440;
-            nomeFabricaTempo.innerHTML = `${tempoMedio.toFixed(0)}(d)`;
-        } else {
-            tempoMedio = dadosTempoResolucao.tempoMedioResolucao;
-            nomeFabricaTempo.innerHTML = `00:${tempoMedio.toFixed(0)}(m)`;
-        }
 
-        mediaAlerta.innerHTML = informacoes[0].nomeFabrica;
+        if (dadosTempoResolucao) {
+            if (dadosTempoResolucao.tempoMedioResolucao >= 60) {
+                tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 60;
+                mediaAlerta.innerHTML = `${tempoMedio.toFixed(0)}:00(h)`
+                nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
+            } else if (dadosTempoResolucao.tempoMedioResolucao >= 1440) { 
+                tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 1440;
+                mediaAlerta.innerHTML = `${tempoMedio.toFixed(0)}:00(d)`
+                nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
+            } else {
+                tempoMedio = dadosTempoResolucao.tempoMedioResolucao;
+                mediaAlerta.innerHTML = `${tempoMedio.toFixed(0)}:00(m)`
+                nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;;
+            }
+        } else {
+            mediaAlerta.innerHTML = `Não possui dados o suficiente`
+        }
     })
     .catch(function (erro) {
         console.error(`#ERRO: ${erro}`);
     });
-}
-
-function kpiFabricaCritica(fabricaComMaisAlerta, informacoes) {
-    var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
-    var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas");
-    var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica");
-
-    fabricaCriticaKpi.innerHTML = informacoes[0].nomeFabrica;
-    quantidadeAlertasKpi.innerHTML = `Quantidade de alertas em aberto: ${fabricaComMaisAlerta.qtd_to_do + fabricaComMaisAlerta.qtd_in_progress}`
 }
 
 var fabricasSelecionadas = [];
@@ -357,6 +345,9 @@ function predicao() {
 
 window.onload = function () {
   dadosGraficoAlerta();
+  setInterval(() => {
+      dadosGraficoAlerta();
+  }, 7000);
   mostrarFabricas();
   criarBotoesPaginacao();
   inicializarGrafico();
