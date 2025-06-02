@@ -106,7 +106,7 @@ function obterAlertasMes(idMaquina, componente) {
       if (porcentagemCritico < 40) {
         document.getElementById("probFalha").style.color = "limegreen"
       } else if (porcentagemCritico < 70) {
-        document.getElementById("probFalha").style.color = "yellow"
+        document.getElementById("probFalha").style.color = "#FFD700"
       } else {
         document.getElementById("probFalha").style.color = "red"
       }
@@ -177,7 +177,7 @@ function obterTempoMtbf(idMaquina, componente) {
         document.getElementById("classificacaoMtbf").style.color = 'red'
       } else if (mtbf < 240) {
         document.getElementById("classificacaoMtbf").innerHTML = `Atenção`
-        document.getElementById("classificacaoMtbf").style.color = 'yellow'
+        document.getElementById("classificacaoMtbf").style.color = '#FFD700'
       } else {
         document.getElementById("classificacaoMtbf").innerHTML = `Ótimo`
         document.getElementById("classificacaoMtbf").style.color = 'limegreen'
@@ -756,6 +756,20 @@ function atualizarDados() {
         } else {
           console.log("calculo do IC falhou.");
         }
+
+        const faixa = document.getElementById('faixaConfiabilidade');
+
+        if(indiceConfiabilidade < 40){
+          faixa.innerHTML = "Crítico"
+          faixa.style.color = 'red'
+        }else if(indiceConfiabilidade < 70){
+          faixa.innerHTML = "Atenção"
+          faixa.style.color = '#FFD700'
+        }else{
+          faixa.innerHTML = 'Estável'
+          faixa.style.color = 'limegreen'
+        }
+
       })
       .catch(erro => {
         console.error("erro calcularConfiabilidade:", erro);

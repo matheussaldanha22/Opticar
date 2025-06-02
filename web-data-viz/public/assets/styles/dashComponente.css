@@ -259,7 +259,7 @@
     font-weight: bold;
 }
 
-#dataInfo{
+#dataInfo {
     display: flex;
     font-size: 20px;
     font-weight: 500;
@@ -323,13 +323,13 @@ div .servidor {
     margin: 20px 0;
 }
 
-.tituloPred{
+.tituloPred {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.escolha{
+.escolha {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -354,16 +354,16 @@ div .servidor {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: #012027;
-    background: linear-gradient(270deg, #012027, #04708D);
+    background: white;
     border-radius: 12px;
     padding: 1vw;
     width: 17vw;
     height: 10vh;
-    color: #fffafa;
+    color: black;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
     font-weight: bold;
-    gap: 8px;
+    gap: 10px;
+    border-bottom: 5px solid #04708D;
 
 }
 
@@ -379,14 +379,20 @@ div .servidor {
 }
 
 .kpiIdv h3 {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bolder;
     display: flex;
     gap: 5px;
+    align-items: center;
 }
 
 .dadoKpi {
-    font-size: 35px;
+    font-size: 40px;
+    color: #04708D;
+}
+
+.infoKpi {
+    font-size: 20px;
 }
 
 .grafSuperior {
