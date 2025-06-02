@@ -205,7 +205,7 @@ def monitorar():
                 "DISCO" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[2]},
                 "RedeEnviada" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[3]},
                 "RedeRecebida" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[4]}
-            }
+                }
             enviarDadosTempoReal(listaTempoReal)
 
             listaPedidoCliente = {}

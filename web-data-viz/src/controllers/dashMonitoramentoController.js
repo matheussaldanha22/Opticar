@@ -14,11 +14,11 @@ function obterSemana(req, res) {
   })
 }
 
-let listaDados
+let listaDados = []
 // Dados enviados pelo código python
 function dadosTempoReal(req, res) {
   const dados = req.body
-  listaDados = dados
+  listaDados.push(dados)
 
   //   console.log(`Dados recebidos do Python: ${JSON.stringify(dados)}`)
   try {
@@ -30,26 +30,19 @@ function dadosTempoReal(req, res) {
 }
 // Dados recebidos obrigatoriamente
 function dadosRecebidos(req, res) {
-  //   if (listaDados.length > 1) {
-  //     listaDados.splice(0, listaDados.length - 1)
-  //   }
-
-  //   if (listaDados[0].length > 15) {
-  //     listaDados[0] = listaDados[0].slice(-15)
-  //   }
-
   console.log(`Dados em tempo real python: ${JSON.stringify(listaDados)}`)
 
   res.status(200).send(listaDados)
+  listaDados = []
 
   // console.log(`Dados recebidos do python Obrigatório: ${listaDados}`)
 }
 
-let listaDadosPedido
+let listaDadosPedido = []
 // Dados enviados pelo código python
 function dadosPedidoCliente(req, res) {
   const dados = req.body
-  listaDadosPedido = dados
+  listaDadosPedido.push(dados)
 
   // console.log(`Dados recebidos do Python: ${JSON.stringify(dados)}`)
   try {
@@ -64,7 +57,7 @@ function dadosPedidoRecebidos(req, res) {
   console.log(`Dados em tempo real python: ${JSON.stringify(listaDadosPedido)}`)
 
   res.status(200).send(listaDadosPedido)
-  console.log(`Dados recebidos do python pedido: ${listaDadosPedido}`)
+  listaDadosPedido = []
 }
 
 function qtdServidoresPorFabrica(req, res) {

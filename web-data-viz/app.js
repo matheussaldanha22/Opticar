@@ -1,5 +1,5 @@
-// var ambiente_processo = "producao"
-var ambiente_processo = "desenvolvimento"
+var ambiente_processo = "producao"
+// var ambiente_processo = "desenvolvimento"
 
 var caminho_env = ambiente_processo === "producao" ? ".env" : ".env.dev"
 // Acima, temos o uso do operador ternário para definir o caminho do arquivo .env
@@ -28,10 +28,8 @@ var adminRouter = require("./src/routes/admin")
 var jiraRouter = require("./src/routes/jira")
 var dashComponentesRouter = require("./src/routes/dashComponentes")
 var dashPeriodoRouter = require("./src/routes/dashPeriodo")
-var gestorInfraRouter = require("./src/routes/gestorInfra");
+var gestorInfraRouter = require("./src/routes/gestorInfra")
 var dashMonitoramentoRouter = require("./src/routes/dashMonitoramento")
-
-
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -52,7 +50,7 @@ app.use("/admin", adminRouter)
 app.use("/jira", jiraRouter)
 app.use("/dashComponentes", dashComponentesRouter)
 app.use("/dashPeriodo", dashPeriodoRouter)
-app.use("/gestorInfra", gestorInfraRouter);
+app.use("/gestorInfra", gestorInfraRouter)
 app.use("/dashMonitoramento", dashMonitoramentoRouter)
 
 app.listen(PORTA_APP, function () {
