@@ -146,7 +146,6 @@ function obterMediaUso(idMaquina, componente) {
         document.getElementById('comparacaoUso').style.color = 'red'
       }
 
-      console.log('EXECUTEI', resultado)
     })
     .catch(erro => {
       console.error("Erro ao buscar USO:", erro);
@@ -198,6 +197,68 @@ function obterTempoMtbf(idMaquina, componente) {
     .catch(erro => {
       console.error("Erro ao buscar MTBF:", erro);
     });
+}
+
+//KPI CONFIABILIDADE
+async function calcularConfiabilidade(idMaquina, componente) {
+  try {
+    // espera as KPIs popularem o HTML
+    await Promise.all([
+      obterAlertasMes(idMaquina, componente),
+      obterMediaUso(idMaquina, componente),
+      obterTempoMtbf(idMaquina, componente)
+    ]);
+
+    // --- P1: Percentual de Alertas Críticos
+    const porcCritico = parseInt(document.getElementById("probFalha").innerHTML) || 0;
+    const p1 = 100 - porcCritico;
+
+    // --- P2: Variação do uso médio
+    const variacao = parseInt(document.getElementById("comparacaoUso").innerHTML) || 0;
+    let p2;
+
+    //validar se uso aumentou em relação ao mês passado ai sim calcula
+    if (variacao > 0) {
+      p2 = 100 - variacao;
+    } else {
+      p2 = 100; // ficou igual ou superior = bom 
+    }
+
+    // --- P3: MTBF atribuindo faixas
+    const mtbfTexto = document.getElementById("mtbf").innerHTML;
+    const [valor, medidaTempo] = mtbfTexto.split(" ");
+    let minutosMtbf = 0;
+
+    //validando se ta exibindo em hora ou min
+    if (medidaTempo.toLowerCase() === "hrs") {
+      minutosMtbf = parseInt(valor) * 60;
+    } else {
+      minutosMtbf = parseInt(valor);
+    }
+
+
+
+    let p3 
+
+    if (minutosMtbf < 60) {
+      p3 = 33;
+    } else if (minutosMtbf < 240) {
+      p3 = 66;
+    } else{
+      p3 = 100;
+    }
+
+
+    const ic = ((p1 + p2 + p3) / 3).toFixed(0);
+
+    console.log(`IC calculado: ${ic} (P1=${p1.toFixed(0)} | P2=${p2.toFixed(0)} | P3=${p3})`);
+
+    return parseFloat(ic);
+
+  } catch (error) {
+    console.error("erro ao calcular o IC:", error);
+    return null;
+  }
 }
 
 
@@ -685,6 +746,20 @@ function atualizarDados() {
     obterTempoMtbf(idMaquina, componente);
     dadosGraficoUso(idMaquina, componente, anoEscolhidoUso, mesEscolhidoUso);
     dadosGraficoAlerta(idMaquina, componente, anoEscolhidoAlerta)
+
+
+    calcularConfiabilidade(idMaquina, componente)
+      .then(indiceConfiabilidade => {
+        if (indiceConfiabilidade !== null) {
+          console.log(`O IC do ${componente} é: ${indiceConfiabilidade}`);
+          document.getElementById('confiabilidade').innerHTML = `${indiceConfiabilidade}/100`
+        } else {
+          console.log("calculo do IC falhou.");
+        }
+      })
+      .catch(erro => {
+        console.error("erro calcularConfiabilidade:", erro);
+      });
   }
 }
 
