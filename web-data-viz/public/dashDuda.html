@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="assets/styles/dashDuda.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="./assets/Scripts/backendDuda.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -61,17 +62,16 @@
                     <h1>Análise do mês de Maio</h1>
                 </div>
                 <div class="servidor">
-                    <select id="slt_servidor">
+                    <select id="slt_servidor" onselect="atualizarDados()">
                         <option selected value="todos">Todos os Servidores</option>
 
                     </select>
 
-                    <select id="slt_mes">
-
+                    <select id="slt_mes" onselect="atualizarDados()">
                     </select>
 
                     <div class="iconeFiltro">
-                        <i class='bx bx-filter-alt' style="color: #ffffff;"></i>
+                        <input type="date" id="ipt_data" oninput="atualizarDadosDia()">
                     </div>
 
                     <button id="btnMostrarGrafico" class="botaoGrafico">

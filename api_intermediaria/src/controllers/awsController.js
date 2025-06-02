@@ -47,7 +47,33 @@ async function enviarParaS3(macAddress, dadosJson) {
     }
 }
 
+async function pegarS3(req,res){
+    var nomeArquivo = "pix"
+
+    const s3 = new AWS.S3();
+
+    const params = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: `${nomeArquivo}/dados.json`,
+     
+    }
+
+    try {
+        const data = await s3.getObject(params).promise();
+        var conteudo = data.Body.toString('utf-8');
+        var resposta = JSON.parse(conteudo)
+        res.status(200).json(resposta)
+    }catch (erro){
+        console.error("Erro ao pegar do S3", )
+        res.status(500).json(erro.message)
+    }
+        
+
+}
+
+
 
 module.exports = {
-    dadosBucket
+    dadosBucket,
+    pegarS3
 };

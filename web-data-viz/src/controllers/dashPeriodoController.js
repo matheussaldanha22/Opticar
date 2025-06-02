@@ -120,7 +120,7 @@ function componenteServer(req,res) {
 }
 
 function semanaServer(req,res) {
-     var ano = req.params.ano;
+    var ano = req.params.ano;
     var mes = req.params.mes;
     var idFabrica = req.params.idFabrica;
     var idServidor = req.params.idServidor;
@@ -129,6 +129,53 @@ function semanaServer(req,res) {
         res.status(200).send(resultado)
     })
 }
+
+function diaComp(req,res) {
+    var ano = req.params.ano;
+    var mes = req.params.mes;
+    var dia = req.params.dia
+    var idFabrica = req.params.idFabrica;
+ 
+    dashPeriodoModel.diaComp(idFabrica, ano, mes,dia).then((resultado)=>{
+        res.status(200).send(resultado)
+    })
+}
+
+
+function periodoDia(req,res) {
+    var ano = req.params.ano;
+    var mes = req.params.mes;
+    var dia = req.params.dia
+    var idFabrica = req.params.idFabrica;
+ 
+    dashPeriodoModel.periodoDia(idFabrica, ano, mes,dia).then((resultado)=>{
+        res.status(200).send(resultado)
+    })
+}
+
+function diaGrafico(req,res) {
+    var ano = req.params.ano;
+    var mes = req.params.mes;
+    var dia = req.params.dia
+    var idFabrica = req.params.idFabrica;
+ 
+    dashPeriodoModel.diaGrafico(idFabrica, ano, mes,dia).then((resultado)=>{
+        res.status(200).send(resultado)
+    })
+}
+
+function diaProcesso(req,res) {
+    var ano = req.params.ano;
+    var mes = req.params.mes;
+    var dia = req.params.dia
+    var idFabrica = req.params.idFabrica;
+ 
+    dashPeriodoModel.diaProcesso(idFabrica, ano, mes,dia).then((resultado)=>{
+        res.status(200).send(resultado)
+    })
+}
+
+
 module.exports ={
     obterSemana,
     obterComponente,
@@ -141,7 +188,11 @@ module.exports ={
     periodoServer,
     componenteServer,
     semanaServer,
-    alertasPeriodo
+    alertasPeriodo,
+    diaComp,
+    periodoDia,
+    diaGrafico,
+    diaProcesso
     
 }
 
