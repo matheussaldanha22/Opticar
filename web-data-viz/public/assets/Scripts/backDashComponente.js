@@ -101,7 +101,14 @@ function obterAlertasMes(idMaquina, componente) {
       let alertasCriticos = Number(alertaMes.alertasCriticos)
       let porcentagemCritico = parseFloat((alertasCriticos / totalAlertas) * 100).toFixed(2)
 
-      document.getElementById("probFalha").innerHTML = `${porcentagemCritico}%`
+      //se nao conseguir calcular = 0%
+      if (isNaN(porcentagemCritico)) {
+        document.getElementById("probFalha").innerHTML = `0%`
+
+      }else{
+        document.getElementById("probFalha").innerHTML = `${porcentagemCritico}%`
+      }
+
 
       if (porcentagemCritico < 40) {
         document.getElementById("probFalha").style.color = "limegreen"
@@ -110,6 +117,7 @@ function obterAlertasMes(idMaquina, componente) {
       } else {
         document.getElementById("probFalha").style.color = "red"
       }
+
 
       document.getElementById("qtdAlertasTotal").innerHTML = totalAlertas
 
@@ -238,13 +246,13 @@ async function calcularConfiabilidade(idMaquina, componente) {
 
 
 
-    let p3 
+    let p3
 
     if (minutosMtbf < 60) {
       p3 = 33;
     } else if (minutosMtbf < 240) {
       p3 = 66;
-    } else{
+    } else {
       p3 = 100;
     }
 
@@ -272,17 +280,17 @@ async function calcularConfiabilidade(idMaquina, componente) {
 
 let anoVar //variaveis global para levar pro atualiza dados
 let mesVar
-let filtroGraf = "anual"
+let filtroGraf = "mensal"
 
 // ------------- VARIAVEIS FILTRO ALERTA
 let anoVarAlerta
-let filtroGrafAlerta = "geral"
+let filtroGrafAlerta = "anual"
 
 //caso nao escolha vai mostrar o ano atual ---- Texto filtro
-document.getElementById("tipoFiltro-uso").innerHTML = "Anual"
+document.getElementById("tipoFiltro-uso").innerHTML = "Mensal"
 document.getElementById("periodo-uso").innerHTML = ` ${data.getFullYear()}`
 
-document.getElementById("tipoFiltro-alertas").innerHTML = "Geral"
+document.getElementById("tipoFiltro-alertas").innerHTML = "Anual"
 document.getElementById("periodo-alertas").innerHTML = ` Todos os anos`
 
 
@@ -298,8 +306,8 @@ function filtrarUso() {
           <h3>Mudar visualização</h3>
           <p class="labelSlt"><b>Visualização em:
             <select id="sltFiltrar">
-            <option value="anual">Anual (Média aos meses)</option>
-            <option value="mensal">Mensal (Média da semana)</option>
+            <option value="mensal">Mensal (Dentro de um ano)</option>
+            <option value="semanal">Semanal (Dentro de um mês)</option>
             </select></b>
           </p>
           
@@ -407,12 +415,12 @@ function filtrarUso() {
       const sltMes = document.getElementById("sltMes");
 
       if (sltFiltrar && sltAno && sltMes) {
-        if (sltFiltrar.value === "mensal") {
-          tipoFiltro.innerHTML = "Mensal";
+        if (sltFiltrar.value === "semanal") {
+          tipoFiltro.innerHTML = "Semanal";
           periodo.innerHTML = `${nomeMeses[sltMes.value - 1]} de ${sltAno.value}`
           filtroGraf = sltFiltrar.value
         } else {
-          tipoFiltro.innerHTML = "Anual";
+          tipoFiltro.innerHTML = "Mensal";
           periodo.innerHTML = sltAno.value
           filtroGraf = sltFiltrar.value
         }
@@ -430,7 +438,7 @@ function filtrarUso() {
     const containerMes = document.getElementById("containerMes");
 
     sltFiltrar.addEventListener("change", function () {
-      if (this.value === "mensal") {
+      if (this.value === "semanal") {
         containerMes.style.display = "block";
       } else {
         containerMes.style.display = "none";
@@ -453,8 +461,8 @@ function filtrarAlerta() {
           <h3>Mudar visualização</h3>
           <p class="labelSlt"><b>Visualização em:
             <select id="sltFiltrar">
-            <option value="geral">Geral (Média aos anos)</option>
-            <option value="anual">Anual (Média aos meses)</option>
+            <option value="anual">Anual (Todos os anos)</option>
+            <option value="mensal">Mensal (Dentro de um ano)</option>
             </select></b>
           </p>
 
@@ -507,12 +515,12 @@ function filtrarAlerta() {
       const sltAno = document.getElementById("sltAno");
 
       if (sltFiltrar && sltAno) {
-        if (sltFiltrar.value === "geral") {
-          tipoFiltro.innerHTML = "Geral";
+        if (sltFiltrar.value === "anual") {
+          tipoFiltro.innerHTML = "Anual";
           periodo.innerHTML = `Todos os anos`
           filtroGrafAlerta = sltFiltrar.value
         } else {
-          tipoFiltro.innerHTML = "Anual";
+          tipoFiltro.innerHTML = "Mensal";
           periodo.innerHTML = sltAno.value
           filtroGrafAlerta = sltFiltrar.value
         }
@@ -529,7 +537,7 @@ function filtrarAlerta() {
     const containerAno = document.getElementById("containerAno");
 
     sltFiltrar.addEventListener("change", function () {
-      if (this.value === "anual") {
+      if (this.value === "mensal") {
         containerAno.style.display = "block";
       } else {
         containerAno.style.display = "none";
@@ -562,7 +570,7 @@ function dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido) {
       let categorias = [];
       let dados = [];
 
-      if (filtroGraf === "mensal") {
+      if (filtroGraf === "semanal") {
         fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -577,7 +585,7 @@ function dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido) {
             renderGraficoUso(categorias, dados, parametro); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
           });
       } else {
-        fetch(`/dashComponentes/dadosGraficoUsoAnual/${idMaquina}/${componente}`, {
+        fetch(`/dashComponentes/dadosGraficoUsoMensal/${idMaquina}/${componente}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ anoEscolhido })
@@ -625,8 +633,8 @@ function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
   let dadosCritico = [];
   let dadosMedio = [];
 
-  if (filtroGrafAlerta === "geral") {
-    fetch(`/dashComponentes/dadosGraficoAlertaGeral/${idMaquina}/${componente}`, {
+  if (filtroGrafAlerta === "anual") {
+    fetch(`/dashComponentes/dadosGraficoAlertaAnual/${idMaquina}/${componente}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" }
     })
@@ -641,7 +649,7 @@ function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
         renderGraficoAlerta(categorias, dadosCritico, dadosMedio);
       });
   } else {
-    fetch(`/dashComponentes/dadosGraficoAlertaAnual/${idMaquina}/${componente}`, {
+    fetch(`/dashComponentes/dadosGraficoAlertaMensal/${idMaquina}/${componente}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ anoEscolhido })
@@ -678,7 +686,9 @@ function renderGraficoAlerta(categorias, dadosCritico, dadosMedio) {
   window.chartSeveridade.render();
 }
 
+function predicaoAlerta(idMaquina,componente){
 
+}
 
 
 //GRAF VALORES
@@ -759,13 +769,13 @@ function atualizarDados() {
 
         const faixa = document.getElementById('faixaConfiabilidade');
 
-        if(indiceConfiabilidade < 40){
+        if (indiceConfiabilidade < 40) {
           faixa.innerHTML = "Crítico"
           faixa.style.color = 'red'
-        }else if(indiceConfiabilidade < 70){
+        } else if (indiceConfiabilidade < 70) {
           faixa.innerHTML = "Atenção"
           faixa.style.color = '#FFD700'
-        }else{
+        } else {
           faixa.innerHTML = 'Estável'
           faixa.style.color = 'limegreen'
         }
@@ -779,6 +789,12 @@ function atualizarDados() {
 
 sltServidor.addEventListener("change", atualizarDados);
 sltComponente.addEventListener("change", atualizarDados);
+
+
+
+
+
+
 
 //PREDICAO
 let currentChart;

@@ -323,6 +323,7 @@ div .servidor {
     margin: 20px 0;
 }
 
+
 .tituloPred {
     display: flex;
     justify-content: space-between;
@@ -549,7 +550,7 @@ div .servidor {
     color: #FFFF;
     border: none;
     border-radius: 12px;
-    width: 10vw;
+    width: 11vw;
     height: 4vh;
 }
 

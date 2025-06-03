@@ -151,7 +151,7 @@ function dadosGraficoUsoSemanal(req, res) {
   }
 }
 
-function dadosGraficoUsoAnual(req, res) {
+function dadosGraficoUsoMensal(req, res) {
   var idMaquina = req.params.idMaquina
   var componente = req.params.componente
   var anoEscolhido = req.body.anoEscolhido;
@@ -159,7 +159,7 @@ function dadosGraficoUsoAnual(req, res) {
   if (anoEscolhido == undefined || componente == undefined || anoEscolhido == undefined) {
     res.status(400).send("undefined params");
   } else {
-    dashComponenteModel.dadosGraficoUsoAnual(idMaquina, componente, anoEscolhido)
+    dashComponenteModel.dadosGraficoUsoMensal(idMaquina, componente, anoEscolhido)
       .then(function (resultado) {
         if (resultado.length > 0) {
           res.status(200).json(resultado)
@@ -169,7 +169,31 @@ function dadosGraficoUsoAnual(req, res) {
       })
       .catch(function (erro) {
         console.log(erro)
-        console.log("Houve um erro ao buscar as informações anual.", erro.sqlMessage)
+        console.log("Houve um erro ao buscar as informações Mensal.", erro.sqlMessage)
+        res.status(500).json(erro.sqlMessage)
+      })
+  }
+}
+
+function dadosGraficoAlertaMensal(req, res) {
+  var idMaquina = req.params.idMaquina
+  var componente = req.params.componente
+  var anoEscolhido = req.body.anoEscolhido;
+
+  if (anoEscolhido == undefined || componente == undefined || anoEscolhido == undefined) {
+    res.status(400).send("undefined params");
+  } else {
+    dashComponenteModel.dadosGraficoAlertaMensal(idMaquina, componente, anoEscolhido)
+      .then(function (resultado) {
+        if (resultado.length > 0) {
+          res.status(200).json(resultado)
+        } else {
+          res.status(204).send("Sem resultados para grafico alertas Mensal")
+        }
+      })
+      .catch(function (erro) {
+        console.log(erro)
+        console.log("Houve um erro ao buscar as informações Mensal.", erro.sqlMessage)
         res.status(500).json(erro.sqlMessage)
       })
   }
@@ -178,33 +202,9 @@ function dadosGraficoUsoAnual(req, res) {
 function dadosGraficoAlertaAnual(req, res) {
   var idMaquina = req.params.idMaquina
   var componente = req.params.componente
-  var anoEscolhido = req.body.anoEscolhido;
-
-  if (anoEscolhido == undefined || componente == undefined || anoEscolhido == undefined) {
-    res.status(400).send("undefined params");
-  } else {
-    dashComponenteModel.dadosGraficoAlertaAnual(idMaquina, componente, anoEscolhido)
-      .then(function (resultado) {
-        if (resultado.length > 0) {
-          res.status(200).json(resultado)
-        } else {
-          res.status(204).send("Sem resultados para grafico alertas anual")
-        }
-      })
-      .catch(function (erro) {
-        console.log(erro)
-        console.log("Houve um erro ao buscar as informações anual.", erro.sqlMessage)
-        res.status(500).json(erro.sqlMessage)
-      })
-  }
-}
-
-function dadosGraficoAlertaGeral(req, res) {
-  var idMaquina = req.params.idMaquina
-  var componente = req.params.componente
 
   dashComponenteModel
-    .dadosGraficoAlertaGeral(idMaquina, componente)
+    .dadosGraficoAlertaAnual(idMaquina, componente)
     .then(function (resultado) {
       if (resultado.length > 0) {
         res.status(200).json(resultado)
@@ -214,7 +214,7 @@ function dadosGraficoAlertaGeral(req, res) {
     })
     .catch(function (erro) {
       console.log(erro)
-      console.log("Houve um erro ao buscar dados do graf geral alerta", erro.sqlMessage)
+      console.log("Houve um erro ao buscar dados do graf Anual alerta", erro.sqlMessage)
       res.status(500).json(erro.sqlMessage)
     })
 
@@ -232,7 +232,7 @@ module.exports = {
   obterMediaUso,
   obterTempoMtbf,
   dadosGraficoUsoSemanal,
-  dadosGraficoUsoAnual,
-  dadosGraficoAlertaAnual,
-  dadosGraficoAlertaGeral
+  dadosGraficoUsoMensal,
+  dadosGraficoAlertaMensal,
+  dadosGraficoAlertaAnual
 }

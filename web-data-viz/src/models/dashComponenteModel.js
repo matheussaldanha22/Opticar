@@ -136,7 +136,7 @@ function dadosGraficoUsoSemanal(idMaquina, componente, anoEscolhido, mesEscolhid
     return database.executarQUENTE(instrucaoSql)
 }
 
-function dadosGraficoUsoAnual(idMaquina, componente, anoEscolhido) {
+function dadosGraficoUsoMensal(idMaquina, componente, anoEscolhido) {
     var instrucaoSql = `
     select month(capturaDados.data) as mes,ROUND(AVG(capturaDados.valor),2) as media_utilizacao FROM capturaDados
     JOIN componenteServidor ON fkComponenteServidor = idComponenteServidor
@@ -154,7 +154,7 @@ function dadosGraficoUsoAnual(idMaquina, componente, anoEscolhido) {
     return database.executarQUENTE(instrucaoSql)
 }
 
-function dadosGraficoAlertaAnual(idMaquina, componente, anoEscolhido) {
+function dadosGraficoAlertaMensal(idMaquina, componente, anoEscolhido) {
     var instrucaoSql = `
     SELECT 
     MONTH(dataHora) AS mes,
@@ -177,7 +177,7 @@ GROUP BY
     return database.executarQUENTE(instrucaoSql)
 }
 
-function dadosGraficoAlertaGeral(idMaquina, componente) {
+function dadosGraficoAlertaAnual(idMaquina, componente) {
     var instrucaoSql = `
         SELECT 
     YEAR(dataHora) AS ano,
@@ -208,7 +208,7 @@ module.exports = {
     obterMediaUso,
     obterTempoMtbf,
     dadosGraficoUsoSemanal,
-    dadosGraficoUsoAnual,
-    dadosGraficoAlertaAnual,
-    dadosGraficoAlertaGeral
+    dadosGraficoUsoMensal,
+    dadosGraficoAlertaMensal,
+    dadosGraficoAlertaAnual
 }
