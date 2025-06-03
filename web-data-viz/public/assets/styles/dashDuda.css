@@ -305,21 +305,20 @@ body {
 }
 
 .kpiUso {
-  display: flex;
+ display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  background: #012027;
-  background: linear-gradient(270deg, #012027, #04708d);
+  background: white;
+  /* background: linear-gradient(270deg, #012027, #04708d); */
+  border-bottom: 5px solid #04708d;
   border-radius: 12px;
-  padding: 0.3vw;
-  width: 20vw;
-  /* height: fit-content; */
+  padding: 1vw;
+  width: 25vw;
+  height: 7vw;
   font-size: 18px;
-  color: #fffafa;
+  color: #04708d;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
   font-weight: bold;
-  /* gap: 5px; */
 }
 
 .tituloKpi {
@@ -421,7 +420,7 @@ body {
   }
 
   table i {
-    font-size: 150%;
+    font-size: 10%;
     }
   
   thead {
@@ -432,8 +431,8 @@ body {
   
   th,
   td {
-    padding: 5px 10px;
-    text-align: left;
+    padding: 5px 8px;
+    /* text-align: left; */
     border-bottom: 1px solid #ddd;
   }
   
@@ -460,7 +459,8 @@ body {
 
 .chartPeriodo{
   background-color: white;
-  width: 98%;
+  width: 100%;
+  height: 90%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -585,8 +585,25 @@ div .servidor select{
         width: 100%;
         margin: 1.5vw 0;
     }
-
+/* 
     .botaoGrafico {
+        background: linear-gradient(270deg, #012027, #04708d);
+        color: white;
+        border: none;
+        border-radius: 3vw;
+        padding: 0.2vw 1vw;
+        font-family: 'Montserrat';
+        font-weight: bold;
+        font-size: 1.1vw;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.5vw;
+        transition: 0.3s;
+        box-shadow: 0.3vw 0.3vw 0.7vw rgba(0, 0, 0, 0.2);
+    } */
+
+    input[type="date"]{
         background: linear-gradient(270deg, #012027, #04708d);
         color: white;
         border: none;
@@ -602,16 +619,13 @@ div .servidor select{
         transition: 0.3s;
         box-shadow: 0.3vw 0.3vw 0.7vw rgba(0, 0, 0, 0.2);
     }
-
-    .botaoGrafico:hover {
-        transform: scale(1.05);
-        background: linear-gradient(270deg, #04708d, #012027);
+    ::-webkit-calendar-picker-indicator{
+      background-color: white;
+      cursor: pointer;
+      border-radius: 3%;
     }
-
-    .botaoGrafico i {
-        font-size: 1.3vw;
-    }
-
+  
+/* 
     .containerGraficoCpuVendas {
         width: 98%;
         margin: 0 auto;
@@ -635,7 +649,7 @@ div .servidor select{
         justify-content: center;
         border-radius: 1vw;
         margin: 0.7vw auto;
-    }
+    } */
 
 @media screen and (max-width: 1400px) {
   .containerGraficos {

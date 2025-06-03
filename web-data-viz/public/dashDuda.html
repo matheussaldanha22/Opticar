@@ -59,7 +59,7 @@
         <div class="painelDash">
             <div class="tempoReal">
                 <div class="texto">
-                    <h1>Análise do mês de Maio</h1>
+                    <h1>Análise do mês de <span id="id_mes">Maio</span></h1>
                 </div>
                 <div class="servidor">
                     <select id="slt_servidor" onselect="atualizarDados()">
@@ -69,29 +69,29 @@
 
                     <select id="slt_mes" onselect="atualizarDados()">
                     </select>
-
+<!-- 
                     <div class="iconeFiltro">
-                        <input type="date" id="ipt_data" oninput="atualizarDadosDia()">
-                    </div>
-
-                    <button id="btnMostrarGrafico" class="botaoGrafico">
                         <i class='bx bx-line-chart'></i>
-                        <span>Correlação consumo x Vendas</span>
-                    </button>
+                        <input type="date" id="ipt_data" oninput="atualizarDadosDia()">
+                    </div> -->
+
+
+                         <input type="date" id="ipt_data" oninput="atualizarDadosDia()">
+                    
 
 
                 </div>
             </div>
 
             <div class="containerKPI">
-                <div class="kpiUso">
+                <div class="kpiUso" id="kpi_semana">
                     <div class="tituloKpi">
                         <h2>Semana do Mês com + alerta</h2>
                         <h3></h3>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" style="color: white; text-shadow: 2px 2px 4px red;"><span
-                                id="semanaAlerta">x</span> ° semana</p>
+                        <p class="dadoKpi" style="color: #04708d;"><span
+                                id="semanaAlerta">x</span></p>
                     </span>
                     <h3><b id="parametroCpu" style="color: red; font-size: 14px;"><span id="qtdAlerta">x</span>
                             Alertas</b></h3>
@@ -103,11 +103,11 @@
 
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoRam" style="color: white; text-shadow: 2px 2px 4px red;"> <span
+                        <p class="dadoKpi" id="usoRam" style="color: #04708d; "> <span
                                 id="componente"> CPU</span></p>
                     </span>
                     <h3>Périodo: <b style="color: red; font-size: 14px;"> <span id="periodo"> x</span></b> <b
-                            style="color: white; font-size: 14px;"> <span id="qtdAlertaComp">xx</span> alertas</b></h3>
+                            style="color: #04708d; font-size: 14px;"> <span id="qtdAlertaComp">xx</span> alertas</b></h3>
 
 
                 </div>
@@ -119,18 +119,18 @@
 
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" id="usoDisco" style="color: white; text-shadow: 2px 2px 4px red;"> <span
+                        <p class="dadoKpi" id="usoDisco" style="color: #04708d;"> <span
                                 id="periodoAlerta">xxxx</span> </p>
                     </span>
                     <h3><b id="parametroDisco" style="color: red; font-size: 14px;"> <span id="qtdPeriodoAlerta"> 30
                             </span> alertas</b></h3>
                 </div>
-                <div class="kpiUso">
+                <div class="kpiUso" id="kpi_dia">
                     <div class="tituloKpi">
                         <h2>Dia do Mês com +alerta</h2>
                     </div>
                     <span class="txtKpi">
-                        <p class="dadoKpi" style="color: white; text-shadow: 2px 2px 4px red;"> <span
+                        <p class="dadoKpi" style="color: #04708d "> <span
                                 id="DiaAlerta">xxxx</span> </p>
                     </span>
                     <h3><b style="color: red; font-size: 14px;"> <span id="qtdDiaAlerta"> 30 </span> alertas</b></h3>

@@ -71,5 +71,21 @@ router.get("/diaProcesso/:idFabrica/:ano/:mes/:dia", function (req,res) {
     dashPeriodoController.diaProcesso(req,res)
 })
 
+router.get("/diaServerComp/:idFabrica/:idServidor/:ano/:mes/:dia", function (req,res) {
+    dashPeriodoController.diaServerComp(req,res)
+})
+
+router.get("/diaServerPeriodo/:idFabrica/:idServidor/:ano/:mes/:dia", function (req,res) {
+    dashPeriodoController.diaServerPeriodo(req,res)
+})
+
+router.get("/diaServerGrafico/:idFabrica/:idServidor/:ano/:mes/:dia", function (req,res) {
+    dashPeriodoController.diaServerGrafico(req,res)
+})
+    
+router.get("/diaServerProcesso/:idFabrica/:idServidor/:ano/:mes/:dia", function (req,res) {
+    dashPeriodoController.diaServerProcesso(req,res)
+})
+    
 
 module.exports = router;

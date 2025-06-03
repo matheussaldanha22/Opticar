@@ -110,7 +110,7 @@ function obterSemana(ano, mes) {
         }
       }
       console.log("exibir")
-      document.getElementById('semanaAlerta').innerHTML = `${maisAlerta}`
+      document.getElementById('semanaAlerta').innerHTML = `${maisAlerta}° semana`
       document.getElementById('qtdAlerta').innerHTML = `${maior}`
     })
   })
@@ -219,6 +219,7 @@ function plotarGraficoPerido() {
   chart = new ApexCharts(document.getElementById("chart"), options);
   chart.render()
 }
+
 
 function dadosGrafico(ano, mes) {
   const idFabrica = sessionStorage.FABRICA_ID;
@@ -387,7 +388,7 @@ function selectServidor(ano, mes) {
     resultado.json().then((json) => {
        if (json.length == 0) {
         Swal.fire({
-        title: "Não Possui Alertas no dia de Hoje",
+        title: "Não Possui Alertas",
         icon: "warning",
         showClass: {
         popup: `
@@ -401,6 +402,7 @@ function selectServidor(ano, mes) {
         animate__fadeOutDown
         animate__faster
        `}});
+     
       }else{   var cpu = {
         "Manhã": 0,
         "Tarde": 0,
@@ -556,9 +558,14 @@ function diaServidor(ano, mes) {
     },
   }).then((resultado) => {
     resultado.json().then((json) => {
-
-      document.getElementById('DiaAlerta').innerHTML = json[0].dia
-      document.getElementById('qtdDiaAlerta').innerHTML = json[0].qtdalerta
+      if (json.length == 0 ) {
+          document.getElementById('DiaAlerta').innerHTML = "Sem Alertas"
+        document.getElementById('qtdDiaAlerta').innerHTML = ""
+      }else{
+          document.getElementById('DiaAlerta').innerHTML = json[0].dia
+          document.getElementById('qtdDiaAlerta').innerHTML = json[0].qtdalerta
+      }
+      
     })
   }
   )
@@ -577,8 +584,15 @@ function periodoServer(ano, mes) {
     },
   }).then((resultado) => {
     resultado.json().then((json) => {
-      document.getElementById('periodoAlerta').innerHTML = json[0].periodo
-      document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
+
+      if (json.length == 0 ) {
+        document.getElementById('periodoAlerta').innerHTML = "Sem alertas"
+        document.getElementById('qtdPeriodoAlerta').innerHTML = ""
+      }else{
+          document.getElementById('periodoAlerta').innerHTML = json[0].periodo
+          document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
+      }
+      
     })
   })
 }
@@ -594,9 +608,18 @@ function componenteServer(ano, mes) {
   }).then((resultado) => {
     resultado.json().then((json) => { //coloca .then pq é uma funcao precisa ()
       console.log(json)
-      document.getElementById('componente').innerHTML = json[0].componente
-      document.getElementById('periodo').innerHTML = json[0].periodo
-      document.getElementById('qtdAlertaComp').innerHTML = json[0].alerta
+
+        if (json.length != 0) {
+        document.getElementById('componente').innerHTML = json[0].componente
+        document.getElementById('periodo').innerHTML = json[0].periodo
+        document.getElementById('qtdAlertaComp').innerHTML = json[0].alerta
+      }else{
+        document.getElementById('componente').innerHTML = `Sem alertas`
+         document.getElementById('periodo').innerHTML = ""
+        document.getElementById('qtdAlertaComp').innerHTML = ""
+       
+      }
+     
     })
   })
 }
@@ -618,6 +641,11 @@ function semanaServer(ano, mes) {
       let maior = 0
       let maisAlerta = null;
 
+      if (semanaAlerta.length == 0) {
+        document.getElementById('semanaAlerta').innerHTML = "Sem alertas"
+      document.getElementById('qtdAlerta').innerHTML = ""
+    } else{
+
       for (let i = 0; i < semanaAlerta.length; i++) {
         semanaAlerta[i].posicaoNoMes = i + 1;
         if (semanaAlerta[i].quantidadeAlertas > maior) {
@@ -626,16 +654,15 @@ function semanaServer(ano, mes) {
         }
       }
       console.log("exibir")
-      document.getElementById('semanaAlerta').innerHTML = `${maisAlerta}`
+      document.getElementById('semanaAlerta').innerHTML = `${maisAlerta}° semana`
       document.getElementById('qtdAlerta').innerHTML = `${maior}`
+    }
+
     })
   })
 
 
 }
-
-
-
 
 function diaComp(dataAno, dataMes, dataDia) {
   const idFabrica = sessionStorage.FABRICA_ID;
@@ -678,7 +705,7 @@ function periodoDia(dataAno, dataMes, dataDia) {
         document.getElementById('periodoAlerta').innerHTML = json[0].periodo
         document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
       }else{
-        document.getElementById('periodoAlerta').innerHTML = `Sem alertas`
+        document.getElementById('periodoAlerta').innerHTML = "Sem alertas"
        document.getElementById('qtdPeriodoAlerta').innerHTML = ``
       }
       
@@ -696,8 +723,9 @@ function diaGrafico(dataAno, dataMes, dataDia) {
     },
   }).then((resultado) => {
     resultado.json().then((json) => {
-
+       
       if (json.length == 0) {
+        plotarGraficoPerido()
         Swal.fire({
         title: "Não Possui Alertas no dia de Hoje",
         icon: "warning",
@@ -854,6 +882,223 @@ function diaProcesso(dataAno, dataMes, dataDia) {
 
 }
 
+function diaServerComp(dataAno, dataMes, dataDia) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  var idServidor = Number(slt_servidor.value)
+
+  fetch(`/dashPeriodo/diaServerComp/${idFabrica}/${idServidor}/${dataAno}/${dataMes}/${dataDia}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    resultado.json().then((json) => { //coloca .then pq é uma funcao precisa ()
+      console.log(json)
+
+      if (json.length != null) {
+        document.getElementById('componente').innerHTML = json[0].componente
+        document.getElementById('periodo').innerHTML = json[0].periodo
+        document.getElementById('qtdAlertaComp').innerHTML = json[0].alerta
+      }else{
+        document.getElementById('componente').innerHTML = `Sem alertas`
+         document.getElementById('periodo').innerHTML = ""
+        document.getElementById('qtdAlertaComp').innerHTML = ""
+       
+      }
+      
+    })
+  }) 
+}
+
+function diaServerPeriodo(dataAno, dataMes, dataDia) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  var idServidor = Number(slt_servidor.value)
+
+  fetch(`/dashPeriodo/diaServerPeriodo/${idFabrica}/${idServidor}/${dataAno}/${dataMes}/${dataDia}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    resultado.json().then((json) => {
+      document.getElementById('periodoAlerta').innerHTML = json[0].periodo
+      document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
+    })
+  })
+}
+
+function diaServerGrafico(dataAno, dataMes, dataDia) {
+  var idServidor = Number(slt_servidor.value)
+  console.log(idServidor)
+
+  const idFabrica = sessionStorage.FABRICA_ID;
+  fetch(`/dashPeriodo/diaServerGrafico/${idFabrica}/${idServidor}/${dataAno}/${dataMes}/${dataDia}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    resultado.json().then((json) => {
+       if (json.length == null) {
+       plotarGraficoPerido()  
+        Swal.fire({
+        title: "Não Possui Alertas",
+        icon: "warning",
+        showClass: {
+        popup: `
+          animate__animated
+         animate__fadeInUp
+         animate__faster
+        `
+       },hideClass: {
+        popup: `
+        animate__animated
+        animate__fadeOutDown
+        animate__faster
+       `}});
+      }else{   
+        var cpu = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+
+      var ram = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+
+      var disco = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+
+      var rede = {
+        "Manhã": 0,
+        "Tarde": 0,
+        "Noite": 0,
+        "Madrugada": 0
+      }
+
+      for (let i = 0; i < json.length; i++) {
+        var alertaAtual = json[i]
+        console.log(alertaAtual.periodo)
+        var periodo = alertaAtual.periodo
+
+        if (alertaAtual.componente.toLowerCase() == "cpu") {
+          cpu[periodo] += alertaAtual.qtdalertas
+        }
+
+        if (alertaAtual.componente.toLowerCase() == "ram") {
+          ram[periodo] += alertaAtual.qtdalertas
+        }
+
+        if (alertaAtual.componente.toLowerCase() == "disco") {
+          disco[periodo] += alertaAtual.qtdalertas
+        }
+
+        if (alertaAtual.componente.toLowerCase() == "rede") {
+          rede[periodo] += alertaAtual.qtdalertas
+        }
+      }
+
+      var dataCpu = [];
+      var dataRede = [];
+      var dataRam = [];
+      var dataDisco = [];
+      var categoriesChart = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
+
+
+      for (let i = 0; i < categoriesChart.length; i++) {
+        var periodo = categoriesChart[i];
+
+        dataCpu.push(cpu[periodo]);
+        dataRam.push(ram[periodo]);
+        dataDisco.push(disco[periodo]);
+        dataRede.push(rede[periodo]);
+      }
+
+
+      var seriesChart = [];
+      var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
+
+      seriesChart.push({
+        name: "CPU",
+        data: dataCpu
+      }, {
+        name: "RAM",
+        data: dataRam
+      },
+        {
+          name: "DISCO",
+          data: dataDisco
+        },
+        {
+          name: "REDE",
+          data: dataRede
+        })
+
+      chart.updateOptions({
+        series: seriesChart,
+        xaxis: { categories: categoriesChart },
+        colors: coresChart,
+        markers: {
+          size: 5,
+          colors: coresChart,
+          strokeColors: "#FFFFFF",
+          strokeWidth: 2,
+        }
+      });
+    }
+    })
+  })
+}
+
+function diaServerProcesso(dataAno, dataMes, dataDia) {
+  const idFabrica = sessionStorage.FABRICA_ID;
+  var idServidor = Number(slt_servidor.value)
+
+  fetch(`/dashPeriodo/diaServerProcesso/${idFabrica}/${idServidor}/${dataAno}/${dataMes}/${dataDia}`, {
+    method: "GET",
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  }).then((resultado) => {
+    resultado.json().then((json) => {
+      processos = json
+      const tabela = document.querySelector(".componentesContainer table");
+      tabela.innerHTML = `<thead>
+                                <tr>
+                                    <td>Processo</td>
+                                    <td>Periodo</td>
+                                    <td>Prioridade</td>
+                                    <td>Quantidade</td>
+                                </tr>
+                           </thead>`
+        ;
+      processos.forEach(processo => {
+        const linha = document.createElement("tr");
+        linha.innerHTML = "";
+        linha.innerHTML += `
+                <tbody>
+                    <td data-label = "Processo">${processo.processo}</td>
+                    <td data-label = "Periodo">${processo.periodo}</td>
+                   <td data-label = "prioriodade">${processo.prioridade}</td>
+                   <td data-label = "quantidae">${processo.alerta}</td>
+                </tbody>
+            `;
+        tabela.appendChild(linha);
+      });
+    })
+  })
+
+}
+
 var sltServidor = document.getElementById("slt_servidor");
 var slt_Mes = document.getElementById("slt_mes")
 var inputData = document.getElementById("ipt_data");
@@ -862,6 +1107,7 @@ var inputData = document.getElementById("ipt_data");
 function atualizarDados() {
   var sltServidor = document.getElementById("slt_servidor");
   var valorSelect = document.getElementById('slt_mes').value
+  var idMes = document.getElementById("id_mes")
   var valoresMesAno = valorSelect.split("/")
 
   var ano = valoresMesAno[1]
@@ -870,8 +1116,14 @@ function atualizarDados() {
   console.log(ano)
   console.log(mes)
 
+  var kpiSemana = document.getElementById("kpi_semana")
+  var kpiDia = document.getElementById("kpi_dia")
+
+   kpiSemana.style.display = 'flex';
+   kpiDia.style.display = 'flex';
 
   if (sltServidor.value != "todos") {
+    idMes.innerHTML = mes
     selectServidor(ano, mes) //gerar grafico de servidor especifico
     tabelaServidor(ano, mes) //tabela de processo de um servidor
     diaServidor(ano, mes) //kpi do servidor especifico com dia com mais alerta
@@ -883,6 +1135,7 @@ function atualizarDados() {
   } else {
     //grafico de todos os servidores
     console.log("rosa")
+    idMes.innerHTML = mes
     obterDia(ano, mes) //kpi dia 
     obterSemana(ano, mes) //kpi semana
     obterComponente(ano, mes) //kpi componente
@@ -896,19 +1149,29 @@ function atualizarDadosDia() {
   const data = new Date(inputData.value);
   var dataAno = data.getFullYear()
   var dataMes = data.getMonth() + 1;
-  var dataDia = data.getDate()
+  var dataDia = data.getDate() + 1;
+  var idMes = document.getElementById("id_mes")
+  var kpiSemana = document.getElementById("kpi_semana")
+  var kpiDia = document.getElementById("kpi_dia")
+
+   kpiSemana.style.display = 'none';
+   kpiDia.style.display = 'none';
 
   if (inputData.value != 0) {
     console.log(dataAno)
     console.log(dataMes)
     console.log(dataDia)
+    idMes.innerHTML = dataMes
     diaComp(dataAno, dataMes, dataDia)
     periodoDia(dataAno, dataMes, dataDia)
     diaGrafico(dataAno, dataMes, dataDia)
     diaProcesso(dataAno, dataMes, dataDia)
       if (sltServidor.value != "todos") {
-        //servidor em especifico
-
+        idMes.innerHTML = mes
+        diaServerComp(dataAno, dataMes, dataDia)
+        diaServerPeriodo(dataAno, dataMes, dataDia)
+        diaServerGrafico(dataAno, dataMes, dataDia)
+        diaServerProcesso(dataAno, dataMes, dataDia)
         
       }
   }
