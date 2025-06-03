@@ -2,40 +2,7 @@
 create database opticarQuente;
 use opticarQuente;
 
-    SELECT 
-            a.idAlerta AS id,
-            a.titulo AS title,
-            a.prioridade AS prioridade,
-            CONCAT(
-                '**Valor do Alerta:** ', a.valor, '\n',
-                '**Data/Hora:** ', DATE_FORMAT(a.dataHora, '%d/%m/%Y %H:%i:%s'), '\n',
-                '**Descrição:** ', a.descricao, '\n',
-                '**Componente:** ', IFNULL(a.componente, 'N/A'), '\n',
-                '**Dados Técnicos:** [Captura #', a.fkCapturaDados, ']'
-            ) AS description,
-            CASE 
-                WHEN a.prioridade = 'Crítica' THEN 'Highest'
-                WHEN a.prioridade = 'Média' THEN 'Medium'
-                ELSE 'Low'
-            END AS priority,
-            IFNULL(a.tipo_incidente, 'Incident') AS issue_type,
-            a.componente AS component,
-            sm.fkFabrica AS idFabrica  -- Adicionando idFabrica
-        FROM 
-            alerta a  -- Tabela alerta no banco opticarFrio
-        JOIN 
-            capturaDados cd ON cd.idCapturaDados = a.fkCapturaDados  -- Junção com capturaDados
-        JOIN 
-            componenteServidor cs ON cs.idComponenteServidor = cd.fkComponenteServidor  -- Junção com componenteServidor
-        JOIN 
-            servidor_maquina sm ON sm.idMaquina = cs.fkMaquina  -- Junção com servidor_maquina (no banco opticar)
-        WHERE 
-            a.idAlerta > %(alert_id)s
-            AND (a.jira_issue_key IS NULL OR a.jira_issue_key = '')
-            AND a.statusAlerta = 'To Do'
-        ORDER BY 
-            a.idAlerta ASC;
-
+   
 
 CREATE TABLE servidor_maquina (
     idMaquina INT PRIMARY KEY auto_increment,
@@ -313,44 +280,53 @@ select * from alerta;
 -- 5 alertas para fkFabrica = 1
 INSERT INTO alerta (valor, titulo, descricao, prioridade, tipo_incidente, componente, statusAlerta, fkCapturaDados)
 VALUES 
-(77.5, 'Alerta 1', 'Temperatura elevada', 'Crítica', 'Superaquecimento', 'Sensor A', 'To Do', 1),
-(78.2, 'Alerta 2', 'Temperatura alta', 'Média', 'Monitoramento', 'Sensor A', 'In Progress', 1),
-(79.9, 'Alerta 3', 'Risco de superaquecimento', 'Crítica', 'Emergência', 'Sensor A', 'Done', 1),
-(80.1, 'Alerta 4', 'Temperatura no limite crítico', 'Crítica', 'Prevenção', 'Sensor A', 'To Do', 1),
-(81.5, 'Alerta 5', 'Temperatura acima do limite', 'Média', 'Observação', 'Sensor A', 'In Progress', 1);
+(77.5, 'Alerta 1', 'Temperatura elevada', 'Crítica', 'Superaquecimento', 'DISCO', 'To Do', 1),
+(78.2, 'Alerta 2', 'Temperatura alta', 'Média', 'Monitoramento', 'DISCO', 'In Progress', 1),
+(79.9, 'Alerta 3', 'Risco de superaquecimento', 'Crítica', 'Emergência', 'DISCO', 'Done', 1),
+(80.1, 'Alerta 4', 'Temperatura no limite crítico', 'Crítica', 'Prevenção', 'DISCO', 'To Do', 1),
+(81.5, 'Alerta 5', 'Temperatura acima do limite', 'Média', 'Observação', 'DISCO', 'In Progress', 1);
 
 -- 11 alertas para fkFabrica = 2
 INSERT INTO alerta (valor, titulo, descricao, prioridade, tipo_incidente, componente, statusAlerta, fkCapturaDados)
 VALUES 
-(115, 'Alerta 6', 'Pressão alta', 'Média', 'Monitoramento', 'Sensor B', 'To Do', 2),
-(117, 'Alerta 7', 'Pressão subindo', 'Crítica', 'Emergência', 'Sensor B', 'In Progress', 2),
-(118, 'Alerta 8', 'Pressão no limite', 'Média', 'Prevenção', 'Sensor B', 'Done', 2),
-(119, 'Alerta 9', 'Pressão crítica', 'Crítica', 'Supervisão', 'Sensor B', 'To Do', 2),
-(120, 'Alerta 10', 'Pressão extrema', 'Crítica', 'Falha iminente', 'Sensor B', 'In Progress', 2),
-(121, 'Alerta 11', 'Pressão instável', 'Média', 'Diagnóstico', 'Sensor B', 'Done', 2),
-(122, 'Alerta 12', 'Pressão oscilante', 'Crítica', 'Teste em andamento', 'Sensor B', 'To Do', 2),
-(123, 'Alerta 13', 'Pressão no pico', 'Crítica', 'Análise requerida', 'Sensor B', 'In Progress', 2),
-(124, 'Alerta 14', 'Pressão elevada contínua', 'Média', 'Precaução', 'Sensor B', 'Done', 2),
-(125, 'Alerta 15', 'Pressão perigosa', 'Crítica', 'Verificação urgente', 'Sensor B', 'To Do', 2),
-(126, 'Alerta 16', 'Pressão descontrolada', 'Crítica', 'Correção imediata', 'Sensor B', 'In Progress', 2);
+(115, 'Alerta 6', 'Pressão alta', 'Média', 'Monitoramento', 'RAM', 'To Do', 2),
+(117, 'Alerta 7', 'Pressão subindo', 'Crítica', 'Emergência', 'RAM', 'In Progress', 2),
+(118, 'Alerta 8', 'Pressão no limite', 'Média', 'Prevenção', 'RAM', 'Done', 2),
+(119, 'Alerta 9', 'Pressão crítica', 'Crítica', 'Supervisão', 'RAM', 'To Do', 2),
+(120, 'Alerta 10', 'Pressão extrema', 'Crítica', 'Falha iminente', 'RAM', 'In Progress', 2),
+(121, 'Alerta 11', 'Pressão instável', 'Média', 'Diagnóstico', 'RAM', 'Done', 2),
+(122, 'Alerta 12', 'Pressão oscilante', 'Crítica', 'Teste em andamento', 'RAM', 'To Do', 2),
+(123, 'Alerta 13', 'Pressão no pico', 'Crítica', 'Análise requerida', 'RAM', 'In Progress', 2),
+(124, 'Alerta 14', 'Pressão elevada contínua', 'Média', 'Precaução', 'RAM', 'Done', 2),
+(125, 'Alerta 15', 'Pressão perigosa', 'Crítica', 'Verificação urgente', 'RAM', 'To Do', 2),
+(126, 'Alerta 16', 'Pressão descontrolada', 'Crítica', 'Correção imediata', 'RAM', 'In Progress', 2);
 
 -- 20 alertas para fkFabrica = 3
 INSERT INTO alerta (valor, titulo, descricao, prioridade, tipo_incidente, componente, statusAlerta, fkCapturaDados)
 VALUES 
-(170, 'Alerta 17', 'Velocidade elevada', 'Média', 'Monitoramento', 'Sensor C', 'To Do', 3),
-(175, 'Alerta 18', 'Velocidade no limite', 'Crítica', 'Prevenção', 'Sensor C', 'In Progress', 3),
-(178, 'Alerta 19', 'Velocidade perigosa', 'Crítica', 'Atenção', 'Sensor C', 'Done', 3),
-(180, 'Alerta 20', 'Velocidade máxima atingida', 'Crítica', 'Falha iminente', 'Sensor C', 'To Do', 3),
-(182, 'Alerta 21', 'Velocidade instável', 'Média', 'Revisão necessária', 'Sensor C', 'In Progress', 3),
-(185, 'Alerta 22', 'Velocidade acima da média', 'Crítica', 'Diagnóstico solicitado', 'Sensor C', 'Done', 3),
-(187, 'Alerta 23', 'Velocidade fora dos padrões', 'Crítica', 'Precaução urgente', 'Sensor C', 'To Do', 3),
-(190, 'Alerta 24', 'Velocidade crítica contínua', 'Crítica', 'Falha operacional', 'Sensor C', 'In Progress', 3),
-(193, 'Alerta 25', 'Velocidade variável crítica', 'Média', 'Teste solicitado', 'Sensor C', 'Done', 3),
-(195, 'Alerta 26', 'Velocidade irregular', 'Crítica', 'Correção emergencial', 'Sensor C', 'To Do', 3),
-(198, 'Alerta 27', 'Velocidade fora da margem', 'Média', 'Investigação', 'Sensor C', 'In Progress', 3),
-(200, 'Alerta 28', 'Velocidade extrema', 'Crítica', 'Manutenção requerida', 'Sensor C', 'Done', 3);
+(170, 'Alerta 17', 'Velocidade elevada', 'Média', 'Monitoramento', 'CPU', 'To Do', 3),
+(175, 'Alerta 18', 'Velocidade no limite', 'Crítica', 'Prevenção', 'CPU', 'In Progress', 3),
+(178, 'Alerta 19', 'Velocidade perigosa', 'Crítica', 'Atenção', 'CPU', 'Done', 3),
+(180, 'Alerta 20', 'Velocidade máxima atingida', 'Crítica', 'Falha iminente', 'CPU', 'To Do', 3),
+(182, 'Alerta 21', 'Velocidade instável', 'Média', 'Revisão necessária', 'CPU', 'In Progress', 3),
+(185, 'Alerta 22', 'Velocidade acima da média', 'Crítica', 'Diagnóstico solicitado', 'CPU', 'Done', 3),
+(187, 'Alerta 23', 'Velocidade fora dos padrões', 'Crítica', 'Precaução urgente', 'CPU', 'To Do', 3),
+(190, 'Alerta 24', 'Velocidade crítica contínua', 'Crítica', 'Falha operacional', 'CPU', 'In Progress', 3),
+(193, 'Alerta 25', 'Velocidade variável crítica', 'Média', 'Teste solicitado', 'CPU', 'Done', 3),
+(195, 'Alerta 26', 'Velocidade irregular', 'Crítica', 'Correção emergencial', 'CPU', 'To Do', 3),
+(198, 'Alerta 27', 'Velocidade fora da margem', 'Média', 'Investigação', 'CPU', 'In Progress', 3),
+(200, 'Alerta 28', 'Velocidade extrema', 'Crítica', 'Manutenção requerida', 'CPU', 'Done', 3);
 
 select * from componenteServidor;
+
+
+SELECT sm.idMaquina, COUNT(*) AS totalCriticos
+        FROM alerta a JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
+        JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
+        JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina WHERE a.prioridade = 'Crítica'and componente = 'CPU'
+        GROUP BY sm.idMaquina ORDER BY totalCriticos DESC
+        ;
+
 
 
 -- #######################################################################################################################################################################################

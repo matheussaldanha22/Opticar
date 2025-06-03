@@ -93,6 +93,7 @@ VALUES
     ('OptiCar Soluções', '12345678000199'),
     ('AutoTech Brasil', '98765432000188'),
     ('SmartEng Mecânica', '45678912000177');
+    
 
 -- Inserindo 3 fábricas associadas às empresas
 INSERT INTO fabrica (nome, telefone, funcao, limiteAtencao, limiteCritico, fkEmpresa)

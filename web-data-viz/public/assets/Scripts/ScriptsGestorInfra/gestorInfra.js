@@ -171,7 +171,7 @@ var barOptions = {
             fontSize: '13px'
         }
     },
-    colors: ["#2C3E50", "#FF0000"],
+    colors: ["#2C3E50", "#FF0000", "#0a6b53", "#00aee5"],
     xaxis: {
         categories: ['20/05', '21/05', '22/05', '23/05', '24/05'], // mocado, NO fetch desmoca
         labels: {
@@ -220,62 +220,91 @@ var barOptions = {
 
 // Faz a requisição e atualiza os dados no gráfico
 
+//################################################################################# por função
+
 var grafico = null;
-
-
-
 function carregarComponente(componente) {
-    
-    var url = `http://localhost:3333/gestorInfra/dados-${componente.toLowerCase()}`;
+    componenteAtual = componente;
 
-    fetch(url)
+    fetch(`http://localhost:3333/gestorInfra/dados-${componente.toUpperCase()}`)
         .then(res => res.json())
         .then(dados => {
-            // PRA NÃO FICAR COISADO OS GRAFICO,pq ta ficando um encima dos outros
             if (grafico !== null) {
                 grafico.destroy();
             }
 
-            // Atualiza os dados do gráfico
             barOptions.series = [
-                { name: 'Alertas totais', data: dados.totais },
-                { name: 'Não Resolvidos', data: dados.toDos }
+                { name: 'Alertas totais', data: dados.totais.slice(-5) },
+                { name: 'Não Resolvidos', data: dados.toDos.slice(-5) },
+                { name: 'Resolvidos', data: dados.Done.slice(-5) },
+                { name: 'Em progresso', data: dados.InProgress.slice(-5) }
             ];
             barOptions.xaxis.categories = dados.categorias;
 
-            
             grafico = new ApexCharts(document.querySelector("#bar-chart"), barOptions);
             grafico.render();
         })
         .catch(err => {
             console.error("Erro ao carregar dados do gráfico:", err);
         });
+
+    
+    
 }
 
 
-//COMEÇA COM A CPU, E DA O INTERVALO PRA TODOS OS COMPONENTES
+//############################################################################# por função
+
+
+
+function atualizarServidorComMaisCriticos(componente) {
+    fetch(`http://localhost:3333/gestorInfra/servidor-com-mais-criticos/${componente.toLowerCase()}`)//o lower, pq sem ta bugando
+        .then(res => res.json())
+        .then(data => {
+            document.querySelector(".textovalor2").textContent = data.mensagem;
+        })
+        .catch(err => {
+            console.error(`Erro ao obter servidor com mais alertas críticos (${componente}):`, err);
+        });
+}
+
+//começar com cpu
+var componenteAtual = 'CPU'; // Começa com CPU
+
 window.addEventListener('DOMContentLoaded', () => {
-    carregarComponente('CPU')
+    carregarComponente(componenteAtual);
+    atualizarServidorComMaisCriticos(componenteAtual); // Atualiza de acordo com a inicialização
+    
     setInterval(() => {
-        carregarComponente('CPU');
-    },10000)
+        carregarComponente(componenteAtual);
+        atualizarServidorComMaisCriticos(componenteAtual);
+    }, 9000);
+});
 
-    setInterval(() => {
-        carregarComponente('RAM');
-    },10000)
 
-    setInterval(() => {
-        carregarComponente('DISCO');
-    },10000)
-})
 
 // PRATROCAR O JHONIS de cima 
 document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
-        var componente = tab.textContent.trim();
-        carregarComponente(componente);
+        componenteAtual = tab.textContent.trim(); // Atualiza variável pra deixar o comp
+        carregarComponente(componenteAtual);
+        atualizarServidorComMaisCriticos(componenteAtual);
     });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
    
 
@@ -352,7 +381,7 @@ document.querySelectorAll('.tab').forEach(tab => {
             stroke: {
                 lineCap: 'round'
             },
-            labels: ['Acertividade no preço']
+            labels: ['Assertividade no preço']
         };
 
         
