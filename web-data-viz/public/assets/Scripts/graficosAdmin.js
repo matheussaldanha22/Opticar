@@ -66,20 +66,31 @@ function plotarGraficoAlerta(dadosAlerta) {
 
     fabricaCriticaLista.sort((a, b) => b.nivelCriticidade - a.nivelCriticidade);
     if (fabricaCriticaLista.length > 0) {
+      var quantidadeCritico = 0;
+      for (i = 0; i< fabricaCriticaLista.length; i++) {
+        if(fabricaCriticaLista[i].estado == 'critico') {
+          quantidadeCritico++
+        }
+      }
       var qtdFabricasCriticas = document.querySelector("#qtdFabricasCriticas");
-      qtdFabricasCriticas.innerHTML = `${fabricaCriticaLista.length} Fábricas`
+      qtdFabricasCriticas.innerHTML = `${quantidadeCritico} Fábricas`
     } else {
       qtdFabricasCriticas.innerHTML = `Nenhuma Fábrica em estado crítico`
     }
     const larguraGrafico = Math.max(fabricaCriticaLista.length * 300, 400);
     var nomeFabricaCritica = fabricaCriticaLista[0].nome;
-    var idFabricaCritica = fabricaCriticaLista[0].id;
+    var idFabricaCritica = fabricaCriticaLista[0].id
+    var qtdAlertasAberto = fabricaCriticaLista[0].qtd_to_do
+    var qtdAlertasProgresso = fabricaCriticaLista[0].qtd_in_progress
+    
     var coresBorda = fabricaCriticaLista.map(fabrica => {
       if (fabrica.estado === 'critico') return '#FF0000';
       if (fabrica.estado === 'atencao') return '#FFD700';
       return '#00000000';
     });
+
     kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica)
+    infoFabricaPadrão(idFabricaCritica, qtdAlertasAberto, qtdAlertasProgresso);
 
     // KPI FABRICA MAIS CRITICA ####################################################
     var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
@@ -135,23 +146,22 @@ function plotarGraficoAlerta(dadosAlerta) {
         bar: {
           columnWidth: "30%",
           horizontal: false,
-          distributed: true
         },
       },
       stroke: {
-        width: 3,
+        width: 2,
         colors: coresBorda
       },
       series: [
         {
           name: "Alertas em Aberto",
           data: fabricaCriticaLista.map(f => f.qtd_to_do),
-          color: "#22B4D1",
+          color: "#04708D",
         },
         {
           name: "Alertas em Andamento",
           data: fabricaCriticaLista.map(f => f.qtd_in_progress),
-          color: "#04708D",
+          color: "#22B4D1",
         },
       ],
       xaxis: {

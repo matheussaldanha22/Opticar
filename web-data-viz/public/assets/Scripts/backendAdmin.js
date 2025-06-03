@@ -16,14 +16,14 @@ function dadosGraficoAlerta() {
     });
 }
 
-function infoFabricaPadrão(fabricaComMaisAlerta) {
-    fetch("/admin/informacaoFabricaPadrao", {
+function infoFabricaPadrão(idFabricaCritica, AlertasAberto, qtdAlertasProgresso) {
+    fetch(`/admin/informacaoFabricaPadrao`, {
         method: "POST",
          headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-        fabricaFkServer: fabricaComMaisAlerta.fkFabrica,
+        fabricaFkServer: idFabricaCritica,
         }),
     })
     .then(function (resposta) {
@@ -33,37 +33,66 @@ function infoFabricaPadrão(fabricaComMaisAlerta) {
         }
         return resposta.json();
     }).then(function (informacoes) {
-        var nome = document.querySelector("#pNome");
-        var gestor = document.querySelector("#pGestor");
-        var telefone = document.querySelector("#pTelefone");
-        var status = document.querySelector("#pStatus");
-        var qtdAlertasAberto = document.querySelector("#pQtdAlertaAberto");
-        var qtdAlertasAndamento = document.querySelector("#pQtdAlertaAndamento");
-        var tempoResolucao = document.querySelector("#pTempoResolucao");
-        var predicao = document.querySelector("#pPredicao");
+        console.log(informacoes)
+        return fetch(`/jira/listarAlertasPorId/${idFabricaCritica}`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json"}
+        }).then(resposta => {
+            if (resposta.ok) {
+                console.log(resposta)
+                return resposta.json();
+            }
+            throw new Error("Erro ao buscar tempo de resolução");
+        }).then(dadosJira => {
+            console.log(dadosJira)
+            var nome = document.querySelector("#pNome");
+            var gestor = document.querySelector("#pGestor");
+            var telefone = document.querySelector("#pTelefone");
+            var status = document.querySelector("#pStatus");
+            var qtdAlertasAberto = document.querySelector("#pQtdAlertaAberto");
+            var qtdAlertasAndamento = document.querySelector("#pQtdAlertaAndamento");
+            var tempoResolucao = document.querySelector("#pTempoResolucao");
+            var valorTotal = AlertasAberto + qtdAlertasProgresso
 
-        var valorTotal = fabricaComMaisAlerta.qtd_to_do + fabricaComMaisAlerta.qtd_in_progress;
-
-        nome.innerHTML = `Nome: ${informacoes[0].nomeFabrica}`;
-        gestor.innerHTML = `Gestor: ${informacoes[0].nome}`;
-        telefone.innerHTML = `Telefone: ${informacoes[0].telefone}`;
-        if (valorTotal >= informacoes[0].limiteAtencao && valorTotal < informacoes[0].limiteCritico) {
-            status.innerHTML += `Status: Atenção`;
-        } else if (valorTotal >= informacoes[0].limiteCritico) {
-            status.innerHTML = `Status: Crítico`;
-        } else {
-            status.innerHTML = `Status: Ok`;
-        }
-        qtdAlertasAberto.innerHTML = `Quantidade de Alertas em aberto: ${fabricaComMaisAlerta.qtd_to_do}`;
-        qtdAlertasAndamento.innerHTML = `Quantidade de Alertas em andamento: ${fabricaComMaisAlerta.qtd_in_progress}`;
-
+            nome.innerHTML = `Nome: ${informacoes[0].nomeFabrica}`;
+            gestor.innerHTML = `Gestor: ${informacoes[0].nome}`;
+            telefone.innerHTML = `Telefone: ${informacoes[0].telefone}`;
+            if (valorTotal >= informacoes[0].limiteAtencao && valorTotal < informacoes[0].limiteCritico) {
+                status.innerHTML += `Status: Atenção`;
+                status.classList.add("cor-atencao")
+            } else if (valorTotal >= informacoes[0].limiteCritico) {
+                status.innerHTML = `Status: Crítico`;
+                status.classList.add("cor-critica")
+            } else {
+                status.innerHTML = `Status: Ok`;
+                status.classList.add("cor-ok")
+            }
+            qtdAlertasAberto.innerHTML = `Quantidade de Alertas em aberto: ${AlertasAberto}`;
+            qtdAlertasAndamento.innerHTML = `Quantidade de Alertas em andamento: ${qtdAlertasProgresso}`;
+            if (dadosJira) {
+            if (dadosJira.tempoMedioResolucao >= 60) {
+                tempoMedio = dadosJira.tempoMedioResolucao / 60;
+                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(h)`
+            } else if (dadosJira.tempoMedioResolucao >= 1440) { 
+                tempoMedio = dadosJira.tempoMedioResolucao / 1440;
+                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(d)`
+            } else {
+                tempoMedio = dadosJira.tempoMedioResolucao;
+                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(m)`
+            }
+            } else {
+                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: Não possui dados o suficiente`
+            }
+        })
     }).catch(function (erro) {
         console.error(`#ERRO: ${erro}`);
     });
 }
 
+
+
 function informacaoFabrica(fabricaNome, serieNome, valorAndamento, valorAberto) {
-  fetch("/admin/informacaoFabrica", {
+  fetch(`/admin/informacaoFabrica`, {
         method: "POST",
          headers: {
           "Content-Type": "application/json",
@@ -79,37 +108,65 @@ function informacaoFabrica(fabricaNome, serieNome, valorAndamento, valorAberto) 
         }
         return resposta.json();
     }).then(function (informacoes) {
-        var nome = document.querySelector("#pNome");
-        var gestor = document.querySelector("#pGestor");
-        var telefone = document.querySelector("#pTelefone");
-        var status = document.querySelector("#pStatus");
-        var qtdAlertasAberto = document.querySelector("#pQtdAlertaAberto");
-        var qtdAlertasAndamento = document.querySelector("#pQtdAlertaAndamento");
-        var tempoResolucao = document.querySelector("#pTempoResolucao");
-        var predicao = document.querySelector("#pPredicao");
+        console.log(informacoes)
+        var idFabricaCritica = informacoes[0].idFabrica
+        return fetch(`/jira/listarAlertasPorId/${idFabricaCritica}`, {
+            method: "GET",
+            headers: {"Content-Type": "application/json"}
+        }).then(resposta => {
+            if (resposta.ok) {
+                console.log(resposta)
+                return resposta.json();
+            }
+            throw new Error("Erro ao buscar tempo de resolução");
+        }).then(dadosJira => {
+            console.log(dadosJira)
+            var nome = document.querySelector("#pNome");
+            var gestor = document.querySelector("#pGestor");
+            var telefone = document.querySelector("#pTelefone");
+            var status = document.querySelector("#pStatus");
+            var qtdAlertasAberto = document.querySelector("#pQtdAlertaAberto");
+            var qtdAlertasAndamento = document.querySelector("#pQtdAlertaAndamento");
+            var tempoResolucao = document.querySelector("#pTempoResolucao");
+            var valorTotal = valorAndamento + valorAberto
 
-        var valorTotal = valorAndamento + valorAberto;
-
-        nome.innerHTML = `Nome: ${informacoes[0].nomeFabrica}`;
-        gestor.innerHTML = `Gestor: ${informacoes[0].nome}`;
-        telefone.innerHTML = `Telefone: ${informacoes[0].telefone}`;
-        if (valorTotal >= informacoes[0].limiteAtencao && valorTotal < informacoes[0].limiteCritico) {
-            status.innerHTML += `Status: Atenção`;
-        } else if (valorTotal >= informacoes[0].limiteCritico) {
-            status.innerHTML = `Status: Crítico`;
-        } else {
-            status.innerHTML = `Status: Ok`;
-        }
-        qtdAlertasAberto.innerHTML = `Quantidade de Alertas em aberto: ${valorAberto}`;
-        qtdAlertasAndamento.innerHTML = `Quantidade de Alertas em andamento: ${valorAndamento}`;
-
+            nome.innerHTML = `Nome: ${informacoes[0].nomeFabrica}`;
+            gestor.innerHTML = `Gestor: ${informacoes[0].nome}`;
+            telefone.innerHTML = `Telefone: ${informacoes[0].telefone}`;
+            if (valorTotal >= informacoes[0].limiteAtencao && valorTotal < informacoes[0].limiteCritico) {
+                status.innerHTML += `Status: Atenção`;
+                status.classList.add("cor-atencao")
+            } else if (valorTotal >= informacoes[0].limiteCritico) {
+                status.innerHTML = `Status: Crítico`;
+                status.classList.add("cor-critica")
+            } else {
+                status.innerHTML = `Status: Ok`;
+                status.classList.add("cor-ok")
+            }
+            qtdAlertasAberto.innerHTML = `Quantidade de Alertas em aberto: ${AlertasAberto}`;
+            qtdAlertasAndamento.innerHTML = `Quantidade de Alertas em andamento: ${qtdAlertasProgresso}`;
+            if (dadosJira) {
+            if (dadosJira.tempoMedioResolucao >= 60) {
+                tempoMedio = dadosJira.tempoMedioResolucao / 60;
+                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(h)`
+            } else if (dadosJira.tempoMedioResolucao >= 1440) { 
+                tempoMedio = dadosJira.tempoMedioResolucao / 1440;
+                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(d)`
+            } else {
+                tempoMedio = dadosJira.tempoMedioResolucao;
+                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(m)`
+            }
+            } else {
+                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: Não possui dados o suficiente`
+            }
+        })
     }).catch(function (erro) {
         console.error(`#ERRO: ${erro}`);
     });
 }
 
 function kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica) {
-    fetch(`/listarAlertasPorId/:${idFabricaCritica}`, {
+    fetch(`/jira/listarAlertasPorId/${idFabricaCritica}`, {
         method: "GET",
         headers: {
             "Content-Type": "application/json",

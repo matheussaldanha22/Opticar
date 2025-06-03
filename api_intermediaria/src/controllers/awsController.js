@@ -55,7 +55,6 @@ async function pegarS3(req,res){
     const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: `${nomeArquivo}/dados.json`,
-     
     }
 
     try {
