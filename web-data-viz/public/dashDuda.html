@@ -59,7 +59,7 @@
         <div class="painelDash">
             <div class="tempoReal">
                 <div class="texto">
-                    <h1>Análise do mês de <span id="id_mes">Maio</span></h1>
+                    <h1>Análise  <span id="id_mes"></span></h1>
                 </div>
                 <div class="servidor">
                     <select id="slt_servidor" onselect="atualizarDados()">
@@ -78,8 +78,6 @@
 
                          <input type="date" id="ipt_data" oninput="atualizarDadosDia()">
                     
-
-
                 </div>
             </div>
 
@@ -175,18 +173,25 @@
                         </table>
                     </div>
                 </div>
-                <div id="graficoConsumoCpuVendas" class="containerGraficoCpuVendas" style="display: none;">
-                    <div class="graficoRelacao">
-                        <div class="titulo">
-                            <h3>Consumo de CPU x PIX </h3>
-
-                        </div>
-                        <div class="chartRelacao" id="chartCpuVendas"></div>
-
-                    </div>
+                
                 </div>
-
+            <div class="containerGraficos">   
+            <div id="div-pix" class="graficoCorrelacao">
+                    <div class="titulo">
+                        <h3>Correlação entre o Volume do Pix e Falhas</h3>
+                    </div>
+                    <div class="" id="chartPix"></div>   
             </div>
+            <div class="pixTexto">
+                  <div class="">
+                        <h3>Correlação entre o Volume do Pix e Falhas</h3>
+                    </div>  
+            
+            </div>   
+
+            </div> 
+           </div>    
+
 
         </div>
 
@@ -226,7 +231,7 @@
         listarMes()
         listarServidores()
         plotarGraficoPerido()
-
+        plotarGraficoPix()
 
         setTimeout(() => {
             atualizarDados()

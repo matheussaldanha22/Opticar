@@ -386,7 +386,7 @@ body {
 
 .graficoPeriodo{
   width: 70%;
-  background-color: #EDEDED;
+  background-color: #ffffff;
   padding: 0.5vw;
   border-radius: 1vw;
   height: 400px;
@@ -394,16 +394,37 @@ body {
 
 }
 
+.graficoCorrelacao{
+   width: 63%;
+  background-color: #ffffff;
+  padding: 0.5vw;
+  border-radius: 1vw;
+  height: 400px;
+  gap: 2vw;
+}
+
 .tabelaProcessos{
   display: flex;
   flex-direction: column;
-  background-color: #EDEDED;
+  background-color: #ffffff;
   padding: 0.5vw;
   border-radius: 1vw;
   height: 400px;
   width: 40%;
   gap: 1vw;
 
+}
+
+
+.pixTexto{
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 0.5vw;
+  border-radius: 1vw;
+  height: 20vw;
+  width: fit-content;
+  gap: 1vw;
 }
 
 .componentesContainer {
