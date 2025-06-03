@@ -62,26 +62,22 @@ function dadosFabricaSelecionada(idFabrica) {
 }
 
 function mtbf(idFabrica) {
-  var instrucaoSql = `SELECT 
-                            TIMESTAMPDIFF(MINUTE, MIN(cd.data), MAX(cd.data)) AS minutos_operacao,
-                            (
-                                SELECT COUNT(a.idAlerta) 
-                                FROM alerta a 
-                                JOIN capturaDados cd2 ON a.fkCapturaDados = cd2.idCapturaDados
-                                JOIN componenteServidor cs2 ON cd2.fkComponenteServidor = cs2.idcomponenteServidor
-                                JOIN servidor_maquina sm2 ON cs2.fkMaquina = sm2.idMaquina
-                                WHERE sm2.fkFabrica = ${idFabrica}
-                                  AND YEAR(a.dataHora) = YEAR(CURDATE())
-                                  AND MONTH(a.dataHora) = MONTH(CURDATE())
-                            ) AS qtd_alertas
-                        FROM 
-                            capturaDados cd
-                            JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
-                            JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
-                        WHERE 
-                            sm.fkFabrica = ${idFabrica}
-                            AND YEAR(cd.data) = YEAR(CURDATE())
-                            AND MONTH(cd.data) = MONTH(CURDATE());`
+  var instrucaoSql = `SELECT
+                      TIMESTAMPDIFF(MINUTE, MIN(cd.data), MAX(cd.data)) AS minutos_operacao,
+                      (
+                          SELECT COUNT(a.idAlerta)
+                          FROM alerta a
+                          JOIN capturaDados cd2 ON a.fkCapturaDados = cd2.idCapturaDados
+                          JOIN componenteServidor cs2 ON cd2.fkComponenteServidor = cs2.idcomponenteServidor
+                          JOIN servidor_maquina sm2 ON cs2.fkMaquina = sm2.idMaquina
+                          WHERE sm2.fkFabrica = ${idFabrica}
+                      ) AS qtd_alertas
+                    FROM
+                      capturaDados cd
+                      JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
+                      JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
+                    WHERE
+                      sm.fkFabrica = ${idFabrica}; `
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executarQUENTE(instrucaoSql)

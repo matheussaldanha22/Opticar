@@ -30,7 +30,7 @@ function verificaAlertas() {
                     LEFT JOIN alerta a ON a.fkCapturaDados = cd.idCapturaDados
                     GROUP BY sm.fkFabrica;`;
 
-  return database.executarFRIO(instrucaoSql);
+  return database.executarQUENTE(instrucaoSql);
 }
 
 function listarFabricas() {

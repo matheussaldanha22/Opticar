@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="assets/styles/dashAdmin.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="./assets/Scripts/graficosAdmin.js" defer></script>
-    <script src="./assets/Scripts/backendAdmin.js" defer></script>
+    
 </head>
 <body>
     <div class="bg"></div>
@@ -59,6 +59,7 @@
                 <h1></h1>
             </div> -->
             <div class="containerKPI">
+
                 <div class="kpiUso">
                     <div class="tituloKpi">
                         <h2>Fábrica mais crítica:</h2>
@@ -108,10 +109,14 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="paginacao" id="paginacao"></div>
                 <div class="info-pagina" id="info-pagina"></div>
-                <div class="tituloModal">Predição de como estará as fábricas selecionadas dentro de 30 dias:</div>
+                <div class="tituloModal">Predição de como estará as fábricas selecionadas dentro de <select id="filtroPredicao" onchange="predicao()">
+                    <option value="7" selected>7 dias</option>
+                    <option value="14">14 dias</option>
+                    <option value="21">21 dias</option>
+                    <option value="30">30 dias</option>
+                </select></div>
                 <div id="graficoPredicao"></div>
                 <div class="fechar">
                     <h1>FECHAR</h1>
@@ -120,7 +125,9 @@
 
             <div class="containerGraficos">
                 <div class="graficos">
-                    <div id="graficoAlertaFabricas"></div>
+                    <div id="graficoAlertaFabricas">
+                        Quantidade de alertas por fábrica
+                    </div>
 
                     <div class="informaçõesFábrica">
                         <div class="titulo"><h1>Informações Fábrica</h1></div>
