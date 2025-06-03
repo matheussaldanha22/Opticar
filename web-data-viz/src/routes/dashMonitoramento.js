@@ -14,7 +14,7 @@ router.post("/dadosTempoReal", (req, res) => {
   dashMonitoramentoController.dadosTempoReal(req, res)
 })
 
-router.get("/dadosRecebidos", (req, res) => {
+router.get("/dadosRecebidos/:idFabrica", (req, res) => {
   dashMonitoramentoController.dadosRecebidos(req, res)
 })
 

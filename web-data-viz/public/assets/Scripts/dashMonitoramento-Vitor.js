@@ -10,17 +10,20 @@ document.addEventListener("DOMContentLoaded", () => {
 })
 
 function renderPagina() {
-  fetch("/dashMonitoramento/dadosRecebidos")
+  const idFabrica = sessionStorage.getItem("FABRICA_ID")
+
+
+  fetch(`/dashMonitoramento/dadosRecebidos/${idFabrica}`)
     .then((res) => res.json())
     .then((dados) => {
       dadosTempoReal = dados
       console.log(dadosTempoReal)
+      console.log(dadosTempoReal[0][0].CPU.idFabrica)
       if (
-        sessionStorage.getItem("FABRICA_ID") == dadosTempoReal.CPU.idFabrica
+        sessionStorage.getItem("FABRICA_ID") == dadosTempoReal[0][0].CPU.idFabrica
       ) {
         console.log(
-          `SessionStorage: ${sessionStorage.getItem("FABRICA_ID")}, JSON: ${
-            dadosTempoReal.CPU.idFabrica
+          `SessionStorage: ${sessionStorage.getItem("FABRICA_ID")}, JSON: ${dadosTempoReal[0][0].CPU.idFabrica
           }`
         )
         renderTabela()
@@ -32,9 +35,12 @@ function renderPagina() {
 }
 
 function renderTabela() {
-  const tabela = document.getElementById("tabela-alertas")
-  let tempoReal = dadosTempoReal
-  tabela.innerHTML = `<thead>
+
+  dadosTempoReal.forEach((dados) => {
+    const tabela = document.getElementById("tabela-alertas")
+    let tempoReal = dados[0]
+    console.log('Tempo real: ' + tempoReal)
+    tabela.innerHTML = `<thead>
                         <tr>
                         <th>Id</th>
                         <th>Servidor</th>
@@ -47,9 +53,9 @@ function renderTabela() {
                     </tr>
                     </thead>`
 
-  const tr = document.createElement("tr")
-  tr.id = `servidor-${tempoReal.CPU.idMaquina}`
-  tr.innerHTML = `
+    const tr = document.createElement("tr")
+    tr.id = `servidor-${tempoReal.CPU.idMaquina}`
+    tr.innerHTML = `
       <td data-label="ID">${tempoReal.CPU.idMaquina}</td>
       <td data-label="Servidor">SV${tempoReal.CPU.idMaquina}</td>
       <td data-label="CPU (%)">${tempoReal.CPU.valor}%</td>
@@ -59,15 +65,25 @@ function renderTabela() {
       <td data-label="Upload">${tempoReal.RedeEnviada.valor} MB/s</td>
       <td data-label="Visualizar"><i class='fa fa-eye servidores' data-id="${tempoReal.CPU.idMaquina}"></i></td>
     `
-  tabela.appendChild(tr)
+    tabela.appendChild(tr)
 
-  const btnServidor = tr.querySelector(".servidores")
-  btnServidor.addEventListener("click", () => {
-    const idServidor = btnServidor.getAttribute("data-id")
-    sessionStorage.setItem("idServidorSelecionado", idServidor)
-    window.location.href = "../../dashMonitoramento-vitor-especifico.html"
-    console.log("Clicou no botão")
+
+    const btnServidor = tr.querySelector(".servidores")
+    btnServidor.addEventListener("click", () => {
+      const idServidor = btnServidor.getAttribute("data-id")
+      sessionStorage.setItem("idServidorSelecionado", idServidor)
+      window.location.href = "../../dashMonitoramento-vitor-especifico.html"
+      console.log("Clicou no botão")
+    })
+
+
+
   })
+
+
+
+
+
 }
 
 function renderKpis() {

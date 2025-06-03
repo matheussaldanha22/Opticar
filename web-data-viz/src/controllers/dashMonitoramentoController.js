@@ -18,7 +18,26 @@ let listaDados = []
 // Dados enviados pelo código python
 function dadosTempoReal(req, res) {
   const dados = req.body
-  listaDados.push(dados)
+
+
+  if(dados.length > 1){
+    for(let i = 0; i < dados.length; i++){
+      for(let j = i+1; j < dados.length; j++) {
+
+        var idMaquina = Object.keys(dados)[i][`${j}`];
+        var idMaquina2 = Object.keys(dados)[j][`${j}`]
+
+        if(idMaquina === idMaquina2){
+          dados.splice(j,1)
+          j--
+        }
+
+      }
+    }
+    listaDados.push(dados)
+  }else{
+    listaDados.push(dados)
+  }
 
   //   console.log(`Dados recebidos do Python: ${JSON.stringify(dados)}`)
   try {
@@ -28,15 +47,44 @@ function dadosTempoReal(req, res) {
     res.status(500).json({ mensagem: "Erro interno no servidor" })
   }
 }
-// Dados recebidos obrigatoriamente
+
 function dadosRecebidos(req, res) {
-  console.log(`Dados em tempo real python: ${JSON.stringify(listaDados)}`)
+  const idFabrica = req.params.idFabrica
 
-  res.status(200).send(listaDados)
-  listaDados = []
+  // Filtra os dados que correspondem ao idFabrica
+  const dadosFiltrados = listaDados.filter(
+    dados => dados[0] && dados[0].CPU && dados[0].CPU.idFabrica == idFabrica
+  )
 
-  // console.log(`Dados recebidos do python Obrigatório: ${listaDados}`)
+  if (dadosFiltrados.length > 0) {
+    res.status(200).send(dadosFiltrados)
+    console.log(`Dados em tempo real python: ${JSON.stringify(dadosFiltrados)}`)
+    // Se quiser limpar só os enviados:
+    listaDados = listaDados.filter(
+      dados => !(dados[0] && dados[0].CPU && dados[0].CPU.idFabrica == idFabrica)
+    )
+  } else {
+    res.status(204).send() // ou res.status(200).send([])
+  }
 }
+
+
+// Dados recebidos obrigatoriamente
+// function dadosRecebidos(req, res) {
+//   const idFabrica = req.params.idFabrica
+
+//   listaDados.forEach((dados, index)=>{
+//     let fabrica = dados[0].CPU.idFabrica
+//     if(idFabrica == fabrica){
+//       res.status(200).send(listaDados)
+//       console.log(`Dados em tempo real python: ${JSON.stringify(listaDados)}`)
+//       listaDados = []
+//     }else{
+//       res.status(500)
+//     }
+//   })
+//   // console.log(`Dados recebidos do python Obrigatório: ${listaDados}`)
+// }
 
 let listaDadosPedido = []
 // Dados enviados pelo código python

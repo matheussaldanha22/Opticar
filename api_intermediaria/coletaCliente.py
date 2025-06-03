@@ -199,16 +199,16 @@ def monitorar():
         try:
             pedidos = obterPedidos(mac_address)
             dados = dadosObrigatorios()
-            listaTempoReal = { "{mac_address}" : {
-                "CPU" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor" : dados[0]},
-                "RAM" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[1]},
-                "DISCO" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[2]},
-                "RedeEnviada" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[3]},
-                "RedeRecebida" : {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[4]}
-                }}
+            listaTempoReal = [{
+                            "CPU": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[0]},
+                            "RAM": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[1]},
+                            "DISCO": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[2]},
+                            "RedeEnviada": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[3]},
+                            "RedeRecebida": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[4]}
+                    }]
             enviarDadosTempoReal(listaTempoReal)
 
-            listaPedidoCliente = {}
+            listaPedidoCliente = {} 
             
             for pedido_cliente in pedidos:
                 print((pedido_cliente['tipo'], pedido_cliente['medida']))
