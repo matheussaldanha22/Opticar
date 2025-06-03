@@ -97,6 +97,9 @@ function plotarGraficoAlerta(dadosAlerta) {
     var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
     var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas");
     var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica");
+    var fabricaCriticaM = document.querySelector("#fabricaCriticaModal");
+    var quantidadeAlertasM = document.querySelector("#quantidadeAlertasModal");
+    var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal");
     if (fabricaCriticaLista.length > 0) {
       if (fabricaCriticaLista[0].estado == 'critico') {
         fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome;
@@ -104,23 +107,41 @@ function plotarGraficoAlerta(dadosAlerta) {
         statusKpiCriticaKpi.innerHTML = `Status: Crítico`
         fabricaCriticaKpi.classList.add("cor-critica")
         statusKpiCriticaKpi.classList.add("cor-critica")
+        fabricaCriticaM.innerHTML = fabricaCriticaLista[0].nome;
+        quantidadeAlertasM.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+        statusKpiCriticaM.innerHTML = `Status: Crítico`
+        fabricaCriticaM.classList.add("cor-critica")
+        statusKpiCriticaM.classList.add("cor-critica")
       } else if (fabricaCriticaLista[0].estado == 'atencao') {
         fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome;
         quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
         statusKpiCriticaKpi.innerHTML = `Status: Atenção`
         fabricaCriticaKpi.classList.add("cor-atencao")
         statusKpiCriticaKpi.classList.add("cor-atencao")
+        fabricaCriticaM.innerHTML = fabricaCriticaLista[0].nome;
+        quantidadeAlertasM.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+        statusKpiCriticaM.innerHTML = `Status: Atenção`
+        fabricaCriticaM.classList.add("cor-atencao")
+        statusKpiCriticaM.classList.add("cor-atencao")
       } else {
         fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome;
         quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
         statusKpiCriticaKpi.innerHTML = `Status: Ok`
         fabricaCriticaKpi.classList.add("cor-ok")
         statusKpiCriticaKpi.classList.add("cor-ok")
+        fabricaCriticaM.innerHTML = fabricaCriticaLista[0].nome;
+        quantidadeAlertasM.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+        statusKpiCriticaM.innerHTML = `Status: Ok`
+        fabricaCriticaM.classList.add("cor-ok")
+        statusKpiCriticaM.classList.add("cor-ok")
       }
     } else {
       fabricaCriticaKpi.innerHTML = `Nenhuma fabrica crítica`;
       quantidadeAlertasKpi.innerHTML = `Nenhum alerta encontrado`
       statusKpiCriticaKpi.innerHTML = ``
+      fabricaCriticaM.innerHTML = `Nenhuma fabrica crítica`;
+      quantidadeAlertasM.innerHTML = `Nenhum alerta encontrado`
+      statusKpiCriticaM.innerHTML = ``
     }
     // #############################################################################
     
@@ -765,7 +786,7 @@ function predicao() {
     for (var i = 0; i < filtro; i++) {
         var dia = new Date(hoje);
         dia.setDate(hoje.getDate() + i)
-        var dataFormatada = dia.toLocaleDateString('pt-BR');
+        var dataFormatada = dia.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }); 
         categoriesPred.push(dataFormatada)
     }
 

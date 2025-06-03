@@ -14,6 +14,30 @@ function cadMaqQuente(so, ip_publico, hostname, mac, fabrica) {
   return database.executarQuente(instrucaoSql)
 }
 
+function cardapio() {
+  const instrucaoSql = `SELECT * FROM componente;`
+
+  return database.executarFrio(instrucaoSql)
+}
+
+function obterServidor(mac) {
+  const instrucaoSql = `SELECT idMaquina from servidor_maquina WHERE Mac_Address = ${mac}`
+
+  return database.executarQuente(instrucaoSql)
+}
+
+function pedidosObrigatorios(valor, servidor) {
+  const instrucaoSql = `INSERT INTO componenteServidor VALUES (DEFAULT, ${valor}, ${servidor}, 'PADRÃO', '90', '80')`
+
+  return database.executarFrio(instrucaoSql)
+}
+
+function pedidosObrigatoriosQuente(valor, servidor) {
+  const instrucaoSql = `INSERT INTO componenteServidor VALUES (DEFAULT, ${valor}, ${servidor}, 'PADRÃO', '90', '80')`
+
+  return database.executarQuente(instrucaoSql)
+}
+
 function pedidosCliente(macAddress) {
   var instrucaoSql = `SELECT * FROM componenteServidor 
                         JOIN servidor_maquina ON componenteServidor.fkMaquina = servidor_maquina.idMaquina
@@ -68,5 +92,9 @@ module.exports = {
     updateIP,
     updateIPFRIO,
     cadMaqFrio,
-    cadMaqQuente
+    cadMaqQuente,
+    cardapio,
+    obterServidor,
+    pedidosObrigatorios,
+    pedidosObrigatoriosQuente
 }

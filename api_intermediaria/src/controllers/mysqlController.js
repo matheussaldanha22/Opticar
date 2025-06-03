@@ -12,11 +12,57 @@ function cadMaqFrio(req, res) {
     }
 
     mysqlModel.cadMaqFrio(so, ip_publico, hostname, mac, fabrica).then((resultado) => {
-            res.status(200).json(resultado);
+        res.status(200).json(resultado);
     }).catch((erro) => {
         console.error("Erro ao cadastrar maquina fria:", erro);
         res.status(500).json({ erro: erro.message});
     });
+}
+
+function cardapio(req, res) {
+
+    mysqlModel.cardapio().then((resultado) => {
+        res.status(200).json(resultado)
+    }).catch((erro) => {
+        console.error("Erro ao pegar o cardapio:", erro);
+        res.status(500).json({erro: erro.message})
+    })
+}
+
+function obterServidor(req, res) {
+    var mac = req.params.mac
+
+    if (!mac) {
+        return res.status(400).json({mensagem: "Bad Request: Dados fornecidos erroneamente"})
+    }
+    
+    mysqlModel.obterServidor(mac).then((resultado) => {
+        res.status(200).json(resultado)
+    }).catch((erro) => {
+        console.error("Erro ao pegar o cardapio:", erro);
+        res.status(500).json({erro: erro.message})
+    })
+}
+
+function pedidosObrigatorios(req, res) {
+    var valor = req.body.valor
+    var servidor = req.body.mac
+    
+    mysqlModel.pedidosObrigatorios(valor, servidor).then((resultado) => {
+        pedidosObrigatoriosQuente(valor, servidor)
+        res.status(200).json(resultado)
+    }).catch((erro) => {
+        console.error("Erro ao inserir pedidoFrio:", erro);
+        res.status(500).json({erro: erro.message})
+    })
+}
+
+function pedidosObrigatoriosQuente(valor, servidor) {
+    mysqlModel.pedidosObrigatoriosQuente(valor, servidor).then((resultado) => {
+        console.log(resultado)
+    }).catch((erro) => {
+        console.error("Erro ao inserir pedidoQuente:", erro)
+    })
 }
 
 function cadMaqQuente(req, res) {
@@ -177,5 +223,8 @@ module.exports = {
   updateIP,
   updateIPFRIO,
   cadMaqFrio,
-  cadMaqQuente
+  cadMaqQuente,
+  cardapio,
+  obterServidor,
+  pedidosObrigatorios
 };

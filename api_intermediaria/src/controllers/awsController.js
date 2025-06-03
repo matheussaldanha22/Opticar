@@ -5,6 +5,8 @@ async function dadosBucket(req, res) {
     try {
         var macAddress = req.body.mac_address;
         var dadosJson = req.body.dadosS3;
+        var dataP = req.body.dataAtual
+        var fabrica = req.body.idFabrica
 
         console.log("Dados recebidos:", req.body);
 
@@ -15,7 +17,7 @@ async function dadosBucket(req, res) {
             });
         }
 
-        const resultado = await enviarParaS3(macAddress, dadosJson);
+        const resultado = await enviarParaS3(macAddress, dadosJson, dataP, fabrica);
         res.status(200).json({
             mensagem: "Dados enviados com sucesso", local: resultado 
         });
@@ -27,12 +29,12 @@ async function dadosBucket(req, res) {
     }
 }
 
-async function enviarParaS3(macAddress, dadosJson) {
+async function enviarParaS3(macAddress, dadosJson, dataP, fabrica) {
     const s3 = new AWS.S3();
 
     const params = {
         Bucket: process.env.BUCKET_NAME,
-        Key: `${macAddress}/dados.json`,
+        Key: `${fabrica}/${macAddress}/${dataP}`,
         Body: JSON.stringify(dadosJson),
         ContentType: 'application/json'
     };

@@ -85,6 +85,7 @@ function listarFabricas() {
                                       <th>Status/Parâmetro</th>
                                       <th>Gestor</th>
                                       <th>Ações</th>
+                                      <th>Vizualizar</th>
                                   </tr>
                                 </thead> `;
           
@@ -117,7 +118,9 @@ function listarFabricas() {
                             <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
                             <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
                                 <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
+                                
                             </td>
+                            <td data-label = "Vizualizar"><button class="btn-visualizar" data-id="${fabrica.idFabrica}"><i class='fa fa-eye'></i></button></td>
                           </tbody>`;
                   } else if (alerta.quantidade_alertas >= fabrica.limiteAtencao && alerta.quantidade_alertas < fabrica.limiteCritico) {
                       linha.innerHTML += `
@@ -131,6 +134,7 @@ function listarFabricas() {
                             <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
                                 <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
                             </td>
+                            <td data-label = "Vizualizar"><button class="btn-visualizar" data-id="${fabrica.idFabrica}"><i class='fa fa-eye'></i></button></td>
                           </tbody>`;
                   } else {
                       linha.innerHTML += `
@@ -144,6 +148,7 @@ function listarFabricas() {
                             <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
                                 <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
                             </td>
+                            <td data-label = "Vizualizar"><button class="btn-visualizar" data-id="${fabrica.idFabrica}"><i class='fa fa-eye'></i></button></td>
                           </tbody>`;
                   } 
                 } else {
@@ -158,6 +163,7 @@ function listarFabricas() {
                         <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
                             <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
                         </td>
+                        <td data-label = "Vizualizar"><button class="btn-visualizar" data-id="${fabrica.idFabrica}"><i class='fa fa-eye'></i></button></td>
                       </tbody>`;
                 }
   
@@ -165,6 +171,7 @@ function listarFabricas() {
 
                 const botaoExcluir = linha.querySelector(".btn-purple");
                 const botaoEditar = linha.querySelector(".btn-editar");
+                const botaoVisu = linha.querySelector(".btn-visualizar");
 
                 botaoEditar.addEventListener("click", () => {
                   abrirModal(botaoEditar)
@@ -184,6 +191,10 @@ function listarFabricas() {
                         }
                     });
                 });
+
+                botaoVisu.addEventListener("click", () => {
+                  abiriModalVisu(botaoVisu);
+                })
           });
     }).catch(erro => {
         console.error("Erro ao buscar componentes:", erro);
@@ -283,6 +294,117 @@ function abrirModal(botaoEditar) {
     console.error("Erro ao realizar fetch:", error);
   });
 }
+
+function abiriModalVisu(botaoVisu) {
+  var idVar = botaoVisu.getAttribute('data-id');
+
+  fetch(`/fabricas/infoFabrica/${idVar}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  }).then(function (resposta) {
+    if (!resposta.ok) {
+      console.log(resposta);
+      throw new Error(`Erro na resposta infoFabrica: ${resposta.status}`);
+    }
+    return resposta.json();
+  }).then(function (informacao) {
+    return fetch(`/jira/listarAlertasPorId/${idVar}`, {
+      method: "GET",
+      headers: {"Content-Type": "application/json"}
+    }).then(resposta => {
+      if (resposta.ok) {
+        console.log(resposta);
+        return resposta.json();
+      }
+      throw new Error("Erro ao buscar tempo resolução Jira");
+    }).then(dadosJira => {
+      return fetch(`/fabricas/verificarAlertasPorId/${idVar}`, {
+        method: "GET",
+        headers: {"Content-Type": "application/json"}
+      }).then(resposta => {
+        if (resposta.ok) {
+          console.log(resposta);
+          return resposta.json();
+        }
+        throw new Error("Erro ao buscar tempo de resolução");
+      }).then(alertas => {
+        return fetch(`/admin/mtbf/${idVar}`, {
+          method: "GET",
+          headers: {"Content-Type": "application/json"}
+        }).then(resposta => {
+          if (resposta.ok) {
+            return resposta.json();
+          }
+          throw new Error("Erro ao buscar dados MTBF");
+        }).then(dadosMtbf => {
+
+          var mtbf = 0;
+          var estado;
+          if (dadosMtbf[0].minutos_operacao && dadosMtbf[0].qtd_alertas > 0) {
+            mtbf = dadosMtbf[0].minutos_operacao / dadosMtbf[0].qtd_alertas;
+          }
+          var tempoMedio = dadosJira.tempoMedioResolucao
+          var tempoResolucao;
+          if(dadosJira.tempoMedioResolucao >= 1440) {
+            if(tempoMedio > mtbf) {
+              estado = 'critico'
+            } else {
+              estado = 'ok'
+            }
+            tempoResolucao = `${(tempoMedio / 1440).toFixed(0)}(d)`
+          } else if (dadosJira.tempoMedioResolucao >= 60) {
+            if (tempoMedio > mtbf) {
+              estado = 'critico'
+            } else {
+              estado = 'ok'
+            }
+            tempoResolucao = `${(tempoMedio / 60).toFixed(0)}(h)`
+          } else {
+            if (tempoMedio > mtbf) {
+              estado = 'critico'
+            } else {
+              estado = 'ok'
+            }
+            tempoResolucao = `${(tempoMedio).toFixed(0)}(m)`
+          }
+
+          var nome = informacao[0].nomeFabrica
+          var gestor = informacao[0].nomeGestorFabrica
+          var telefone = informacao[0].telefone
+          var status = estado
+          var qtdAlertasAberto = alertas[0].qtd_to_do
+          var qtdAlertasAndamento = alertas[0].qtd_done
+
+      
+          Swal.fire({
+          html: `
+                <div class="modal-test">
+                    <div class="containerCadastroFrabic">
+                        <h3>Informações Fábrica</h3>
+                        <label>Nome Fábrica: ${nome} </label>
+                        <label>Gestor: ${gestor}</label>
+                        <label>Telefone: ${telefone} </label>
+                        <label>Status: ${status}</label>
+                        <label>Alertas em aberto: ${qtdAlertasAberto}</label>
+                        <label>Alertas em andamento: ${qtdAlertasAndamento}</label>
+                        <label>Tempo resolução: ${tempoResolucao}</label>
+                    </div>
+                </div>
+          `,
+          showCancelButton: true,
+          cancelButtonText: "Fechar",
+          background: '#fff',
+          customClass: 'addModal'
+          })
+        });
+      });
+    });
+  }).catch(error => {
+    console.error("Erro:", error);
+  });
+}  
 
 function updateFabrica(idVar) {
   var nomeVar = iptNomeFabrica.value

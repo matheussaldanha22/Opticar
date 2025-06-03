@@ -18,12 +18,19 @@ body {
   overflow-x: hidden;
 }
 
-/* .mainContainer {
-    display: flex;
-    gap: 10%;
-    flex-direction: row;
-    min-height: 100vh;
-  } */
+.tituloDASH {
+  height: 10px;
+}
+
+.tituloDASH h1 {
+  text-align: start;
+  color: #2C3E50;
+}
+
+.tituloGrafico {
+  color: #2C3E50;
+  padding-left: 55px;
+}
 
 .mainContainer {
   background-color: #f5f1f1;
@@ -37,7 +44,6 @@ body {
 
 .contentContainer {
   width: 90vw;
-  /* margin-left: 8%; */
   gap: 10%;
 }
 
@@ -344,6 +350,7 @@ body {
 }
 
 #graficoAlertaFabricas {
+  border: #04708d 1px solid;
   background-color: white;
   border-radius: 7px;
   color: #000;
@@ -411,6 +418,7 @@ body {
 }
 
 .informaçõesFábrica {
+  border: #04708d 1px solid;
   color: black;
   font-weight: 700;
   background: white;
@@ -442,6 +450,7 @@ body {
 }
 
 .graficoAlertaFabricas {
+  border: #04708d 1px solid;
   display: flex;
   flex-direction: row;
 }
@@ -617,6 +626,7 @@ h1 {
   }
 
   #graficoAlertaFabricas {
+    border: #04708d 1px solid;
     width: 100%;
     max-width: 100%;
   }

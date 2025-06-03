@@ -33,9 +33,30 @@ function verificaAlertas() {
   return database.executarQUENTE(instrucaoSql);
 }
 
+function verificarAlertasPorId(idFabrica) {
+  var instrucaoSql = `SELECT servidor.fkFabrica, COUNT(CASE WHEN alerta.statusAlerta = 'To Do' THEN 1 END) AS qtd_to_do,
+							   COUNT(CASE WHEN alerta.statusAlerta = 'In Progress' THEN 1 END) AS qtd_in_progress,
+							   COUNT(CASE WHEN alerta.statusAlerta = 'Done' THEN 1 END) AS qtd_done
+								FROM servidor_maquina AS servidor
+								LEFT JOIN componenteServidor ON servidor.idMaquina = componenteServidor.fkMaquina
+								LEFT JOIN capturaDados AS captura ON componenteServidor.idcomponenteServidor = captura.fkComponenteServidor
+								INNER JOIN alerta ON captura.idCapturaDados = alerta.fkCapturaDados
+								where servidor.fkFabrica = ${idFabrica};`;
+
+  return database.executarQUENTE(instrucaoSql);
+}
+
+
 function listarFabricas() {
   var instrucaoSql = `SELECT f.idfabrica AS idFabrica, f.nome AS nomeFabrica, f.limiteAtencao, f.limiteCritico, u.nome AS nomeGestorFabrica 
     FROM fabrica AS f LEFT JOIN usuario AS u ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorFabrica';`
+
+  return database.executarFRIO(instrucaoSql)
+}
+
+function infoFabrica(idFabrica) {
+  var instrucaoSql = `SELECT f.idfabrica AS idFabrica, f.nome AS nomeFabrica, f.limiteAtencao, f.limiteCritico, u.nome AS nomeGestorFabrica, f.telefone
+    FROM fabrica AS f LEFT JOIN usuario AS u ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorFabrica' WHERE idfabrica = ${idFabrica};`
 
   return database.executarFRIO(instrucaoSql)
 }
@@ -76,5 +97,7 @@ module.exports = {
   excluirFabrica,
   excluirFabricaFrio,
   modalUpdate,
-  updateFabrica
+  updateFabrica,
+  infoFabrica,
+  verificarAlertasPorId
 }

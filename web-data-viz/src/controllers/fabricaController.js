@@ -21,6 +21,50 @@ function listarFabricasEmpresa(req, res) {
     })
 }
 
+function infoFabrica(req, res) {
+  var idFabrica = req.params.idVar
+
+  console.log(`Buscando fabricas por empresa`)
+
+  fabricaModel
+    .infoFabrica(idFabrica)
+    .then(function (resultado) {
+      if (resultado.length > 0) {
+        res.status(200).json(resultado)
+      } else {
+        res.status(204).send("Nenhum resultado encontrado!")
+      }
+    })
+    .catch(function (erro) {
+      console.log(erro)
+      console.log("Houve um erro ao buscar as fabricas.", erro.sqlMessage)
+      res.status(500).json(erro.sqlMessage)
+    })
+}
+
+function verificarAlertasPorId(req, res) {
+  var idFabrica = req.params.idVar
+
+  console.log(`Buscando fabricas por empresa`)
+
+  fabricaModel
+    .verificarAlertasPorId(idFabrica)
+    .then(function (resultado) {
+      if (resultado.length > 0) {
+        res.status(200).json(resultado)
+      } else {
+        res.status(204).send("Nenhum resultado encontrado!")
+      }
+    })
+    .catch(function (erro) {
+      console.log(erro)
+      console.log("Houve um erro ao buscar as fabricas.", erro.sqlMessage)
+      res.status(500).json(erro.sqlMessage)
+    })
+}
+
+
+
 function modalUpdate(req, res) {
   var id = req.body.idServer
   fabricaModel
@@ -189,5 +233,7 @@ module.exports = {
   excluirFabrica,
   excluirFabricaFrio,
   modalUpdate,
-  updateFabrica
+  updateFabrica,
+  infoFabrica,
+  verificarAlertasPorId
 }

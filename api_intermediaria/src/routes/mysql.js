@@ -7,6 +7,18 @@ router.post("/pedidosCliente", function (req, res) {
   mysqlController.pedidosCliente(req, res)
 })
 
+router.get("/cardapio", function (req, res) {
+  mysqlController.cardapio(req, res)
+})
+
+router.get("/obterServidor/:mac", function (req, res) {
+  mysqlController.obterServidor(req, res)
+})
+
+router.post("/pedidosObrigatorios", function (req, res) {
+  mysqlController.pedidosObrigatorios(req, res)
+})
+
 router.post("/cadMaqFrio", function (req, res) {
   mysqlController.cadMaqFrio(req, res)
 })

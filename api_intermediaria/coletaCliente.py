@@ -106,10 +106,10 @@ def inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta
 
 ############################################################################################################################################################################
 
-def dadosBucket(dadosS3, mac_address):
+def dadosBucket(dadosS3, mac_address, dataAtual, idFabrica):
     try:
         fetch_dadosS3 = "http://localhost:3333/aws/dadosS3"
-        resposta = requests.post(fetch_dadosS3, json={"mac_address": mac_address, "dadosS3": dadosS3})
+        resposta = requests.post(fetch_dadosS3, json={"mac_address": mac_address, "dadosS3": dadosS3, "dataAtual": dataAtual, "idFabrica": idFabrica})
 
         if resposta.status_code == 200:
             print("Dados enviados com sucesso")
@@ -187,7 +187,7 @@ def monitorar():
     mac_address = pegando_mac_address()
     
     print(f"Iniciando monitoramento nesse mac_address: {mac_address}")
-    intervalo_envio_s3 = 500 # 1 hora
+    intervalo_envio_s3 = 1440 # 1 hora
     ultimo_envio_s3 = datetime.datetime.now()
     dadosS3 = {
         "macAddress": mac_address,
@@ -223,6 +223,8 @@ def monitorar():
                     dadosS3["leitura"].append({
                         "componente": pedido_cliente['tipo'],
                         "medida": pedido_cliente['medida'],
+                        "idFabrica": pedido_cliente['fkFabrica'],
+                        "idMaquina": pedido_cliente['idMaquina'],
                         "valor": valor
                     })
 
@@ -268,7 +270,8 @@ def monitorar():
             
             tempo_passado = (datetime.datetime.now() - ultimo_envio_s3).total_seconds()
             if tempo_passado >= intervalo_envio_s3:
-                dadosBucket(dadosS3, mac_address)
+                dataAtual = datetime.datetime.now().isoformat()
+                dadosBucket(dadosS3, mac_address, dataAtual, idFabrica)
                 ultimo_envio_s3 = datetime.datetime.now()
 
             enviarDadosPedidoCliente(listaPedidoCliente)

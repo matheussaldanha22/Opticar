@@ -11,8 +11,17 @@ router.post("/cadastrar", function (req, res) {
   fabricaController.cadastrar(req, res)
 })
 
+router.get("/verificarAlertasPorId/:idVar", function (req, res) {
+  fabricaController.verificarAlertasPorId(req, res)
+})
+
+
 router.get("/verificaAlertas", function (req, res) {
   fabricaController.verificaAlertas(req, res)
+})
+
+router.get("/infoFabrica/:idVar", function (req, res) {
+  fabricaController.infoFabrica(req, res)
 })
 
 router.post("/listarFabricas", function (req, res) {

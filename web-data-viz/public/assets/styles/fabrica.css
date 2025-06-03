@@ -396,6 +396,29 @@ table {
     transition: 0.2s;
 }
 
+.btn-visualizar {
+    text-align: center;
+    font-family: 'Montserrat';
+    font-weight: 600;
+    background-color: black;
+    color: black;
+    border: none;
+    border-radius: 12px;
+    width: 5vw;
+    height: 3vh;
+    transition: 0.2s;
+}
+
+.btn-visualizar i {
+    color: white;
+}
+
+.btn-visualizar:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+    transition: 0.2s;
+}
+
 .btn-purple:hover{
     cursor: pointer;
     transform: scale(1.05);
