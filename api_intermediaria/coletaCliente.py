@@ -172,9 +172,14 @@ def dadosObrigatorios():
     uso_cpu2 = psutil.cpu_percent()
     uso_ram2 = psutil.virtual_memory().percent
     uso_disco2 = psutil.disk_usage('/').percent
+    rede = psutil.net_io_counters()
+    time.sleep(1)
     rede2 = psutil.net_io_counters()
-    mb_enviados2 = round(rede2.bytes_sent / (1024 * 1024), 2)
-    mb_recebidos2 = round(rede2.bytes_recv / (1024 * 1024), 2)
+    bytes_enviados_por_seg = rede2.bytes_sent - rede.bytes_sent
+    bytes_recebidos_por_seg = rede2.bytes_recv - rede.bytes_recv
+
+    mb_enviados2 = round(bytes_enviados_por_seg / (1024 * 1024), 2)
+    mb_recebidos2 = round(bytes_recebidos_por_seg / (1024 * 1024), 2)
     
     return uso_cpu2, uso_ram2, uso_disco2, mb_enviados2, mb_recebidos2
     

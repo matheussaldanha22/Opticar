@@ -327,7 +327,7 @@ tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-.tabelaContainer td:nth-child(7) {
+.tabelaContainer td:nth-child(8) {
   cursor: pointer;
   /* font-size: 30px; */
 }

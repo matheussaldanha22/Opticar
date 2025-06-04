@@ -1,18 +1,12 @@
 const itensPorPagina = 10
 let paginaAtual = 1
-let alertas = [] // Armazenamento dos dados recebidos do backend
+
+
+let dadosTempoReal = []
+
 
 document.addEventListener("DOMContentLoaded", () => {
-  fetch("/alertas/listar")
-    .then((res) => res.json())
-    .then((dados) => {
-      // alertas = dados
-      // renderTabela(paginaAtual)
-      // renderPaginacao()
-    })
-    .catch((err) => {
-      console.error("Erro ao carregar alertas:", err)
-    })
+  renderGraficos()
 })
 
 function renderTabela(pagina) {
@@ -112,61 +106,198 @@ function abrirModal(id) {
   })
 }
 
-var options = {
-  chart: {
-    type: "line",
-    height: "100%",
-    width: "100%",
-    foreColor: "#fff",
-  },
-  series: [
-    {
-      name: "sales",
-      data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
+
+
+function renderGraficos() {
+  // Crie o gráfico com dados vazios
+  var cpu = {
+    chart: {
+      type: "line",
+      height: "100%",
+      width: "100%",
+      foreColor: "#000",
     },
-  ],
-  colors: ["#fff"],
-  xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
-  },
-}
-
-var options2 = {
-  chart: {
-    height: "100%",
-    width: "100%",
-    type: "radialBar",
-  },
-  colors: ["#01627B", "#4b4b4b9c"],
-  series: [60],
-  labels: ["Uso"],
-}
-
-var options3 = {
-  chart: {
-    type: "line",
-    height: "100%",
-    width: "100%",
-    foreColor: "#fff",
-  },
-  series: [
-    {
-      name: "sales",
-      data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
+    series: [
+      {
+        name: "Porcentagem",
+        data: [],
+      },
+    ],
+    stroke: {
+      curve: "smooth",
+      width: 3
     },
-  ],
-  colors: ["#fff"],
-  xaxis: {
-    categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
-  },
+    colors: ["#000"],
+    xaxis: {
+      categories: [],
+    },
+  };
+
+  var disco = {
+    chart: {
+      height: "100%",
+      width: "100%",
+      type: "radialBar",
+    },
+    colors: ["#01627B", "#4b4b4b9c"],
+    series: [60],
+    labels: ["Uso"],
+  }
+
+  var ram = {
+    chart: {
+      type: "line",
+      height: "100%",
+      width: "100%",
+      foreColor: "#000",
+    },
+    series: [
+      {
+        name: "Ram",
+        data: [],
+      },
+    ],
+        stroke: {
+      curve: "smooth",
+      width: 3
+    },
+    colors: ["#000"],
+    xaxis: {
+      categories: [],
+    },
+  }
+
+  chart = new ApexCharts(document.querySelector("#chart"), cpu);
+  chart.render();
+
+  graficoDisco = new ApexCharts(document.getElementById("chartDisco"), disco)
+  graficoDisco.render()
+
+  graficoRam = new ApexCharts(document.getElementById("chartRam"), ram)
+  graficoRam.render()
+
+
+
+  setInterval(() => {
+    renderDados()
+  }, 6000);
 }
 
-var chart = new ApexCharts(document.querySelector("#chart"), options)
 
-chart.render()
 
-var grafico = new ApexCharts(document.getElementById("chartDisco"), options2)
-grafico.render()
 
-var graficoRam = new ApexCharts(document.getElementById("chartRam"), options3)
-graficoRam.render()
+
+function renderDados() {
+  let maquinaSelecionada = sessionStorage.getItem("idServidorSelecionado");
+  const idFabrica = sessionStorage.getItem("FABRICA_ID");
+
+  console.log(`mAQUINA SELECIONADA ${maquinaSelecionada}`)
+
+  fetch(`/dashMonitoramento/dadosRecebidos/${idFabrica}`)
+    .then((res) => res.json())
+    .then((dados) => {
+      dados.forEach((servidores) => {
+        servidores.forEach((novoServidor) => {
+          if (novoServidor.CPU.idMaquina == maquinaSelecionada) {
+            dadosTempoReal.push([novoServidor]);
+            if (dadosTempoReal.length > 7) {
+              dadosTempoReal.shift();
+            }
+          }
+        });
+      });
+
+      const cpuData = dadosTempoReal.map(arr => arr[0].CPU.valor);
+
+      const discoData = [dadosTempoReal[dadosTempoReal.length - 1]?.[0]?.DISCO?.valor || 0]
+
+      const ultimoDisco = discoData[discoData.length - 1] || 0
+      console.log(`Dados disco: ${discoData}`)
+
+      const ramData = dadosTempoReal.map(arr => arr[0].RAM.valor)
+
+
+
+
+      const cpuHorarios = dadosTempoReal.map(arr => {
+        const agora = new Date();
+        return agora.toLocaleTimeString('pt-BR', { hour12: false });
+      });
+
+      // Atualize apenas os dados do gráfico
+      chart.updateSeries([{
+        name: "Porcentagem",
+        data: cpuData,
+      }]);
+      chart.updateOptions({
+        xaxis: { categories: cpuHorarios }
+      });
+
+
+      graficoDisco.updateSeries([ultimoDisco])
+
+      graficoDisco.updateOptions({
+        // colors: ["#FF0"],
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {
+                show: true,
+                fontSize: '22px',
+                color: '#000'
+              }
+            }
+          }
+        }
+      })
+
+      graficoRam.updateSeries([{
+        name: "Porcentagem",
+        data: ramData
+      }])
+      graficoRam.updateOptions({
+        xaxis: {categories: cpuHorarios}
+      })
+
+
+
+      // Atualize o texto de utilização
+      const cpuTexto = cpuData[cpuData.length - 1] || 0;
+      let utilizacaoTexto = document.getElementById('utilizacaoInfo');
+      utilizacaoTexto.textContent = cpuTexto + '%';
+
+      let utilizacaoDisco = document.getElementById('utilizacaoInfoDisco')
+      utilizacaoDisco.textContent = ultimoDisco + '%'
+      console.log(cpuData)
+      console.log(dadosTempoReal)
+    });
+}
+
+
+
+
+
+
+
+
+
+// var ram = {
+//   chart: {
+//     type: "line",
+//     height: "100%",
+//     width: "100%",
+//     foreColor: "#000",
+//   },
+//   series: [
+//     {
+//       name: "sales",
+//       data: [30, 40, 45, 50, 49, 60, 70, 91, 125],
+//     },
+//   ],
+//   colors: ["#000"],
+//   xaxis: {
+//     categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999],
+//   },
+// }
+
+

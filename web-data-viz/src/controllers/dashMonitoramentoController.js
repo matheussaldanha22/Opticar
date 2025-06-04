@@ -64,7 +64,7 @@ function dadosRecebidos(req, res) {
       dados => !(dados[0] && dados[0].CPU && dados[0].CPU.idFabrica == idFabrica)
     )
   } else {
-    res.status(204).send() // ou res.status(200).send([])
+    res.status(200).json([])
   }
 }
 

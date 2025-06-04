@@ -478,7 +478,8 @@ table i:hover {
   max-height: inherit;
   max-width: inherit;
   width: 70%;
-  background: linear-gradient(270deg, #012027, #04708d);
+  /* background: linear-gradient(270deg, #012027, #04708d); */
+  background: #fff;
   border-radius: 10px;
 }
 
@@ -519,7 +520,7 @@ table i:hover {
   width: 100%;
   height: 100%;
   /* border: 1px solid black; */
-  background-color: #efefef;
+  background-color: #f8f8f8;
   display: flex;
   padding: 1%;
   border-radius: 10px;
@@ -552,11 +553,18 @@ table i:hover {
   font-weight: 1000;
 }
 
-.textoGrafico #utilizacaoInfoDisco {
-  margin-top: 20%;
+.textoGrafico {
+  margin-top: 2.5%;
   color: #04708d;
   font-weight: 1000;
   font-size: 1.5vw;
+}
+
+#utilizacaoInfoDisco{
+  margin-top: 20%;
+  color: #04708d;
+  font-weight: 1000;
+  font-size: 4.5vw;
 }
 
 #chartDisco {
@@ -573,7 +581,8 @@ table i:hover {
   max-height: inherit;
   max-width: inherit;
   width: 70%;
-  background: linear-gradient(270deg, #012027, #04708d);
+  /* background: linear-gradient(270deg, #012027, #04708d); */
+  background: #fff;
   border-radius: 10px;
 }
 

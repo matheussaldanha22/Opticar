@@ -76,8 +76,10 @@ function renderTabela() {
       btnServidor.addEventListener("click", () => {
         const idServidor = btnServidor.getAttribute("data-id")
         sessionStorage.setItem("idServidorSelecionado", idServidor)
-        window.location.href = "../../dashMonitoramento-vitor-especifico.html"
         console.log("Clicou no botão")
+        setInterval(()=>{
+        window.location.href = "../../dashMonitoramento-vitor-especifico.html"
+        }, 2000)
       })
     })
   })
