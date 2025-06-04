@@ -52,6 +52,10 @@ router.get("/dadosGraficoAlertaAnual/:idMaquina/:componente", function (req, res
   dashComponenteController.dadosGraficoAlertaAnual(req, res)
 })
 
+router.get("/dadosPredicaoAlertaSemanal/:idMaquina/:componente", function (req, res) {
+  dashComponenteController.dadosPredicaoAlertaSemanal(req, res)
+})
+
 
 
 module.exports = router

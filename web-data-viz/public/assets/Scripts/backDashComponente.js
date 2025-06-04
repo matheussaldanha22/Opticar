@@ -105,7 +105,7 @@ function obterAlertasMes(idMaquina, componente) {
       if (isNaN(porcentagemCritico)) {
         document.getElementById("probFalha").innerHTML = `0%`
 
-      }else{
+      } else {
         document.getElementById("probFalha").innerHTML = `${porcentagemCritico}%`
       }
 
@@ -146,11 +146,11 @@ function obterMediaUso(idMaquina, componente) {
 
       if (usoMesAtual <= usoMesPassado) {
         comparacao = usoMesPassado - usoMesAtual
-        document.getElementById('comparacaoUso').innerHTML = `-${comparacao}%`
+        document.getElementById('comparacaoUso').innerHTML = `-${comparacao.toFixed(2)}%`
         document.getElementById('comparacaoUso').style.color = 'limegreen'
       } else {
         comparacao = usoMesAtual - usoMesPassado
-        document.getElementById('comparacaoUso').innerHTML = `+${comparacao}%`
+        document.getElementById('comparacaoUso').innerHTML = `+${comparacao.toFixed(2)}%`
         document.getElementById('comparacaoUso').style.color = 'red'
       }
 
@@ -686,8 +686,79 @@ function renderGraficoAlerta(categorias, dadosCritico, dadosMedio) {
   window.chartSeveridade.render();
 }
 
-function predicaoAlerta(idMaquina,componente){
+function predicaoAlerta(idMaquina, componente) {
+  fetch(`/dashComponentes/dadosPredicaoAlertaSemanal/${idMaquina}/${componente}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" }
+  })
+    .then(res => res.json())
+    .then(informacoes => {
+      // transforma dados em vetores, ss precisa disso [semana,alerta]
+      const dadosSemanais = informacoes.map(item => [
+        item.semana_do_mes,
+        item.quantidade_alertas
+      ]);
 
+
+
+      // gera o modelo de regressao
+      const regression = ss.linearRegression(dadosSemanais);
+
+      // predicao
+      const previsao = ss.linearRegressionLine(regression);
+
+      // preve os alertas dividindo por semana
+      const alertasPrevistos = [];
+      for (let semana = 0; semana < informacoes.length; semana++) {
+        const predito = Math.round(previsao(semana));
+        alertasPrevistos.push(Math.max(0, predito)); // arredonda para inteiro
+      }
+
+      //vetor para pegar vetor dos alertas real
+      const alertasReais = informacoes.map(item =>
+        item.quantidade_alertas
+      );
+
+      //pegar categorias(semanas da previsao)
+      const categorias = informacoes.map(item =>
+        `Semana ${item.semana_do_mes}`
+      );
+      console.log('catego', categorias)
+      console.log('Previsao', alertasPrevistos)
+
+      renderGraficoPrevisaoAlerta(alertasReais, alertasPrevistos, categorias);
+    });
+
+}
+
+function renderGraficoPrevisaoAlerta(alertasReais, alertasPrevistos, categorias) {
+  const data = new Date(); // garantir que data existe
+  const options = {
+    chart: { type: 'line', height: 300, toolbar: { show: false } },
+    series: [
+      {
+        name: `Alertas ${nomeMeses[data.getMonth()]}`,
+        data: alertasReais
+      },
+      {
+        name: `Alertas ${nomeMeses[data.getMonth() + 1]} (Previsão)`,
+        data: alertasPrevistos
+      }
+    ],
+    xaxis: {
+      categories: categorias,
+      labels: { style: { colors: '#333'} }
+    },
+    colors: ['#0077b6', '#333'],
+    stroke: {
+      width: [5, 5],
+      curve: 'smooth',
+      dashArray: [0, 8] 
+    }
+  };
+
+  window.grafPredicao = new ApexCharts(document.querySelector("#grafPredicao"), options);
+  window.grafPredicao.render();
 }
 
 
@@ -756,6 +827,7 @@ function atualizarDados() {
     obterTempoMtbf(idMaquina, componente);
     dadosGraficoUso(idMaquina, componente, anoEscolhidoUso, mesEscolhidoUso);
     dadosGraficoAlerta(idMaquina, componente, anoEscolhidoAlerta)
+    predicaoAlerta(idMaquina, componente)
 
 
     calcularConfiabilidade(idMaquina, componente)
@@ -797,66 +869,66 @@ sltComponente.addEventListener("change", atualizarDados);
 
 
 //PREDICAO
-let currentChart;
-const chartElement = document.querySelector("#predictionChart");
-const titleElement = document.querySelector("#chartTitle");
+// let currentChart;
+// const chartElement = document.querySelector("#predictionChart");
+// const titleElement = document.querySelector("#chartTitle");
 
 
-function renderChart(tipo) {
-  if (currentChart) currentChart.destroy();
+// function renderChart(tipo) {
+//   if (currentChart) currentChart.destroy();
 
-  let options;
-  if (tipo === 'alertas') {
-    titleElement.innerText = `Número de alertas previstos - CPU (Prox. Mês - ${nomeMeses[mesAtual + 1]})`;
-    options = {
-      chart: { type: 'line', height: 300, toolbar: { show: false } },
-      series: [{ name: 'Alertas', data: chartData.alertas }],
-      xaxis: {
-        categories: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
-        labels: { style: { colors: '#333' } }
-      },
-      colors: ['#0077b6']
-    };
-  } else if (tipo === 'risco') {
-    titleElement.innerText = `Percentual de alertas críticos - CPU (Próx.Semestre)`;
-    const dados = chartData.risco;
-    const options = {
-      chart: { type: 'bar', stacked: false, height: 300 },
-      series: [
-        { name: 'Sobrecarga (%)', data: dados.data }
-      ],
-      xaxis: { categories: mesesSeguintes, labels: { style: { colors: '#000' } } },
-      colors: ['#011f4b'],
-      legend: { labels: { colors: '#000' } },
-      tooltip: { theme: 'light' }
-    };
+//   let options;
+//   if (tipo === 'alertas') {
+//     titleElement.innerText = `Número de alertas previstos - CPU (Prox. Mês - ${nomeMeses[mesAtual + 1]})`;
+//     options = {
+//       chart: { type: 'line', height: 300, toolbar: { show: false } },
+//       series: [{ name: 'Alertas', data: chartData.alertas }],
+//       xaxis: {
+//         categories: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
+//         labels: { style: { colors: '#333' } }
+//       },
+//       colors: ['#0077b6']
+//     };
+//   } else if (tipo === 'risco') {
+//     titleElement.innerText = `Percentual de alertas críticos - CPU (Próx.Semestre)`;
+//     const dados = chartData.risco;
+//     const options = {
+//       chart: { type: 'bar', stacked: false, height: 300 },
+//       series: [
+//         { name: 'Sobrecarga (%)', data: dados.data }
+//       ],
+//       xaxis: { categories: mesesSeguintes, labels: { style: { colors: '#000' } } },
+//       colors: ['#011f4b'],
+//       legend: { labels: { colors: '#000' } },
+//       tooltip: { theme: 'light' }
+//     };
 
-    currentChart = new ApexCharts(chartElement, options);
-    currentChart.render();
-  }
-  else if (tipo === 'tendencia') {
-    titleElement.innerText = `Tendência de Crescimento de Uso - CPU (7 dias)`;
-    options = {
-      chart: { type: 'area', height: 300, toolbar: { show: false } },
-      series: [{ name: 'Uso Projetado (%)', data: chartData.tendencia }],
-      xaxis: {
-        categories: ['Hoje', '+1d', '+2d', '+3d', '+4d', '+5d', '+6d'],
-        labels: { style: { colors: '#333' } }
-      },
-      colors: ['#2196f3']
-    };
-  }
+//     currentChart = new ApexCharts(chartElement, options);
+//     currentChart.render();
+//   }
+//   else if (tipo === 'tendencia') {
+//     titleElement.innerText = `Tendência de Crescimento de Uso - CPU (7 dias)`;
+//     options = {
+//       chart: { type: 'area', height: 300, toolbar: { show: false } },
+//       series: [{ name: 'Uso Projetado (%)', data: chartData.tendencia }],
+//       xaxis: {
+//         categories: ['Hoje', '+1d', '+2d', '+3d', '+4d', '+5d', '+6d'],
+//         labels: { style: { colors: '#333' } }
+//       },
+//       colors: ['#2196f3']
+//     };
+//   }
 
-  currentChart = new ApexCharts(chartElement, options);
-  currentChart.render();
-}
+//   currentChart = new ApexCharts(chartElement, options);
+//   currentChart.render();
+// }
 
-document.getElementById("tipo").addEventListener("change", () => {
-  renderChart(document.getElementById("tipo").value);
-});
+// document.getElementById("tipo").addEventListener("change", () => {
+//   renderChart(document.getElementById("tipo").value);
+// });
 
-// renderSeveridade();
-renderChart("alertas");
+// // renderSeveridade();
+// renderChart("alertas");
 
 
 

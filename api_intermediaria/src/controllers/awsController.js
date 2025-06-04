@@ -34,7 +34,7 @@ async function enviarParaS3(macAddress, dadosJson, dataP, fabrica) {
 
     const params = {
         Bucket: process.env.BUCKET_NAME,
-        Key: `${fabrica}/${macAddress}/${dataP}`,
+        Key: `fabrica${fabrica}/${macAddress}/${dataP}`,
         Body: JSON.stringify(dadosJson),
         ContentType: 'application/json'
     };

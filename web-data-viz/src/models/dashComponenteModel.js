@@ -199,6 +199,27 @@ GROUP BY
     return database.executarQUENTE(instrucaoSql)
 }
 
+function dadosPredicaoAlertaSemanal(idMaquina, componente) {
+    var instrucaoSql = `
+   SELECT
+  CEIL(DAY(a.dataHora) / 7) AS semana_do_mes,
+  COUNT(a.idAlerta) AS quantidade_alertas
+FROM alerta a
+JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
+JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
+JOIN componente c ON cs.fkComponente = c.idcomponente
+JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
+WHERE
+  c.tipo = '${componente}'
+  AND sm.idMaquina = ${idMaquina}
+  AND YEAR(a.dataHora) = YEAR(CURDATE())
+  AND MONTH(a.dataHora) = MONTH(CURDATE()) 
+GROUP BY CEIL(DAY(a.dataHora) / 7)
+ORDER BY semana_do_mes;
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
+}
 
 module.exports = {
     obterParametrosComponente,
@@ -210,5 +231,6 @@ module.exports = {
     dadosGraficoUsoSemanal,
     dadosGraficoUsoMensal,
     dadosGraficoAlertaMensal,
-    dadosGraficoAlertaAnual
+    dadosGraficoAlertaAnual,
+    dadosPredicaoAlertaSemanal
 }

@@ -12,8 +12,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script src="assets/Scripts/backDashComponente.js" defer></script>
-
+    <script src="assets/Scripts/backDashComponente.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/simple-statistics@7.7.0/dist/simple-statistics.min.js"></script>
 
 
 
@@ -102,7 +102,7 @@
                 <div class="servidor">
                     <p style="font-size: 25px;display: flex;align-items: center;">Selecione o servidor:</p>
                     <select name="" class="sltRoxo" id="sltServidor">
-                        
+
                     </select>
                 </div>
             </div>
@@ -126,12 +126,13 @@
                 <!-- KPI USO MEDIO  -->
                 <div class="kpiIdv">
                     <div class="tituloKpi">
-                        <h2 style="display: flex; gap: 3px;">Porcentagem de uso médio <p id="kpiMes2"></p></h2>
+                        <h2 style="display: flex; gap: 3px;">Porcentagem de uso médio <p id="kpiMes2"></p>
+                        </h2>
                     </div>
                     <span class="txtKpi">
                         <p class="dadoKpi" id="usoMedio">00%</p>
                     </span>
-                    <h3>Comparativo com o mês anterior: <p  class="infoKpi" id="comparacaoUso">0</p>
+                    <h3>Comparativo com o mês anterior: <p class="infoKpi" id="comparacaoUso">0</p>
                 </div>
 
                 <!-- KPI MTBF -->
@@ -142,7 +143,7 @@
                     <span class="txtKpi">
                         <p class="dadoKpi" id="mtbf">0</p>
                     </span>
-                    <h3>Classificação: <b   class="infoKpi" id="classificacaoMtbf">...</b></h3>
+                    <h3>Classificação: <b class="infoKpi" id="classificacaoMtbf">...</b></h3>
                 </div>
 
                 <!-- KPI CONFIABILIDADE -->
@@ -153,12 +154,12 @@
                     <span class="txtKpi">
                         <p class="dadoKpi" id="confiabilidade">0</p>
                     </span>
-                    <h3>Status: <p id="faixaConfiabilidade"  class="infoKpi" style="color: yellow;">Zona de risco</p>
+                    <h3>Status: <p id="faixaConfiabilidade" class="infoKpi" style="color: yellow;">Zona de risco</p>
                     </h3>
                 </div>
 
             </div>
-            
+
 
             <!-- charts -->
             <div class="grafSuperior">
@@ -167,7 +168,9 @@
                     <div class="grafBox">
                         <div class="grafContainer">
                             <h4 style="display: flex; justify-content: space-between;width: 26vw;">
-                                <div style="display: flex; gap: 5px;">Uso médio vs Limite - <p class="nomeComponente"> CPU</p> </div>
+                                <div style="display: flex; gap: 5px;">Uso médio vs Limite - <p class="nomeComponente">
+                                        CPU</p>
+                                </div>
 
                                 <p style="border-bottom: solid 1px gray; color: gray;">
                                     <i class='bx bx-filter-alt'></i>
@@ -189,7 +192,9 @@
                     <div class="grafBox">
                         <div class="grafContainer">
                             <h4 style="display: flex; justify-content: space-between;width: 26vw;">
-                                <div style="display: flex; gap: 5px;">Distribuição de alertas - <p class="nomeComponente">CPU</p></div>
+                                <div style="display: flex; gap: 5px;">Distribuição de alertas - <p
+                                        class="nomeComponente">CPU</p>
+                                </div>
                                 <p style="border-bottom: solid 1px gray; color: gray;">
                                     <i class='bx bx-filter-alt'></i>
                                     <span id="tipoFiltro-alertas">Anual</span> -
@@ -229,8 +234,8 @@
                     </div>
 
                     <div class="grafBox">
-                        <h4 id="chartTitle">Número de alertas previstos (7 dias)</h4>
-                        <div id="predictionChart"></div>
+                        <h4 id="chartTitle" style="display: flex; gap:5px;">Número de alertas previstos no próximo mês - <p class="nomeComponente">CPU</p></h4>
+                        <div id="grafPredicao"></div>
                     </div>
                 </div>
 
@@ -247,4 +252,3 @@
 </body>
 
 </html>
-

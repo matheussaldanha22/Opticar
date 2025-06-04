@@ -192,7 +192,7 @@ def monitorar():
     mac_address = pegando_mac_address()
     
     print(f"Iniciando monitoramento nesse mac_address: {mac_address}")
-    intervalo_envio_s3 = 1440 # 1 hora
+    intervalo_envio_s3 = 5 # 1 hora = 1440
     ultimo_envio_s3 = datetime.datetime.now()
     dadosS3 = {
         "macAddress": mac_address,
