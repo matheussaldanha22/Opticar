@@ -5,6 +5,33 @@ function listarTipo() {
     return database.executarFRIO(instrucaoSql);
 }
 
+function modalUpdate(id) {
+    var instrucaoSql = `SELECT * FROM componenteServidor JOIN componente on fkComponente = idComponente WHERE idcomponenteServidor = ${id};`
+    return database.executarFRIO(instrucaoSql)
+}
+
+function updatePedido(id, modelo, limiteC, limiteA) {
+    var instrucaoSql = `UPDATE componenteServidor
+                        SET
+                            modelo = '${modelo}',
+                            limiteCritico = ${limiteC},
+                            limiteAtencao = ${limiteA}
+                        WHERE
+                            idcomponenteServidor = ${id};`
+    return database.executarFRIO(instrucaoSql)
+}
+
+function updatePedidoQuente(id, modelo, limiteC, limiteA) {
+    var instrucaoSql = `UPDATE componenteServidor
+                        SET
+                            modelo = '${modelo}',
+                            limiteCritico = ${limiteC},
+                            limiteAtencao = ${limiteA}
+                        WHERE
+                            idcomponenteServidor = ${id};`
+    return database.executarQUENTE(instrucaoSql)
+}
+
 function listarMedida(tipoSelecionado) {
     var instrucaoSql = `SELECT DISTINCT medida FROM componente WHERE tipo = '${tipoSelecionado}';`;
     return database.executarFRIO(instrucaoSql);
@@ -54,5 +81,8 @@ module.exports ={
     cadastrarFrio,
     listarComponentes,
     excluirComponente,
-    excluirComponenteFrio
+    excluirComponenteFrio,
+    modalUpdate,
+    updatePedido,
+    updatePedidoQuente
  };

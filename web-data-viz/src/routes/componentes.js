@@ -19,6 +19,14 @@ router.post("/cadastrarFrio", function (req, res) {
     componenteController.cadastrarFrio(req,res);
 })
 
+router.post("/modalUpdate", function (req, res) {
+    componenteController.modalUpdate(req,res);
+})
+
+router.post("/updatePedido", function (req, res) {
+    componenteController.updatePedido(req,res);
+})
+
 router.post("/verificar", function (req, res) {
     componenteController.verificar(req,res);
 })

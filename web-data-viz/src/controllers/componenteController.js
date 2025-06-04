@@ -14,6 +14,71 @@ function listarTipo(req, res) {
     });
 }
 
+function modalUpdate(req, res) {
+    var id = req.body.idServer;
+    
+    if (id == undefined) {
+      res.status(400).send("undefined! modalUpdate");
+    } else {
+      componenteModel.modalUpdate(id)
+        .then(function (resultado) {
+          res.json(resultado);
+        })
+        .catch(function (erro) {
+          console.log(erro);
+          console.log(
+            "\nHouve um erro ao realizar a operação do select!",
+            erro.sqlMessage
+          );
+          res.status(500).json(erro.sqlMessage);
+        });
+    }
+}
+
+function updatePedido(req, res) {
+    var id = req.body.idServer;
+    var modelo = req.body.modeloServer;
+    var limiteC = req.body.limiteCServer;
+    var limiteA = req.body.limiteAServer;
+
+    if (!id || !modelo || !limiteA || !limiteC) {
+      res.status(400).send("undefined! updatePedido");
+    } else {
+      componenteModel.updatePedido(id, modelo, limiteC, limiteA)
+        .then(function (resultado) {
+          updatePedidoQuente(id, modelo, limiteC, limiteA)
+          res.json(resultado);
+        })
+        .catch(function (erro) {
+          console.log(erro);
+          console.log(
+            "\nHouve um erro ao realizar a operação do update!",
+            erro.sqlMessage
+          );
+          res.status(500).json(erro.sqlMessage);
+        });
+    }
+}
+
+function updatePedidoQuente(req, res, id, modelo, limiteC, limiteA) {
+    if (!id || !modelo || !limiteA || !limiteC) {
+      console.log("undefined! updatePedido");
+    } else {
+      componenteModel.updatePedidoQuente(id, modelo, limiteC, limiteA)
+        .then(function (resultado) {
+          res.status(200).json(resultado);
+        })
+        .catch(function (erro) {
+          console.log(erro);
+          console.log(
+            "\nHouve um erro ao realizar a operação do updateQuente!",
+            erro.sqlMessage
+          );
+          res.status(500).json(erro.sqlMessage);
+        });
+    }
+}
+
 function listarMedida(req, res) {
     var tipoSelecionado = req.body.tipoSelecionadoServer;
     
@@ -177,5 +242,7 @@ function excluirComponenteFrio(req, res) {
     verificar,
     listarComponentes,
     excluirComponente,
-    excluirComponenteFrio
+    excluirComponenteFrio,
+    modalUpdate,
+    updatePedido
   };

@@ -1,9 +1,4 @@
-var lista_componente = [];
-var lista_tipo = [];
-var lista_medida = [];
-
 function listarTipo() {
-    var lista_tipo = [];
     fetch("/componentes/listarTipo", {
         method: "GET",
     })
@@ -19,7 +14,6 @@ function listarTipo() {
         tipoElement.innerHTML = `<option value="#" selected>Selecione o Componente</option>`
         if (componentes.length > 0) {
             componentes.forEach((tipo) => {
-                lista_tipo.push(tipo);
                 var option = document.createElement("option");
                 option.textContent = tipo.tipo;
                 tipoElement.appendChild(option);
@@ -39,7 +33,6 @@ function listarTipo() {
 
 
 function listarMedida() {
-    var lista_medida = [];
     var tipoSelecionadoVar = sltTipo.value;
 
     fetch("/componentes/listarMedida", {
@@ -59,10 +52,19 @@ function listarMedida() {
         medidaElement.innerHTML = `<option value="#" selected>Selecione a Medida</option>`;
         if (componentes.length > 0) {
             componentes.forEach((tipo) => {
-                lista_medida.push(tipo);
+              if (tipoSelecionadoVar == "Cpu" && tipo.medida == "Porcentagem") {
+                return
+              } else if (tipoSelecionadoVar == "Ram" && tipo.medida == "Porcentagem") {
+                return
+              } else if (tipoSelecionadoVar == "Disco" && tipo.medida == "Porcentagem") {
+                return
+              } else if (tipoSelecionadoVar == "Rede" && tipo.medida == "Upload" || tipo.medida == "Download") {
+                return
+              } else {
                 var option = document.createElement("option");
                 option.textContent = tipo.medida;
                 medidaElement.appendChild(option);
+              }
             });
             console.log("Tipos cadastrados com sucesso");
         } else {
@@ -215,8 +217,6 @@ function listarComponente() {
         }),
         }).then(resposta => resposta.json())
           .then(componentes => {
-            lista_componente = [];
-            lista_componente.push(componentes);
             const tabela = document.querySelector(".componentesContainer table");
             tabela.innerHTML = "";
             tabela.innerHTML = `
@@ -229,11 +229,13 @@ function listarComponente() {
                                     <th>Modelo</th>
                                     <th>Limite grave</th>
                                     <th>Limite atenção</th>
-                                    <th>Excluir</th>
+                                    <th>Ações</th>
                                 </tr>
                               </thead>`;
 
             componentes.forEach(componente => {
+              if ((componente.tipo == "Cpu" || componente.tipo == "Ram" || componente.tipo == "Disco" || componente.tipo == "Rede")
+                 && (componente.medida == "Porcentagem" || componente.medida == "Upload" || componente.medida == "Download")) {
                 const linha = document.createElement("tr");
                 linha.innerHTML = ""; 
                 linha.innerHTML += `
@@ -245,7 +247,29 @@ function listarComponente() {
                       <td data-label = "Modelo">${componente.modelo}</td>
                       <td data-label = "Limite Grave">${componente.limiteCritico}</td>
                       <td data-label = "Limite atenção">${componente.limiteAtencao}</td>
-                      <td data-label = "Excluir"><button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bxs-trash'></i></button></td>
+                      <td data-label = "Editar"><button class="btn-editar" data-id="${componente.idcomponenteServidor}"><i class='bx bx-edit'></i></button></td>
+                    </tbody>
+                `;
+                tabela.appendChild(linha);
+
+                const botaoEditar = linha.querySelector(".btn-editar")
+                botaoEditar.addEventListener("click", () => {
+                  modalEditar(botaoEditar)
+                })
+                } else {
+                  const linha = document.createElement("tr");
+                linha.innerHTML = ""; 
+                linha.innerHTML += `
+                    <tbody>
+                      <td data-label = "ID Componente">${componente.idcomponenteServidor}</td>
+                      <td data-label = "Tipo componente">${componente.tipo}</td>
+                      <td data-label = "Tipo de medida">${componente.medida}</td>
+                      <td data-label = "Indicador">${componente.indicador}</td>
+                      <td data-label = "Modelo">${componente.modelo}</td>
+                      <td data-label = "Limite Grave">${componente.limiteCritico}</td>
+                      <td data-label = "Limite atenção">${componente.limiteAtencao}</td>
+                      <td data-label = "Ações"><button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bxs-trash'></i></button>
+                      <button class="btn-editar" data-id="${componente.idcomponenteServidor}"><i class='bx bx-edit'></i></button></td>
                     </tbody>
                 `;
                 tabela.appendChild(linha);
@@ -266,6 +290,12 @@ function listarComponente() {
                         }
                     });
                 });
+
+                const botaoEditar = linha.querySelector(".btn-editar")
+                botaoEditar.addEventListener("click", () => {
+                  modalEditar(botaoEditar)
+                })
+              }
             });
     }).catch(erro => {
         console.error("Erro ao buscar componentes:", erro);
@@ -324,4 +354,89 @@ function verificaIdMaquina() {
   if (idMaquinaVar == undefined) {
     window.location.href = "/listadeservidores.html";
   }
+}
+
+function modalEditar(botaoEditar) {
+  var idVar = botaoEditar.getAttribute("data-id");
+
+  fetch("/componentes/modalUpdate", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ idServer: idVar }),
+  })
+  .then(resposta => {
+    if (!resposta.ok) throw new Error("Erro na resposta da API");
+    return resposta.json();
+  })
+  .then(dados => {
+    const componente = dados[0]; 
+    Swal.fire({
+      html: `
+            <div class="modal-test">
+                <div class="containerCadastroComp">
+                    <h3>Editar Pedido</h3>
+                    <label>Componente: ${componente.tipo}</label>
+                    <label>Medida: ${componente.medida}</label>
+                    <label>Modelo: <input id="iptModelo" value="${componente.modelo}"></label>
+                    <label>Limite critico: <input id="iptLimiteC" value="${componente.limiteCritico}"></label>
+                    <label>Limite atenção: <input id="iptLimiteAtencao" value="${componente.limiteAtencao}"></label>
+                </div>
+            </div>
+      `,
+      showCancelButton: true,
+      cancelButtonText: "Fechar",
+      background: '#fff',
+      confirmButtonColor: '#2C3E50',
+      confirmButtonText: "Salvar",
+      customClass: 'addModal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        updatePedido(idVar);
+        listarComponente()
+      }
+    });
+    listarComponente();
+  })
+  .catch(function (error) {
+    console.error("Erro ao realizar fetch:", error);
+  });
+}
+
+function updatePedido(idVar) {
+  var modelo = iptModelo.value;
+  var limiteC = iptLimiteC.value;
+  var limiteA = iptLimiteAtencao.value;
+
+  if (modelo == '' || !limiteC || !limiteA) {
+    Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
+    return;
+  }
+
+  fetch("/componentes/updatePedido", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+      idServer: idVar,
+      modeloServer: modelo,
+      limiteCServer: limiteC,
+      limiteAServer: limiteA,
+    }),
+    })
+      .then(async function (resposta) {
+        console.log("resposta: ", resposta);
+        if (resposta.ok) {
+          listarFabricas()
+          Swal.fire('Sucesso!', 'Pedido editado com sucesso!', 'success');
+        } else {
+          Swal.fire('Erro!', 'Falha ao editar o Pedido.', 'error');
+        }
+      })
+      .catch(function (erro) {
+        console.error("Erro ao enviar dados:", erro);
+      });
+      return false;
 }
