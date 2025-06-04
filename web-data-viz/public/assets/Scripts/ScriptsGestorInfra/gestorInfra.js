@@ -171,7 +171,7 @@ var barOptions = {
             fontSize: '13px'
         }
     },
-    colors: ["#2C3E50", "#FF0000", "#0a6b53", "#00aee5"],
+    colors: ["#2D3748", "#E53E3E", "#3182CE", "#805AD5"],
     xaxis: {
         categories: ['20/05', '21/05', '22/05', '23/05', '24/05'], // mocado, NO fetch desmoca
         labels: {
@@ -217,7 +217,7 @@ var barOptions = {
 
 
 
-
+//grafico de barras
 // Faz a requisição e atualiza os dados no gráfico
 
 //################################################################################# por função
@@ -258,7 +258,7 @@ function carregarComponente(componente) {
 
 
 function atualizarServidorComMaisCriticos(componente) {
-    fetch(`http://localhost:3333/gestorInfra/servidor-com-mais-criticos/${componente.toLowerCase()}`)//o lower, pq sem ta bugando
+    fetch(`http://localhost:3333/gestorInfra/servidor-com-mais-criticos/${componente.toLowerCase()}`)//o lower, pq sem ta dando bo
         .then(res => res.json())
         .then(data => {
             document.querySelector(".textovalor2").textContent = data.mensagem;
@@ -268,12 +268,12 @@ function atualizarServidorComMaisCriticos(componente) {
         });
 }
 
-//começar com cpu
+
 var componenteAtual = 'CPU'; // Começa com CPU
 
 window.addEventListener('DOMContentLoaded', () => {
     carregarComponente(componenteAtual);
-    atualizarServidorComMaisCriticos(componenteAtual); // Atualiza de acordo com a inicialização
+    atualizarServidorComMaisCriticos(componenteAtual); // Atualiza dependendo do jhonis
     
     setInterval(() => {
         carregarComponente(componenteAtual);
@@ -381,7 +381,7 @@ document.querySelectorAll('.tab').forEach(tab => {
             stroke: {
                 lineCap: 'round'
             },
-            labels: ['Assertividade no preço']
+            labels: ['precisão de']
         };
 
         

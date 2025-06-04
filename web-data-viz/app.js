@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 // var ambiente_processo = "producao"
+=======
+//var ambiente_processo = "producao"
+>>>>>>> Stashed changes
 var ambiente_processo = "desenvolvimento"
 
 var caminho_env = ambiente_processo === "producao" ? ".env" : ".env.dev"

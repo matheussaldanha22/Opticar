@@ -1,0 +1,18 @@
+{
+  "precos_mensais": [
+    {
+      "mes": "Março 2025",
+      "preco_medio": 29002.71
+    },
+    {
+      "mes": "Abril 2025",
+      "preco_medio": 7107.40
+    },
+    {
+      "mes": "Maio 2025",
+      "preco_medio": 17686.73
+    }
+  ]
+}
+
+
