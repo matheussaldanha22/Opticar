@@ -1,7 +1,3 @@
-// const fabricasG = Array.from({ length: 10 }, (_, i) => `Fábrica ${i + 1}`);
-// const larguraGrafico = Math.max(fabricasG.length * 105, 400);
-
-//GRÁFICO ALERTAS
 var fabricaCriticaLista = []
 var fabricasSelecionadas = [];
 
@@ -66,41 +62,37 @@ function plotarGraficoAlerta(dadosAlerta) {
     }
 
     fabricaCriticaLista.sort((a, b) => b.nivelCriticidade - a.nivelCriticidade);
+    var qtdFabricasCriticas = document.querySelector("#qtdFabricasCriticas");
     if (fabricaCriticaLista.length > 0) {
       var quantidadeCritico = 0;
-      for (i = 0; i< fabricaCriticaLista.length; i++) {
+      for (let i = 0; i< fabricaCriticaLista.length; i++) {
         if(fabricaCriticaLista[i].estado == 'critico') {
           quantidadeCritico++
         }
       }
-      var qtdFabricasCriticas = document.querySelector("#qtdFabricasCriticas");
       qtdFabricasCriticas.innerHTML = `${quantidadeCritico} Fábricas`
-    } else {
-      qtdFabricasCriticas.innerHTML = `Nenhuma Fábrica em estado crítico`
-    }
-    const larguraGrafico = Math.max(fabricaCriticaLista.length * 300, 400);
-    var nomeFabricaCritica = fabricaCriticaLista[0].nome;
-    var idFabricaCritica = fabricaCriticaLista[0].id
-    var qtdAlertasAberto = fabricaCriticaLista[0].qtd_to_do
-    var qtdAlertasProgresso = fabricaCriticaLista[0].qtd_in_progress
-    
-    var coresBorda = fabricaCriticaLista.map(fabrica => {
-      if (fabrica.estado === 'critico') return '#FF0000';
-      if (fabrica.estado === 'atencao') return '#FFD700';
-      return '#00000000';
-    });
+      
+      const larguraGrafico = Math.max(fabricaCriticaLista.length * 300, 400);
+      var nomeFabricaCritica = fabricaCriticaLista[0].nome;
+      var idFabricaCritica = fabricaCriticaLista[0].id
+      var qtdAlertasAberto = fabricaCriticaLista[0].qtd_to_do
+      var qtdAlertasProgresso = fabricaCriticaLista[0].qtd_in_progress
+      
+      kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica)
+      infoFabricaPadrão(idFabricaCritica, qtdAlertasAberto, qtdAlertasProgresso);
 
-    kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica)
-    infoFabricaPadrão(idFabricaCritica, qtdAlertasAberto, qtdAlertasProgresso);
+      var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
+      var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas");
+      var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica");
+      var fabricaCriticaM = document.querySelector("#fabricaCriticaModal");
+      var quantidadeAlertasM = document.querySelector("#quantidadeAlertasModal");
+      var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal");
+      
+      fabricaCriticaKpi.classList.remove("cor-critica", "cor-atencao", "cor-ok");
+      statusKpiCriticaKpi.classList.remove("cor-critica", "cor-atencao", "cor-ok");
+      fabricaCriticaM.classList.remove("cor-critica", "cor-atencao", "cor-ok");
+      statusKpiCriticaM.classList.remove("cor-critica", "cor-atencao", "cor-ok");
 
-    // KPI FABRICA MAIS CRITICA ####################################################
-    var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
-    var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas");
-    var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica");
-    var fabricaCriticaM = document.querySelector("#fabricaCriticaModal");
-    var quantidadeAlertasM = document.querySelector("#quantidadeAlertasModal");
-    var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal");
-    if (fabricaCriticaLista.length > 0) {
       if (fabricaCriticaLista[0].estado == 'critico') {
         fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome;
         quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
@@ -135,73 +127,74 @@ function plotarGraficoAlerta(dadosAlerta) {
         fabricaCriticaM.classList.add("cor-ok")
         statusKpiCriticaM.classList.add("cor-ok")
       }
-    } else {
-      fabricaCriticaKpi.innerHTML = `Nenhuma fabrica crítica`;
-      quantidadeAlertasKpi.innerHTML = `Nenhum alerta encontrado`
-      statusKpiCriticaKpi.innerHTML = ``
-      fabricaCriticaM.innerHTML = `Nenhuma fabrica crítica`;
-      quantidadeAlertasM.innerHTML = `Nenhum alerta encontrado`
-      statusKpiCriticaM.innerHTML = ``
-    }
-    // #############################################################################
-    
-
-    var optionsBar = {
-      chart: {
-        height: 550,
-        width: larguraGrafico,
-        type: "bar",
-        toolbar: { show: true },
-        zoom: { enabled: true },
-        stacked: true,
-        events: {
-          dataPointSelection: function(event, chartContext, config) {
-            const serieNome = optionsBar.series[config.seriesIndex].name;
-            const fabricaNome = optionsBar.xaxis.categories[config.dataPointIndex];
-            const valorAberto = optionsBar.series[0].data[config.dataPointIndex];
-            const valorAndamento = optionsBar.series[1].data[config.dataPointIndex];
-            informacaoFabrica(fabricaNome, serieNome, valorAberto, valorAndamento);
+       var optionsBar = {
+        chart: {
+          height: 550,
+          width: larguraGrafico,
+          type: "bar",
+          toolbar: { show: true },
+          zoom: { enabled: true },
+          stacked: true,
+          events: {
+            dataPointSelection: function(event, chartContext, config) {
+              const serieNome = optionsBar.series[config.seriesIndex].name;
+              const fabricaNome = optionsBar.xaxis.categories[config.dataPointIndex];
+              const valorAberto = optionsBar.series[0].data[config.dataPointIndex];
+              const valorAndamento = optionsBar.series[1].data[config.dataPointIndex];
+              informacaoFabrica(fabricaNome, serieNome, valorAberto, valorAndamento);
+            }
           }
-        }
-      },
-      plotOptions: {
-        bar: {
-          columnWidth: "30%",
-          horizontal: false,
         },
-      },
-      stroke: {
-        width: 2,
-        colors: coresBorda
-      },
-      series: [
-        {
-          name: "Alertas em Aberto",
-          data: fabricaCriticaLista.map(f => f.qtd_to_do),
-          color: "#04708D",
+        plotOptions: {
+          bar: {
+            columnWidth: "30%",
+            horizontal: false,
+          },
         },
-        {
-          name: "Alertas em Andamento",
-          data: fabricaCriticaLista.map(f => f.qtd_in_progress),
-          color: "#22B4D1",
+        series: [
+          {
+            name: "Alertas em Aberto",
+            data: fabricaCriticaLista.map(f => f.qtd_to_do),
+            color: "#04708D",
+          },
+          {
+            name: "Alertas em Andamento",
+            data: fabricaCriticaLista.map(f => f.qtd_in_progress),
+            color: "#22B4D1",
+          },
+        ],
+        xaxis: {
+          categories: fabricaCriticaLista.map(f => f.nome),
+          color: "#0330fc",
         },
-      ],
-      xaxis: {
-        categories: fabricaCriticaLista.map(f => f.nome),
-      },
-      fill: {
-        opacity: 1,
-      },
-    };
+        fill: {
+          opacity: 1,
+        },
+      };
 
-    if (window.chartBar) {
-      window.chartBar.destroy();
+      if (window.chartBar) {
+        window.chartBar.destroy();
+      }
+      window.chartBar = new ApexCharts(
+        document.querySelector("#graficoAlertaFabricas"),
+        optionsBar
+      );
+      window.chartBar.render();
+
+    } else {
+      qtdFabricasCriticas.innerHTML = `Nenhuma Fábrica em estado crítico`
+      document.querySelector("#fabricaCritica").innerHTML = `Nenhuma fabrica crítica`;
+      document.querySelector("#quantidadeAlertas").innerHTML = `Nenhum alerta encontrado`
+      document.querySelector("#statusKpiCritica").innerHTML = ``
+      document.querySelector("#fabricaCriticaModal").innerHTML = `Nenhuma fabrica crítica`;
+      document.querySelector("#quantidadeAlertasModal").innerHTML = `Nenhum alerta encontrado`
+      document.querySelector("#statusKpiCriticaModal").innerHTML = ``
+        if (window.chartBar) {
+            window.chartBar.destroy();
+             window.chartBar = new ApexCharts(document.querySelector("#graficoAlertaFabricas"), {chart: {type: 'bar', height:350}, series: [], xaxis: {categories: []}});
+             window.chartBar.render();
+        }
     }
-    window.chartBar = new ApexCharts(
-      document.querySelector("#graficoAlertaFabricas"),
-      optionsBar
-    );
-    window.chartBar.render();
   })
   .catch(function (erro) {
     console.error(`#ERRO: ${erro}`);
@@ -255,8 +248,8 @@ function mostrarFabricas() {
         throw new Error("Não foi possível pegar os alertas")
       }).then(dadosAlerta => {
         fabricas.length = 0;
-        for(i = 0; i < dadosAlerta.length; i ++) {
-          for(j = 0; j < dadosFabrica.length; j++) {
+        for(let i = 0; i < dadosAlerta.length; i ++) {
+          for(let j = 0; j < dadosFabrica.length; j++) {
             if (dadosFabrica[j].idFabrica == dadosAlerta[i].fkFabrica) {
               var totalAlertasAgora = dadosAlerta[i].qtd_to_do + dadosAlerta[i].qtd_in_progress;
               var isCritica = false;
@@ -319,19 +312,16 @@ function renderizarGrade() {
             var idFabrica = divFabrica.getAttribute("data-id")
             var nomeFabrica = divFabrica.getAttribute("data-nome")
             if (divFabrica.classList.contains("div-selecionada")) {
-                for(i = 0; i < fabricasSelecionadas.length; i++) {
-                  if(idFabrica == Number(fabricasSelecionadas[i].idFabrica)) {
-                    fabricasSelecionadas.splice(i, 1)
-                    dadoFabricaSelecionada()
-                    break
-                  }
+                for(let k = 0; k < fabricasSelecionadas.length; k++) {
+                    if(idFabrica == Number(fabricasSelecionadas[k].idFabrica)) {
+                        fabricasSelecionadas.splice(k, 1)
+                        dadoFabricaSelecionada()
+                        break
+                    }
                 }
-                console.log("OLAAAAAAAAAAAAAAAAAAAAAAAAAAA" + fabricasSelecionadas)
                 divFabrica.classList.remove("div-selecionada");
                 contadorSelecionado--;
             } else if (contadorSelecionado < 5) {
-                var idFabrica = divFabrica.getAttribute("data-id")
-                var nomeFabrica = divFabrica.getAttribute("data-nome")
                 dadoFabricaSelecionada(idFabrica, nomeFabrica)
                 divFabrica.classList.add("div-selecionada");
                 contadorSelecionado++;
@@ -346,7 +336,6 @@ function renderizarGrade() {
 
 function criarBotoesPaginacao() {
   const paginacao = document.getElementById("paginacao");
-  
   paginacao.innerHTML = "";
   
   const totalPaginas = Math.ceil(fabricas.length / fabricasPorPagina);
@@ -357,7 +346,7 @@ function criarBotoesPaginacao() {
   btnAnterior.disabled = paginaAtual === 1; 
   btnAnterior.addEventListener("click", function() {
     paginaAtual = paginaAtual - 1;
-    // mostrarFabricas();
+    renderizarGrade();
     criarBotoesPaginacao();
   });
   paginacao.appendChild(btnAnterior);
@@ -373,7 +362,7 @@ function criarBotoesPaginacao() {
   btnProximo.disabled = paginaAtual === totalPaginas; 
   btnProximo.addEventListener("click", function() {
     paginaAtual = paginaAtual + 1;
-    // mostrarFabricas();
+    renderizarGrade();
     criarBotoesPaginacao();
   });
   paginacao.appendChild(btnProximo);
@@ -397,7 +386,7 @@ function dadosGraficoAlerta() {
     });
 }
 
-function infoFabricaPadrão(idFabricaCritica, AlertasAberto, qtdAlertasProgresso) {
+function infoFabricaPadrão(idFabricaCritica, qtdAlertasAbertoParam, qtdAlertasProgressoParam) {
     fetch(`/admin/informacaoFabricaPadrao`, {
         method: "POST",
          headers: {
@@ -409,60 +398,62 @@ function infoFabricaPadrão(idFabricaCritica, AlertasAberto, qtdAlertasProgresso
     })
     .then(function (resposta) {
         if (!resposta.ok) {
-            console.log(resposta)
             throw new Error(`Erro na resposta: ${resposta.status}`);
         }
         return resposta.json();
     }).then(function (informacoes) {
-        console.log(informacoes)
         return fetch(`/jira/listarAlertasPorId/${idFabricaCritica}`, {
             method: "GET",
             headers: {"Content-Type": "application/json"}
         }).then(resposta => {
             if (resposta.ok) {
-                console.log(resposta)
                 return resposta.json();
             }
             throw new Error("Erro ao buscar tempo de resolução");
         }).then(dadosJira => {
-            console.log(dadosJira)
             var nome = document.querySelector("#pNome");
             var gestor = document.querySelector("#pGestor");
             var telefone = document.querySelector("#pTelefone");
             var status = document.querySelector("#pStatus");
-            var qtdAlertasAberto = document.querySelector("#pQtdAlertaAberto");
-            var qtdAlertasAndamento = document.querySelector("#pQtdAlertaAndamento");
+            var pQtdAlertasAberto = document.querySelector("#pQtdAlertaAberto");
+            var pQtdAlertasAndamento = document.querySelector("#pQtdAlertaAndamento");
             var tempoResolucao = document.querySelector("#pTempoResolucao");
-            var valorTotal = AlertasAberto + qtdAlertasProgresso
+            var valorTotal = qtdAlertasAbertoParam + qtdAlertasProgressoParam;
+            var tempoMedio = 0;
 
             nome.innerHTML = `Nome: ${informacoes[0].nomeFabrica}`;
             gestor.innerHTML = `Gestor: ${informacoes[0].nome}`;
             telefone.innerHTML = `Telefone: ${informacoes[0].telefone}`;
-            if (valorTotal >= informacoes[0].limiteAtencao && valorTotal < informacoes[0].limiteCritico) {
-                status.innerHTML += `Status: Atenção`;
-                status.classList.add("cor-atencao")
-            } else if (valorTotal >= informacoes[0].limiteCritico) {
+            
+            status.classList.remove("cor-ok", "cor-atencao", "cor-critica");
+            if (valorTotal >= informacoes[0].limiteCritico) {
                 status.innerHTML = `Status: Crítico`;
                 status.classList.add("cor-critica")
+            } else if (valorTotal >= informacoes[0].limiteAtencao) {
+                status.innerHTML = `Status: Atenção`;
+                status.classList.add("cor-atencao")
             } else {
                 status.innerHTML = `Status: Ok`;
                 status.classList.add("cor-ok")
             }
-            qtdAlertasAberto.innerHTML = `Quantidade de Alertas em aberto: ${AlertasAberto}`;
-            qtdAlertasAndamento.innerHTML = `Quantidade de Alertas em andamento: ${qtdAlertasProgresso}`;
-            if (dadosJira) {
-            if (dadosJira.tempoMedioResolucao >= 60) {
-                tempoMedio = dadosJira.tempoMedioResolucao / 60;
-                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(h)`
-            } else if (dadosJira.tempoMedioResolucao >= 1440) { 
-                tempoMedio = dadosJira.tempoMedioResolucao / 1440;
-                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(d)`
+            pQtdAlertasAberto.innerHTML = `Quantidade de Alertas em aberto: ${qtdAlertasAbertoParam}`;
+            pQtdAlertasAndamento.innerHTML = `Quantidade de Alertas em andamento: ${qtdAlertasProgressoParam}`;
+            
+            if (dadosJira && dadosJira.tempoMedioResolucao !== null && dadosJira.tempoMedioResolucao !== undefined) {
+                tempoMedio = parseFloat(dadosJira.tempoMedioResolucao);
+                if (isNaN(tempoMedio)) {
+                    tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: Dado inválido`;
+                } else if (tempoMedio >= 1440) { 
+                    tempoMedio = tempoMedio / 1440;
+                    tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}(d)`;
+                } else if (tempoMedio >= 60) {
+                    tempoMedio = tempoMedio / 60;
+                    tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(h)`;
+                } else {
+                    tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(m)`;
+                }
             } else {
-                tempoMedio = dadosJira.tempoMedioResolucao;
-                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(m)`
-            }
-            } else {
-                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: Não possui dados o suficiente`
+                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: Não possui dados o suficiente`;
             }
         })
     }).catch(function (erro) {
@@ -470,86 +461,89 @@ function infoFabricaPadrão(idFabricaCritica, AlertasAberto, qtdAlertasProgresso
     });
 }
 
-
-
-function informacaoFabrica(fabricaNome, serieNome, valorAndamento, valorAberto) {
+function informacaoFabrica(fabricaNome, serieNome, valAberto, valAndamento) {
   fetch(`/admin/informacaoFabrica`, {
-        method: "POST",
-         headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-        fabricaNomeServer: fabricaNome,
-        }),
-    })
-    .then(function (resposta) {
-        if (!resposta.ok) {
-            console.log(resposta)
-            throw new Error(`Erro na resposta: ${resposta.status}`);
-        }
-        return resposta.json();
-    }).then(function (informacoes) {
-        console.log(informacoes)
-        var idFabricaCritica = informacoes[0].idFabrica
-        return fetch(`/jira/listarAlertasPorId/${idFabricaCritica}`, {
-            method: "GET",
-            headers: {"Content-Type": "application/json"}
-        }).then(resposta => {
-            if (resposta.ok) {
-                console.log(resposta)
-                return resposta.json();
-            }
-            throw new Error("Erro ao buscar tempo de resolução");
-        }).then(dadosJira => {
-            console.log(dadosJira)
-            var nome = document.querySelector("#pNome");
-            var gestor = document.querySelector("#pGestor");
-            var telefone = document.querySelector("#pTelefone");
-            var status = document.querySelector("#pStatus");
-            var qtdAlertasAberto = document.querySelector("#pQtdAlertaAberto");
-            var qtdAlertasAndamento = document.querySelector("#pQtdAlertaAndamento");
-            var tempoResolucao = document.querySelector("#pTempoResolucao");
-            var valorTotal = valorAndamento + valorAberto
+      method: "POST",
+       headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+      fabricaNomeServer: fabricaNome,
+      }),
+  })
+  .then(function (resposta) {
+      if (!resposta.ok) {
+          throw new Error(`Erro na resposta: ${resposta.status}`);
+      }
+      return resposta.json();
+  }).then(function (informacoes) {
+      var idFabricaCritica = informacoes[0].idFabrica
+      return fetch(`/jira/listarAlertasPorId/${idFabricaCritica}`, {
+          method: "GET",
+          headers: {"Content-Type": "application/json"}
+      }).then(resposta => {
+          if (resposta.ok) {
+              return resposta.json();
+          }
+          throw new Error("Erro ao buscar tempo de resolução");
+      }).then(dadosJira => {
+          var nome = document.querySelector("#pNome");
+          var gestor = document.querySelector("#pGestor");
+          var telefone = document.querySelector("#pTelefone");
+          var pQtdAlertasAberto = document.querySelector("#pQtdAlertaAberto");
+          var pQtdAlertasAndamento = document.querySelector("#pQtdAlertaAndamento");
+          
+          nome.innerHTML = `Nome: ${informacoes[0].nomeFabrica}`;
+          gestor.innerHTML = `Gestor: ${informacoes[0].nome}`;
+          telefone.innerHTML = `Telefone: ${informacoes[0].telefone}`;
 
-            nome.innerHTML = `Nome: ${informacoes[0].nomeFabrica}`;
-            gestor.innerHTML = `Gestor: ${informacoes[0].nome}`;
-            telefone.innerHTML = `Telefone: ${informacoes[0].telefone}`;
-            if (valorTotal >= informacoes[0].limiteAtencao && valorTotal < informacoes[0].limiteCritico) {
-                status.innerHTML += `Status: Atenção`;
-                status.classList.add("cor-atencao")
-            } else if (valorTotal >= informacoes[0].limiteCritico) {
-                status.innerHTML = `Status: Crítico`;
-                status.classList.add("cor-critica")
-            } else {
-                status.innerHTML = `Status: Ok`;
-                status.classList.add("cor-ok")
-            }
-            qtdAlertasAberto.innerHTML = `Quantidade de Alertas em aberto: ${AlertasAberto}`;
-            qtdAlertasAndamento.innerHTML = `Quantidade de Alertas em andamento: ${qtdAlertasProgresso}`;
-            if (dadosJira) {
-            if (dadosJira.tempoMedioResolucao >= 60) {
-                tempoMedio = dadosJira.tempoMedioResolucao / 60;
-                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(h)`
-            } else if (dadosJira.tempoMedioResolucao >= 1440) { 
-                tempoMedio = dadosJira.tempoMedioResolucao / 1440;
-                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(d)`
-            } else {
-                tempoMedio = dadosJira.tempoMedioResolucao;
-                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(m)`
-            }
-            } else {
-                tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: Não possui dados o suficiente`
-            }
-        })
-    }).catch(function (erro) {
-        console.error(`#ERRO: ${erro}`);
-    });
+          var status = document.querySelector("#pStatus");
+          var valorTotal = valAberto + valAndamento;
+          status.classList.remove("cor-ok", "cor-atencao", "cor-critica");
+          
+          if (valorTotal >= informacoes[0].limiteCritico) {
+              status.innerHTML = `Status: Crítico`;
+              status.classList.add("cor-critica");
+          } else if (valorTotal >= informacoes[0].limiteAtencao) {
+              status.innerHTML = `Status: Atenção`;
+              status.classList.add("cor-atencao");
+          } else { 
+              status.innerHTML = `Status: Ok`;
+              status.classList.add("cor-ok");
+          }
+          pQtdAlertasAberto.innerHTML = `Quantidade de Alertas em aberto: ${valAberto}`;
+          pQtdAlertasAndamento.innerHTML = `Quantidade de Alertas em andamento: ${valAndamento}`;
+          var tempoResolucao = document.querySelector("#pTempoResolucao");
+          var tempoMedio;
+
+          if (dadosJira && dadosJira.tempoMedioResolucao !== undefined && dadosJira.tempoMedioResolucao !== null) {
+              let tempoEmMinutos = parseFloat(dadosJira.tempoMedioResolucao); 
+
+              if (isNaN(tempoEmMinutos)) {
+                  tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: Dado inválido`;
+              } else if (tempoEmMinutos >= 1440) { 
+                  tempoMedio = tempoEmMinutos / 1440;
+                  tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}(d)`;
+              } else if (tempoEmMinutos >= 60) { 
+                  tempoMedio = tempoEmMinutos / 60;
+                  tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(h)`;
+              } else {
+                  tempoMedio = tempoEmMinutos;
+                  tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: ${tempoMedio.toFixed(0)}:00(m)`;
+              }
+          } else {
+              tempoResolucao.innerHTML = `Tempo médio de resolução por alerta: Não possui dados o suficiente`;
+          }
+      })
+  }).catch(function (erro) {
+      console.error(`#ERRO: ${erro}`);
+  });
 }
 
 function dadoFabricaSelecionada(idFabrica, nomeFabrica) {
   if (idFabrica == undefined && nomeFabrica == undefined) {
-      predicao()
-      return
+    predicao()
+    return
   }
     fetch(`/admin/dadosFabricaSelecionada/${idFabrica}`, {
       method: "GET",
@@ -557,51 +551,46 @@ function dadoFabricaSelecionada(idFabrica, nomeFabrica) {
     })
     .then(resposta => {
       if (resposta.ok) {
-        console.log(resposta)
         return resposta.json();
       }
       throw new Error("Erro ao buscar dados da fábrica");
     })
     .then(dadosFabrica => {
-        console.log(dadosFabrica)
         return fetch(`/admin/mtbf/${idFabrica}`, {
             method: "GET",
             headers: {"Content-Type": "application/json"}
         })
         .then(resposta => {
             if (resposta.ok) {
-                console.log(resposta)
                 return resposta.json();
             }
             throw new Error("Erro ao buscar MTBF");
         })
         .then(dadosMtbf => {
-            console.log(dadosMtbf)
             return fetch(`/jira/listarAlertasPorId/${idFabrica}`, {
                 method: "GET",
                 headers: {"Content-Type": "application/json"}
             })
             .then(resposta => {
                 if (resposta.ok) {
-                    console.log(resposta)
                     return resposta.json();
                 }
                 throw new Error("Erro ao buscar tempo de resolução");
             })
             .then(dadosJira => {
-                console.log(dadosJira)
                 var mtbf = 0;
-                if (dadosMtbf[0].minutos_operacao && dadosMtbf[0].qtd_alertas > 0) {
+                if (dadosMtbf[0] && dadosMtbf[0].minutos_operacao && dadosMtbf[0].qtd_alertas > 0) {
                     mtbf = dadosMtbf[0].minutos_operacao / dadosMtbf[0].qtd_alertas;
                 }
                 fabricasSelecionadas.push({
                     "idFabrica": idFabrica,
                     "nome": nomeFabrica,
-                    "tempoResolucao": dadosJira.tempoMedioResolucao || 0,
-                    "quantidadeAlertas": (dadosFabrica[0].qtd_to_do || 0) + (dadosFabrica[0].qtd_in_progress || 0),
+                    "tempoResolucao": parseFloat(dadosJira.tempoMedioResolucao),
+                    "quantidadeAlertas": ((dadosFabrica[0].qtd_to_do || 0) + (dadosFabrica[0].qtd_in_progress || 0)),
                     "MTBF": mtbf
                 });
-                console.log("Fábrica adicionada com sucesso:", fabricasSelecionadas);
+                console.log("OLA BRASIL AQUI É DA DASHHHH")
+                console.log(fabricasSelecionadas)
                 predicao()
             });
         });
@@ -630,63 +619,55 @@ function kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica) {
             headers: {"Content-Type": "application/json"}
         }).then(resposta => {
             if (resposta.ok) {
-                console.log(resposta)
                 return resposta.json();
             }
             throw new Error("Erro ao buscar MTBF");
         }).then((dadosMtbf => {
             var tempoMedio = 0;
             var mtbf = 0;
-            if (dadosMtbf[0].minutos_operacao && dadosMtbf[0].qtd_alertas > 0) {
+            if (dadosMtbf[0] && dadosMtbf[0].minutos_operacao && dadosMtbf[0].qtd_alertas > 0) {
                 mtbf = Number((dadosMtbf[0].minutos_operacao / dadosMtbf[0].qtd_alertas).toFixed(0));
             }
-            console.log(mtbf)
 
-            mediaAlerta = document.querySelector("#mediaAlerta");
-            nomeFabricaTempo = document.querySelector("#nomeFabricaTempo");
-            statusFabricaTempo = document.querySelector("#statusFabricaTempo");
+            let mediaAlerta = document.querySelector("#mediaAlerta");
+            let nomeFabricaTempo = document.querySelector("#nomeFabricaTempo");
+            
+            mediaAlerta.classList.remove("cor-critica", "cor-ok", "cor-atencao");
 
-            if (dadosTempoResolucao) {
-                if (dadosTempoResolucao.tempoMedioResolucao >= 1440) {
-                    tempoMedio = dadosTempoResolucao.tempoMedioResolucao;
-                    if (tempoMedio > mtbf) {
-                        tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 1440;
-                        mediaAlerta.innerHTML = `${tempoMedio.toFixed(0)}(d)`
-                        mediaAlerta.classList.add("cor-critica")
-                        nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
-                    } else {
-                        tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 1440;
-                        mediaAlerta.innerHTML = `${tempoMedio.toFixed(0)}(d)`
-                        mediaAlerta.classList.add("cor-ok")
-                        nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
-                    }
-                } else if (dadosTempoResolucao.tempoMedioResolucao >= 60) {
-                    tempoMedio = dadosTempoResolucao.tempoMedioResolucao;
-                    if (tempoMedio > mtbf) {
-                        tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 60;
-                        mediaAlerta.innerHTML = `${tempoMedio.toFixed(0)}:00(h)`
-                        mediaAlerta.classList.add("cor-critica")
-                        nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
-                    } else {
-                        tempoMedio = dadosTempoResolucao.tempoMedioResolucao / 60;
-                        mediaAlerta.innerHTML = `${tempoMedio.toFixed(0)}:00(h)`
-                        mediaAlerta.classList.add("cor-ok")
-                        nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
-                    } 
-                } else {
-                    tempoMedio = dadosTempoResolucao.tempoMedioResolucao;
-                    if (tempoMedio > mtbf) {
-                        mediaAlerta.innerHTML = `${tempoMedio.toFixed(0)}:00(m)`
-                        mediaAlerta.classList.add("cor-critica")
-                        nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
-                    } else {
-                        mediaAlerta.innerHTML = `${tempoMedio.toFixed(0)}:00(m)`
-                        mediaAlerta.classList.add("cor-ok")
-                        nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
-                    }
+            if (dadosTempoResolucao && dadosTempoResolucao.tempoMedioResolucao !== null && dadosTempoResolucao.tempoMedioResolucao !== undefined) {
+                tempoMedio = parseFloat(dadosTempoResolucao.tempoMedioResolucao);
+                let displayTempo;
+                let unit;
+
+                if (isNaN(tempoMedio)){
+                    mediaAlerta.innerHTML = `Dado inválido`;
+                    nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
+                    return;
                 }
+
+                if (tempoMedio >= 1440) {
+                    displayTempo = (tempoMedio / 1440).toFixed(0);
+                    unit = "(d)";
+                    mediaAlerta.innerHTML = `${displayTempo}${unit}`;
+                } else if (tempoMedio >= 60) {
+                    displayTempo = (tempoMedio / 60).toFixed(0);
+                    unit = ":00(h)";
+                    mediaAlerta.innerHTML = `${displayTempo}${unit}`;
+                } else {
+                    displayTempo = tempoMedio.toFixed(0);
+                    unit = ":00(m)";
+                    mediaAlerta.innerHTML = `${displayTempo}${unit}`;
+                }
+                
+                if (mtbf > 0 && tempoMedio > mtbf) {
+                    mediaAlerta.classList.add("cor-critica");
+                } else {
+                    mediaAlerta.classList.add("cor-ok");
+                }
+                nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
             } else {
-                mediaAlerta.innerHTML = `Não possui dados o suficiente`
+                mediaAlerta.innerHTML = `Não possui dados o suficiente`;
+                nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
             }
         }))
     })
@@ -768,6 +749,9 @@ function inicializarGrafico() {
     }
     };
 
+    if(chartPred) {
+        chartPred.destroy();
+    }
     chartPred = new ApexCharts(
     document.querySelector("#graficoPredicao"),
     options
@@ -793,18 +777,34 @@ function predicao() {
     fabricasSelecionadas.forEach(fabrica => {
         var dados = [];
         var totalAlertas = fabrica.quantidadeAlertas;
-        console.log(totalAlertas)
-        var alertasPorDia = 1440 / fabrica.MTBF;
-        console.log(alertasPorDia)
-        var alertasResolvidosPorDia = 1440 / fabrica.tempoResolucao;
-        console.log(alertasResolvidosPorDia)
+        
+        var mtbf = fabrica.MTBF;
+        if (fabrica.MTBF > 0 && fabrica.MTBF < 1) {
+            mtbf = 1; 
+        }
 
-        for(var i = 0; i < filtro; i++) {
+        var alertasPorDia = 0;
+        if (mtbf > 0) {
+            alertasPorDia = 1440 / mtbf;
+        }
+
+        var alertasResolvidosPorDia = 0;
+        if (fabrica.tempoResolucao > 0) {
+            alertasResolvidosPorDia = 1440 / fabrica.tempoResolucao;
+        }
+
+        for(var k = 0; k < filtro; k++) {
             totalAlertas += alertasPorDia - alertasResolvidosPorDia;
-            if (alertasResolvidosPorDia > alertasPorDia) {
-                totalAlertas = 0
+            
+            if (totalAlertas < 0) {
+                totalAlertas = 0;
             }
-            dados.push(Number(totalAlertas.toFixed(0)))
+            
+            if (alertasResolvidosPorDia > alertasPorDia) {
+                 totalAlertas = 0; 
+            }
+            
+            dados.push(Number(totalAlertas.toFixed(0)));
         }
 
         seriesPred.push({
@@ -831,11 +831,7 @@ function predicao() {
 
 window.onload = function () {
   dadosGraficoAlerta();
-  setInterval(() => {
-      dadosGraficoAlerta();
-  }, 7000);
   mostrarFabricas();
   criarBotoesPaginacao();
   inicializarGrafico();
 };
-

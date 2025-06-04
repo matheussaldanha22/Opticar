@@ -371,6 +371,7 @@ table {
 
 .critico {
     color: red;
+    
 }
 
 .ok {
@@ -378,7 +379,7 @@ table {
 }
 
 .atencao {
-    color: yellow;
+    color: #ffd727;
 }
 
 
@@ -531,6 +532,8 @@ table {
 #infoUltimo{
     border-bottom: none;
 }
+
+
 
 .containerCadastroFrabic label {
     display: flex;

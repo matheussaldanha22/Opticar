@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persona: Administrador - OptiCars</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            color: #555;
+            margin-top: 20px;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    Envie sua pergunta: <input type="text" id="pergunta"> <button onclick="bob()">enviar</button>
+    <button onclick="pdf()">clica cabaças</button>
+
+</body>
+
+</html>
+<script>
+var respostas;
+
+async function bob() {
+    try {
+        var perguntas = document.getElementById("pergunta").value;
+        
+        const response = await fetch("http://localhost:5000/perguntar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                perguntaServer: perguntas
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro na requisição: ' + response.status);
+        }
+
+        // AQUI ESTÁ A CORREÇÃO: extrair o HTML da resposta
+        respostas = await response.text(); // Para HTML use .text(), para JSON use .json()
+        console.log(respostas);
+        
+    } catch (erro) {
+        console.error(`Erro: ${erro}`);
+    }
+}
+
+// Função PDF permanece igual, mas agora vai receber o HTML correto
+async function pdf() {
+    try {
+        const response = await fetch("http://localhost:5000/pdf", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                resposta: respostas // Agora isso será o HTML, não o objeto Response
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao gerar PDF: ' + response.status);
+        }
+
+        const blob = await response.blob();
+        console.log(blob);
+        
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'resposta_opticars.pdf';
+        
+        document.body.appendChild(a);
+        a.click();
+        
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+    } catch (erro) {
+        console.error("Erro ao baixar PDF:", erro);
+        alert("Erro ao gerar PDF. Tente novamente.");
+    }
+}
+</script>

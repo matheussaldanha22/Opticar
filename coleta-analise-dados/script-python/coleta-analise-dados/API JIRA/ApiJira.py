@@ -198,7 +198,7 @@ def create_jira_issue(alert):
     idFabrica = int(fabrica['idfabrica'])
     print(f'Tipo fabrica: {type(idFabrica)}')
     
-    issue_dict = {
+    issue_df = {
         'project': {'key': 'MOT'},
         'summary': f'[Alerta {alert["id"]}] {alert["title"]} - Fábrica: {fabrica["nome"]}({fabrica['idfabrica']})',
         'description': alert["description"] + f"\n\n**Fábrica:** {fabrica['nome']} (ID: {fabrica['idfabrica']})",
