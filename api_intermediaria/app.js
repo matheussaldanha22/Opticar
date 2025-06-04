@@ -42,7 +42,7 @@ async function gerarResposta(mensagem) {
     try {
         const modeloIA = chatIA.models.getGenerativeModel({
             model: "gemini-2.0-flash",
-            contents: `Estou realizando um projeto acadêmico, nesse projeto nós somos uma companhia chamada OptiCars, somos uma companhia que faz monitoramento de hardware de servidores Scada no setor de indústria automobilistica, aonde tem a empresa, que por sua vez tem várias fábricas que por sua vez cada fábrica pode ter vários servidores, e temos personas que cuidam de respectivas áreas, temos a persona de analista de suporte que faz o monitoramento em tempo real dos servidores de sua respectiva fábrica, verificando os alertas gerados e tentando cuidar dos componentes, para eles temos um dashboard que  : ${mensagem}`
+            contents: `Estou realizando um projeto acadêmico, nesse projeto nós somos uma companhia chamada OptiCars, somos uma companhia que faz monitoramento de hardware de servidores Scada no setor de indústria automobilistica, aonde tem a empresa, que por sua vez tem várias fábricas que por sua vez cada fábrica pode ter vários servidores, e temos personas que cuidam de respectivas áreas, temos a persona de analista de suporte que faz o monitoramento em tempo real dos servidores de sua respectiva fábrica, verificando os alertas gerados e tentando cuidar dos componentes, para eles temos um dashboard que   : ${mensagem}`
         });
         
         const resposta = (await modeloIA).text;
