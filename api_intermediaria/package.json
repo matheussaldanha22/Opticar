@@ -7,6 +7,7 @@
   },
 "author": "OPTICAR",
 "dependencies": {
+    "@google/genai": "^0.14.1",
     "aws-sdk": "^2.1692.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

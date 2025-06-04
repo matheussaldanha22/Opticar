@@ -216,7 +216,20 @@ def monitorar():
                 idMaquina = pedido_cliente['idMaquina']
                 tipo = pedido_cliente['tipo']
                 medida = pedido_cliente['medida']
-                
+                pular_processamento = False
+
+                if tipo == "Cpu" and medida == "Porcentagem":
+                    pular_processamento = True
+                elif tipo == "Ram" and medida == "Porcentagem":
+                    pular_processamento = True
+                elif tipo == "Disco" and medida == "Porcentagem":
+                    pular_processamento = True
+                elif tipo == "Rede" and (medida == "Upload" or medida == "Download"):
+                    pular_processamento = True
+
+                if pular_processamento:
+                    print(f"--- Pedido pulado: Tipo={tipo}, Medida={medida}")
+                    continue 
                 try:
                     valor = eval(pedido_cliente['codigo'])
                     idPedido = pedido_cliente['idcomponenteServidor']
