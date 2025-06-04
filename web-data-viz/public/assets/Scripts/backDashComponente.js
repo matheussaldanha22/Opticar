@@ -686,6 +686,31 @@ function renderGraficoAlerta(categorias, dadosCritico, dadosMedio) {
   window.chartSeveridade.render();
 }
 
+// const a = document.getElementById("sltServidor");
+// const b = document.getElementById("sltComponente");
+// const sltPredicao = document.getElementById("slt_predicao")
+
+// sltPredicao.addEventListener("change", () => {
+//   executarPredicao(a, b)
+// })
+
+function executarPredicao(idMaquina, componente) {
+  const tituloGrafico = document.querySelector("#chartTitle");
+  const sltPredicao = document.getElementById("slt_predicao")
+  let valorSlt = sltPredicao.value
+
+
+  if (valorSlt == "uso") {
+    tituloGrafico.innerHTML = "Tendência de Crescimento de Uso (7 dias) - "
+    predicaoUso(idMaquina, componente)
+  } else {
+    tituloGrafico.innerHTML = "Número de Alertas Previstos (Prox. Mês) -  "
+    predicaoAlerta(idMaquina, componente)
+  }
+
+}
+
+
 function predicaoAlerta(idMaquina, componente) {
   fetch(`/dashComponentes/dadosPredicaoAlertaSemanal/${idMaquina}/${componente}`, {
     method: "GET",
@@ -699,13 +724,11 @@ function predicaoAlerta(idMaquina, componente) {
         item.quantidade_alertas
       ]);
 
-
-
       // gera o modelo de regressao
-      const regression = ss.linearRegression(dadosSemanais);
+      const modeloRegressao = ss.linearRegression(dadosSemanais);
 
       // predicao
-      const previsao = ss.linearRegressionLine(regression);
+      const previsao = ss.linearRegressionLine(modeloRegressao);
 
       // preve os alertas dividindo por semana
       const alertasPrevistos = [];
@@ -723,16 +746,62 @@ function predicaoAlerta(idMaquina, componente) {
       const categorias = informacoes.map(item =>
         `Semana ${item.semana_do_mes}`
       );
-      console.log('catego', categorias)
-      console.log('Previsao', alertasPrevistos)
+      console.log('categoriaAlerta', categorias)
+      console.log('PrevisaoAlerta', alertasPrevistos)
 
       renderGraficoPrevisaoAlerta(alertasReais, alertasPrevistos, categorias);
     });
 
 }
 
+function predicaoUso(idMaquina, componente) {
+  let anoAtual = data.getFullYear();
+  let mesAtual = data.getMonth() + 1;
+  console.log(anoAtual, mesAtual)
+
+  fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ anoEscolhido: anoAtual, mesEscolhido: mesAtual })
+  })
+    .then(res => res.json())
+    .then(informacoes => {
+      const dadosSemanais = informacoes.map(item => [
+        item.semana_do_mes,
+        item.media_utilizacao
+      ]);
+
+      // gera o modelo de regressao
+      const modeloRegressao = ss.linearRegression(dadosSemanais);
+
+      // predicao
+      const previsao = ss.linearRegressionLine(modeloRegressao);
+
+      // preve os alertas dividindo por semana
+      const usoPrevisto = [];
+      for (let semana = 0; semana < informacoes.length; semana++) {
+        const predito = Math.round(previsao(semana));
+        usoPrevisto.push(Math.max(0, predito)); // arredonda para inteiro
+      }
+
+      //vetor para pegar vetor dos alertas real
+      const usoReal = informacoes.map(item =>
+        item.media_utilizacao
+      );
+
+      //pegar categorias(semanas da previsao)
+      const categorias = informacoes.map(item =>
+        `Semana ${item.semana_do_mes}`
+      );
+      console.log('Previsao uso', usoPrevisto)
+
+      renderGraficoPrevisaoUso(usoReal, usoPrevisto, categorias);
+
+    });
+
+}
+
 function renderGraficoPrevisaoAlerta(alertasReais, alertasPrevistos, categorias) {
-  const data = new Date(); // garantir que data existe
   const options = {
     chart: { type: 'line', height: 300, toolbar: { show: false } },
     series: [
@@ -747,15 +816,48 @@ function renderGraficoPrevisaoAlerta(alertasReais, alertasPrevistos, categorias)
     ],
     xaxis: {
       categories: categorias,
-      labels: { style: { colors: '#333'} }
+      labels: { style: { colors: '#333' } }
     },
     colors: ['#0077b6', '#333'],
     stroke: {
       width: [5, 5],
       curve: 'smooth',
-      dashArray: [0, 8] 
+      dashArray: [0, 8]
     }
   };
+
+  // if (window.grafPredicao) {
+  //   window.grafPredicao.destroy();
+  // }
+
+  window.grafPredicao = new ApexCharts(document.querySelector("#grafPredicao"), options);
+  window.grafPredicao.render();
+
+}
+
+function renderGraficoPrevisaoUso(usoReal, usoPrevisto, categorias) {
+  const options = {
+    chart: { type: 'line', height: 300, toolbar: { show: false } },
+    series: [
+      {
+        name: `Média do uso em ${nomeMeses[data.getMonth()]}`,
+        data: usoReal
+      }
+    ],
+    xaxis: {
+      categories: categorias,
+      labels: { style: { colors: '#333' } }
+    },
+    colors: ['#ff0000'],
+    stroke: {
+      width: 5,
+      curve: 'smooth'
+    }
+  };
+
+  if (window.grafPredicao) {
+    window.grafPredicao.destroy();
+  }
 
   window.grafPredicao = new ApexCharts(document.querySelector("#grafPredicao"), options);
   window.grafPredicao.render();
@@ -797,6 +899,7 @@ const chartData = {
 //FUNÇÃO PARA ATUALIZAR DADOS DE ACORDO COM O FILTRO SLTS
 const sltServidor = document.getElementById("sltServidor");
 const sltComponente = document.getElementById("sltComponente");
+const sltPredicao = document.getElementById("slt_predicao");
 
 function atualizarDados() {
   const idMaquina = sltServidor.value;
@@ -827,7 +930,7 @@ function atualizarDados() {
     obterTempoMtbf(idMaquina, componente);
     dadosGraficoUso(idMaquina, componente, anoEscolhidoUso, mesEscolhidoUso);
     dadosGraficoAlerta(idMaquina, componente, anoEscolhidoAlerta)
-    predicaoAlerta(idMaquina, componente)
+    executarPredicao(idMaquina, componente)
 
 
     calcularConfiabilidade(idMaquina, componente)
@@ -861,6 +964,7 @@ function atualizarDados() {
 
 sltServidor.addEventListener("change", atualizarDados);
 sltComponente.addEventListener("change", atualizarDados);
+sltPredicao.addEventListener("change", atualizarDados);
 
 
 
