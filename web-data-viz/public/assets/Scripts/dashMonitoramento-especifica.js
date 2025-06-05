@@ -106,7 +106,11 @@ function abrirModal(id) {
   })
 }
 
-
+let cpuData = []
+let discoData = []
+let ramData = []
+let downloadData = []
+let uploadData = []
 
 function renderGraficos() {
   // Crie o gráfico com dados vazios
@@ -157,7 +161,7 @@ function renderGraficos() {
         data: [],
       },
     ],
-        stroke: {
+    stroke: {
       curve: "smooth",
       width: 3
     },
@@ -191,7 +195,7 @@ function renderDados() {
   let maquinaSelecionada = sessionStorage.getItem("idServidorSelecionado");
   const idFabrica = sessionStorage.getItem("FABRICA_ID");
 
-  console.log(`mAQUINA SELECIONADA ${maquinaSelecionada}`)
+  console.log(`Maquina selecionada:  ${maquinaSelecionada}`)
 
   fetch(`/dashMonitoramento/dadosRecebidos/${idFabrica}`)
     .then((res) => res.json())
@@ -207,14 +211,124 @@ function renderDados() {
         });
       });
 
-      const cpuData = dadosTempoReal.map(arr => arr[0].CPU.valor);
+      cpuData = dadosTempoReal.map(arr => arr[0].CPU.valor);
 
-      const discoData = [dadosTempoReal[dadosTempoReal.length - 1]?.[0]?.DISCO?.valor || 0]
+      discoData = [dadosTempoReal[dadosTempoReal.length - 1]?.[0]?.DISCO?.valor || 0]
 
-      const ultimoDisco = discoData[discoData.length - 1] || 0
       console.log(`Dados disco: ${discoData}`)
 
-      const ramData = dadosTempoReal.map(arr => arr[0].RAM.valor)
+      ramData = dadosTempoReal.map(arr => arr[0].RAM.valor)
+
+      downloadData = dadosTempoReal.map(arr => arr[0].RedeRecebida.valor)
+      uploadData = dadosTempoReal.map(arr => arr[0].RedeEnviada.valor)
+
+
+      const ultimoDisco = discoData[discoData.length - 1] || 0
+
+
+      const cpuHorarios = dadosTempoReal.map(arr => {
+        const agora = new Date();
+        return agora.toLocaleTimeString('pt-BR', { hour12: false });
+      });
+
+      // Atualize apenas os dados do gráfico
+      chart.updateSeries([{
+        name: "Porcentagem",
+        data: cpuData,
+      }]);
+      chart.updateOptions({
+        xaxis: { categories: cpuHorarios }
+      });
+
+
+      graficoDisco.updateSeries([ultimoDisco])
+
+      graficoDisco.updateOptions({
+        // colors: ["#FF0"],
+        plotOptions: {
+          radialBar: {
+            dataLabels: {
+              name: {
+                show: true,
+                fontSize: '22px',
+                color: '#000'
+              }
+            }
+          }
+        }
+      })
+
+      graficoRam.updateSeries([{
+        name: "Porcentagem",
+        data: ramData
+      }])
+      graficoRam.updateOptions({
+        xaxis: { categories: cpuHorarios }
+      })
+
+
+
+
+
+
+      // Atualize o texto de utilização
+      const cpuTexto = cpuData[cpuData.length - 1] || 0;
+      let utilizacaoTexto = document.getElementById('utilizacaoInfo');
+      utilizacaoTexto.textContent = cpuTexto + '%';
+
+      let utilizacaoDisco = document.getElementById('utilizacaoInfoDisco')
+      utilizacaoDisco.textContent = ultimoDisco + '%'
+
+      const ramTexto = ramData[ramData.length - 1] || 0;
+      let utilizacaoRam = document.getElementById('utilizacaoInfoRam')
+      utilizacaoRam.textContent = ramTexto + '%'
+
+
+      const downloadTexto = downloadData[downloadData.length - 1] || 0
+      const uploadTexto = uploadData[uploadData.length - 1] || 0
+
+      let dowTexto = document.getElementById('recebida')
+      let upTexto = document.getElementById('enviada')
+
+      dowTexto.textContent = downloadTexto + 'MB/s'
+      upTexto.textContent = uploadTexto + 'MB/s'
+
+
+      console.log(cpuData)
+      console.log(dadosTempoReal)
+    });
+}
+
+function renderDadosPedido() {
+  let maquinaSelecionada = sessionStorage.getItem("idServidorSelecionado");
+  const idFabrica = sessionStorage.getItem("FABRICA_ID");
+
+  console.log(`Maquina selecionada:  ${maquinaSelecionada}`)
+
+  fetch(`/dashMonitoramento/dadosRecebidos/${idFabrica}`)
+    .then((res) => res.json())
+    .then((dados) => {
+      dados.forEach((servidores) => {
+        servidores.forEach((novoServidor) => {
+          if (novoServidor.CPU.idMaquina == maquinaSelecionada) {
+            dadosTempoReal.push([novoServidor]);
+            if (dadosTempoReal.length > 7) {
+              dadosTempoReal.shift();
+            }
+          }
+        });
+      });
+
+      cpuData = dadosTempoReal.map(arr => arr[0].CPU.valor);
+
+      discoData = [dadosTempoReal[dadosTempoReal.length - 1]?.[0]?.DISCO?.valor || 0]
+
+      console.log(`Dados disco: ${discoData}`)
+
+      ramData = dadosTempoReal.map(arr => arr[0].RAM.valor)
+
+      downloadData = dadosTempoReal.map(arr => arr[0].RedeRecebida.valor)
+      uploadData = dadosTempoReal.map(arr => arr[0].RedeEnviada.valor)
 
 
 
@@ -256,20 +370,103 @@ function renderDados() {
         data: ramData
       }])
       graficoRam.updateOptions({
-        xaxis: {categories: cpuHorarios}
+        xaxis: { categories: cpuHorarios }
       })
-
-
 
       // Atualize o texto de utilização
       const cpuTexto = cpuData[cpuData.length - 1] || 0;
       let utilizacaoTexto = document.getElementById('utilizacaoInfo');
       utilizacaoTexto.textContent = cpuTexto + '%';
 
+      const ultimoDisco = discoData[discoData.length - 1] || 0
       let utilizacaoDisco = document.getElementById('utilizacaoInfoDisco')
       utilizacaoDisco.textContent = ultimoDisco + '%'
+
+      const ramTexto = ramData[ramData.length - 1] || 0;
+      let utilizacaoRam = document.getElementById('utilizacaoInfoRam')
+      utilizacaoRam.textContent = ramTexto + '%'
+
+
+      const downloadTexto = downloadData[downloadData.length - 1] || 0
+      const uploadTexto = uploadData[uploadData.length - 1] || 0
+
+      let dowTexto = document.getElementById('recebida')
+      let upTexto = document.getElementById('enviada')
+
+      dowTexto.textContent = downloadTexto + 'MB/s'
+      upTexto.textContent = uploadTexto + 'MB/s'
+
+
       console.log(cpuData)
       console.log(dadosTempoReal)
+    });
+}
+
+
+function modalFiltro(nomeComponente) {
+  let maquinaSelecionada = sessionStorage.getItem('idServidorSelecionado')
+  let filtroComponente = nomeComponente.dataset.idFiltro
+
+  fetch(`dashMonitoramento/filtroMedida/${maquinaSelecionada}`)
+    .then((resposta) => resposta.json())
+    .then((dados) => {
+      // Filtra apenas os itens do componente selecionado
+      const componentesFiltrados = dados.filter(item => 
+        item.componente === filtroComponente
+      );
+      console.log(componentesFiltrados)
+      console.log(filtroComponente)
+      
+      if (componentesFiltrados.length > 0) {
+        // Cria opções para escolher a medida
+        let opcoesHTML = '';
+        componentesFiltrados.forEach(item => {
+          opcoesHTML += `<option value="${item.medida}">${item.medida}</option>`;
+        });
+        
+        Swal.fire({
+          title: `Filtro ${filtroComponente}`,
+          html: `
+            <div class="modal-test">
+              <div class="containerConfigAlerta">
+                <h2>Escolha a medida:</h2>
+                <select id="selectMedida" class="form-select">
+                  ${opcoesHTML}
+                </select>
+              </div>
+            </div>
+          `,
+          showCancelButton: true,
+          showConfirmButton: true,
+          confirmButtonText: "Aplicar",
+          cancelButtonText: "Fechar",
+          customClass: "alertaModal",
+          preConfirm: () => {
+            const medidaSelecionada = document.getElementById('selectMedida').value;
+            // Aqui você pode fazer algo com os valores selecionados
+            console.log(`Filtro aplicado: ${filtroComponente} - ${medidaSelecionada}`);
+            return { medida: medidaSelecionada };
+          }
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Faça algo com o resultado após confirmar
+          }
+        });
+      } else {
+        Swal.fire({
+          title: "Erro",
+          text: `Não encontramos medidas para o componente ${filtroComponente}`,
+          icon: "error"
+        });
+      }
+    })
+    .catch(error => {
+      console.error("Erro ao buscar medidas:", error);
+      Swal.fire({
+        title: "Erro",
+        text: "Falha ao carregar as medidas disponíveis",
+        icon: "error"
+      });
     });
 }
 

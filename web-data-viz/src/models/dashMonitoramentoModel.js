@@ -22,7 +22,18 @@ function qtdServidoresPorFabrica(idFabrica) {
   return database.executarQUENTE(instrucaoSql)
 }
 
+
+function filtroMedida(idMaquina){
+  var instrucaoSql = `
+  SELECT componente.tipo as componente, componente.medida as medida from componente 
+	JOIN componenteServidor ON  componenteServidor.fkComponente = componente.idcomponente
+    WHERE componenteServidor.fkMaquina = ${idMaquina};  
+  `
+  return database.executarQUENTE(instrucaoSql)
+}
+
 module.exports = {
   obterParametrosComponente,
   qtdServidoresPorFabrica,
+  filtroMedida
 }

@@ -26,8 +26,12 @@ router.post("/dadosPedidoCliente", (req, res) => {
   dashMonitoramentoController.dadosPedidoCliente(req, res)
 })
 
-router.get("/dadosPedidoRecebidos", (req, res) => {
+router.get("/dadosPedidoRecebidos/:idFabrica", (req, res) => {
   dashMonitoramentoController.dadosPedidoRecebidos(req, res)
+})
+
+router.get("/filtroMedida/:idMaquina", (req, res) =>{
+  dashMonitoramentoController.filtroMedida(req, res)
 })
 
 module.exports = router

@@ -62,6 +62,21 @@ def enviarDadosTempoReal(listaTempoReal):
         except Exception as e:
             print(f"Erro ao conectar na rota tempo real: {e}")
 
+
+# def enviarDadosPedidoTempoReal(listaTempoReal):
+#         try:
+#             fetch_tempoReal = "http://localhost:8080/dashMonitoramento/dadosPedidoCliente"
+#             resposta = requests.post(fetch_tempoReal, json=listaTempoReal)
+
+#             if resposta.status_code == 200:
+#                 print("Dados enviados em tempo real")
+#                 print(resposta.json())
+#             else:
+#                 print(f"Erro ao enviar os dados em tempo real: {resposta.status_code}")
+#                 print(resposta.text)
+#         except Exception as e:
+#             print(f"Erro ao conectar na rota tempo real: {e}")
+
 ############################################################################################################################################################################
 
 def enviarDadosPedidoCliente(listaPedidoCliente):
@@ -71,6 +86,7 @@ def enviarDadosPedidoCliente(listaPedidoCliente):
 
             if resposta.status_code == 200:
                 print("Dados enviados do pedido do cliente")
+                print(listaPedidoCliente)
                 print(resposta.json())
             else:
                 print(f"Erro ao enviar os dados do pedido do cliente: {resposta.status_code}")
@@ -190,6 +206,8 @@ def dadosObrigatorios():
 ############################################################################################################################################################################
 def monitorar():
     mac_address = pegando_mac_address()
+    listaPedidoCliente = []
+    # tipoComponente = []
     
     print(f"Iniciando monitoramento nesse mac_address: {mac_address}")
     intervalo_envio_s3 = 5 # 1 hora = 1440
@@ -199,7 +217,6 @@ def monitorar():
         "dataAtual": datetime.datetime.now().isoformat(),
         "leitura": []
     }
-
     while True:
         try:
             pedidos = obterPedidos(mac_address)
@@ -213,7 +230,6 @@ def monitorar():
                     }]
             enviarDadosTempoReal(listaTempoReal)
 
-            listaPedidoCliente = {} 
             
             for pedido_cliente in pedidos:
                 print((pedido_cliente['tipo'], pedido_cliente['medida']))
@@ -223,18 +239,20 @@ def monitorar():
                 medida = pedido_cliente['medida']
                 pular_processamento = False
 
-                if tipo == "Cpu" and medida == "Porcentagem":
-                    pular_processamento = True
-                elif tipo == "Ram" and medida == "Porcentagem":
-                    pular_processamento = True
-                elif tipo == "Disco" and medida == "Porcentagem":
-                    pular_processamento = True
-                elif tipo == "Rede" and (medida == "Upload" or medida == "Download"):
-                    pular_processamento = True
+                # tipoComponente.append(tipo)
 
-                if pular_processamento:
-                    print(f"--- Pedido pulado: Tipo={tipo}, Medida={medida}")
-                    continue 
+                # if tipo == "Cpu" and medida == "Porcentagem":
+                #     pular_processamento = True
+                # elif tipo == "Ram" and medida == "Porcentagem":
+                #     pular_processamento = True
+                # elif tipo == "Disco" and medida == "Porcentagem":
+                #     pular_processamento = True
+                # elif tipo == "Rede" and (medida == "Upload" or medida == "Download"):
+                #     pular_processamento = True
+
+                # if pular_processamento:
+                #     print(f"--- Pedido pulado: Tipo={tipo}, Medida={medida}")
+                #     continue 
                 try:
                     valor = eval(pedido_cliente['codigo'])
                     idPedido = pedido_cliente['idcomponenteServidor']
@@ -246,11 +264,17 @@ def monitorar():
                         "valor": valor
                     })
 
-                    if mac_address not in listaPedidoCliente:
-                        listaPedidoCliente[mac_address] = []
-                    listaPedidoCliente[mac_address].append({
-                        "{tipo}":{"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida, "mac_address": mac_address}
-                    })
+                    # if mac_address not in listaPedidoCliente:
+                    #     listaPedidoCliente[mac_address] = []
+                    # listaPedidoCliente[mac_address].append({
+                    #     "{tipo}":{"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida, "mac_address": mac_address}
+                    # })
+
+
+                    listaPedidoCliente.append({
+                            tipo:{"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida, "mac_address": mac_address}
+                        })
+
 
                     print(f"Valor capturado: {valor} e id: {idPedido}")
                     inserirDados(valor, idPedido)
@@ -283,6 +307,7 @@ def monitorar():
                         processoRAM = processoFunc['ram']
                         processoDISCO = processoFunc['disco']
                         inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta, tipo_incidente, fkPedido, componente, processo, processoCPU, processoRAM, processoDISCO)
+                    
                 except Exception as e:
                     print(f"Erro ao processar pedido: {e}")
             
@@ -293,6 +318,8 @@ def monitorar():
                 ultimo_envio_s3 = datetime.datetime.now()
 
             enviarDadosPedidoCliente(listaPedidoCliente)
+            listaPedidoCliente = []
+
 
             time.sleep(5)
 

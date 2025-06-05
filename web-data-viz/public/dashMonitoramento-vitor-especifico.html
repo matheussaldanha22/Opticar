@@ -22,25 +22,24 @@
 <body>
     <!-- NavBar -->
     <div class="mainContainer">
-        <div id="div_menu" class="menu ">
-            <div class="nav-burger" onclick="expand()">
+        <div id="div_menu" class="menu" role="navigation" aria-label="Menu principal">
+            <button class="nav-burger" onclick="expand()" aria-label="Abrir/fechar menu" aria-expanded="false">
                 <div id="linha1"></div>
                 <div id="linha2"></div>
                 <div id="linha3"></div>
-            </div>
+            </button>
 
-            <ul id="ul_links" class="nav-links ">
-
-                <li class="li-active">
-                    <i class='bx bx-desktop' style='color:#ffffff'></i>
+            <ul id="ul_links" class="nav-links" role="menubar">
+                <li class="li-active" role="menuitem">
+                    <i class='bx bx-desktop' style='color:#ffffff' aria-hidden="true"></i>
                     <span>Monitoramento</span>
                 </li>
-                <li>
-                    <i class='bx bxs-bell-ring' style='color:#ffffff'></i>
+                <li role="menuitem">
+                    <i class='bx bxs-bell-ring' style='color:#ffffff' aria-hidden="true"></i>
                     <span>Alertas</span>
                 </li>
-                <li>
-                    <i class='bx bx-server' style='color:#ffffff'></i>
+                <li role="menuitem">
+                    <i class='bx bx-server' style='color:#ffffff' aria-hidden="true"></i>
                     <span>Servidores</span>
                 </li>
             </ul>
@@ -76,14 +75,14 @@
             <hr>
             <div class="alertasContainer">
 
-                <div class="tempoReal">
+                <!-- <div class="tempoReal">
                     <div class="containerKpis">
                         <div class="tempo_atividade">
                             <h3 id="alerta">Total de processos</h3>
                             <p>2</p>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <div class="mainContainerTabela">
                     <h2 class="tituloTabela">Principais processos (alto consumo)</h2>
                     <table id="tabela-alertas" class="tabelaContainer">
@@ -135,7 +134,15 @@
                     <div class="sessao1Charts">
                         <div class="cpuChart charts">
                             <div class="informacoesCPU textoGrafico">
-                                <h4><i class='bx bx-chip'></i> CPU</h4>
+                                <div class="containerTitulo2">
+                                    <h4><i class='bx bx-chip'></i> CPU</h4>
+                                    <div class="containerFiltroCpu">
+                                        <!-- <p>Filtrar</p> -->
+                                        <i class="fa-solid fa-filter" style="border: none;" data-id-filtro="Cpu"
+                                            onclick="modalFiltro(this)"></i>
+                                    </div>
+
+                                </div>
                                 <div>
                                     <h5>Utilização</h5>
                                     <p id="utilizacaoInfo"></p>
@@ -145,7 +152,15 @@
                         </div>
                         <div class="discoChart charts">
                             <div class="informacoesCPU textoGrafico">
-                                <h4><i class='bx  bx-folder'></i> Disco</h4>
+                                <div class="containerTitulo2">
+                                    <h4><i class='bx  bx-folder'></i> Disco</h4>
+                                    <div class="containerFiltroCpu">
+                                        <!-- <p>Filtrar</p> -->
+                                        <i class="fa-solid fa-filter" style="border: none;" data-id-filtro="Disco"
+                                            onclick="modalFiltro(this)"></i>
+                                    </div>
+                                </div>
+
                                 <div>
                                     <h5>Utilização</h5>
                                     <p id="utilizacaoInfoDisco">60%</p>
@@ -156,13 +171,47 @@
                     </div>
 
                     <div class="sessao2Charts">
-                        <div class="redeChart charts"></div>
+                        <div class="redeChart charts">
+                            <div class="containerTitulo">
+                                <h2><i class="fa-solid fa-wifi"></i>Rede</h2>
+                                <div class="containerFiltroCpu">
+                                    <!-- <p>Filtrar</p> -->
+                                    <i class="fa-solid fa-filter" style="border: none;" data-id-filtro="Rede"
+                                        onclick="modalFiltro(this)"></i>
+                                </div>
+                            </div>
+                            <div class="containerDowUp">
+                                <div class="downloadContainer valoresContainer">
+                                    <div class="trianguloDown"></div>
+                                    <div class="containerTextoDown">
+                                        <h5>Download</h5>
+                                        <p id="recebida"> 5 MB/s</p>
+                                    </div>
+
+                                </div>
+                                <div class="uploadContainer valoresContainer">
+                                    <div class="trianguloUp"></div>
+                                    <div class="containerTextoUp">
+                                        <h5>Upload</h5>
+                                        <p id="enviada">5 MB/s</p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
                         <div class="ramChart charts">
                             <div class="informacoesCPU textoGrafico">
-                                <h4><i class='bx  bx-credit-card-front'></i> RAM</h4>
+                                <div class="containerTitulo2">
+                                    <h4><i class='bx  bx-credit-card-front'></i> RAM</h4>
+                                    <div class="containerFiltroCpu">
+                                        <!-- <p>Filtrar</p> -->
+                                        <i class="fa-solid fa-filter" style="border: none;" data-id-filtro="Ram"
+                                            onclick="modalFiltro(this)"></i>
+                                    </div>
+                                </div>
                                 <div>
                                     <h5>Utilização</h5>
-                                    <p id="utilizacaoInfo"> 100%</p>
+                                    <p id="utilizacaoInfoRam"> 100%</p>
                                 </div>
                             </div>
                             <div id="chartRam"></div>
