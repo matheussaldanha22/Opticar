@@ -31,7 +31,7 @@ app.listen(PORTA_APP, () => {
 });
 
 app.post("/perguntar", async (req, res) => {
-    const pergunta = req.body.pergunta;
+    const pergunta = req.body.perguntaServer;
 
     try {
         const resultado = await gerarResposta(pergunta);

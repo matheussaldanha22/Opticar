@@ -1,5 +1,91 @@
-var fabricaCriticaLista = []
+var fabricaCriticaLista = [];
 var fabricasSelecionadas = [];
+var eixoXAlerta = [];
+var eixoYAlerta = [];
+var estados = [];
+
+const nomeDias = [
+  "Domingo",
+  "Segunda-Feira",
+  "Terça-Feira",
+  "Quarta-Feira",
+  "Quinta-Feira",
+  "Sexta-Feira",
+  "Sábado"
+]
+
+const nomeMeses = [
+  'Janeiro',
+  'Fevereiro',
+  'Março',
+  'Abril',
+  'Maio',
+  'Junho',
+  'Julho',
+  'Agosto',
+  'Setembro',
+  'Outubro',
+  'Novembro',
+  'Dezembro'
+];
+
+function obterData() {
+  let dataExibir = new Date;
+  return `${nomeDias[dataExibir.getDay()]} - ${dataExibir.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`;
+}
+
+function mostrarData() {
+  setInterval(() => {
+    document.getElementById("dataInfo").innerHTML = obterData()
+  }, 1000);
+}
+
+const bobPredicao = document.querySelector('.bobPredicao')
+const bobAlerta = document.querySelector('.bobAlerta')
+
+bobAlerta.addEventListener('click', () => {
+  Swal.fire({
+      html: `
+            <div class="modal-bob">
+                <div class="containerBob">
+                    <h3>Gostaria de um relatório em pdf da sua dashboard de alertas?</h3>
+                </div>
+            </div>
+      `,
+      showCancelButton: true,
+      cancelButtonText: "Não",
+      background: '#fff',
+      confirmButtonColor: '#2C3E50',
+      confirmButtonText: "Sim",
+      customClass: 'addModal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        bobAlertaRelatorio()
+      }
+    });
+})
+
+bobPredicao.addEventListener('click', () => {
+  Swal.fire({
+      html: `
+            <div class="modal-bob">
+                <div class="containerBob">
+                    <h3>Gostaria de um relatório em pdf da sua dashboard de alertas?</h3>
+                </div>
+            </div>
+      `,
+      showCancelButton: true,
+      cancelButtonText: "Não",
+      background: '#fff',
+      confirmButtonColor: '#2C3E50',
+      confirmButtonText: "Sim",
+      customClass: 'addModal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        bobPredicaoRelatorio()
+      }
+    });
+})
 
 function plotarGraficoAlerta(dadosAlerta) {
   fabricaCriticaLista = []
@@ -155,12 +241,12 @@ function plotarGraficoAlerta(dadosAlerta) {
           {
             name: "Alertas em Aberto",
             data: fabricaCriticaLista.map(f => f.qtd_to_do),
-            color: "#04708D",
+            color: "#011f4b",
           },
           {
             name: "Alertas em Andamento",
             data: fabricaCriticaLista.map(f => f.qtd_in_progress),
-            color: "#22B4D1",
+            color: "#0077b6",
           },
         ],
         xaxis: {
@@ -171,6 +257,10 @@ function plotarGraficoAlerta(dadosAlerta) {
           opacity: 1,
         },
       };
+
+      eixoXAlerta = fabricaCriticaLista.map(f => f.nome).join(", ");
+      eixoYAlerta = `Aberto: [${fabricaCriticaLista.map(f => f.qtd_to_do).join(", ")}], Andamento: [${fabricaCriticaLista.map(f => f.qtd_in_progress).join(", ")}]`;
+      estados = `${fabricaCriticaLista.map(f => f.estado)}`
 
       if (window.chartBar) {
         window.chartBar.destroy();
@@ -758,6 +848,9 @@ function inicializarGrafico() {
     );
     chartPred.render();
 }
+var nomeFabricaPred = [];
+var dataYPredicao = [];
+var eixoXPredicao = [];
 
 function predicao() {
   var filtro = Number(filtroPredicao.value)
@@ -812,6 +905,11 @@ function predicao() {
             data: dados
         })
     })
+    nomeFabricaPred = seriesPred.map(s => s.name).join(", ");
+    dataYPredicao = seriesPred.map(s => {
+                      return `${s.name}: ${s.data.join(", ")}`;
+                    }).join("\n");
+    eixoXPredicao = categoriesPred
 
     chartPred.updateOptions({
         series: seriesPred,
@@ -829,7 +927,113 @@ function predicao() {
   }
 }
 
+var respostas;
+
+async function bobAlertaRelatorio() {
+    try {
+        var perguntas = `Faça essa resposta para a persona administrador, quero um relatório a respeito do gráfico de alertas que possuo, ele me fala os alertas de cada fábrica, os em andamento e os em aberto, quero saber que ações eu devia tomar para essas fábricas irei te passar aqui os dados do gráfico, aqui estão os nomes das fábricas o eixo X do gráfico ${eixoXAlerta} e respectivamente os alertas delas, o eixo Y do gráfico ${eixoYAlerta} junto com o estado de cada fábrica ${estados}`;
+        
+        const response = await fetch("http://localhost:5000/perguntar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                perguntaServer: perguntas
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro na requisição: ' + response.status);
+        }
+        respostas = await response.text();
+        console.log(respostas);
+        pdf(respostas)
+        
+    } catch (erro) {
+        console.error(`Erro: ${erro}`);
+    }
+}
+
+async function bobPredicaoRelatorio() {
+    try {
+        var series = chartPred.w.config.series;
+        var datas = chartPred.w.config.xaxis.categories;
+        if (!chartPred || !series || !datas) {
+            Swal.fire('Erro', 'Componente não foi excluído com sucesso', 'error');
+          return;
+        }
+
+        var perguntas = `Esse é um relatório para a persona Administrador. Quero um relatório do gráfico abaixo que mostra uma previsão da quantidade de alertas acumulados ao longo dos dias para cada fábrica selecionada. A previsão considera dois fatores principais: MTBF (Mean Time Between Failures): representa o tempo médio entre falhas em minutos.
+        Tempo médio de resolução de alertas: também em minutos.
+        Gostaria que no relatório fosse explicado a conta por trás da predição.
+        A ideia é estimar, para os próximos dias, quantos alertas irão surgir (com base no MTBF) e quantos serão resolvidos (com base no tempo médio de resolução). Com isso, calculamos o acúmulo previsto de alertas para cada dia.
+        O eixo X representa as datas futuras (dias consecutivos), e o eixo Y mostra a quantidade acumulada de alertas prevista para cada uma dessas datas. Cada linha no gráfico representa uma fábrica diferente.
+        Aqui estão os dados do gráfico: essas são as fábricas ${nomeFabricaPred} o eixo X ${eixoXPredicao} e aqui o eixo Y ${dataYPredicao}, quero saber que ações eu devia tomar para essas fábricas, quero um relatório que caiba em 1 página e sem gráfico somente os dados e as ações que você acha que eu deveria tomar`;
+        
+        const response = await fetch("http://localhost:5000/perguntar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                perguntaServer: perguntas
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro na requisição: ' + response.status);
+        }
+        respostas = await response.text();
+        console.log(respostas);
+        pdf(respostas)
+        
+    } catch (erro) {
+        console.error(`Erro: ${erro}`);
+    }
+}
+
+async function pdf(respostas) {
+    try {
+        const response = await fetch("http://localhost:5000/pdf", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                resposta: respostas
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao gerar PDF: ' + response.status);
+        }
+
+        const blob = await response.blob();
+        console.log(blob);
+        
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        a.download = 'relatórioAdmin.pdf';
+        
+        document.body.appendChild(a);
+        a.click();
+        
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+        
+    } catch (erro) {
+        console.error("Erro ao baixar PDF:", erro);
+        alert("Erro ao gerar PDF. Tente novamente.");
+    }
+}
+
+
+
 window.onload = function () {
+  mostrarData();
   dadosGraficoAlerta();
   mostrarFabricas();
   criarBotoesPaginacao();
