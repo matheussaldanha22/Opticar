@@ -12,9 +12,6 @@
     font-family: 'Montserrat';
 }
 
-
-
-
 /* BARRA LATERAL */
 .menu {
     display: flex;
@@ -43,10 +40,8 @@
 .nav-active {
     transform: translateX(0%);
     transition: 1s;
-
 }
 
-/*  */
 .linha1-active {
     transform: rotate(44deg);
     transition: 0.7s;
@@ -67,8 +62,6 @@
     cursor: pointer;
 }
 
-/*  */
-
 .nav-burger {
     display: block;
     top: 5vw;
@@ -85,19 +78,17 @@
     display: flex;
     flex-direction: column;
     gap: 5vw;
+}
 
-    & span {
-        display: none;
-    }
-
+.nav-links span {
+    display: none;
 }
 
 .nav-links li i {
     font-size: 12vw;
 }
 
-
-/* cabecalho */
+/* CABEÇALHO */
 .dashHistorica {
     display: flex;
     flex-direction: column;
@@ -178,8 +169,7 @@
     transition: 0.3s;
 }
 
-/* Painel dashs */
-
+/* PAINEL DASHBOARD */
 .painelDash {
     display: flex;
     flex-direction: column;
@@ -215,12 +205,10 @@
     border-bottom: 2px solid black;
     font-family: Arial, sans-serif;
     transition: 0.3s ease;
-
 }
 
 .sltInvisivel select {
     appearance: none;
-    /* Remove o estilo padrão */
     -webkit-appearance: none;
     -moz-appearance: none;
     border: none;
@@ -246,7 +234,6 @@
     font-size: 14px;
     pointer-events: none;
 }
-
 
 .texto {
     display: flex;
@@ -292,10 +279,9 @@ div .servidor {
     height: 3vh;
     width: 3vw;
     padding: 0 0vw 0 0vw;
-
 }
 
-/* GRAFS */
+/* GRÁFICOS */
 .graficos {
     display: flex;
     gap: 3vw;
@@ -325,7 +311,6 @@ div .servidor {
     margin: 20px 0;
 }
 
-
 .tituloPred {
     display: flex;
     justify-content: space-between;
@@ -345,6 +330,7 @@ div .servidor {
     border: 1px solid #ccc;
 }
 
+/* KPIS */
 .kpis {
     display: flex;
     justify-content: center;
@@ -367,7 +353,6 @@ div .servidor {
     font-weight: bold;
     gap: 10px;
     border-bottom: 5px solid #04708D;
-
 }
 
 .titulokpiIdv {
@@ -401,10 +386,8 @@ div .servidor {
 .grafSuperior {
     display: flex;
     gap: 2vw;
-    margin-top: 2vh
+    margin-top: 2vh;
 }
-
-
 
 .filtrar {
     display: flex;
@@ -432,20 +415,13 @@ div .servidor {
     transform: scale(1.1);
     transition: 0.3s;
     background-color: #3d5268;
-
 }
-
-
-
-
 
 .kpisTempo {
     display: flex;
     flex-direction: column;
     gap: 2vh;
 }
-
-
 
 .kpiTempo {
     display: flex;
@@ -463,7 +439,6 @@ div .servidor {
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
     font-weight: bold;
     gap: 10px;
-
 }
 
 .kpiTempo h2 {
@@ -482,9 +457,7 @@ div .servidor {
     font-size: 25px;
 }
 
-
-
-/* GRAFS INFERIOR */
+/* GRÁFICOS INFERIOR */
 .grafInferior {
     display: flex;
     flex-direction: column;
@@ -494,13 +467,7 @@ div .servidor {
 
 .grafInferior .grafBox {
     width: 50vw;
-
 }
-
-
-
-
-
 
 /* MODAL */
 .modal-test {
@@ -560,10 +527,6 @@ div .servidor {
     cursor: pointer;
 }
 
-.labelSlt {
-    display: flex;
-}
-
 .iptFiltrar {
     text-align: center;
     font-family: 'Montserrat';
@@ -575,13 +538,11 @@ div .servidor {
     height: 3vh;
 }
 
+/* ===== MEDIA QUERIES PARA RESPONSIVIDADE ===== */
 
-
-/* MEDIA MENU LATERAL FUNCIONAR */
-@media only screen and (min-width:702px) {
-
+/* DESKTOP - Menu lateral funcional */
+@media only screen and (min-width: 702px) {
     .menu {
-
         width: 5%;
         height: 100vh;
         position: fixed;
@@ -597,34 +558,30 @@ div .servidor {
         width: 100%;
         display: flex;
         align-items: center;
+    }
 
-        /* transition: all 1s; */
-        & li i {
-            font-size: 40px;
-        }
+    .nav-links li i {
+        font-size: 40px;
+    }
 
-        & span {
-            display: none;
-        }
+    .nav-links span {
+        display: none;
+    }
 
-        & ul {
-            width: 100%;
-        }
+    .nav-links ul {
+        width: 100%;
+    }
 
-        & li {
-            position: relative;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-
-
+    .nav-links li {
+        position: relative;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
     }
 
     .nav-links-expanded .li-active::after {
-        /* display: none; */
         width: 90% !important;
         left: 0 !important;
     }
@@ -636,8 +593,6 @@ div .servidor {
         bottom: -20%;
         left: 15%;
         border-radius: 2px;
-
-
         background-color: #007BFF;
         height: 3.5px;
     }
@@ -655,58 +610,182 @@ div .servidor {
     }
 
     .nav-links-expanded {
-        /* animation: expandir 10s linear; */
         margin-left: 5px;
+    }
 
-        & li {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            gap: 1em;
+    .nav-links-expanded li {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1em;
+    }
 
-            & span {
-                color: #fff;
-                font-family: 'Montserrat';
-                font-size: 1.5vw;
-                font-weight: 550;
-                display: flex;
-            }
-        }
+    .nav-links-expanded li span {
+        color: #fff;
+        font-family: 'Montserrat';
+        font-size: 1.5vw;
+        font-weight: 550;
+        display: flex;
     }
 
     .menu-expand {
         width: 20%;
         display: flex;
         align-items: flex-start;
-        /* padding: 20px; */
-
     }
-
-
 
     .oculta {
         display: none;
     }
-
-
 }
 
-@keyframes expandir {
-    from {
-        width: 5%
+/* ========================================================= */
+/* ===== CÓDIGO APENAS PARA A RESPONSIVIDADE (CELULAR) ===== */
+/* ========================================================= */
+
+@media (max-width: 701px) {
+
+    /* Oculta a primeira div que só contém o menu (que será fixo) */
+    body > .dashHistorica:first-of-type {
+        display: none;
+    }
+    
+    /* AJUSTE DO CORPO E CONTEÚDO PRINCIPAL */
+    .dashHistorica {
+        width: 100%;
+        margin-left: 0;
+        padding: 15px;
+        padding-top: 70px; /* Espaço no topo para o botão do menu */
+        gap: 20px;
+        box-sizing: border-box;
+    }
+    
+    /* AJUSTES DO MENU LATERAL NO CELULAR */
+    .menu {
+        position: fixed;
+        left: -100%; /* Começa escondido */
+        width: 80%;
+        max-width: 320px;
+        height: 100vh;
+        transition: left 0.3s ease-in-out;
+        padding-top: 60px;
+        align-items: flex-start;
+        gap: 15px;
     }
 
-    to {
-        width: 20%;
+    .menu.menu-aberto-celular {
+        left: 0; /* Classe para mostrar o menu */
     }
-}
+    
+    .nav-burger {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 1001;
+    }
 
-@keyframes diminui {
-    from {
-        width: 20%
+    .nav-burger div {
+        background-color: #333;
+        width: 30px;
+        height: 3px;
+        margin: 6px 0;
+    }
+    
+    /* CORREÇÃO DA COR DA LETRA E AJUSTES DA NAV */
+    .nav-links span {
+        display: block;
+        color: white; /* LETRAS BRANCAS */
     }
 
-    to {
-        width: 5%;
+    .nav-links { gap: 15px; }
+    .nav-links li { padding: 10px 25px; gap: 15px; }
+    .nav-links li i { font-size: 1.5rem; }
+
+    /* AJUSTE DO CABEÇALHO */
+    .cabecalho {
+        flex-direction: column;
+        height: auto;
+        gap: 15px;
+        align-items: flex-start;
+        width: 100%;
+        margin-top: 0;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        padding: 15px;
     }
+
+    .empresa, .perfil {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+    }
+    
+    .perfil { margin-left: 0; }
+    .perfil i.bxs-user-circle { font-size: 36px !important; }
+
+    .txtInfo {
+        height: auto;
+        width: auto;
+        gap: 2px;
+        font-size: 1rem;
+    }
+    
+    .perfil .txtInfo {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+    .perfil .txtInfo .txt {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .perfil .txtInfo p {
+        font-size: 0.9rem;
+    }
+    .perfil .txtInfo i.bx-chevron-down {
+        display: none;
+    }
+
+    .circuloEmp { width: 45px; height: 45px; }
+    .bxs-business { font-size: 1.5rem; }
+    
+    /* AJUSTE DO PAINEL DASHBOARD */
+    .painelDash {
+        width: 100%;
+        height: auto;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .cabecalhoDash {
+        flex-direction: column;
+        height: auto;
+        width: 100%;
+        margin-left: 0;
+        gap: 15px;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .tituloDash { flex-direction: column; gap: 8px; }
+    .sltInvisivel { width: auto; }
+    .sltInvisivel select { font-size: 1.5rem; text-align: center; padding: 5px; }
+    #titulo { font-size: 1.25rem; }
+    
+    div .servidor { flex-direction: column; align-items: center; font-size: 1rem; }
+    .sltRoxo { padding: 10px 20px; }
+
+    /* AJUSTE DOS KPIS E GRÁFICOS */
+    .kpis { flex-direction: column; gap: 15px; }
+    .kpiIdv { width: 100%; padding: 15px; }
+    .dadoKpi { font-size: 2rem; }
+
+    .grafSuperior, .graficos { flex-direction: column; gap: 15px; margin-left: 0; }
+    .grafBox { width: 100%; padding: 15px; }
+    .grafContainer { flex-direction: column; gap: 10px; align-items: center; }
+    .grafContainer h4 { text-align: center; }
+    .grafInferior { margin-left: 0; }
+    
+    .tituloPred { flex-direction: column; align-items: center; text-align: center; gap: 15px; }
 }

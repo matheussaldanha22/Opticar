@@ -1,15 +1,31 @@
-// BARRA LATERAL
+// CÓDIGO PARA CONTROLE DA BARRA LATERAL RESPONSIVA
 function expand() {
-  if (div_menu.classList.contains('menu-expand')) {
-    div_menu.style.animation = 'diminui 0.2s linear';
+    const menu = document.getElementById('div_menu');
+    const ul_links = document.getElementById('ul_links');
+    const linha1 = document.getElementById('linha1');
+    const linha2 = document.getElementById('linha2');
+    const linha3 = document.getElementById('linha3');
 
-  } else {
-    div_menu.style.animation = 'expandir 0.2s linear';
+    // VERIFICA SE A TELA É DE CELULAR (menor que 702px)
+    if (window.innerWidth < 702) {
+        // Comportamento no Celular: Abrir/Fechar menu lateral
+        menu.classList.toggle('menu-aberto-celular');
+        linha1.classList.toggle('linha1-active');
+        linha2.classList.toggle('linha2-active');
+        linha3.classList.toggle('linha3-active');
 
-  }
-  div_menu.classList.toggle('menu-expand')
-  ul_links.classList.toggle('nav-links-expanded')
+    } else {
+        // Comportamento no Desktop: Expandir/Diminuir menu (seu código original)
+        if (menu.classList.contains('menu-expand')) {
+            menu.style.animation = 'diminui 0.2s linear';
+        } else {
+            menu.style.animation = 'expandir 0.2s linear';
+        }
+        menu.classList.toggle('menu-expand');
+        ul_links.classList.toggle('nav-links-expanded');
+    }
 }
+
 
 function carregaPagina() {
   mostrarData();
@@ -700,7 +716,7 @@ function executarPredicao(idMaquina, componente) {
   let valorSlt = sltPredicao.value
 
 
-  if (valorSlt == "uso") {
+  if (valorSlt === "uso") {
     tituloGrafico.innerHTML = "Tendência de Crescimento de Uso (7 dias) - "
     predicaoUso(idMaquina, componente)
   } else {
@@ -749,7 +765,7 @@ function predicaoAlerta(idMaquina, componente) {
       console.log('categoriaAlerta', categorias)
       console.log('PrevisaoAlerta', alertasPrevistos)
 
-      renderGraficoPrevisaoAlerta(alertasReais, alertasPrevistos, categorias);
+      renderGrafPredicao('alerta', alertasReais, alertasPrevistos, categorias);
     });
 
 }
@@ -795,70 +811,77 @@ function predicaoUso(idMaquina, componente) {
       );
       console.log('Previsao uso', usoPrevisto)
 
-      renderGraficoPrevisaoUso(usoReal, usoPrevisto, categorias);
+      renderGrafPredicao('uso', usoReal, usoPrevisto, categorias);
+
+
 
     });
 
 }
 
-function renderGraficoPrevisaoAlerta(alertasReais, alertasPrevistos, categorias) {
-  const options = {
-    chart: { type: 'line', height: 300, toolbar: { show: false } },
-    series: [
-      {
-        name: `Alertas ${nomeMeses[data.getMonth()]}`,
-        data: alertasReais
+function renderGrafPredicao(tipo, valoresReais, valoresPrevistos, categorias) {
+  let options;
+  const data = new Date();
+
+  if (tipo === 'alerta') {
+    options = {
+      chart: {
+        type: 'line',
+        height: 300,
+        toolbar: { show: false }
       },
-      {
-        name: `Alertas ${nomeMeses[data.getMonth() + 1]} (Previsão)`,
-        data: alertasPrevistos
+      series: [
+        {
+          name: `Alertas ${nomeMeses[data.getMonth()]}`,
+          data: valoresReais
+        },
+        {
+          name: `Alertas ${nomeMeses[data.getMonth() + 1]} (Previsão)`,
+          data: valoresPrevistos
+        }
+      ],
+      xaxis: {
+        categories: categorias,
+        labels: { style: { colors: '#333' } }
+      },
+      colors: ['#0077b6', '#333'],
+      stroke: {
+        width: [4, 4],
+        curve: 'smooth',
+        dashArray: [0, 8]
       }
-    ],
-    xaxis: {
-      categories: categorias,
-      labels: { style: { colors: '#333' } }
-    },
-    colors: ['#0077b6', '#333'],
-    stroke: {
-      width: [5, 5],
-      curve: 'smooth',
-      dashArray: [0, 8]
-    }
-  };
-
-  // if (window.grafPredicao) {
-  //   window.grafPredicao.destroy();
-  // }
-
-  window.grafPredicao = new ApexCharts(document.querySelector("#grafPredicao"), options);
-  window.grafPredicao.render();
-
-}
-
-function renderGraficoPrevisaoUso(usoReal, usoPrevisto, categorias) {
-  const options = {
-    chart: { type: 'line', height: 300, toolbar: { show: false } },
-    series: [
-      {
-        name: `Média do uso em ${nomeMeses[data.getMonth()]}`,
-        data: usoReal
+    };
+  } else {
+    options = {
+      chart: {
+        type: 'area',
+        height: 300,
+        toolbar: { show: false }
+      },
+      series: [
+        {
+          name: `Média do uso em ${nomeMeses[data.getMonth()]}`,
+          data: valoresReais
+        }
+      ],
+      xaxis: {
+        categories: categorias,
+        labels: { style: { colors: '#333' } }
+      },
+      colors: ['#011f4b'],
+      stroke: {
+        width: 5,
+        curve: 'smooth'
       }
-    ],
-    xaxis: {
-      categories: categorias,
-      labels: { style: { colors: '#333' } }
-    },
-    colors: ['#ff0000'],
-    stroke: {
-      width: 5,
-      curve: 'smooth'
-    }
-  };
+    };
+  }
 
-  if (window.grafPredicao) {
+  // destroi 
+  if (window.grafPredicao && typeof window.grafPredicao.destroy === "function") {
     window.grafPredicao.destroy();
   }
 
+  // ✅ Criar e renderizar novo gráfico
   window.grafPredicao = new ApexCharts(document.querySelector("#grafPredicao"), options);
   window.grafPredicao.render();
 }
@@ -964,7 +987,11 @@ function atualizarDados() {
 
 sltServidor.addEventListener("change", atualizarDados);
 sltComponente.addEventListener("change", atualizarDados);
-sltPredicao.addEventListener("change", atualizarDados);
+sltPredicao.addEventListener("change", () => {
+  const idMaquina = sltServidor.value;
+  const componente = sltComponente.value;
+  executarPredicao(idMaquina, componente);
+});
 
 
 
