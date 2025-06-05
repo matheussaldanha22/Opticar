@@ -2,17 +2,15 @@
   "precos_mensais": [
     {
       "mes": "Março 2025",
-      "preco_medio": 29002.71
+      "ssd_servidor": 2500.00
     },
     {
       "mes": "Abril 2025",
-      "preco_medio": 7107.40
+      "ssd_servidor": 2750.00
     },
     {
       "mes": "Maio 2025",
-      "preco_medio": 17686.73
+      "ssd_servidor": 3025.00
     }
   ]
 }
-
-

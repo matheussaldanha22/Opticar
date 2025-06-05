@@ -1,0 +1,23 @@
+{
+  "precos_mensais": [
+    { "mes": "Dez 2024", 
+    "preco_medio": 15500.00 },
+
+    { "mes": "Jan 2025", 
+    "preco_medio": 16000.00 },
+
+    { "mes": "Fev 2025",
+     "preco_medio": 17250.00 },
+
+    { "mes": "Mar 2025", 
+    "preco_medio": 16500.00 },
+    
+    { "mes": "Abr 2025", 
+    "preco_medio": 18000.00 },
+
+    { "mes": "Mai 2025", 
+    "preco_medio": 17500.00 }
+  ]
+}
+
+

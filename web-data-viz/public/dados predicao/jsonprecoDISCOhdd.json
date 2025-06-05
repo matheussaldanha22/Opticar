@@ -1,0 +1,16 @@
+{
+  "precos_mensais": [
+    {
+      "mes": "Março 2025",
+      "hdd_servidor": 1500.00
+    },
+    {
+      "mes": "Abril 2025",
+      "hdd_servidor": 1500.00
+    },
+    {
+      "mes": "Maio 2025",
+      "hdd_servidor": 1500.00
+    }
+  ]
+}

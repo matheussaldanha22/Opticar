@@ -188,6 +188,19 @@
 }
 
 /* ========== CABEÇALHO ========== */
+.painelDash {
+   margin-left: 6%; 
+   align-items:normal;
+  display: flex;
+  flex-direction: column;
+  gap: 1vw;
+  background-color: #f5f1f1;
+  width: 90vw;
+  padding: 10px;
+  border-radius: 10px;
+  height: fit-content;
+  box-shadow: 5px 2px 10px rgb(161, 160, 160);
+}
 .dashHistorica {
     display: flex;
     flex-direction: column;
@@ -360,7 +373,7 @@
         /*grafico 1*/
 
         .dashboard-lista {
-          margin-left: 6%;
+          
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 25px;

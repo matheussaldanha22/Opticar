@@ -11,14 +11,18 @@
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <link rel="icon" type="image/png" href="assets/images/logoOpticar.png">
 
-    <!-- Scripts -->
-    <script src="./assets/Scripts/sessao.js" defer></script>
-    <script src="./assets/Scripts/ScriptsGestorInfra/gestorInfra.js" defer></script>
-
 
     <!-- Bibliotecas -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> 
+    <script src="https://unpkg.com/simple-statistics@7.8.3/dist/simple-statistics.min.js"></script>
+
+    <!-- Scripts -->
+    <script src="./assets/Scripts/sessao.js" defer></script>
+    <script src="./assets/Scripts/ScriptsGestorInfra/graficoEKPIesquerda.js" defer></script>
+    <script src="./assets/Scripts/ScriptsGestorInfra/graficoEKPIdireita.js" defer></script>
+    
+
 </head>
 
 <body>
@@ -61,19 +65,20 @@
         </div>
 
     </div>
-
-    <h1>Gestão da Infraestrutura</h1>
-
-    <h2>Veja seus componentes</h2>
+    <div class="painelDash">
+        <h1>Gestão da Infraestrutura</h1>
         
         <div class="tabs">
             <button class="arrow arrow-left">&#9664;</button>
             <button class="tab">RAM</button>
-            <button class="tab active">CPU</button>
-            <button class="tab">DISCO</button>
-            <button class="tab">PROCESSOS</button>
-            <button class="arrow arrow-right">&#9654;</button>
-        </div>
+                <button class="tab active">CPU</button>
+                <button class="tab">DISCO</button>
+                <button class="tab">PROCESSOS</button>
+                <button class="arrow arrow-right">&#9654;</button>
+            </div>
+
+    
+            <h2>Monitore seus recursos</h2>
 
         <div class="dashboard-lista">
             <div class="cartao">
@@ -142,6 +147,7 @@ gap: 20px;">
     
 
     
+                       </div>
 
 
 </body>
