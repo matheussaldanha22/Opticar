@@ -39,76 +39,63 @@
 
 
       
-// JSON de entrada com os dados históricos
-var dados ={
+// puxa do bucket o bglh de json
+var dados = {
   "precos_mensais": [
-    { "mes": "Dez 2024", "preco_medio": 15500.00 },
-    { "mes": "Jan 2025", "preco_medio": 16000.00 },
-    { "mes": "Fev 2025", "preco_medio": 17250.00 },
-    { "mes": "Mar 2025", "preco_medio": 16500.00 },
-    { "mes": "Abr 2025", "preco_medio": 18000.00 },
-    { "mes": "Mai 2025", "preco_medio": 17500.00 }
+    { "mes": "Dez", "ano": "2024", "preco_medio": 15500.00 },
+    { "mes": "Jan", "ano": "2025", "preco_medio": 16000.00 },
+    { "mes": "Fev", "ano": "2025", "preco_medio": 17250.00 },
+    { "mes": "Mar", "ano": "2025", "preco_medio": 16500.00 },
+    { "mes": "Abr", "ano": "2025", "preco_medio": 18000.00 },
+    { "mes": "Mai", "ano": "2025", "preco_medio": 17500.00 }
   ]
 };
 
-// geraros proximos jhonis de mes
-function gerarProximosMeses(ultimoMes, quantidade = 3) {
-  // Divide o nome do mês e o ano que vêm na string
-  var [mesCortado, ano] = ultimoMes.split(' '); 
-
+// Função para gerar os da prev
+function gerarProximosMeses(mesAtual, anoAtual, quantidade = 3) {
   var meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+  var indice = meses.indexOf(mesAtual);
+  var ano = parseInt(anoAtual);
 
-  // Obtém o índice do mês na lista de meses
-  var indiceAtual = meses.indexOf(mesCortado); 
+  var futuros = [];
 
-  // vou converter para tentar ir colocando dps do for, se der errado esquece o ano 
-  var ano = parseInt(ano); 
-
-  var mesesFuturos = []; 
-
-  // Loop para calcular os próximos meses
   for (var i = 0; i < quantidade; i++) {
-    indiceAtual++; // Avança para o próximo mês
-
-    // Se passar de dezembro, volta para janeiro e incrementa o ano
-    if (indiceAtual >= 12) { 
-      indiceAtual = 0;
+    indice++;
+    if (indice >= 12) {
+      indice = 0;
       ano++;
     }
-
-    // Adiciona o mês formatado com o jhonis ok 
-    mesesFuturos.push(`${meses[indiceAtual]} ${ano}`); 
+    futuros.push({ mes: meses[indice], ano: ano.toString() });
   }
-  
-  return mesesFuturos; // Retorna o array com os próximos meses
+
+  return futuros;
 }
 
-// Preparar os dados para a regressão linear
-var x = dados.precos_mensais.map((_, i) => i + 1); // Gera um array com números sequenciais (1, 2, ..., N)
-var y = dados.precos_mensais.map(item => item.preco_medio); // Extrai os preços médios para fazer a regressão
-var regressao = ss.linearRegression(x.map((xi, i) => [xi, y[i]])); // Cria a equação da reta
-var prever = ss.linearRegressionLine(regressao); // Obtém a função para prever novos valores
+// Preparar dados da regressão
+var x = dados.precos_mensais.map((_, i) => i + 1);
+var y = dados.precos_mensais.map(item => item.preco_medio);
 
-// Prever os próximos 3 pontos para a sequência de preços
-var novosX = [x.length + 1, x.length + 2, x.length + 3]; // Define os novos índices no tempo
-var previsoes = novosX.map(prever); // Aplica a função de predição para cada novo ponto
+// Regressão linear
+var regressao = ss.linearRegression(x.map((xi, i) => [xi, y[i]]));
+var prever = ss.linearRegressionLine(regressao);
 
-// Garantir que nenhum dos valores previstos seja negativo (não faz sentido para preços)
-var previsoesPositivas = previsoes.map(v => Math.max(0, v)); // Se for negativo, transforma em zero
+// Prever os próximos 3 valores
+var novosX = [x.length + 1, x.length + 2, x.length + 3];
+var previsoes = novosX.map(prever);
+var previsoesPositivas = previsoes.map(v => Math.max(0, v));
 
-// Calcular o coeficiente de determinação (R²), que indica a precisão do modelo
-var r2 = ss.rSquared(x.map((xi, i) => [xi, y[i]]), prever); // Mede o ajuste dos dados
-var r2Porcentagem = parseFloat((r2 * 100).toFixed(2)); // Converte R² para porcentagem e arredonda
+// R²
+var r2 = ss.rSquared(x.map((xi, i) => [xi, y[i]]), prever);
+var r2Porcentagem = parseFloat((r2 * 100).toFixed(2));
 
-// Definir as categorias do gráfico (meses)
-var mesesHistoricos = dados.precos_mensais.map(item => item.mes); // Obtém a lista de meses dos dados históricos
-var mesesFuturos = gerarProximosMeses(mesesHistoricos[mesesHistoricos.length - 1], 3); // Calcula os próximos meses
-var todasAsCategorias = [...mesesHistoricos, ...mesesFuturos]; // Junta os meses históricos com os futuros
+// Categorias do gráfico
+var mesesHistoricos = dados.precos_mensais.map(item => `${item.mes}/${item.ano.slice(-2)}`);
+var ultimo = dados.precos_mensais[dados.precos_mensais.length - 1];
+var futuros = gerarProximosMeses(ultimo.mes, ultimo.ano);
+var mesesFuturos = futuros.map(item => `${item.mes}/${item.ano.slice(-2)}`);
 
-// Criar os dados compvaros para o gráfico
-var previsaoGrafico = [...y, ...previsoesPositivas]; // Junta os preços históricos com as previsões futuras
-
-// Configuração do gráfico line
+var todasAsCategorias = [...mesesHistoricos, ...mesesFuturos];
+var previsaoGrafico = [...y, ...previsoesPositivas];
 var dashArrayConfig = Array(previsaoGrafico.length - 3).fill(0).concat(Array(3).fill(6));
 
 var lineOptions = {
