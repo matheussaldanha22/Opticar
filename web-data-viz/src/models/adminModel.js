@@ -16,7 +16,7 @@ function dadosGraficoAlerta() {
 }
 
 function dadosFabrica() {
-  var instrucaoSql = `select fabrica.idFabrica, fabrica.nome as nomeFabrica, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
+  var instrucaoSql = `select fabrica.idFabrica, fabrica.nome as nomeFabrica, fabrica.telefone, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
                         from fabrica JOIN usuario on fkFabrica = idfabrica;`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)

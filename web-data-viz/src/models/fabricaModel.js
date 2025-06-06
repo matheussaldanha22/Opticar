@@ -24,11 +24,17 @@ function cadastrar(nome, funcao, limiteA, limiteG) {
 }
 
 function verificaAlertas() {
-  var instrucaoSql = `SELECT sm.fkFabrica, COUNT(a.idAlerta) AS quantidade_alertas FROM servidor_maquina sm
-                    LEFT JOIN componenteServidor cs ON cs.fkMaquina = sm.idMaquina
-                    LEFT JOIN capturaDados cd ON cd.fkComponenteServidor = cs.idcomponenteServidor
-                    LEFT JOIN alerta a ON a.fkCapturaDados = cd.idCapturaDados
-                    GROUP BY sm.fkFabrica;`;
+  var instrucaoSql = `SELECT 
+      servidor.fkFabrica, 
+      COUNT(CASE WHEN alerta.statusAlerta = 'To Do' THEN 1 END) AS qtd_to_do,
+      COUNT(CASE WHEN alerta.statusAlerta = 'In Progress' THEN 1 END) AS qtd_in_progress,
+      COUNT(CASE WHEN alerta.statusAlerta = 'Done' THEN 1 END) AS qtd_done
+    FROM servidor_maquina AS servidor
+    LEFT JOIN componenteServidor ON servidor.idMaquina = componenteServidor.fkMaquina
+    LEFT JOIN capturaDados AS captura ON componenteServidor.idcomponenteServidor = captura.fkComponenteServidor
+    LEFT JOIN alerta ON captura.idCapturaDados = alerta.fkCapturaDados
+    GROUP BY servidor.fkFabrica
+    ORDER BY (qtd_to_do + qtd_in_progress) DESC;`;
 
   return database.executarQUENTE(instrucaoSql);
 }

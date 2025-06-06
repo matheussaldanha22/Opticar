@@ -1,4 +1,5 @@
 let alertaFabrica = [];
+var fabricaCriticaLista = [];
 
 function verificaAlertas() {
     fetch("/fabricas/verificaAlertas", {
@@ -62,144 +63,139 @@ function cadastrarFabrica() {
 }
 
 function listarFabricas() {
-    var idMaquinaVar = sessionStorage.idMaquinaSelecionada
+  const idEmpresa = sessionStorage.EMPRESA;
 
-    fetch("/fabricas/listarFabricas", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          idMaquinaServer: idMaquinaVar
-        }),
-        }).then(resposta => resposta.json())
-          .then(fabricas => {
-            const tabela = document.querySelector(".fabricaContainer table");
-            tabela.innerHTML = "";
-            tabela.innerHTML = `<thead class ="tituloTabela">
-                                  <tr>
-                                      <th>ID Fabrica</th>
-                                      <th>Nome</th>
-                                      <th>Limite Atenção</th>
-                                      <th>Limite Crítico</th>
-                                      <th>Status/Parâmetro</th>
-                                      <th>Gestor</th>
-                                      <th>Ações</th>
-                                      <th>Vizualizar</th>
-                                  </tr>
-                                </thead> `;
-          
+  fetch(`/fabricas/listarFabricasEmpresa/${idEmpresa}`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  })
+    .then(res => res.json())
+    .then(fabricas => {
+      const tabela = document.querySelector(".fabricaContainer table");
+      tabela.innerHTML = `
+        <thead class="tituloTabela">
+          <tr>
+            <th>ID Fábrica</th>
+            <th>Nome</th>
+            <th>Limite Atenção</th>
+            <th>Limite Crítico</th>
+            <th>Status/Parâmetro</th>
+            <th>Gestor</th>
+            <th>Ações</th>
+            <th>Visualizar</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
 
-            fabricas.forEach(fabrica => {
-                var alerta = null;
-        
-                for (let i = 0; i < alertaFabrica.length; i++) {
-                  if (alertaFabrica[i].fkFabrica === fabrica.idFabrica) {
-                      alerta = alertaFabrica[i];
-                      break;
-                  }
-                }
+      const corpoTabela = tabela.querySelector("tbody");
+      const fabricaCriticaLista = [];
 
-                const linha = document.createElement("tr");
-                linha.classList.add("cor");
-                linha.innerHTML = "";
-                
-                if (alerta) {
-                  console.log(alerta.quantidade_alertas)
-                  console.log(fabrica.limiteAtencao)
-                  if (alerta.quantidade_alertas < fabrica.limiteAtencao) {
-                      linha.innerHTML += `
-                          <tbody>
-                            <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
-                            <td data-label = "Nome">${fabrica.nomeFabrica}</td>
-                            <td data-label = "Limite Grave">${fabrica.limiteCritico}</td>
-                            <td data-label = "Limite atenção">${fabrica.limiteAtencao}</td>
-                            <td data-label = "Status/Parâmetro" class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
-                            <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
-                            <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
-                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
-                                
-                            </td>
-                            <td data-label = "Vizualizar"><button class="btn-visualizar" data-id="${fabrica.idFabrica}"><i class='fa fa-eye'></i></button></td>
-                          </tbody>`;
-                  } else if (alerta.quantidade_alertas >= fabrica.limiteAtencao && alerta.quantidade_alertas < fabrica.limiteCritico) {
-                      linha.innerHTML += `
-                          <tbody>
-                            <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
-                            <td data-label = "Nome">${fabrica.nomeFabrica}</td>
-                            <td data-label = "Limite Grave">${fabrica.limiteCritico}</td>
-                            <td data-label = "Limite atenção">${fabrica.limiteAtencao}</td>
-                            <td data-label = "Status/Parâmetro" class="atencao">Atenção <i class='bx bx-error-circle atencao'></i></td>
-                            <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
-                            <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
-                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
-                            </td>
-                            <td data-label = "Vizualizar"><button class="btn-visualizar" data-id="${fabrica.idFabrica}"><i class='fa fa-eye'></i></button></td>
-                          </tbody>`;
-                  } else {
-                      linha.innerHTML += `
-                          <tbody>
-                            <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
-                            <td data-label = "Nome">${fabrica.nomeFabrica}</td>
-                            <td data-label = "Limite Grave">${fabrica.limiteCritico}</td>
-                            <td data-label = "Limite atenção">${fabrica.limiteAtencao}</td>
-                            <td data-label = "Status/Parâmetro" class="critico">Crítico <i class='bx bx-error critico'></i></td>
-                            <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
-                            <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
-                                <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
-                            </td>
-                            <td data-label = "Vizualizar"><button class="btn-visualizar" data-id="${fabrica.idFabrica}"><i class='fa fa-eye'></i></button></td>
-                          </tbody>`;
-                  } 
-                } else {
-                  linha.innerHTML += `
-                      <tbody>
-                        <td data-label = "ID Fábrica">${fabrica.idFabrica}</td>
-                        <td data-label = "Nome">${fabrica.nomeFabrica}</td>
-                        <td data-label = "Limite Grave">${fabrica.limiteCritico}</td>
-                        <td data-label = "Limite atenção">${fabrica.limiteAtencao}</td>
-                        <td data-label = "Status/Parâmetro" class="ok">Ok <i class='bx bx-check-circle ok'></i></td>
-                        <td data-label = "Gestor">${fabrica.nomeGestorFabrica}</td>
-                        <td data-label = "Ações"><button class="btn-editar" data-id="${fabrica.idFabrica}"><i class='bx bx-edit' ></i></button>
-                            <button class="btn-purple excluir" data-id="${fabrica.idFabrica}"><i class='bx bxs-trash'></i></button>
-                        </td>
-                        <td data-label = "Vizualizar"><button class="btn-visualizar" data-id="${fabrica.idFabrica}"><i class='fa fa-eye'></i></button></td>
-                      </tbody>`;
-                }
-  
-                tabela.appendChild(linha);
+      for (let i = 0; i < fabricas.length; i++) {
+        const fabrica = fabricas[i];
 
-                const botaoExcluir = linha.querySelector(".btn-purple");
-                const botaoEditar = linha.querySelector(".btn-editar");
-                const botaoVisu = linha.querySelector(".btn-visualizar");
+        for (let j = 0; j < alertaFabrica.length; j++) {
+          const alerta = alertaFabrica[j];
 
-                botaoEditar.addEventListener("click", () => {
-                  abrirModal(botaoEditar)
-                })
+          if (alerta.fkFabrica === fabrica.idfabrica) {
+            const quantidade = alerta.qtd_to_do + alerta.qtd_in_progress;
+            let estado, nivelCriticidade;
 
-                botaoExcluir.addEventListener("click", () => {
-                    Swal.fire({
-                        title: "Tem certeza?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#d33",
-                        cancelButtonColor: "#3085d6",
-                        confirmButtonText: "Sim, excluir!"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            excluirFabrica(botaoExcluir);
-                        }
-                    });
-                });
+            if (quantidade >= fabrica.limiteCritico) {
+              estado = "critico";
+              nivelCriticidade = quantidade - fabrica.limiteCritico;
+            } else if (quantidade >= fabrica.limiteAtencao) {
+              estado = "atencao";
+              nivelCriticidade = quantidade - fabrica.limiteAtencao;
+            } else {
+              estado = "ok";
+              nivelCriticidade = 0;
+            }
 
-                botaoVisu.addEventListener("click", () => {
-                  abiriModalVisu(botaoVisu);
-                })
+            fabricaCriticaLista.push({
+              nome: fabrica.nome,
+              gestor: fabrica.nome,
+              atencao: fabrica.limiteAtencao,
+              critico: fabrica.limiteCritico,
+              telefone: fabrica.telefone,
+              id: fabrica.idfabrica,
+              qtd_to_do: alerta.qtd_to_do,
+              qtd_in_progress: alerta.qtd_in_progress,
+              quantidade,
+              estado,
+              nivelCriticidade
+            });
+            break;
+          }
+        }
+      }
+
+      fabricaCriticaLista.sort((a, b) => b.nivelCriticidade - a.nivelCriticidade);
+
+      fabricaCriticaLista.forEach(fabrica => {
+        const linha = document.createElement("tr");
+        linha.classList.add("cor");
+
+        let statusHTML = "";
+        if (fabrica.estado === "ok") {
+          statusHTML = `<td data-label="Status/Parâmetro" class="ok">Ok <i class='bx bx-check-circle ok'></i></td>`;
+        } else if (fabrica.estado === "atencao") {
+          statusHTML = `<td data-label="Status/Parâmetro" class="atencao">Atenção <i class='bx bx-error-circle atencao'></i></td>`;
+        } else {
+          statusHTML = `<td data-label="Status/Parâmetro" class="critico">Crítico <i class='bx bx-error critico'></i></td>`;
+        }
+
+        linha.innerHTML = `
+          <td data-label="ID Fábrica">${fabrica.id}</td>
+          <td data-label="Nome">${fabrica.nome}</td>
+          <td data-label="Limite Grave">${fabrica.critico}</td>
+          <td data-label="Limite Atenção">${fabrica.atencao}</td>
+          ${statusHTML}
+          <td data-label="Gestor">${fabrica.gestor}</td>
+          <td data-label="Ações">
+            <button class="btn-editar" data-id="${fabrica.id}"><i class='bx bx-edit'></i></button>
+            <button class="btn-purple excluir" data-id="${fabrica.id}"><i class='bx bxs-trash'></i></button>
+          </td>
+          <td data-label="Visualizar">
+            <button class="btn-visualizar" data-id="${fabrica.id}"><i class='fa fa-eye'></i></button>
+          </td>
+        `;
+
+        corpoTabela.appendChild(linha);
+
+        const botaoEditar = linha.querySelector(".btn-editar");
+        const botaoExcluir = linha.querySelector(".btn-purple");
+        const botaoVisualizar = linha.querySelector(".btn-visualizar");
+
+        botaoEditar.addEventListener("click", () => {
+          abrirModal(botaoEditar);
+        });
+
+        botaoExcluir.addEventListener("click", () => {
+          Swal.fire({
+            title: "Tem certeza?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sim, excluir!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              excluirFabrica(botaoExcluir);
+            }
           });
-    }).catch(erro => {
-        console.error("Erro ao buscar componentes:", erro);
+        });
+
+        botaoVisualizar.addEventListener("click", () => {
+          abiriModalVisu(botaoVisualizar);
+        });
+      });
+    })
+    .catch(erro => {
+      console.error("Erro ao buscar fábrias:", erro);
     });
 }
+
 
 function excluirFabrica(botaoExcluir) {
     var idVar = botaoExcluir.getAttribute("data-id");

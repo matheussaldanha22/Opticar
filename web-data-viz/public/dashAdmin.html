@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,8 +12,9 @@
     <link rel="stylesheet" href="assets/styles/dashAdmin.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="./assets/Scripts/graficosAdmin.js" defer></script>
-    
+
 </head>
+
 <body>
     <div class="bg"></div>
 
@@ -56,7 +58,7 @@
 
         <div class="painelDash">
 
-             <div class="cabecalhoDash">
+            <div class="cabecalhoDash">
                 <div class="texto">
                     <div class="tituloDash">
                         <p id="titulo">Monitoramento das Fábricas da sua Empresa - </p>
@@ -70,9 +72,9 @@
                     <p class="descricao"> Acompanhe o status das suas Fábricas.</p>
                 </div>
             </div>
-            
+
             <div class="containerKPI">
-                
+
                 <div class="kpiUso">
                     <div class="tituloKpi">
                         <h2>Fábrica mais crítica:</h2>
@@ -81,7 +83,7 @@
                         </span>
                         <h3 id="statusKpiCritica">Status: Ok</h3>
                         <h3 id="quantidadeAlertas">13 Alertas em aberto</h3>
-                        
+
                     </div>
                 </div>
 
@@ -104,7 +106,7 @@
                         </span>
                         <h3>Clique <a id="fabricas">aqui</a> para ver elas</h3>
                     </div>
-                    
+
                 </div>
             </div>
 
@@ -128,12 +130,13 @@
                 </div>
                 <div class="paginacao" id="paginacao"></div>
                 <div class="info-pagina" id="info-pagina"></div>
-                <div class="tituloModal">Predição de como estará as fábricas selecionadas dentro de <select id="filtroPredicao" onchange="predicao()">
-                    <option value="7" selected>7 dias</option>
-                    <option value="14">14 dias</option>
-                    <option value="21">21 dias</option>
-                    <option value="30">30 dias</option>
-                </select></div>
+                <div class="tituloModal">Predição de como estará as fábricas selecionadas dentro de <select
+                        id="filtroPredicao" onchange="predicao()">
+                        <option value="7" selected>7 dias</option>
+                        <option value="14">14 dias</option>
+                        <option value="21">21 dias</option>
+                        <option value="30">30 dias</option>
+                    </select></div>
                 <div id="graficoPredicao"></div>
                 <div class="fechar">
                     <h1>FECHAR</h1>
@@ -144,47 +147,68 @@
             </div>
             <div class="containerGraficos">
                 <div class="graficos">
-                     <div class="grafBox">
+                    <div class="grafBox">
                         <div class="grafContainer">
                             <h4 style="display: flex; justify-content: space-between;width: 26vw;">
                                 <div class="nomeGrafico" style="display: flex; gap: 5px;">Quantidade de alertas - <p>
                                         Por fábrica</p>
                                 </div>
-                                <p style="border-bottom: solid 1px gray; color: gray;">
-                                    <span id="tipoFiltro-uso">Atual</span> -
-                                    <span id="periodo-uso">2025</span>
-                                </p>
                             </h4>
                             <div class="filtrar">
                                 <h3>Visualizar predição:</h3>
                                 <div class="iconeFiltro" onclick="filtrarAlerta()">
-                                   <u><a id="cliqueAqui"><i class='bx bx-time-five' style="color: #ffffff;"></i></a></u> 
+                                    <u><a id="cliqueAqui"><i class='bx bx-time-five'
+                                                style="color: #ffffff;"></i></a></u>
                                 </div>
                             </div>
                         </div>
                         <div id="graficoAlertaFabricas"></div>
-                    </div>   
-                        
                     </div>
 
-                    <div class="informaçõesFábrica">
-                        <div class="titulo"><h1>Informações Fábrica</h1></div>
-                        <div class="detalhes">
-                            <p id="pNome">Nome:</p>
-                            <p id="pGestor">Gestor:</p>
-                            <p id="pTelefone">Telefone:</p>
-                            <p id="pStatus">Status:</p>
-                            <p id="pQtdAlertaAberto">Quantidade de Alertas em aberto:</p>
-                            <p id="pQtdAlertaAndamento">Quantidade de Alertas em andamento:</p>
-                            <p id="pTempoResolucao">Tempo médio de resolução por alerta:</p>
+                </div>
+
+                <!-- <div class="informaçõesFábrica">
+                    <div class="titulo">
+                        <h1>Informações Fábrica</h1>
+                    </div>
+                    <div class="detalhes">
+                        <p id="pNome">Nome:</p>
+                        <p id="pGestor">Gestor:</p>
+                        <p id="pTelefone">Telefone:</p>
+                        <p id="pStatus">Status:</p>
+                        <p id="pQtdAlertaAberto">Quantidade de Alertas em aberto:</p>
+                        <p id="pQtdAlertaAndamento">Quantidade de Alertas em andamento:</p>
+                        <p id="pTempoResolucao">Tempo médio de resolução por alerta:</p>
+                    </div>
+                </div> -->
+                <div class="containerFabricas">
+                    <div class="tituloContainerFabricas">
+                        <h4 style="display: flex; justify-content: space-between;width: 26vw;">
+                        <div class="nomeGrafico" style="display: flex; gap: 5px;">Fábricas com maior criticidade:
+                        </div>
+                        </h4>
+                    </div>
+                    <div class="cards-container"></div>
+                </div>
+                <!-- Modal -->
+                <div id="modal" class="modal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="modal-title">Informações Fábrica</div>
+                            <button class="close-btn" onclick="closeModal()">×</button>
+                        </div>
+                        <div id="modal-body">
+                            <!-- Conteúdo será inserido pelo JavaScript -->
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+    </div>
+
 </body>
+
 </html>
 <script>
     function expand() {
