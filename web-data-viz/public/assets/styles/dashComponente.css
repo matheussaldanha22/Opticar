@@ -178,7 +178,7 @@
     width: 90vw;
     padding: 10px;
     border-radius: 10px;
-    height: 117vh;
+    height: 118vh;
     box-shadow: 5px 2px 10px rgb(161, 160, 160);
 }
 
@@ -241,6 +241,10 @@
     gap: 5px;
 }
 
+.descricao{
+    font-size: 20px;
+}
+
 #titulo {
     font-size: 25px;
     font-weight: bold;
@@ -248,7 +252,7 @@
 
 #dataInfo {
     display: flex;
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 500;
 }
 
@@ -263,6 +267,7 @@ div .servidor {
 .sltRoxo {
     font-family: 'Montserrat';
     font-weight: 600;
+    font-size: 20px;
     background-color: #2C3E50;
     color: #FFFF;
     border: none;
@@ -296,13 +301,17 @@ div .servidor {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+.grafTitulo{
+    display: flex;
+    gap: 5px;
+    font-size: 20px;
+}
+
 .grafContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-
-
 
 
 .predicao {
@@ -321,11 +330,13 @@ div .servidor {
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 20px;
 }
 
 .predicao select {
     padding: 10px;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: bolds;
     border-radius: 8px;
     border: 1px solid #ccc;
 }
@@ -396,7 +407,7 @@ div .servidor {
 }
 
 .filtrar h3 {
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 200;
 }
 
@@ -408,6 +419,13 @@ div .servidor {
     border-radius: 5px;
     padding: 5px;
     transition: 0.3s;
+}
+
+.infoFiltro{
+    border-bottom: solid 1px gray;
+    color: gray;
+    font-size: 19px;
+    font-weight: bolder;
 }
 
 .iconeFiltro:hover {
@@ -466,7 +484,7 @@ div .servidor {
 }
 
 .grafInferior .grafBox {
-    width: 50vw;
+    width: 86vw;
 }
 
 /* MODAL */

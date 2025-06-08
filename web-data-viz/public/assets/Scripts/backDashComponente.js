@@ -1,29 +1,29 @@
 // CÓDIGO PARA CONTROLE DA BARRA LATERAL RESPONSIVA
 function expand() {
-    const menu = document.getElementById('div_menu');
-    const ul_links = document.getElementById('ul_links');
-    const linha1 = document.getElementById('linha1');
-    const linha2 = document.getElementById('linha2');
-    const linha3 = document.getElementById('linha3');
+  const menu = document.getElementById('div_menu');
+  const ul_links = document.getElementById('ul_links');
+  const linha1 = document.getElementById('linha1');
+  const linha2 = document.getElementById('linha2');
+  const linha3 = document.getElementById('linha3');
 
-    // VERIFICA SE A TELA É DE CELULAR (menor que 702px)
-    if (window.innerWidth < 702) {
-        // Comportamento no Celular: Abrir/Fechar menu lateral
-        menu.classList.toggle('menu-aberto-celular');
-        linha1.classList.toggle('linha1-active');
-        linha2.classList.toggle('linha2-active');
-        linha3.classList.toggle('linha3-active');
+  // VERIFICA SE A TELA É DE CELULAR (menor que 702px)
+  if (window.innerWidth < 702) {
+    // Comportamento no Celular: Abrir/Fechar menu lateral
+    menu.classList.toggle('menu-aberto-celular');
+    linha1.classList.toggle('linha1-active');
+    linha2.classList.toggle('linha2-active');
+    linha3.classList.toggle('linha3-active');
 
+  } else {
+    // Comportamento no Desktop: Expandir/Diminuir menu (seu código original)
+    if (menu.classList.contains('menu-expand')) {
+      menu.style.animation = 'diminui 0.2s linear';
     } else {
-        // Comportamento no Desktop: Expandir/Diminuir menu (seu código original)
-        if (menu.classList.contains('menu-expand')) {
-            menu.style.animation = 'diminui 0.2s linear';
-        } else {
-            menu.style.animation = 'expandir 0.2s linear';
-        }
-        menu.classList.toggle('menu-expand');
-        ul_links.classList.toggle('nav-links-expanded');
+      menu.style.animation = 'expandir 0.2s linear';
     }
+    menu.classList.toggle('menu-expand');
+    ul_links.classList.toggle('nav-links-expanded');
+  }
 }
 
 
@@ -623,15 +623,25 @@ function renderGraficoUso(categorias, dados, parametro) {
   console.log("parametro do componente:", parametro);
 
   const options = {
-    chart: { type: 'line', height: 300, toolbar: { show: true } },
+    chart: { type: 'line', height: 300, toolbar: { show: false } },
     series: [
       { name: 'Uso médio (%)', data: dados },
       { name: 'Limite crítico', data: new Array(categorias.length).fill(parametro), stroke: { dashArray: 5 } }
     ],
-    xaxis: { categories: categorias },
-    yaxis: { max: 100 },
+    xaxis: { categories: categorias, labels: { style: { colors: '#000', fontSize: '12px', fontFamily: "Montserrat", fontWeight: 'bold' } } },
+    yaxis: {
+      labels: {
+        style: {
+          fontSize: "12px",  // Tamanho aumentado
+          fontFamily: "Montserrat",
+          colors: "#000"
+        }
+      }
+    },
     colors: ['#000', '#e63946'],
-    stroke: { curve: 'smooth', width: [3, 2] }
+    stroke: { curve: 'smooth', width: [3, 2] },
+    legend: { fontSize: '20px' }
+
   };
 
   if (window.chartUso) { //se já tiver um grafico destroi p plotar o outro
@@ -686,15 +696,23 @@ function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
 
 function renderGraficoAlerta(categorias, dadosCritico, dadosMedio) {
   const options = {
-    chart: { type: 'bar', stacked: true, height: 300, toolbar: { show: true } },
+    chart: { type: 'bar', stacked: true, height: 300, toolbar: { show: false } },
     series: [
       { name: 'Crítico', data: dadosCritico },
       { name: 'Médio', data: dadosMedio }
     ],
-    xaxis: { categories: categorias, labels: { style: { colors: '#000' } } },
+    xaxis: { categories: categorias, labels: { style: { colors: '#000', fontSize: '11px', fontFamily: "Montserrat", fontWeight: 'bold' } } },
+    yaxis: {
+      labels: {
+        style: {
+          fontSize: "14px",  // Tamanho aumentado
+          fontFamily: "Montserrat",
+          colors: "#000"
+        }
+      }
+    },
     colors: ['#011f4b', '#0077b6'],
-    legend: { labels: { colors: '#000' } },
-    tooltip: { theme: 'light' }
+    legend: { fontSize: '20px' }
   };
 
   if (window.chartSeveridade) window.chartSeveridade.destroy();
@@ -717,7 +735,7 @@ function executarPredicao(idMaquina, componente) {
 
 
   if (valorSlt === "uso") {
-    tituloGrafico.innerHTML = "Tendência de Crescimento de Uso (7 dias) - "
+    tituloGrafico.innerHTML = "Tendência de Crescimento de Uso (Prox. Mês) - "
     predicaoUso(idMaquina, componente)
   } else {
     tituloGrafico.innerHTML = "Número de Alertas Previstos (Prox. Mês) -  "
@@ -827,12 +845,12 @@ function renderGrafPredicao(tipo, valoresReais, valoresPrevistos, categorias) {
     options = {
       chart: {
         type: 'line',
-        height: 300,
+        height: 320,
         toolbar: { show: false }
       },
       series: [
         {
-          name: `Alertas ${nomeMeses[data.getMonth()]}`,
+          name: `Alertas ${nomeMeses[data.getMonth()]}(Atual)`,
           data: valoresReais
         },
         {
@@ -842,9 +860,19 @@ function renderGrafPredicao(tipo, valoresReais, valoresPrevistos, categorias) {
       ],
       xaxis: {
         categories: categorias,
-        labels: { style: { colors: '#333' } }
+        labels: { style: { colors: '#000', fontSize: '13px', fontFamily: "Montserrat", fontWeight: 'bold' } }
       },
-      colors: ['#0077b6', '#333'],
+      yaxis: {
+        labels: {
+          style: {
+            fontSize: "14px",  // Tamanho aumentado
+            fontFamily: "Montserrat",
+            colors: "#000"
+          }
+        }
+      },
+      colors: ['#333', '#0077b6'],
+      legend: { fontSize: '20px' },
       stroke: {
         width: [4, 4],
         curve: 'smooth',
@@ -855,7 +883,7 @@ function renderGrafPredicao(tipo, valoresReais, valoresPrevistos, categorias) {
     options = {
       chart: {
         type: 'area',
-        height: 300,
+        height: 320,
         toolbar: { show: false }
       },
       series: [
@@ -866,9 +894,19 @@ function renderGrafPredicao(tipo, valoresReais, valoresPrevistos, categorias) {
       ],
       xaxis: {
         categories: categorias,
-        labels: { style: { colors: '#333' } }
+        labels: { style: { colors: '#000', fontSize: '13px', fontFamily: "Montserrat", fontWeight: 'bold' } }
+      },
+      yaxis: {
+        labels: {
+          style: {
+            fontSize: "14px",  // Tamanho aumentado
+            fontFamily: "Montserrat",
+            colors: "#000"
+          }
+        }
       },
       colors: ['#011f4b'],
+      legend: { fontSize: '20px' },
       stroke: {
         width: 5,
         curve: 'smooth'
@@ -932,9 +970,11 @@ function atualizarDados() {
 
   let anoEscolhidoAlerta = anoVarAlerta
 
-
+  //atualizar nome dos componentes no gráfico
   const nomesComponente = document.querySelectorAll('.nomeComponente')
-  nomesComponente.forEach(i => { i.innerHTML = componente });
+  nomesComponente.forEach(i => {
+    i.innerHTML = componente.toUpperCase();
+  });
 
   //atribuindo que se nao filtrar por padrão puxa o mes e ano atual --USO
   if (!anoEscolhidoUso || !mesEscolhidoUso) {
@@ -992,75 +1032,6 @@ sltPredicao.addEventListener("change", () => {
   const componente = sltComponente.value;
   executarPredicao(idMaquina, componente);
 });
-
-
-
-
-
-
-
-//PREDICAO
-// let currentChart;
-// const chartElement = document.querySelector("#predictionChart");
-// const titleElement = document.querySelector("#chartTitle");
-
-
-// function renderChart(tipo) {
-//   if (currentChart) currentChart.destroy();
-
-//   let options;
-//   if (tipo === 'alertas') {
-//     titleElement.innerText = `Número de alertas previstos - CPU (Prox. Mês - ${nomeMeses[mesAtual + 1]})`;
-//     options = {
-//       chart: { type: 'line', height: 300, toolbar: { show: false } },
-//       series: [{ name: 'Alertas', data: chartData.alertas }],
-//       xaxis: {
-//         categories: ['Semana 1', 'Semana 2', 'Semana 3', 'Semana 4', 'Semana 5'],
-//         labels: { style: { colors: '#333' } }
-//       },
-//       colors: ['#0077b6']
-//     };
-//   } else if (tipo === 'risco') {
-//     titleElement.innerText = `Percentual de alertas críticos - CPU (Próx.Semestre)`;
-//     const dados = chartData.risco;
-//     const options = {
-//       chart: { type: 'bar', stacked: false, height: 300 },
-//       series: [
-//         { name: 'Sobrecarga (%)', data: dados.data }
-//       ],
-//       xaxis: { categories: mesesSeguintes, labels: { style: { colors: '#000' } } },
-//       colors: ['#011f4b'],
-//       legend: { labels: { colors: '#000' } },
-//       tooltip: { theme: 'light' }
-//     };
-
-//     currentChart = new ApexCharts(chartElement, options);
-//     currentChart.render();
-//   }
-//   else if (tipo === 'tendencia') {
-//     titleElement.innerText = `Tendência de Crescimento de Uso - CPU (7 dias)`;
-//     options = {
-//       chart: { type: 'area', height: 300, toolbar: { show: false } },
-//       series: [{ name: 'Uso Projetado (%)', data: chartData.tendencia }],
-//       xaxis: {
-//         categories: ['Hoje', '+1d', '+2d', '+3d', '+4d', '+5d', '+6d'],
-//         labels: { style: { colors: '#333' } }
-//       },
-//       colors: ['#2196f3']
-//     };
-//   }
-
-//   currentChart = new ApexCharts(chartElement, options);
-//   currentChart.render();
-// }
-
-// document.getElementById("tipo").addEventListener("change", () => {
-//   renderChart(document.getElementById("tipo").value);
-// });
-
-// // renderSeveridade();
-// renderChart("alertas");
-
 
 
 

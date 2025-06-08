@@ -93,11 +93,11 @@
                         <!-- data -->
                         <div
                             style="display: flex; align-items: center; gap: 10px; margin-left: 10vw; color: gray;height: 5vh;">
-                            <i class='bx bxs-time' style="font-size: 20px;"></i>
+                            <i class='bx bxs-time' style="font-size: 22px;"></i>
                             <p id="dataInfo"></p>
                         </div>
                     </div>
-                    <p class="descricao"> Acompanhe o desempenho do seu componente com base em registros históricos.</p>
+                    <p class="descricao"> Acompanhe o desempenho do seu componente com<br> base em registros históricos.</p>
                 </div>
                 <div class="servidor">
                     <p style="font-size: 25px;display: flex;align-items: center;">Selecione o servidor:</p>
@@ -167,17 +167,17 @@
                 <div class="graficos">
                     <div class="grafBox">
                         <div class="grafContainer">
-                            <h4 style="display: flex; justify-content: space-between;width: 26vw;">
-                                <div style="display: flex; gap: 5px;">Uso médio vs Limite - <p class="nomeComponente">
+                            <h4 >
+                                <div class="grafTitulo">Uso médio vs Limite - <p class="nomeComponente">
                                         CPU</p>
                                 </div>
 
-                                <p style="border-bottom: solid 1px gray; color: gray;">
-                                    <i class='bx bx-filter-alt'></i>
-                                    <span id="tipoFiltro-uso">Anual</span> -
-                                    <span id="periodo-uso">2025</span>
-                                </p>
                             </h4>
+                            <p class="infoFiltro">
+                                <i class='bx bx-filter-alt'></i>
+                                <span id="tipoFiltro-uso">Anual</span> -
+                                <span id="periodo-uso">2025</span>
+                            </p>
                             <div class="filtrar">
                                 <h3>Filtrar:</h3>
                                 <div class="iconeFiltro" onclick="filtrarUso()">
@@ -191,16 +191,16 @@
                     <!-- GRAFICO ALERTAS -->
                     <div class="grafBox">
                         <div class="grafContainer">
-                            <h4 style="display: flex; justify-content: space-between;width: 26vw;">
-                                <div style="display: flex; gap: 5px;">Distribuição de alertas - <p
+                            <h4>
+                                <div class="grafTitulo">Distribuição de alertas - <p
                                         class="nomeComponente">CPU</p>
                                 </div>
-                                <p style="border-bottom: solid 1px gray; color: gray;">
-                                    <i class='bx bx-filter-alt'></i>
-                                    <span id="tipoFiltro-alertas">Anual</span> -
-                                    <span id="periodo-alertas">2025</span>
-                                </p>
                             </h4>
+                            <p class="infoFiltro">
+                                <i class='bx bx-filter-alt'></i>
+                                <span id="tipoFiltro-alertas">Anual</span> -
+                                <span id="periodo-alertas">2025</span>
+                            </p>
                             <div class="filtrar">
                                 <h3>Filtrar:</h3>
                                 <div class="iconeFiltro" onclick="filtrarAlerta()">
@@ -221,19 +221,21 @@
                     <div class="tituloPred">
                         <div style="display:flex;align-items:center;">
                             <i class='bx bx-bar-chart-square' style="font-size: 30px;"></i>
-                            <b style="font-size: 20px;">Previsões inteligentes</b><br>
+                            <b style="font-size: 25px;">Previsões inteligentes</b><br>
                         </div>
                         <div class="escolha">
                             <span>Tipo de Previsão:</span><br>
                             <select id="slt_predicao">
-                                <option value="uso">Tendência de Crescimento de Uso (7 dias)</option>
+                                <option value="uso">Tendência de Crescimento de Uso (Prox. Mês)</option>
                                 <option value="alertas">Número de Alertas Previstos (Prox. Mês)</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="grafBox">
-                        <h4 id="chartTitle" style="display: flex; gap:5px;">Número de alertas previstos no próximo mês - <p class="nomeComponente">CPU</p></h4>
+                        <div class="grafTitulo"><h4 id="chartTitle">Distribuição de alertas -</h4> <p style="font-weight: bolder;"class="nomeComponente">CPU
+                            </p>
+                        </div>
                         <div id="grafPredicao"></div>
                     </div>
                 </div>
