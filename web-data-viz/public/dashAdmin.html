@@ -61,11 +61,11 @@
             <div class="cabecalhoDash">
                 <div class="texto">
                     <div class="tituloDash">
-                        <p id="titulo">Monitoramento das Fábricas da sua Empresa - </p>
+                        <p id="titulo">Monitoramento das Fábricas da sua Empresa</p>
                         <!-- data -->
                         <div
                             style="display: flex; align-items: center; gap: 10px; margin-left: 10vw; color: gray;height: 5vh;">
-                            <i class='bx bxs-time' style="font-size: 20px;"></i>
+                            <i class='bx bxs-time' style="font-size: 30px;"></i>
                             <p id="dataInfo"></p>
                         </div>
                     </div>
@@ -76,13 +76,13 @@
             <div class="containerKPI">
 
                 <div class="kpiUso">
-                    <div class="tituloKpi">
-                        <h2>Fábrica mais crítica:</h2>
+                    <div class="tituloKpi" onclick="visualizarHistorico()">
+                        <h2>Fábrica com maior criticidade:</h2>
                         <span class="txtKpi">
-                            <p class="dadoKpi" id="fabricaCritica">Fábrica 1</p>
+                            <p class="dadoKpi" id="fabricaCritica"><span class="loader"></span></p>
                         </span>
-                        <h3 id="statusKpiCritica">Status: Ok</h3>
-                        <h3 id="quantidadeAlertas">13 Alertas em aberto</h3>
+                        <h3 id="statusKpiCritica"></h3>
+                        <h3 id="quantidadeAlertas"></h3>
 
                     </div>
                 </div>
@@ -91,9 +91,9 @@
                     <div class="tituloKpi">
                         <h2>Tempo na resolução dos alertas:</h2>
                         <span class="txtKpi">
-                            <p class="dadoKpi" id="mediaAlerta">Fábrica 1</p>
+                            <p class="dadoKpi" id="mediaAlerta"><div id="tempo" class="loader"></div></p>
                         </span>
-                        <h3 id="nomeFabricaTempo">50(Min)</h3>
+                        <h3 id="nomeFabricaTempo"></h3>
                     </div>
                 </div>
 
@@ -102,7 +102,7 @@
                     <div class="tituloKpi">
                         <h2>Quantidade Fábricas em estado crítico</h2>
                         <span class="txtKpi">
-                            <p class="dadoKpi" id="qtdFabricasCriticas">13 Fábricas</p>
+                            <p class="dadoKpi" id="qtdFabricasCriticas"><span class="loader"></span></p>
                         </span>
                         <h3>Clique <a id="fabricas">aqui</a> para ver elas</h3>
                     </div>
@@ -118,31 +118,36 @@
                         <div class="tituloKpi">
                             <h2>Fábrica mais crítica:</h2>
                             <span class="txtKpi">
-                                <p class="dadoKpi" id="fabricaCriticaModal">Fábrica 1</p>
+                                <p class="dadoKpi" id="fabricaCriticaModal"><span class="loader"></span></p>
                             </span>
-                            <h3 id="statusKpiCriticaModal">Status: Ok</h3>
-                            <h3 id="quantidadeAlertasModal">13 Alertas em aberto</h3>
+                            <h3 id="statusKpiCriticaModal"></h3>
+                            <h3 id="quantidadeAlertasModal"></h3>
                         </div>
                         <div class="bobPredicao">
                             <img src="./assets/images/bobIA-removebg-preview.png" alt="">
+                            <span id="bobP"></span>
                         </div>
                     </div>
                 </div>
                 <div class="paginacao" id="paginacao"></div>
                 <div class="info-pagina" id="info-pagina"></div>
-                <div class="tituloModal">Predição de como estará as fábricas selecionadas dentro de <select
-                        id="filtroPredicao" onchange="predicao()">
+                <div class="tituloModal">Predição de como estará as fábricas selecionadas dentro de 
+                <div class="sltInvisivel">
+                    <select id="filtroPredicao" onchange="predicao()">
                         <option value="7" selected>7 dias</option>
                         <option value="14">14 dias</option>
                         <option value="21">21 dias</option>
                         <option value="30">30 dias</option>
-                    </select></div>
+                    </select>
+                </div>
+                    </div>
                 <div id="graficoPredicao"></div>
                 <div class="fechar">
                     <h1>FECHAR</h1>
                 </div>
             </div>
             <div class="bobAlerta">
+                <span id="bobA"></span>
                 <img src="./assets/images/bobIA-removebg-preview.png" alt="">
             </div>
             <div class="containerGraficos">
@@ -156,7 +161,7 @@
                             </h4>
                             <div class="filtrar">
                                 <h3>Visualizar predição:</h3>
-                                <div class="iconeFiltro" onclick="filtrarAlerta()">
+                                <div class="iconeFiltro">
                                     <u><a id="cliqueAqui"><i class='bx bx-time-five'
                                                 style="color: #ffffff;"></i></a></u>
                                 </div>
@@ -184,7 +189,7 @@
                 <div class="containerFabricas">
                     <div class="tituloContainerFabricas">
                         <h4 style="display: flex; justify-content: space-between;width: 26vw;">
-                        <div class="nomeGrafico" style="display: flex; gap: 5px;">Fábricas com maior criticidade:
+                        <div class="nomeGrafico" style="display: flex; gap: 5px;">Fábricas com maior criticidade (Top 6)
                         </div>
                         </h4>
                     </div>

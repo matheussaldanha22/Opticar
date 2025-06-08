@@ -59,11 +59,10 @@ function cadastrarFabrica() {
         .catch(function (erro) {
           console.error("Erro ao enviar dados:", erro);
         });
-        return false;
 }
 
 function listarFabricas() {
-  const idEmpresa = sessionStorage.EMPRESA;
+  var idEmpresa = sessionStorage.EMPRESA;
 
   fetch(`/fabricas/listarFabricasEmpresa/${idEmpresa}`, {
     method: "GET",
@@ -71,7 +70,7 @@ function listarFabricas() {
   })
     .then(res => res.json())
     .then(fabricas => {
-      const tabela = document.querySelector(".fabricaContainer table");
+      var tabela = document.querySelector(".fabricaContainer table");
       tabela.innerHTML = `
         <thead class="tituloTabela">
           <tr>
@@ -88,18 +87,19 @@ function listarFabricas() {
         <tbody></tbody>
       `;
 
-      const corpoTabela = tabela.querySelector("tbody");
-      const fabricaCriticaLista = [];
+      var corpoTabela = tabela.querySelector("tbody");
+      var fabricaCriticaLista = [];
 
       for (let i = 0; i < fabricas.length; i++) {
-        const fabrica = fabricas[i];
+        var fabrica = fabricas[i];
 
         for (let j = 0; j < alertaFabrica.length; j++) {
-          const alerta = alertaFabrica[j];
+          var alerta = alertaFabrica[j];
 
           if (alerta.fkFabrica === fabrica.idfabrica) {
-            const quantidade = alerta.qtd_to_do + alerta.qtd_in_progress;
-            let estado, nivelCriticidade;
+            var quantidade = alerta.qtd_to_do + alerta.qtd_in_progress;
+            var estado
+            var nivelCriticidade;
 
             if (quantidade >= fabrica.limiteCritico) {
               estado = "critico";
@@ -133,10 +133,10 @@ function listarFabricas() {
       fabricaCriticaLista.sort((a, b) => b.nivelCriticidade - a.nivelCriticidade);
 
       fabricaCriticaLista.forEach(fabrica => {
-        const linha = document.createElement("tr");
+        var linha = document.createElement("tr");
         linha.classList.add("cor");
 
-        let statusHTML = "";
+        var statusHTML = "";
         if (fabrica.estado === "ok") {
           statusHTML = `<td data-label="Status/Parâmetro" class="ok">Ok <i class='bx bx-check-circle ok'></i></td>`;
         } else if (fabrica.estado === "atencao") {
@@ -163,9 +163,9 @@ function listarFabricas() {
 
         corpoTabela.appendChild(linha);
 
-        const botaoEditar = linha.querySelector(".btn-editar");
-        const botaoExcluir = linha.querySelector(".btn-purple");
-        const botaoVisualizar = linha.querySelector(".btn-visualizar");
+        var botaoEditar = linha.querySelector(".btn-editar");
+        var botaoExcluir = linha.querySelector(".btn-purple");
+        var botaoVisualizar = linha.querySelector(".btn-visualizar");
 
         botaoEditar.addEventListener("click", () => {
           abrirModal(botaoEditar);
@@ -259,7 +259,7 @@ function abrirModal(botaoEditar) {
     return resposta.json();
   })
   .then(dados => {
-    const fabrica = dados[0]; 
+    var fabrica = dados[0]; 
     Swal.fire({
       html: `
             <div class="modal-test">
@@ -284,7 +284,7 @@ function abrirModal(botaoEditar) {
       }
     });
 
-    listarFabricas(); // Cuidado: isso recarrega antes da edição. Talvez mover para depois do update.
+    listarFabricas();
   })
   .catch(function (error) {
     console.error("Erro ao realizar fetch:", error);
@@ -373,7 +373,6 @@ function abiriModalVisu(botaoVisu) {
           var qtdAlertasAberto = alertas[0].qtd_to_do
           var qtdAlertasAndamento = alertas[0].qtd_done
 
-      
           Swal.fire({
           html: `
                 <div class="modal-test">
@@ -429,7 +428,6 @@ function updateFabrica(idVar) {
     })
       .then(async function (resposta) {
         console.log("resposta: ", resposta);
-        var mensagem = await resposta.text();
         if (resposta.ok) {
           listarFabricas()
           Swal.fire('Sucesso!', 'Fábrica editada com sucesso!', 'success');

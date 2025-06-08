@@ -1,17 +1,6 @@
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
 //var ambiente_processo = "producao"
-=======
 
-// var ambiente_processo = "producao"
-
->>>>>>> Stashed changes
 var ambiente_processo = "desenvolvimento"
-=======
-var ambiente_processo = "producao"
-// var ambiente_processo = "desenvolvimento"
->>>>>>> Stashed changes
-
 var caminho_env = ambiente_processo === "producao" ? ".env" : ".env.dev"
 // Acima, temos o uso do operador ternário para definir o caminho do arquivo .env
 // A sintaxe do operador ternário é: condição ? valor_se_verdadeiro : valor_se_falso
