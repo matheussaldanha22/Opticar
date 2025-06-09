@@ -51,7 +51,7 @@ function renderTabela(pagina) {
       <td data-label="Tipo">${alerta.tipo}</td>
       <td data-label="TipoComponente">${alerta.tipoComponente}</td>
       <td data-label="Status">${alertaNome}</td>
-      <td data-label="Vizualizar"><i class='bx bx-arrow-from-left btn' onclick="abrirModal(${alerta.id})"></i></td>
+      <td data-label="Vizualizar"><i class='bx bx-arrow-from-left btn' onclick="abrirModal(${alerta.idAlerta})"></i></td>
     `
     tabela.appendChild(tr)
   })
@@ -77,7 +77,8 @@ function renderPaginacao() {
 }
 
 function abrirModal(id) {
-  const alerta = alertas.find((item) => item.id === id)
+  console.log("ESTOU NO ABRIR MODAL" + id)
+  const alerta = alertas.find((item) => item.idAlerta === id)
 
   if (!alerta) {
     return Swal.fire("Erro", "Alerta não encontrado", "error")

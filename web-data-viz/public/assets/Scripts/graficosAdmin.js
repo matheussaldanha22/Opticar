@@ -252,6 +252,29 @@ function dadosGraficoAlerta() {
     })
     .catch(function (erro) {
       console.error(`#ERRO: ${erro}`);
+      let selecionar = document.querySelector("#selecionar")
+      let mediaAlerta = document.querySelector("#mediaAlerta");
+      let nomeFabricaTempo = document.querySelector("#nomeFabricaTempo");
+      var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
+      var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas");
+      var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica");
+      var fabricaCriticaM = document.querySelector("#fabricaCriticaModal");
+      var quantidadeAlertasM = document.querySelector("#quantidadeAlertasModal");
+      var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal");
+      let loader = document.querySelector("#tempo");
+      loader.classList.remove("loader")
+      statusKpiCriticaKpi = ""
+      selecionar.innerHTML = ""
+      fabricaCriticaKpi.innerHTML = 
+      fabricaCriticaM.innerHTML = "Nenhum alerta";
+      document.querySelector(
+          "#fabricaCriticaModal"
+        ).innerHTML = `Nenhuma alerta`
+      quantidadeAlertasM.innerHTML = ``;
+      quantidadeAlertasKpi.innerHTML = ``;
+      statusKpiCriticaKpi.innerHTML = ``;
+      nomeFabricaTempo.innerHTML = ``;
+      mediaAlerta.innerHTML = `Nenhum alerta`;
     });
 }
 
@@ -525,6 +548,23 @@ function plotarGraficoAlerta(dadosAlerta) {
     })
     .catch(function (erro) {
       console.error(`#ERRO: ${erro}`);
+      var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
+      var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas");
+      var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica");
+      var fabricaCriticaM = document.querySelector("#fabricaCriticaModal");
+      var quantidadeAlertasM = document.querySelector("#quantidadeAlertasModal");
+      var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal");
+      let loader = document.querySelector("#tempo");
+      loader.classList.remove("loader");
+      fabricaCriticaM.innerHTML = "Nenhum alerta";
+      document.querySelector(
+          "#fabricaCriticaModal"
+        ).innerHTML = `Nenhuma fabrica crítica`
+      quantidadeAlertasM.innerHTML = ``;
+      quantidadeAlertasKpi.innerHTML = `Nenhum alerta`;
+      statusKpiCriticaKpi.innerHTML = ``;
+      nomeFabricaTempo.innerHTML = `Nenhum alerta`;
+      mediaAlerta.innerHTML = `Não possui dados o suficiente`;
     });
 }
 
@@ -659,6 +699,7 @@ function mostrarFabricas() {
         });
     })
     .catch(function (error) {
+      qtdFabricasCriticas.innerHTML = `Nenhum alerta`;
       console.error("Erro ao realizar fetch:", error);
     });
 }
@@ -893,6 +934,10 @@ function kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica) {
     })
     .catch(function (erro) {
       console.error(`#ERRO: ${erro}`);
+      let mediaAlerta = document.querySelector("#mediaAlerta");
+      let nomeFabricaTempo = document.querySelector("#nomeFabricaTempo");
+      nomeFabricaTempo.innerHTML = `Nenhum alerta encontrado`;
+      mediaAlerta.innerHTML = `Não possui dados o suficiente`;
     });
 }
 
