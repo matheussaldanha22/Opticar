@@ -1,21 +1,22 @@
 {
-    "name":"api_intermediaria",
-    "version":"1.0",
-    "scripts":{
-        "start":"node app.js",
-        "dev":"nodemon --exec node app.js"
-        },
-            "author":"OPTICAR",
-            "dependencies":
-        {
-            "puppeteer": "^21.11.0",
-            "@google/genai": "^0.14.1",
-            "aws-sdk":"^2.1692.0",
-            "cors":"^2.8.5",
-            "dotenv":"^16.4.5",
-            "express":"^4.17.1",
-            "mysql2":"^3.9.4",
-            "node-fetch":"^3.3.2",
-            "nodemon":"^2.0.7",
-            "path":"^0.12.7"
-        }}
+    "name": "api_intermediaria",
+    "version": "1.0",
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon --exec node app.js"
+    },
+    "author": "OPTICAR",
+    "dependencies": {
+        "@google/genai": "^0.14.1",
+        "aws-sdk": "^2.1692.0",
+        "cors": "^2.8.5",
+        "dotenv": "^16.4.5",
+        "express": "^4.17.1",
+        "multer": "^2.0.1",
+        "mysql2": "^3.9.4",
+        "node-fetch": "^3.3.2",
+        "nodemon": "^2.0.7",
+        "path": "^0.12.7",
+        "puppeteer": "^21.11.0"
+    }
+}

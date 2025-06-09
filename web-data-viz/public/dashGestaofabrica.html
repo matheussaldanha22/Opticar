@@ -21,6 +21,7 @@
     <script src="./assets/Scripts/sessao.js" defer></script>
     <script src="./assets/Scripts/ScriptsGestorInfra/graficoEKPIesquerda.js" defer></script>
     <script src="./assets/Scripts/ScriptsGestorInfra/graficoEKPIdireita.js" defer></script>
+    <script src="./assets/Scripts/ScriptsGestorInfra/envioRelatorio.js" defer></script>
     
 
 </head>
@@ -66,7 +67,8 @@
 
     </div>
     <div class="painelDash">
-        <h1>Gestão da Infraestrutura</h1>
+        <h1 style="font-size:xx-large; margin-left: 1%;">Gestão da Infraestrutura</h1>
+        <h2 style="margin-top: 1%; margin-bottom: -2%;">Monitore seus recursos</h2>
         
         <div class="tabs">
             <button class="arrow arrow-left">&#9664;</button>
@@ -78,7 +80,7 @@
             </div>
 
     
-            <h2>Monitore seus recursos</h2>
+            
 
         <div class="dashboard-lista">
             <div class="cartao">
@@ -104,18 +106,27 @@ gap: 20px;">
             </div>
 
             <div class="cartao">
+                <div id="line-chart"></div>
+                <div id="gauge-chart"></div>
                 
-                <div class="caixasumario">
-                    <h3 class="cartao-titulo2">Gastos estimados para troca do componente</h3>
-                    <div class="textovalor">Total de ≈ R$ 65.900,00</div>
-                    <!--<div class="valorporServidor">= R$ 13.900,00 por servidor</div>-->
+<div class="caixasumario">
+                    <h2 style="margin-bottom: 2vh ;">Relatório para predição mensal</h2>
+                    <div id="areaEnvio" style=" color: #04708d; border: 2px dashed #04708d; padding: 18px; text-align: center; border-radius: 5vh;">
+                    <h3>Anexe o relatório de gastos dos componentes</h3><br>
+                    <input type="file" id="documentos" style="display:none" />
+                    <button onclick="document.getElementById('documentos').click()" style="
+                    background-color: #04708d; color: white; border: none; border-radius: 8px; padding: 12px 20px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background-color 0.3s ease;
+                    ">  Selecione um arquivo</button>
+                    </div> 
+<div id="upload-status"></div>
                 </div>
+
+
 
         
 
 
-                <div id="line-chart"></div>
-                <div id="gauge-chart"></div>
+
 
                
             </div>

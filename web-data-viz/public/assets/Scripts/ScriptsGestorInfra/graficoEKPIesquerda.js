@@ -84,7 +84,7 @@ var grafico = null;
 function carregarComponente(componente) {
     componenteAtual = componente;
 
-    fetch(`http://localhost:3333/gestorInfra/dados-${componente.toUpperCase()}`)
+    fetch(`http://localhost:3333/gestorInfra/dados-${componente.toUpperCase()}`)//pra n ter q fazer pra cada comp
         .then(res => res.json())
         .then(dados => {
             if (grafico !== null) {
@@ -116,7 +116,7 @@ function carregarComponente(componente) {
 
 
 function atualizarServidorComMaisCriticos(componente) {
-    fetch(`http://localhost:3333/gestorInfra/servidor-com-mais-criticos/${componente.toLowerCase()}`)//o lower, pq sem ta dando bo
+    fetch(`http://localhost:3333/gestorInfra/servidor-com-mais-criticos/${componente.toLowerCase()}`)//o lower, pq sem ta dando bo, e 
         .then(res => res.json())
         .then(data => {
             document.querySelector(".textovalor2").textContent = data.mensagem;
@@ -131,7 +131,8 @@ var componenteAtual = 'CPU'; // Começa com CPU
 
 window.addEventListener('DOMContentLoaded', () => {
     carregarComponente(componenteAtual);
-    atualizarServidorComMaisCriticos(componenteAtual); // Atualiza dependendo do jhonis
+    atualizarServidorComMaisCriticos(componenteAtual); 
+    atualizarGraficoPrevisao(componenteAtual);// Atualiza dependendo do jhonis
     
     setInterval(() => {
         carregarComponente(componenteAtual);
@@ -147,6 +148,7 @@ document.querySelectorAll('.tab').forEach(tab => {
         componenteAtual = tab.textContent.trim(); // Atualiza variável pra deixar o comp
         carregarComponente(componenteAtual);
         atualizarServidorComMaisCriticos(componenteAtual);
+        atualizarGraficoPrevisao(componenteAtual);
     });
 });
 

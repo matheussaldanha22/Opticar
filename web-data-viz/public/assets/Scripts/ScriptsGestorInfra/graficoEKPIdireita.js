@@ -38,25 +38,11 @@
         //----------------------------------------------------------------------------------------
 
 
-      
-// puxa do bucket o bglh de json
-var dados = {
-  "precos_mensais": [
-    { "mes": "Dez", "ano": "2024", "preco_medio": 15500.00 },
-    { "mes": "Jan", "ano": "2025", "preco_medio": 16000.00 },
-    { "mes": "Fev", "ano": "2025", "preco_medio": 17250.00 },
-    { "mes": "Mar", "ano": "2025", "preco_medio": 16500.00 },
-    { "mes": "Abr", "ano": "2025", "preco_medio": 18000.00 },
-    { "mes": "Mai", "ano": "2025", "preco_medio": 17500.00 }
-  ]
-};
 
-// Função para gerar os da prev
-function gerarProximosMeses(mesAtual, anoAtual, quantidade = 3) {
+        function gerarProximosMeses(mesAtual, anoAtual, quantidade = 3) {
   var meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
   var indice = meses.indexOf(mesAtual);
   var ano = parseInt(anoAtual);
-
   var futuros = [];
 
   for (var i = 0; i < quantidade; i++) {
@@ -71,38 +57,44 @@ function gerarProximosMeses(mesAtual, anoAtual, quantidade = 3) {
   return futuros;
 }
 
-// Preparar dados da regressão
-var x = dados.precos_mensais.map((_, i) => i + 1);
-var y = dados.precos_mensais.map(item => item.preco_medio);
+async function atualizarGraficoPrevisao(componente) {
+  try {
+    var res = await fetch(`http://localhost:3334/awsGestorinfra/pegar/${componente}`);
+    var dados = await res.json();
 
-// Regressão linear
-var regressao = ss.linearRegression(x.map((xi, i) => [xi, y[i]]));
-var prever = ss.linearRegressionLine(regressao);
+    console.log("Dados recebidos para o gráfico:", dados); //se num aparecer n ta funfando o fetch
 
-// Prever os próximos 3 valores
-var novosX = [x.length + 1, x.length + 2, x.length + 3];
-var previsoes = novosX.map(prever);
-var previsoesPositivas = previsoes.map(v => Math.max(0, v));
+    // mapearos dados que tão vindo como arrayja
+    var x = dados.map((_, i) => i + 1);
+    var y = dados.map(item => Number(item.preco_medio));
 
-// R²
-var r2 = ss.rSquared(x.map((xi, i) => [xi, y[i]]), prever);
-var r2Porcentagem = parseFloat((r2 * 100).toFixed(2));
+    var regressao = ss.linearRegression(x.map((xi, i) => [xi, y[i]]));
+    var prever = ss.linearRegressionLine(regressao);
 
-// Categorias do gráfico
-var mesesHistoricos = dados.precos_mensais.map(item => `${item.mes}/${item.ano.slice(-2)}`);
-var ultimo = dados.precos_mensais[dados.precos_mensais.length - 1];
-var futuros = gerarProximosMeses(ultimo.mes, ultimo.ano);
-var mesesFuturos = futuros.map(item => `${item.mes}/${item.ano.slice(-2)}`);
+    var novosX = [x.length + 1, x.length + 2, x.length + 3];
+    var previsoes = novosX.map(prever);
+    var previsoesPositivas = previsoes.map(v => Math.max(0, v));
 
-var todasAsCategorias = [...mesesHistoricos, ...mesesFuturos];
-var previsaoGrafico = [...y, ...previsoesPositivas];
-var dashArrayConfig = Array(previsaoGrafico.length - 3).fill(0).concat(Array(3).fill(6));
+    var r2 = ss.rSquared(x.map((xi, i) => [xi, y[i]]), prever);
+    var r2Porcentagem = parseFloat((r2 * 100).toFixed(2));
 
-var lineOptions = {
-  series: [{
-    name: 'Previsão de preços por mês',
-    data: previsaoGrafico
-  }],
+    var mesesHistoricos = dados.map(item => `${item.mes}/${item.ano}`);
+    var ultimo = dados[dados.length - 1];
+    var mesesFuturos = gerarProximosMeses(ultimo.mes, ultimo.ano).map(item => `${item.mes}/${item.ano}`);
+
+    var todasAsCategorias = [...mesesHistoricos, ...mesesFuturos];
+    var previsaoGrafico = [...y, ...previsoesPositivas];
+    var dashArrayConfig = Array(previsaoGrafico.length - 3).fill(0).concat(Array(3).fill(6));
+
+    // ver se tavindo valor direito
+    console.log("Categorias:", todasAsCategorias);
+    console.log("Dados do gráfico:", previsaoGrafico);
+    console.log("R²:", r2Porcentagem);
+
+
+    // Atualizar gráfico de linha
+    var lineOptions = {
+  series: [{ name: 'Previsão de preços por mês', data: previsaoGrafico }],
   chart: {
     height: 280,
     type: 'line',
@@ -117,18 +109,16 @@ var lineOptions = {
       top: 5
     }
   },
-  forecastDataPoints: {
-          count: 3
-        },
+  forecastDataPoints: { count: 3 },
   colors: ['#14589c'],
   dataLabels: { enabled: false },
   stroke: {
     curve: 'smooth',
     width: 3,
-    dashArray: dashArrayConfig // Aplicando apenas nos últimos três pontos
+    dashArray: dashArrayConfig
   },
   title: {
-    text: 'Previsão de Gastos com CPU',
+    text: `Previsão de Gastos com ${componente.toUpperCase()}`,
     align: 'left',
     style: {
       fontSize: '16px',
@@ -171,7 +161,7 @@ var lineOptions = {
       }
     },
     min: 0,
-    max: 20000
+    max: Math.floor(Math.max(...previsaoGrafico) * 2) 
   },
   markers: {
     size: 5,
@@ -194,88 +184,90 @@ var lineOptions = {
   }
 };
 
-// Configuração do gráfico Gauge com R²
-var gaugeOptions = {
-  series: [r2Porcentagem],
-  chart: {
-    height: 150,
-    type: 'radialBar',
-    fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif',
-    toolbar: { show: true }
-  },
-  plotOptions: {
-    radialBar: {
-      startAngle: -135,
-      endAngle: 135,
-      hollow: {
-        margin: 0,
-        size: '70%',
-        background: '#fff',
-        dropShadow: {
-          enabled: true,
-          top: 3,
-          left: 0,
-          blur: 4,
-          opacity: 0.24
+    var gaugeOptions = {
+      series: [r2Porcentagem],
+      chart: {
+        height: 150,
+        type: 'radialBar',
+        fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif',
+        toolbar: { show: true }
+      },
+      plotOptions: {
+        radialBar: {
+          startAngle: -135,
+          endAngle: 135,
+          hollow: {
+            margin: 0,
+            size: '70%',
+            background: '#fff',
+            dropShadow: {
+              enabled: true,
+              top: 3,
+              left: 0,
+              blur: 4,
+              opacity: 0.24
+            }
+          },
+          track: {
+            background: '#fff',
+            strokeWidth: '67%',
+            dropShadow: {
+              enabled: true,
+              top: -3,
+              left: 0,
+              blur: 4,
+              opacity: 0.35
+            }
+          },
+          dataLabels: {
+            show: true,
+            name: {
+              offsetY: -10,
+              show: true,
+              color: '#011f27',
+              fontSize: '17px'
+            },
+            value: {
+              formatter: val => parseInt(val) + '%',
+              color: '#011f27',
+              fontSize: '36px',
+              show: true
+            }
+          }
         }
       },
-      track: {
-        background: '#fff',
-        strokeWidth: '67%',
-        dropShadow: {
-          enabled: true,
-          top: -3,
-          left: 0,
-          blur: 4,
-          opacity: 0.35
+      fill: {
+        type: 'gradient',
+        gradient: {
+          shade: 'dark',
+          type: 'horizontal',
+          shadeIntensity: 0.5,
+          gradientToColors: ['#011f27'],
+          opacityFrom: 1,
+          opacityTo: 1,
+          stops: [0, 100]
         }
       },
-      dataLabels: {
-        show: true,
-        name: {
-          offsetY: -10,
-          show: true,
-          color: '#011f27',
-          fontSize: '17px'
-        },
-        value: {
-          formatter: val => parseInt(val) + '%',
-          color: '#011f27',
-          fontSize: '36px',
-          show: true
-        }
-      }
-    }
-  },
-  fill: {
-    type: 'gradient',
-    gradient: {
-      shade: 'dark',
-      type: 'horizontal',
-      shadeIntensity: 0.5,
-      gradientToColors: ['#011f27'],
-      opacityFrom: 1,
-      opacityTo: 1,
-      stops: [0, 100]
-    }
-  },
-  stroke: { lineCap: 'round' },
-  labels: ['Precisão de']
-};
+      stroke: { lineCap: 'round' },
+      labels: ['Precisão de']
+    };
 
-    
+    // Limpar e renderizar novos gráficos
+    document.querySelector("#line-chart").innerHTML = "";
+    document.querySelector("#gauge-chart").innerHTML = "";
 
-    // Renderização
     new ApexCharts(document.querySelector("#line-chart"), lineOptions).render();
     new ApexCharts(document.querySelector("#gauge-chart"), gaugeOptions).render();
 
+  } catch (error) {
+    console.error("Erro ao buscar dados de previsão:", error);
+  }
+}
 
-
-
-
-
-
-
+// Inicialização padrão com CPU ao carregar
+document.addEventListener("DOMContentLoaded", () => {
+  atualizarGraficoPrevisao("CPU");
+});
 
 
 
