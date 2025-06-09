@@ -394,10 +394,8 @@ function modalEditar(botaoEditar) {
     }).then((result) => {
       if (result.isConfirmed) {
         updatePedido(idVar);
-        listarComponente()
       }
     });
-    listarComponente();
   })
   .catch(function (error) {
     console.error("Erro ao realizar fetch:", error);
@@ -420,23 +418,51 @@ function updatePedido(idVar) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-      idServer: idVar,
-      modeloServer: modelo,
-      limiteCServer: limiteC,
-      limiteAServer: limiteA,
-    }),
+        idServer: idVar,
+        modeloServer: modelo,
+        limiteCServer: limiteC,
+        limiteAServer: limiteA,
+      }),
     })
-      .then(async function (resposta) {
-        console.log("resposta: ", resposta);
-        if (resposta.ok) {
-          listarFabricas()
-          Swal.fire('Sucesso!', 'Pedido editado com sucesso!', 'success');
-        } else {
-          Swal.fire('Erro!', 'Falha ao editar o Pedido.', 'error');
-        }
-      })
-      .catch(function (erro) {
-        console.error("Erro ao enviar dados:", erro);
-      });
-      return false;
+    .then(async function (resposta) {
+      console.log("resposta updatePedido: ", resposta);
+      if (resposta.ok) {
+        return updatePedidoQuente(idVar, modelo, limiteC, limiteA);
+      } else {
+        throw new Error('Falha na primeira atualização');
+      }
+    })
+    .then(() => {
+      listarComponente();
+      Swal.fire('Sucesso!', 'Pedido editado com sucesso!', 'success');
+    })
+    .catch(function (erro) {
+      console.error("Erro ao enviar dados:", erro);
+      Swal.fire('Erro!', 'Falha ao editar o Pedido.', 'error');
+    });
+}
+
+function updatePedidoQuente(idVar, modelo, limiteC, limiteA) {
+  console.log("UPDATE PEDIDO QUENTE");
+  console.log(idVar, modelo, limiteC, limiteA);
+
+  return fetch("/componentes/updatePedidoQuente", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        idServer: idVar,
+        modeloServer: modelo,
+        limiteCServer: limiteC,
+        limiteAServer: limiteA,
+      }),
+    })
+    .then(async function (resposta) {
+      console.log("resposta updatePedidoQuente: ", resposta);
+      if (!resposta.ok) {
+        throw new Error('Falha na segunda atualização');
+      }
+      return resposta;
+    });
 }

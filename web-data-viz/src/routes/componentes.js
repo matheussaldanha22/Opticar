@@ -27,6 +27,10 @@ router.post("/updatePedido", function (req, res) {
     componenteController.updatePedido(req,res);
 })
 
+router.post("/updatePedidoQuente", function (req, res) {
+    componenteController.updatePedidoQuente(req,res);
+})
+
 router.post("/verificar", function (req, res) {
     componenteController.verificar(req,res);
 })

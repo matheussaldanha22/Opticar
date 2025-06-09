@@ -46,7 +46,6 @@ function updatePedido(req, res) {
     } else {
       componenteModel.updatePedido(id, modelo, limiteC, limiteA)
         .then(function (resultado) {
-          updatePedidoQuente(id, modelo, limiteC, limiteA)
           res.json(resultado);
         })
         .catch(function (erro) {
@@ -59,19 +58,23 @@ function updatePedido(req, res) {
         });
     }
 }
+function updatePedidoQuente(req, res) {
+    var id = req.body.idServer;
+    var modelo = req.body.modeloServer;
+    var limiteC = req.body.limiteCServer;
+    var limiteA = req.body.limiteAServer;
 
-function updatePedidoQuente(req, res, id, modelo, limiteC, limiteA) {
     if (!id || !modelo || !limiteA || !limiteC) {
-      console.log("undefined! updatePedido");
+      res.status(400).send("undefined! updatePedido");
     } else {
       componenteModel.updatePedidoQuente(id, modelo, limiteC, limiteA)
         .then(function (resultado) {
-          res.status(200).json(resultado);
+          res.json(resultado);
         })
         .catch(function (erro) {
           console.log(erro);
           console.log(
-            "\nHouve um erro ao realizar a operação do updateQuente!",
+            "\nHouve um erro ao realizar a operação do update!",
             erro.sqlMessage
           );
           res.status(500).json(erro.sqlMessage);
@@ -244,5 +247,6 @@ function excluirComponenteFrio(req, res) {
     excluirComponente,
     excluirComponenteFrio,
     modalUpdate,
-    updatePedido
+    updatePedido,
+    updatePedidoQuente
   };
