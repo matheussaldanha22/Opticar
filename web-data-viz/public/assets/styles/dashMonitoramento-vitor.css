@@ -327,7 +327,7 @@ tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-.tabelaContainer td:nth-child(8) {
+.tabelaContainer td:nth-child(10) {
   cursor: pointer;
   /* font-size: 30px; */
 }
@@ -422,9 +422,20 @@ tbody tr:nth-child(even) {
 
 .tempo_atividade {
   border-radius: 10px;
-  background: #012027;
-  background: linear-gradient(270deg, #012027, #04708d);
-  color: #ffff;
+  background: #fff;
+  /* background: linear-gradient(270deg, #012027, #04708d); */
+  color: #000;
+  border: 1px solid #04708d;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+
+}
+
+#qtdServidoresCritico{
+  color: #04708d;
+}
+
+#qtdServidoresAtencao{
+  color: #04708d;
 }
 
 .tempo_atividade p {
@@ -493,6 +504,18 @@ table i:hover {
   width: 1%;
   border: 1px solid black;
   height: 1%;
+}
+
+.critico{
+  border: 1px solid #dc2626;
+  background-color: #dc2626;
+  color: #fff;
+}
+
+.atencao{
+  border: 1px solid yellow;
+  background-color: #ead308;
+  color: #000;
 }
 
 @media screen and (max-width: 700px) {

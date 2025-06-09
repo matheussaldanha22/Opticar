@@ -31,8 +31,12 @@ router.get("/dadosPedidoRecebidos/:idFabrica/:idMaquina", (req, res) => {
 })
 
 
-router.post("/processosPorMaquina/:idMaquina", (req, res) =>{
+router.post("/processosPorMaquina", (req, res) =>{
   dashMonitoramentoController.processosPorMaquina(req, res)
+})
+
+router.get("/listarProcessos/:idMaquina", (req, res) =>{
+  dashMonitoramentoController.listarProcessos(req, res)
 })
 
 router.get("/filtroMedida/:idMaquina", (req, res) =>{

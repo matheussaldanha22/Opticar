@@ -11,6 +11,7 @@ let listaHorarios2 = []
 let componenteFiltrado = ""
 let medida = ""
 let indicadorPedido = ""
+let indicadorPedidoRam = ""
 
 document.addEventListener("DOMContentLoaded", () => {
   renderGraficos()
@@ -158,7 +159,7 @@ function renderGraficos() {
       type: "radialBar",
     },
     colors: ["#01627B", "#4b4b4b9c"],
-    series: [60],
+    series: [0],
     labels: ["Uso"],
   }
 
@@ -198,7 +199,7 @@ function renderGraficos() {
 
   setInterval(() => {
     renderDados()
-  }, 6000);
+  }, 2000);
 }
 
 
@@ -327,21 +328,18 @@ function renderDados() {
 let novaMaquina = {}
 
 function adicionarOuSubstituirDados(maquinaId, nomeComponente, dados){
-  // Encontra a máquina existente em listaFiltroAplicado
-  // let maquinaExistente = listaFiltroAplicado.find(item => item[0][nomeComponente]?.idMaquina === maquinaId);
-  // console.log('Estou na funcao de adicionarOuSubstituirDados')
-
-  // if (maquinaExistente) {
-  //     // Se a máquina existe, atualiza o dado do componente
-  //     maquinaExistente[0][nomeComponente] = dados;
-  // } else {
-  // Se a máquina não existe, cria uma nova entrada para a máquina
-  novaMaquina[nomeComponente] = dados
-  listaFiltroAplicado.push([novaMaquina])
+  // Cria um NOVO objeto a cada chamada
+  let novaMaquina = {};
+  novaMaquina[nomeComponente] = dados;
+  
+  listaFiltroAplicado.push([novaMaquina]);
+  
   if (listaFiltroAplicado.length > 7) {
-    listaFiltroAplicado.shift()
+    listaFiltroAplicado.shift();
   }
-  // }
+  
+  console.log('Dados adicionados:', novaMaquina);
+  console.log('Lista atual:', listaFiltroAplicado);
 }
 
 
@@ -356,7 +354,20 @@ function renderDadosPedido(medidaSelecionada, filtroComponente) {
   console.log('Cpu esta filtrada')
   console.log(`MedidaSelecionada dentro da funcao: ${medidaSelecionada}`)
 
-
+function adicionarOuSubstituirDados(maquinaId, nomeComponente, dados){
+  // Cria um NOVO objeto a cada chamada
+  let novaMaquina = {};
+  novaMaquina[nomeComponente] = dados;
+  
+  listaFiltroAplicado.push([novaMaquina]);
+  
+  if (listaFiltroAplicado.length > 7) {
+    listaFiltroAplicado.shift();
+  }
+  
+  console.log('Dados adicionados:', novaMaquina);
+  console.log('Lista atual:', listaFiltroAplicado);
+}
   fetch(`/dashMonitoramento/dadosPedidoRecebidos/${idFabrica}/${maquinaSelecionada}`)
     .then((res) => res.json())
     .then((dados) => {
@@ -417,7 +428,7 @@ function renderDadosPedido(medidaSelecionada, filtroComponente) {
 
       const ramTexto = ramData[ramData.length - 1] || 0;
       let utilizacaoRam = document.getElementById('utilizacaoInfoRam')
-      utilizacaoRam.textContent = ramTexto + `${indicadorPedido}`
+      utilizacaoRam.textContent = ramTexto + `${indicadorPedidoRam}`
       // Fim dados RAM
     }
   //  Adicionar uma variavel que tera mhz, %, etc
@@ -476,13 +487,22 @@ function modalFiltro(nomeComponente) {
             // renderDadosPedido(result.value.medida, filtroComponente)
             medida = result.value.medida
             console.log(`MedidaSelecionada: ${medidaSelecionada}`)
+            console.log(`MedidaSelecionada: ${medida}`)
             componenteFiltrado = filtroComponente
-
-            if(medida == 'Frequência' ){
+            console.log(`Indicador: ${indicadorPedido}`)
+            const medidaLower = medida.toLowerCase()
+            if(medidaLower.includes('fr')){
               indicadorPedido = 'Mhz'
+              indicadorPedidoRam = 'Mhz'
+              console.log('Estou no if de frequencia')
             }else if(medida == 'Porcentagem'){
               indicadorPedido = '%'
+              indicadorPedidoRam = '%'
             }
+
+
+
+            indicadorPedidoRam
 
             if (componenteFiltrado == 'Cpu') {
               cpuFiltro = true

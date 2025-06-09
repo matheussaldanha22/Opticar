@@ -79,6 +79,24 @@ def enviarDadosPedidoCliente(listaPedidoCliente):
         except Exception as e:
             print(f"Erro ao conectar na rota dos pedidos do cliente: {e}")
 
+
+
+
+def enviarTopProcessos(listaProcessos):
+    try:
+        fetch_tempoReal = "http://localhost:8080/dashMonitoramento/processosPorMaquina"
+        resposta = requests.post(fetch_tempoReal, json= listaProcessos)
+
+        if resposta.status_code == 200:
+            print("Processos enviados com sucesso")
+            print(listaProcessos)
+            print(resposta.json())
+        else:
+            print(f"Erro ao enviar os processos da máquina: {resposta.status_code}")
+            print(resposta.text)
+    except Exception as e:
+        print(f"Erro ao conectar com a rota de processos: {e}")
+
 ############################################################################################################################################################################
 
 def inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta, tipo_incidente, fkPedido, componente, processo, processoCPU, processoRAM, processoDISCO):
@@ -183,6 +201,64 @@ def dadosObrigatorios():
     mb_recebidos2 = round(bytes_recebidos_por_seg / (1024 * 1024), 2)
     
     return uso_cpu2, uso_ram2, uso_disco2, mb_enviados2, mb_recebidos2
+
+############################################################################################################################################################################
+
+
+def pegar_top_3_processos(idMaquina):
+    """
+    Captura todos os processos do sistema e retorna os 3 com maior consumo de CPU
+    incluindo o idMaquina fornecido
+    """
+    lista_processos = []
+    
+    # Coleta informações de todos os processos
+    for processo in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent']):
+        try:
+            # Força o cálculo do CPU percent com intervalo
+            cpu_usage = processo.info['cpu_percent'] or processo.cpu_percent(interval=0.1)
+            
+            # Coleta informações de I/O se disponível
+            try:
+                io_counters = processo.io_counters()
+                disco_usage = io_counters.read_bytes + io_counters.write_bytes
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                disco_usage = 0
+            
+            processo_info = {
+                "idMaquina": idMaquina,
+                "pid": processo.info['pid'],
+                "nome": processo.info['name'],
+                "cpu": round(cpu_usage, 2),
+                "ram": round(processo.info['memory_percent'], 2),
+                "disco": disco_usage
+            }
+            
+            lista_processos.append(processo_info)
+            
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            # Ignora processos que não podem ser acessados
+            continue
+        except Exception as e:
+            # Ignora outros erros
+            continue
+    
+    # Ordena por CPU usage (decrescente) e pega os top 3
+    top_3_processos = sorted(lista_processos, key=lambda x: x['cpu'], reverse=True)[:3]
+    
+    # Se não encontrou processos suficientes, preenche com dados vazios
+    while len(top_3_processos) < 3:
+        top_3_processos.append({
+            "idMaquina": idMaquina,
+            "pid": 0,
+            "nome": "Processo não encontrado",
+            "cpu": 0,
+            "ram": 0,
+            "disco": 0
+        })
+    
+    return top_3_processos
+
     
 ############################################################################################################################################################################
 ############################################################################################################################################################################
@@ -240,6 +316,8 @@ def monitorar():
                     listaPedidoCliente.append({
                             tipo:{"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida,"limiteCritico": limiteCritico, "limiteAtencao": limiteAtencao, "mac_address": mac_address}
                         })
+                    
+                    top_3_processos = pegar_top_3_processos(idMaquina)
                 
 
                     print(f"Valor capturado: {valor} e id: {idPedido}")
@@ -285,6 +363,7 @@ def monitorar():
                 dadosS3["leitura"] = []
 
             enviarDadosPedidoCliente(listaPedidoCliente)
+            enviarTopProcessos(top_3_processos)
             listaPedidoCliente = []
 
 

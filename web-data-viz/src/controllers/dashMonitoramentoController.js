@@ -192,8 +192,26 @@ function filtroMedida(req, res) {
 
 }
 
+let listaProcessos = []
+
 function processosPorMaquina(req, res){
-  
+    const processos = req.body
+    listaProcessos = processos
+    res.status(200).send(listaProcessos)
+}
+
+function listarProcessos(req, res){
+    const idMaquina = req.params.idMaquina
+
+    try{
+    res.status(200).send(listaProcessos)
+
+    }catch (erro){
+      console.error(`Erro no servidor: ${erro}`)
+    }
+
+
+
 }
 
 module.exports = {
@@ -203,5 +221,7 @@ module.exports = {
   qtdServidoresPorFabrica,
   dadosPedidoCliente,
   dadosPedidoRecebidos,
-  filtroMedida
+  filtroMedida,
+  processosPorMaquina,
+  listarProcessos
 }
