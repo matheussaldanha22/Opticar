@@ -860,7 +860,7 @@ function renderGrafPredicao(tipo, valoresReais, valoresPrevistos, categorias) {
       ],
       xaxis: {
         categories: categorias,
-        labels: { style: { colors: '#000', fontSize: '13px', fontFamily: "Montserrat", fontWeight: 'bold' } }
+        labels: { style: { colors: '#000', fontSize: '15px', fontFamily: "Montserrat", fontWeight: 'bold' } }
       },
       yaxis: {
         labels: {
@@ -894,7 +894,7 @@ function renderGrafPredicao(tipo, valoresReais, valoresPrevistos, categorias) {
       ],
       xaxis: {
         categories: categorias,
-        labels: { style: { colors: '#000', fontSize: '13px', fontFamily: "Montserrat", fontWeight: 'bold' } }
+        labels: { style: { colors: '#000', fontSize: '15px', fontFamily: "Montserrat", fontWeight: 'bold' } }
       },
       yaxis: {
         labels: {

@@ -267,7 +267,7 @@ div .servidor {
 .sltRoxo {
     font-family: 'Montserrat';
     font-weight: 600;
-    font-size: 20px;
+    font-size: 17px;
     background-color: #2C3E50;
     color: #FFFF;
     border: none;
@@ -537,8 +537,9 @@ div .servidor {
     color: #FFFF;
     border: none;
     border-radius: 12px;
-    width: 11vw;
+    width: 12vw;
     height: 4vh;
+    font-size: 15px;
 }
 
 #sltFiltrar:hover {
