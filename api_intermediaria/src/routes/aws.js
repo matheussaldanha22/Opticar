@@ -17,11 +17,11 @@ router.post("/relatorioClient", upload.single('relatorioCliente'), function (req
   awsController.relatorioClient(req, res);
 });
 
-router.get("/visualizarHistorico", function(req, res) {
+router.get("/visualizarHistorico/:pasta", function(req, res) {
   awsController.visualizarHistorico(req,res)
 });
 
-router.get("/baixarHistorico/:relatorioNome", function(req, res) {
+router.get("/baixarHistorico/:relatorioNome/:pasta", function(req, res) {
   awsController.baixarHistorico(req, res)
 });
 

@@ -33,6 +33,7 @@ async function relatorioClient(req, res) {
     try {
         const arquivo = req.file;
         const tipo = req.body.tipo;
+        const pasta = req.body.pasta;
 
         console.log("Arquivo recebido:", arquivo);
         console.log("Tipo recebido:", tipo);
@@ -44,7 +45,7 @@ async function relatorioClient(req, res) {
             });
         }
 
-        const resultado = await enviarRelatorio(arquivo.buffer, arquivo.originalname, tipo);
+        const resultado = await enviarRelatorio(arquivo.buffer, arquivo.originalname, tipo, pasta);
         
         res.status(200).json({
             mensagem: "Relatório enviado para AWS com sucesso", 
@@ -79,12 +80,12 @@ async function enviarParaS3(macAddress, dadosJson, dataP, fabrica) {
     }
 }
 
-async function enviarRelatorio(bufferArquivo, nomeArquivo, tipo) {
+async function enviarRelatorio(bufferArquivo, nomeArquivo, tipo, pasta) {
     const s3 = new AWS.S3();
 
     const params = {
         Bucket: process.env.BUCKET_NAME,
-        Key: `Relatorios/${tipo}`,
+        Key: `${pasta}/${tipo}`,
         Body: bufferArquivo,
         ContentType: 'application/pdf'  
     };
@@ -100,11 +101,12 @@ async function enviarRelatorio(bufferArquivo, nomeArquivo, tipo) {
 }
 
 async function visualizarHistorico(req, res) {
+    var pasta = req.params.pasta;
     const s3 = new AWS.S3()
 
     const params = {
         Bucket: process.env.BUCKET_NAME,
-        Prefix: "Relatorios/"
+        Prefix: `${pasta}/`
     }
 
     try {
@@ -141,11 +143,12 @@ async function pegarS3(req,res){
 
 async function baixarHistorico(req, res) {
     var nome = req.params.relatorioNome
+    var pasta = req.params.pasta
     const s3 = new AWS.S3()
 
     const params = {
         Bucket: process.env.BUCKET_NAME,
-        Key: `Relatorios/${nome}`
+        Key: `${pasta}/${nome}`
     }
 
     try {
