@@ -1,3 +1,44 @@
+const bobCorrelacao = document.querySelector(".bobCorrelacao");
+
+bobCorrelacao.addEventListener("click", () => {
+  Swal.fire({
+    html: `
+      <div class="modal-bob">
+        <div class="containerBob">
+          <h3>Relatório de Correlação</h3>
+          <div style="margin: 20px 0;">
+            <label><input type="radio" id="novo" name="opcao" value="novo" checked> Gerar novo</label><br>
+            <label><input type="radio" id="antigo" name="opcao" value="antigo"> Baixar anterior</label>
+          </div>
+          <select id="select_relatorio" style="width: 100%; padding: 8px; margin-top: 10px;">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+      </div>
+    `,
+    showCancelButton: true,
+    cancelButtonText: "Cancelar",
+    confirmButtonText: "Baixar",
+    confirmButtonColor: "#2C3E50",
+    background: "#fff",
+    customClass: "addModal",
+    didOpen: () => {
+      visualizarHistorico();
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      if (document.getElementById('novo').checked) {
+        bobCorrelacaoRelatorio();
+      } else {
+        var relatorioNome = document.getElementById('select_relatorio').value;
+        if (relatorioNome) {
+          baixarHistorico(relatorioNome);
+        }
+      }
+    }
+  });
+});
+
 function esconder() {
   var grafico = document.getElementById('graficoConsumoPix');
   var texto = document.getElementById('button-cor');
@@ -1392,4 +1433,158 @@ function plotarGraficoPix(dadosCpu, dadosRam, dadosDisco, dadosRede, dataPix) {
 
 
 slt_componente.addEventListener("change", atualizarDados)
+
+var respostas;
+
+async function bobCorrelacaoRelatorio() {
+  document.getElementById('bobP').classList.add('loader');
+  var agora = new Date();
+  var ano = agora.getFullYear();
+  var mes = String(agora.getMonth() + 1).padStart(2, '0');
+  var dia = String(agora.getDate()).padStart(2, '0');
+  var hora = String(agora.getHours()).padStart(2, '0');
+  var minuto = String(agora.getMinutes()).padStart(2, '0');
+  var tipo = `Correlação_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
+  try {
+    var perguntas = ``;
+
+    const response = await fetch("http://localhost:5000/perguntar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        perguntaServer: perguntas,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro na requisição: " + response.status);
+    }
+    respostas = await response.text();
+    console.log(respostas);
+    pdf(respostas, tipo);
+  } catch (erro) {
+    console.error(`Erro: ${erro}`);
+    Swal.fire('Erro!', 'Erro ao tentar formular relatório', 'error')
+  } finally {
+    document.getElementById('bobP').classList.remove('loader');
+  }
+}
+
+async function pdf(respostas, tipo) {
+  try {
+    const resposta = await fetch("http://localhost:5000/pdf", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        respostaBOB: respostas,
+        nomeArquivo: tipo,
+      }),
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao gerar PDF: " + resposta.status);
+    }
+
+    const blob = await resposta.blob();
+    console.log(blob);
+    relatorioClient(blob, tipo)
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = url;
+    a.download = `${tipo}`;
+
+    document.body.appendChild(a);
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (erro) {
+    console.error("Erro ao baixar PDF:", erro);
+    Swal.fire('Erro!', 'Erro ao baixar PDF', 'error')
+  }
+}
+
+async function relatorioClient(blob, tipo) {
+  const formData = new FormData();
+  formData.append("relatorioCliente", blob, "relatorio.pdf")
+  formData.append("tipo", tipo);
+
+  try {
+    const resposta = await fetch("http://localhost:5000/aws/relatorioClient", {
+      method: "POST",
+      body: formData
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao enviar relatório para a aws" + resposta.status)
+    }
+  } catch (erro) {
+    console.error("Erro ao enviar relatório:", erro);
+    Swal.fire('Erro!', 'Erro ao enviar relatório', 'error')
+  }
+}
+
+async function visualizarHistorico() {
+  try {
+    const resposta = await fetch("http://localhost:5000/aws/visualizarHistorico", {
+      method: "GET",
+      headers: { "Content-Type": "application/json"}
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao visualizar histórico")
+    }
+
+    var dados = await resposta.json()
+
+    const slt = document.getElementById('select_relatorio');
+    dados.forEach((options) => {
+      var option = document.createElement("option");
+      option.value = options;
+      option.textContent = options;
+      slt.appendChild(option)
+    })
+    
+    console.log("estou no visualizarHistorico")
+    console.log(resposta)
+  } catch (erro) {
+    console.error(erro)
+  }
+}
+
+async function baixarHistorico(relatorioNome) {
+  try {
+    const resposta = await fetch(`http://localhost:5000/aws/baixarHistorico/${relatorioNome}`, {
+      method: "GET",
+      headers: {"Content-Type": "application/pdf"}
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao baixar histórico")
+    }
+    console.log("Estou no baixar histórico")
+    console.log(resposta)
+
+    const blob = await resposta.blob()
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = url;
+    a.download = `${relatorioNome}`;
+    document.body.appendChild(a);
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (erro) {
+    console.error(erro)
+  }
+}
 

@@ -1,43 +1,92 @@
+var icRelatorio = [];
+
+var alertaP = [];
+
+var alertaR = [];
+
+var alertaCategorias = [];
+
+var usoCategorias = [];
+
+var usoY = [];
+
+const bobPredicao = document.querySelector(".bobPredicao");
+
+bobPredicao.addEventListener("click", () => {
+  Swal.fire({
+    html: `
+      <div class="modal-bob">
+        <div class="containerBob">
+          <h3>Relatório de Predição</h3>
+          <div style="margin: 20px 0;">
+            <label><input type="radio" id="novo" name="opcao" value="novo" checked> Gerar novo</label><br>
+            <label><input type="radio" id="antigo" name="opcao" value="antigo"> Baixar anterior</label>
+          </div>
+          <select id="select_relatorio" style="width: 100%; padding: 8px; margin-top: 10px;">
+            <option value="">Selecione...</option>
+          </select>
+        </div>
+      </div>
+    `,
+    showCancelButton: true,
+    cancelButtonText: "Cancelar",
+    confirmButtonText: "Baixar",
+    confirmButtonColor: "#2C3E50",
+    background: "#fff",
+    customClass: "addModal",
+    didOpen: () => {
+      visualizarHistorico();
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      if (document.getElementById("novo").checked) {
+        bobCorrelacaoRelatorio();
+      } else {
+        var relatorioNome = document.getElementById("select_relatorio").value;
+        if (relatorioNome) {
+          baixarHistorico(relatorioNome);
+        }
+      }
+    }
+  });
+});
+
 // CÓDIGO PARA CONTROLE DA BARRA LATERAL RESPONSIVA
 function expand() {
-  const menu = document.getElementById('div_menu');
-  const ul_links = document.getElementById('ul_links');
-  const linha1 = document.getElementById('linha1');
-  const linha2 = document.getElementById('linha2');
-  const linha3 = document.getElementById('linha3');
+  const menu = document.getElementById("div_menu");
+  const ul_links = document.getElementById("ul_links");
+  const linha1 = document.getElementById("linha1");
+  const linha2 = document.getElementById("linha2");
+  const linha3 = document.getElementById("linha3");
 
   // VERIFICA SE A TELA É DE CELULAR (menor que 702px)
   if (window.innerWidth < 702) {
     // Comportamento no Celular: Abrir/Fechar menu lateral
-    menu.classList.toggle('menu-aberto-celular');
-    linha1.classList.toggle('linha1-active');
-    linha2.classList.toggle('linha2-active');
-    linha3.classList.toggle('linha3-active');
-
+    menu.classList.toggle("menu-aberto-celular");
+    linha1.classList.toggle("linha1-active");
+    linha2.classList.toggle("linha2-active");
+    linha3.classList.toggle("linha3-active");
   } else {
     // Comportamento no Desktop: Expandir/Diminuir menu (seu código original)
-    if (menu.classList.contains('menu-expand')) {
-      menu.style.animation = 'diminui 0.2s linear';
+    if (menu.classList.contains("menu-expand")) {
+      menu.style.animation = "diminui 0.2s linear";
     } else {
-      menu.style.animation = 'expandir 0.2s linear';
+      menu.style.animation = "expandir 0.2s linear";
     }
-    menu.classList.toggle('menu-expand');
-    ul_links.classList.toggle('nav-links-expanded');
+    menu.classList.toggle("menu-expand");
+    ul_links.classList.toggle("nav-links-expanded");
   }
 }
-
 
 function carregaPagina() {
   mostrarData();
   listarServidores();
   atualizarDados();
-
 }
 
 document.addEventListener("DOMContentLoaded", () => {
   carregaPagina();
 });
-
 
 //-----------------------------DADOS UTEIS PARA GRAFICOS E KPIS
 const nomeDias = [
@@ -47,47 +96,49 @@ const nomeDias = [
   "Quarta-Feira",
   "Quinta-Feira",
   "Sexta-Feira",
-  "Sábado"
-]
-
-const nomeMeses = [
-  'Janeiro',
-  'Fevereiro',
-  'Março',
-  'Abril',
-  'Maio',
-  'Junho',
-  'Julho',
-  'Agosto',
-  'Setembro',
-  'Outubro',
-  'Novembro',
-  'Dezembro'
+  "Sábado",
 ];
 
-let data = new Date;
-let mesAtual = data.getMonth()
+const nomeMeses = [
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
+];
+
+let data = new Date();
+let mesAtual = data.getMonth();
 
 //-----------------------------FUNÇÃO PLOTAR DATAS
 function obterData() {
-  let dataExibir = new Date;
-  return `${nomeDias[dataExibir.getDay()]} - ${dataExibir.toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo' })}`;
+  let dataExibir = new Date();
+  return `${nomeDias[dataExibir.getDay()]} - ${dataExibir.toLocaleString(
+    "pt-BR",
+    { timeZone: "America/Sao_Paulo" }
+  )}`;
 }
 
 function mostrarData() {
   setInterval(() => {
-    document.getElementById("dataInfo").innerHTML = obterData()
+    document.getElementById("dataInfo").innerHTML = obterData();
   }, 1000);
 }
 
-
 //-----------------------------CARREGAR SERVIDORES NO SLT
 function listarServidores() {
-  const servidores = JSON.parse(sessionStorage.getItem('SERVIDORES'));
+  const servidores = JSON.parse(sessionStorage.getItem("SERVIDORES"));
   const selectServidores = document.getElementById("sltServidor");
 
   if (servidores && servidores.length > 0) {
-    servidores.forEach(servidor => {
+    servidores.forEach((servidor) => {
       const option = document.createElement("option");
       option.value = servidor.idMaquina;
       option.textContent = `SV${servidor.idMaquina}`;
@@ -98,47 +149,45 @@ function listarServidores() {
   }
 }
 
-
-
 //-----------------------------KPIS
 
 //KPI % ALERTA
 function obterAlertasMes(idMaquina, componente) {
   return fetch(`/dashComponentes/obterAlertasMes/${idMaquina}/${componente}`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   })
-    .then(res => res.json())
-    .then(alertaMes => {
+    .then((res) => res.json())
+    .then((alertaMes) => {
       console.log("Alertas do mês:", alertaMes);
-      let totalAlertas = alertaMes.totalAlertas
-      let alertasCriticos = Number(alertaMes.alertasCriticos)
-      let porcentagemCritico = parseFloat((alertasCriticos / totalAlertas) * 100).toFixed(2)
+      let totalAlertas = alertaMes.totalAlertas;
+      let alertasCriticos = Number(alertaMes.alertasCriticos);
+      let porcentagemCritico = parseFloat(
+        (alertasCriticos / totalAlertas) * 100
+      ).toFixed(2);
 
       //se nao conseguir calcular = 0%
       if (isNaN(porcentagemCritico)) {
-        document.getElementById("probFalha").innerHTML = `0%`
-
+        document.getElementById("probFalha").innerHTML = `0%`;
       } else {
-        document.getElementById("probFalha").innerHTML = `${porcentagemCritico}%`
+        document.getElementById(
+          "probFalha"
+        ).innerHTML = `${porcentagemCritico}%`;
       }
-
 
       if (porcentagemCritico < 40) {
-        document.getElementById("probFalha").style.color = "limegreen"
+        document.getElementById("probFalha").style.color = "limegreen";
       } else if (porcentagemCritico < 70) {
-        document.getElementById("probFalha").style.color = "#FFD700"
+        document.getElementById("probFalha").style.color = "#FFD700";
       } else {
-        document.getElementById("probFalha").style.color = "red"
+        document.getElementById("probFalha").style.color = "red";
       }
 
-
-      document.getElementById("qtdAlertasTotal").innerHTML = totalAlertas
-
+      document.getElementById("qtdAlertasTotal").innerHTML = totalAlertas;
     })
-    .catch(erro => {
+    .catch((erro) => {
       console.error("Erro ao buscar alertas:", erro);
     });
 }
@@ -146,79 +195,76 @@ function obterAlertasMes(idMaquina, componente) {
 //KPI MEDIA USO
 function obterMediaUso(idMaquina, componente) {
   return fetch(`/dashComponentes/obterMediaUso/${idMaquina}/${componente}`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   })
-    .then(res => res.json())
-    .then(resultado => {
-
+    .then((res) => res.json())
+    .then((resultado) => {
       let usoMesAtual = resultado[0].media_uso;
       let usoMesPassado = resultado[1].media_uso;
-      let comparacao
+      let comparacao;
 
-      document.getElementById('usoMedio').innerHTML = `${usoMesAtual}%`
+      document.getElementById("usoMedio").innerHTML = `${usoMesAtual}%`;
 
       if (usoMesAtual <= usoMesPassado) {
-        comparacao = usoMesPassado - usoMesAtual
-        document.getElementById('comparacaoUso').innerHTML = `-${comparacao.toFixed(2)}%`
-        document.getElementById('comparacaoUso').style.color = 'limegreen'
+        comparacao = usoMesPassado - usoMesAtual;
+        document.getElementById(
+          "comparacaoUso"
+        ).innerHTML = `-${comparacao.toFixed(2)}%`;
+        document.getElementById("comparacaoUso").style.color = "limegreen";
       } else {
-        comparacao = usoMesAtual - usoMesPassado
-        document.getElementById('comparacaoUso').innerHTML = `+${comparacao.toFixed(2)}%`
-        document.getElementById('comparacaoUso').style.color = 'red'
+        comparacao = usoMesAtual - usoMesPassado;
+        document.getElementById(
+          "comparacaoUso"
+        ).innerHTML = `+${comparacao.toFixed(2)}%`;
+        document.getElementById("comparacaoUso").style.color = "red";
       }
-
     })
-    .catch(erro => {
+    .catch((erro) => {
       console.error("Erro ao buscar USO:", erro);
     });
 }
 
-
-
 //KPI MTBF
 function obterTempoMtbf(idMaquina, componente) {
   return fetch(`/dashComponentes/obterTempoMtbf/${idMaquina}/${componente}`, {
-    method: 'GET',
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
   })
-    .then(res => res.json())
-    .then(tempos => {
+    .then((res) => res.json())
+    .then((tempos) => {
       console.log("Desempenho:", tempos);
       let minOperacao = tempos.minutos_operacao;
       let qtdAlertas = tempos.qtd_alertas;
-      let mtbf = Math.floor(minOperacao / qtdAlertas)
+      let mtbf = Math.floor(minOperacao / qtdAlertas);
 
-      let metrica = "Min"
+      let metrica = "Min";
 
       //validação descobrir faixa
       if (mtbf < 60) {
-        document.getElementById("classificacaoMtbf").innerHTML = `Ruim`
-        document.getElementById("classificacaoMtbf").style.color = 'red'
+        document.getElementById("classificacaoMtbf").innerHTML = `Ruim`;
+        document.getElementById("classificacaoMtbf").style.color = "red";
       } else if (mtbf < 240) {
-        document.getElementById("classificacaoMtbf").innerHTML = `Atenção`
-        document.getElementById("classificacaoMtbf").style.color = '#FFD700'
+        document.getElementById("classificacaoMtbf").innerHTML = `Atenção`;
+        document.getElementById("classificacaoMtbf").style.color = "#FFD700";
       } else {
-        document.getElementById("classificacaoMtbf").innerHTML = `Ótimo`
-        document.getElementById("classificacaoMtbf").style.color = 'limegreen'
+        document.getElementById("classificacaoMtbf").innerHTML = `Ótimo`;
+        document.getElementById("classificacaoMtbf").style.color = "limegreen";
       }
 
       // se tiver mais de 60 min ele vira hora
       if (mtbf > 60) {
-        mtbf = Math.floor((minOperacao / 60) / qtdAlertas)
-        metrica = "Hrs"
+        mtbf = Math.floor(minOperacao / 60 / qtdAlertas);
+        metrica = "Hrs";
       }
 
-
-
-      document.getElementById("mtbf").innerHTML = `${mtbf} ${metrica}`
-
+      document.getElementById("mtbf").innerHTML = `${mtbf} ${metrica}`;
     })
-    .catch(erro => {
+    .catch((erro) => {
       console.error("Erro ao buscar MTBF:", erro);
     });
 }
@@ -230,22 +276,24 @@ async function calcularConfiabilidade(idMaquina, componente) {
     await Promise.all([
       obterAlertasMes(idMaquina, componente),
       obterMediaUso(idMaquina, componente),
-      obterTempoMtbf(idMaquina, componente)
+      obterTempoMtbf(idMaquina, componente),
     ]);
 
     // --- P1: Percentual de Alertas Críticos
-    const porcCritico = parseInt(document.getElementById("probFalha").innerHTML) || 0;
+    const porcCritico =
+      parseInt(document.getElementById("probFalha").innerHTML) || 0;
     const p1 = 100 - porcCritico;
 
     // --- P2: Variação do uso médio
-    const variacao = parseInt(document.getElementById("comparacaoUso").innerHTML) || 0;
+    const variacao =
+      parseInt(document.getElementById("comparacaoUso").innerHTML) || 0;
     let p2;
 
     //validar se uso aumentou em relação ao mês passado ai sim calcula
     if (variacao > 0) {
       p2 = 100 - variacao;
     } else {
-      p2 = 100; // ficou igual ou superior = bom 
+      p2 = 100; // ficou igual ou superior = bom
     }
 
     // --- P3: MTBF atribuindo faixas
@@ -260,10 +308,7 @@ async function calcularConfiabilidade(idMaquina, componente) {
       minutosMtbf = parseInt(valor);
     }
 
-
-
-    let p3
-
+    let p3;
     if (minutosMtbf < 60) {
       p3 = 33;
     } else if (minutosMtbf < 240) {
@@ -272,47 +317,43 @@ async function calcularConfiabilidade(idMaquina, componente) {
       p3 = 100;
     }
 
-
     const ic = ((p1 + p2 + p3) / 3).toFixed(0);
 
-    console.log(`IC calculado: ${ic} (P1=${p1.toFixed(0)} | P2=${p2.toFixed(0)} | P3=${p3})`);
+    icRelatorio.push(ic);
+
+    console.log(
+      `IC calculado: ${ic} (P1=${p1.toFixed(0)} | P2=${p2.toFixed(
+        0
+      )} | P3=${p3})`
+    );
 
     return parseFloat(ic);
-
   } catch (error) {
     console.error("erro ao calcular o IC:", error);
     return null;
   }
 }
 
-
-
-
-
-
-
-
 //-----------------------------MODAL FILTRO USO
 
-let anoVar //variaveis global para levar pro atualiza dados
-let mesVar
-let filtroGraf = "mensal"
+let anoVar; //variaveis global para levar pro atualiza dados
+let mesVar;
+let filtroGraf = "mensal";
 
 // ------------- VARIAVEIS FILTRO ALERTA
-let anoVarAlerta
-let filtroGrafAlerta = "anual"
+let anoVarAlerta;
+let filtroGrafAlerta = "anual";
 
 //caso nao escolha vai mostrar o ano atual ---- Texto filtro
-document.getElementById("tipoFiltro-uso").innerHTML = "Mensal"
-document.getElementById("periodo-uso").innerHTML = ` ${data.getFullYear()}`
+document.getElementById("tipoFiltro-uso").innerHTML = "Mensal";
+document.getElementById("periodo-uso").innerHTML = ` ${data.getFullYear()}`;
 
-document.getElementById("tipoFiltro-alertas").innerHTML = "Anual"
-document.getElementById("periodo-alertas").innerHTML = ` Todos os anos`
-
+document.getElementById("tipoFiltro-alertas").innerHTML = "Anual";
+document.getElementById("periodo-alertas").innerHTML = ` Todos os anos`;
 
 function filtrarUso() {
-  let idMaquina = sltServidor.value
-  let componente = sltComponente.value
+  let idMaquina = sltServidor.value;
+  let componente = sltComponente.value;
 
   Swal.fire({
     title: `Filtrar gráfico <u style="color:#2C3E50;">Uso</u>`,
@@ -344,87 +385,91 @@ function filtrarUso() {
     showCancelButton: true,
     cancelButtonText: "Fechar",
     confirmButtonText: "Confirmar",
-    confirmButtonColor: '#2C3E50',
+    confirmButtonColor: "#2C3E50",
     customClass: "alertaModal",
-    didOpen: () => { //#############EXECUTA OS COMANDOS ASSIM Q MODAL ABRE SWEETALERT
+    didOpen: () => {
+      //#############EXECUTA OS COMANDOS ASSIM Q MODAL ABRE SWEETALERT
 
+      selectAno = document.getElementById("sltAno");
+      selectMes = document.getElementById("sltMes");
 
-      selectAno = document.getElementById("sltAno")
-      selectMes = document.getElementById("sltMes")
-
-      fetch(`/dashComponentes/obterAnosDisponiveis/${idMaquina}/${componente}`, { //fetch para add anos nos selects
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      })
-        .then(res => res.json())
-        .then(res => {
-
-          res.forEach(item => {
+      fetch(
+        `/dashComponentes/obterAnosDisponiveis/${idMaquina}/${componente}`,
+        {
+          //fetch para add anos nos selects
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          res.forEach((item) => {
             const option = document.createElement("option");
             option.value = item.ano;
             option.textContent = item.ano;
             selectAno.appendChild(option);
           });
-
-
         })
-        .catch(erro => {
+        .catch((erro) => {
           console.error("Erro ao buscar anos", erro);
         });
 
       //#######FETCH QUE POR PADRÃO LISTA OS MESES DO ANO ATUAL
-      let ano = data.getFullYear()
-      fetch(`/dashComponentes/obterMesesDisponiveis/${idMaquina}/${componente}/${ano}`, { //fetch para add anos nos selects
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      })
-        .then(res => res.json())
-        .then(res => {
-          selectMes.innerHTML = ''
-          res.forEach(item => {
+      let ano = data.getFullYear();
+      fetch(
+        `/dashComponentes/obterMesesDisponiveis/${idMaquina}/${componente}/${ano}`,
+        {
+          //fetch para add anos nos selects
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          selectMes.innerHTML = "";
+          res.forEach((item) => {
             const option = document.createElement("option");
             option.value = item.mes;
             option.textContent = `${nomeMeses[item.mes - 1]}`;
             selectMes.appendChild(option);
           });
-
-
         })
-        .catch(erro => {
+        .catch((erro) => {
           console.error("Erro ao buscar meses", erro);
         });
 
-
       //#######EVENTO NO SELECT PARA OBTER MESES CORRESPONDENTES DO MES
-      selectAno.addEventListener("change", function () { //fetch nos meses quando muda o ano
+      selectAno.addEventListener("change", function () {
+        //fetch nos meses quando muda o ano
 
-        let ano = selectAno.value
-        fetch(`/dashComponentes/obterMesesDisponiveis/${idMaquina}/${componente}/${ano}`, { //fetch para add anos nos selects
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' }
-        })
-          .then(res => res.json())
-          .then(res => {
-            selectMes.innerHTML = ''
-            res.forEach(item => {
+        let ano = selectAno.value;
+        fetch(
+          `/dashComponentes/obterMesesDisponiveis/${idMaquina}/${componente}/${ano}`,
+          {
+            //fetch para add anos nos selects
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        )
+          .then((res) => res.json())
+          .then((res) => {
+            selectMes.innerHTML = "";
+            res.forEach((item) => {
               const option = document.createElement("option");
               option.value = item.mes;
               option.textContent = `${nomeMeses[item.mes - 1]}`;
               selectMes.appendChild(option);
             });
-
-
           })
-          .catch(erro => {
+          .catch((erro) => {
             console.error("Erro ao buscar meses", erro);
           });
       });
-
-    }
+    },
   }).then((res) => {
     if (res.isConfirmed) {
-      const tipoFiltro = document.getElementById("tipoFiltro-uso")
-      const periodo = document.getElementById("periodo-uso")
+      const tipoFiltro = document.getElementById("tipoFiltro-uso");
+      const periodo = document.getElementById("periodo-uso");
 
       const sltFiltrar = document.getElementById("sltFiltrar");
       const sltAno = document.getElementById("sltAno");
@@ -433,19 +478,21 @@ function filtrarUso() {
       if (sltFiltrar && sltAno && sltMes) {
         if (sltFiltrar.value === "semanal") {
           tipoFiltro.innerHTML = "Semanal";
-          periodo.innerHTML = `${nomeMeses[sltMes.value - 1]} de ${sltAno.value}`
-          filtroGraf = sltFiltrar.value
+          periodo.innerHTML = `${nomeMeses[sltMes.value - 1]} de ${
+            sltAno.value
+          }`;
+          filtroGraf = sltFiltrar.value;
         } else {
           tipoFiltro.innerHTML = "Mensal";
-          periodo.innerHTML = sltAno.value
-          filtroGraf = sltFiltrar.value
+          periodo.innerHTML = sltAno.value;
+          filtroGraf = sltFiltrar.value;
         }
       }
 
-      anoVar = sltAno.value
-      mesVar = sltMes.value
+      anoVar = sltAno.value;
+      mesVar = sltMes.value;
 
-      atualizarDados()
+      atualizarDados();
     }
   });
 
@@ -463,11 +510,10 @@ function filtrarUso() {
   }, 100);
 }
 
-
 //FILTRAR GRAFICO ALERTA
 function filtrarAlerta() {
-  let idMaquina = sltServidor.value
-  let componente = sltComponente.value
+  let idMaquina = sltServidor.value;
+  let componente = sltComponente.value;
 
   Swal.fire({
     title: `Filtrar gráfico <u style="color:#2C3E50;">Alerta</u>`,
@@ -494,38 +540,38 @@ function filtrarAlerta() {
     showCancelButton: true,
     cancelButtonText: "Fechar",
     confirmButtonText: "Confirmar",
-    confirmButtonColor: '#2C3E50',
+    confirmButtonColor: "#2C3E50",
     customClass: "alertaModal",
-    didOpen: () => { //#############EXECUTA OS COMANDOS ASSIM Q MODAL ABRE SWEETALERT
+    didOpen: () => {
+      //#############EXECUTA OS COMANDOS ASSIM Q MODAL ABRE SWEETALERT
 
+      selectAno = document.getElementById("sltAno");
 
-      selectAno = document.getElementById("sltAno")
-
-      fetch(`/dashComponentes/obterAnosDisponiveis/${idMaquina}/${componente}`, { //fetch para add anos nos selects
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      })
-        .then(res => res.json())
-        .then(res => {
-
-          res.forEach(item => {
+      fetch(
+        `/dashComponentes/obterAnosDisponiveis/${idMaquina}/${componente}`,
+        {
+          //fetch para add anos nos selects
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      )
+        .then((res) => res.json())
+        .then((res) => {
+          res.forEach((item) => {
             const option = document.createElement("option");
             option.value = item.ano;
             option.textContent = item.ano;
             selectAno.appendChild(option);
           });
-
-
         })
-        .catch(erro => {
+        .catch((erro) => {
           console.error("Erro ao buscar anos", erro);
         });
-
-    }
+    },
   }).then((res) => {
     if (res.isConfirmed) {
-      const tipoFiltro = document.getElementById("tipoFiltro-alertas")
-      const periodo = document.getElementById("periodo-alertas")
+      const tipoFiltro = document.getElementById("tipoFiltro-alertas");
+      const periodo = document.getElementById("periodo-alertas");
 
       const sltFiltrar = document.getElementById("sltFiltrar");
       const sltAno = document.getElementById("sltAno");
@@ -533,18 +579,18 @@ function filtrarAlerta() {
       if (sltFiltrar && sltAno) {
         if (sltFiltrar.value === "anual") {
           tipoFiltro.innerHTML = "Anual";
-          periodo.innerHTML = `Todos os anos`
-          filtroGrafAlerta = sltFiltrar.value
+          periodo.innerHTML = `Todos os anos`;
+          filtroGrafAlerta = sltFiltrar.value;
         } else {
           tipoFiltro.innerHTML = "Mensal";
-          periodo.innerHTML = sltAno.value
-          filtroGrafAlerta = sltFiltrar.value
+          periodo.innerHTML = sltAno.value;
+          filtroGrafAlerta = sltFiltrar.value;
         }
       }
 
-      anoVarAlerta = sltAno.value
+      anoVarAlerta = sltAno.value;
 
-      atualizarDados()
+      atualizarDados();
     }
   });
 
@@ -562,20 +608,22 @@ function filtrarAlerta() {
   }, 100);
 }
 
-
 //-----------------------------CHARTS
 
 // #######CHART USO
 function obterParametroComponente(idMaquina, componente) {
-  return fetch(`/dashComponentes/obterParametrosComponente/${idMaquina}/${componente}`, {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  })
-    .then(res => res.json())
-    .then(res => {
+  return fetch(
+    `/dashComponentes/obterParametrosComponente/${idMaquina}/${componente}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+  )
+    .then((res) => res.json())
+    .then((res) => {
       return res.limiteCritico;
     })
-    .catch(erro => {
+    .catch((erro) => {
       console.error("Erro ao buscar parâmetros", erro);
     });
 }
@@ -587,28 +635,34 @@ function dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido) {
       let dados = [];
 
       if (filtroGraf === "semanal") {
-        fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ anoEscolhido, mesEscolhido })
-        })
-          .then(res => res.json())
-          .then(informacoes => {
-            informacoes.forEach(item => {
+        fetch(
+          `/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ anoEscolhido, mesEscolhido }),
+          }
+        )
+          .then((res) => res.json())
+          .then((informacoes) => {
+            informacoes.forEach((item) => {
               categorias.push(`Semana ${item.semana_do_mes}`);
               dados.push(item.media_utilizacao);
             });
             renderGraficoUso(categorias, dados, parametro); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
           });
       } else {
-        fetch(`/dashComponentes/dadosGraficoUsoMensal/${idMaquina}/${componente}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ anoEscolhido })
-        })
-          .then(res => res.json())
-          .then(informacoes => {
-            informacoes.forEach(item => {
+        fetch(
+          `/dashComponentes/dadosGraficoUsoMensal/${idMaquina}/${componente}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ anoEscolhido }),
+          }
+        )
+          .then((res) => res.json())
+          .then((informacoes) => {
+            informacoes.forEach((item) => {
               categorias.push(`${nomeMeses[item.mes - 1]}`);
               dados.push(item.media_utilizacao);
             });
@@ -616,79 +670,100 @@ function dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido) {
           });
       }
     })
-    .catch(erro => console.error("Erro:", erro));
+    .catch((erro) => console.error("Erro:", erro));
 }
 
 function renderGraficoUso(categorias, dados, parametro) {
   console.log("parametro do componente:", parametro);
 
   const options = {
-    chart: { type: 'line', height: 300, toolbar: { show: false } },
+    chart: { type: "line", height: 300, toolbar: { show: false } },
     series: [
-      { name: 'Uso médio (%)', data: dados },
-      { name: 'Limite crítico', data: new Array(categorias.length).fill(parametro), stroke: { dashArray: 5 } }
+      { name: "Uso médio (%)", data: dados },
+      {
+        name: "Limite crítico",
+        data: new Array(categorias.length).fill(parametro),
+        stroke: { dashArray: 5 },
+      },
     ],
-    xaxis: { categories: categorias, labels: { style: { colors: '#000', fontSize: '12px', fontFamily: "Montserrat", fontWeight: 'bold' } } },
+    xaxis: {
+      categories: categorias,
+      labels: {
+        style: {
+          colors: "#000",
+          fontSize: "12px",
+          fontFamily: "Montserrat",
+          fontWeight: "bold",
+        },
+      },
+    },
     yaxis: {
       labels: {
         style: {
-          fontSize: "12px",  // Tamanho aumentado
+          fontSize: "12px", // Tamanho aumentado
           fontFamily: "Montserrat",
-          colors: "#000"
-        }
-      }
+          colors: "#000",
+        },
+      },
     },
-    colors: ['#000', '#e63946'],
-    stroke: { curve: 'smooth', width: [3, 2] },
-    legend: { fontSize: '20px' }
-
+    colors: ["#000", "#e63946"],
+    stroke: { curve: "smooth", width: [3, 2] },
+    legend: { fontSize: "20px" },
   };
 
-  if (window.chartUso) { //se já tiver um grafico destroi p plotar o outro
-    window.chartUso.destroy()
-  };
+  if (window.chartUso) {
+    //se já tiver um grafico destroi p plotar o outro
+    window.chartUso.destroy();
+  }
 
-  window.chartUso = new ApexCharts(document.querySelector("#graficoUsoComponente"), options);
+  window.chartUso = new ApexCharts(
+    document.querySelector("#graficoUsoComponente"),
+    options
+  );
   window.chartUso.render();
 }
 
 // #######CHART ALERTA
 function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
-
   let categorias = [];
   let dadosCritico = [];
   let dadosMedio = [];
 
   if (filtroGrafAlerta === "anual") {
-    fetch(`/dashComponentes/dadosGraficoAlertaAnual/${idMaquina}/${componente}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" }
-    })
-      .then(res => res.json())
-      .then(informacoes => {
-        informacoes.forEach(item => {
+    fetch(
+      `/dashComponentes/dadosGraficoAlertaAnual/${idMaquina}/${componente}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    )
+      .then((res) => res.json())
+      .then((informacoes) => {
+        informacoes.forEach((item) => {
           categorias.push(`${item.ano}`);
           dadosCritico.push(item.alertasCriticos);
           dadosMedio.push(item.alertasMedios);
-
         });
         renderGraficoAlerta(categorias, dadosCritico, dadosMedio);
       });
   } else {
-    fetch(`/dashComponentes/dadosGraficoAlertaMensal/${idMaquina}/${componente}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ anoEscolhido })
-    })
-      .then(res => res.json())
-      .then(informacoes => {
-        informacoes.forEach(item => {
+    fetch(
+      `/dashComponentes/dadosGraficoAlertaMensal/${idMaquina}/${componente}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ anoEscolhido }),
+      }
+    )
+      .then((res) => res.json())
+      .then((informacoes) => {
+        informacoes.forEach((item) => {
           categorias.push(`${nomeMeses[item.mes - 1]}`);
           dadosCritico.push(item.alertasCriticos);
           dadosMedio.push(item.alertasMedios);
         });
-        console.log("dados", informacoes)
-        console.log("ano do fetch", anoEscolhido)
+        console.log("dados", informacoes);
+        console.log("ano do fetch", anoEscolhido);
         renderGraficoAlerta(categorias, dadosCritico, dadosMedio); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
       });
   }
@@ -696,27 +771,45 @@ function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
 
 function renderGraficoAlerta(categorias, dadosCritico, dadosMedio) {
   const options = {
-    chart: { type: 'bar', stacked: true, height: 300, toolbar: { show: false } },
+    chart: {
+      type: "bar",
+      stacked: true,
+      height: 300,
+      toolbar: { show: false },
+    },
     series: [
-      { name: 'Crítico', data: dadosCritico },
-      { name: 'Médio', data: dadosMedio }
+      { name: "Crítico", data: dadosCritico },
+      { name: "Médio", data: dadosMedio },
     ],
-    xaxis: { categories: categorias, labels: { style: { colors: '#000', fontSize: '11px', fontFamily: "Montserrat", fontWeight: 'bold' } } },
+    xaxis: {
+      categories: categorias,
+      labels: {
+        style: {
+          colors: "#000",
+          fontSize: "11px",
+          fontFamily: "Montserrat",
+          fontWeight: "bold",
+        },
+      },
+    },
     yaxis: {
       labels: {
         style: {
-          fontSize: "14px",  // Tamanho aumentado
+          fontSize: "14px", // Tamanho aumentado
           fontFamily: "Montserrat",
-          colors: "#000"
-        }
-      }
+          colors: "#000",
+        },
+      },
     },
-    colors: ['#011f4b', '#0077b6'],
-    legend: { fontSize: '20px' }
+    colors: ["#011f4b", "#0077b6"],
+    legend: { fontSize: "20px" },
   };
 
   if (window.chartSeveridade) window.chartSeveridade.destroy();
-  window.chartSeveridade = new ApexCharts(document.querySelector("#distribuicaoSeveridade"), options);
+  window.chartSeveridade = new ApexCharts(
+    document.querySelector("#distribuicaoSeveridade"),
+    options
+  );
   window.chartSeveridade.render();
 }
 
@@ -730,32 +823,36 @@ function renderGraficoAlerta(categorias, dadosCritico, dadosMedio) {
 
 function executarPredicao(idMaquina, componente) {
   const tituloGrafico = document.querySelector("#chartTitle");
-  const sltPredicao = document.getElementById("slt_predicao")
-  let valorSlt = sltPredicao.value
-
+  const sltPredicao = document.getElementById("slt_predicao");
+  let valorSlt = sltPredicao.value;
 
   if (valorSlt === "uso") {
-    tituloGrafico.innerHTML = "Tendência de Crescimento de Uso (Prox. Mês) - "
-    predicaoUso(idMaquina, componente)
+    tituloGrafico.innerHTML = "Tendência de Crescimento de Uso (Prox. Mês) - ";
+    predicaoUso(idMaquina, componente);
   } else {
-    tituloGrafico.innerHTML = "Número de Alertas Previstos (Prox. Mês) -  "
-    predicaoAlerta(idMaquina, componente)
+    tituloGrafico.innerHTML = "Número de Alertas Previstos (Prox. Mês) -  ";
+    predicaoAlerta(idMaquina, componente);
   }
-
 }
 
-
 function predicaoAlerta(idMaquina, componente) {
-  fetch(`/dashComponentes/dadosPredicaoAlertaSemanal/${idMaquina}/${componente}`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" }
-  })
-    .then(res => res.json())
-    .then(informacoes => {
+  usoCategorias = [];
+  usoY = [];
+  alertaP = [];
+  alertaR = [];
+  fetch(
+    `/dashComponentes/dadosPredicaoAlertaSemanal/${idMaquina}/${componente}`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    }
+  )
+    .then((res) => res.json())
+    .then((informacoes) => {
       // transforma dados em vetores, ss precisa disso [semana,alerta]
-      const dadosSemanais = informacoes.map(item => [
+      const dadosSemanais = informacoes.map((item) => [
         item.semana_do_mes,
-        item.quantidade_alertas
+        item.quantidade_alertas,
       ]);
 
       // gera o modelo de regressao
@@ -772,37 +869,40 @@ function predicaoAlerta(idMaquina, componente) {
       }
 
       //vetor para pegar vetor dos alertas real
-      const alertasReais = informacoes.map(item =>
-        item.quantidade_alertas
-      );
+      const alertasReais = informacoes.map((item) => item.quantidade_alertas);
 
       //pegar categorias(semanas da previsao)
-      const categorias = informacoes.map(item =>
-        `Semana ${item.semana_do_mes}`
+      const categorias = informacoes.map(
+        (item) => `Semana ${item.semana_do_mes}`
       );
-      console.log('categoriaAlerta', categorias)
-      console.log('PrevisaoAlerta', alertasPrevistos)
-
-      renderGrafPredicao('alerta', alertasReais, alertasPrevistos, categorias);
+      console.log("categoriaAlerta", categorias);
+      console.log("PrevisaoAlerta", alertasPrevistos);
+      alertaP.push(alertasPrevistos);
+      alertaR.push(alertasReais);
+      alertaCategorias.push(categorias);
+      renderGrafPredicao("alerta", alertasReais, alertasPrevistos, categorias);
     });
-
 }
 
 function predicaoUso(idMaquina, componente) {
   let anoAtual = data.getFullYear();
   let mesAtual = data.getMonth() + 1;
-  console.log(anoAtual, mesAtual)
+  console.log(anoAtual, mesAtual);
+  usoCategorias = [];
+  usoY = [];
+  alertaP = [];
+  alertaR = [];
 
   fetch(`/dashComponentes/dadosGraficoUsoSemanal/${idMaquina}/${componente}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ anoEscolhido: anoAtual, mesEscolhido: mesAtual })
+    body: JSON.stringify({ anoEscolhido: anoAtual, mesEscolhido: mesAtual }),
   })
-    .then(res => res.json())
-    .then(informacoes => {
-      const dadosSemanais = informacoes.map(item => [
+    .then((res) => res.json())
+    .then((informacoes) => {
+      const dadosSemanais = informacoes.map((item) => [
         item.semana_do_mes,
-        item.media_utilizacao
+        item.media_utilizacao,
       ]);
 
       // gera o modelo de regressao
@@ -819,111 +919,127 @@ function predicaoUso(idMaquina, componente) {
       }
 
       //vetor para pegar vetor dos alertas real
-      const usoReal = informacoes.map(item =>
-        item.media_utilizacao
-      );
+      const usoReal = informacoes.map((item) => item.media_utilizacao);
 
       //pegar categorias(semanas da previsao)
-      const categorias = informacoes.map(item =>
-        `Semana ${item.semana_do_mes}`
+      const categorias = informacoes.map(
+        (item) => `Semana ${item.semana_do_mes}`
       );
-      console.log('Previsao uso', usoPrevisto)
+      console.log("Previsao uso", usoPrevisto);
 
-      renderGrafPredicao('uso', usoReal, usoPrevisto, categorias);
+      usoY.push(usoPrevisto);
+      usoCategorias.push(categorias);
 
-
-
+      renderGrafPredicao("uso", usoReal, usoPrevisto, categorias);
     });
-
 }
 
 function renderGrafPredicao(tipo, valoresReais, valoresPrevistos, categorias) {
   let options;
   const data = new Date();
 
-  if (tipo === 'alerta') {
+  if (tipo === "alerta") {
     options = {
       chart: {
-        type: 'line',
+        type: "line",
         height: 320,
-        toolbar: { show: false }
+        toolbar: { show: false },
       },
       series: [
         {
           name: `Alertas ${nomeMeses[data.getMonth()]}(Atual)`,
-          data: valoresReais
+          data: valoresReais,
         },
         {
           name: `Alertas ${nomeMeses[data.getMonth() + 1]} (Previsão)`,
-          data: valoresPrevistos
-        }
+          data: valoresPrevistos,
+        },
       ],
       xaxis: {
         categories: categorias,
-        labels: { style: { colors: '#000', fontSize: '15px', fontFamily: "Montserrat", fontWeight: 'bold' } }
+        labels: {
+          style: {
+            colors: "#000",
+            fontSize: "15px",
+            fontFamily: "Montserrat",
+            fontWeight: "bold",
+          },
+        },
       },
       yaxis: {
         labels: {
           style: {
-            fontSize: "14px",  // Tamanho aumentado
+            fontSize: "14px", // Tamanho aumentado
             fontFamily: "Montserrat",
-            colors: "#000"
-          }
-        }
+            colors: "#000",
+          },
+        },
       },
-      colors: ['#333', '#0077b6'],
-      legend: { fontSize: '20px' },
+      colors: ["#333", "#0077b6"],
+      legend: { fontSize: "20px" },
       stroke: {
         width: [4, 4],
-        curve: 'smooth',
-        dashArray: [0, 8]
-      }
+        curve: "smooth",
+        dashArray: [0, 8],
+      },
     };
   } else {
     options = {
       chart: {
-        type: 'area',
+        type: "area",
         height: 320,
-        toolbar: { show: false }
+        toolbar: { show: false },
       },
       series: [
         {
           name: `Média do uso em ${nomeMeses[data.getMonth()]}`,
-          data: valoresReais
-        }
+          data: valoresReais,
+        },
       ],
       xaxis: {
         categories: categorias,
-        labels: { style: { colors: '#000', fontSize: '15px', fontFamily: "Montserrat", fontWeight: 'bold' } }
+        labels: {
+          style: {
+            colors: "#000",
+            fontSize: "15px",
+            fontFamily: "Montserrat",
+            fontWeight: "bold",
+          },
+        },
       },
       yaxis: {
         labels: {
           style: {
-            fontSize: "14px",  // Tamanho aumentado
+            fontSize: "14px", // Tamanho aumentado
             fontFamily: "Montserrat",
-            colors: "#000"
-          }
-        }
+            colors: "#000",
+          },
+        },
       },
-      colors: ['#011f4b'],
-      legend: { fontSize: '20px' },
+      colors: ["#011f4b"],
+      legend: { fontSize: "20px" },
       stroke: {
         width: 5,
-        curve: 'smooth'
-      }
+        curve: "smooth",
+      },
     };
   }
 
-  // destroi 
-  if (window.grafPredicao && typeof window.grafPredicao.destroy === "function") {
+  // destroi
+  if (
+    window.grafPredicao &&
+    typeof window.grafPredicao.destroy === "function"
+  ) {
     window.grafPredicao.destroy();
   }
 
   // ✅ Criar e renderizar novo gráfico
-  window.grafPredicao = new ApexCharts(document.querySelector("#grafPredicao"), options);
+  window.grafPredicao = new ApexCharts(
+    document.querySelector("#grafPredicao"),
+    options
+  );
   window.grafPredicao.render();
 }
-
 
 //GRAF VALORES
 
@@ -931,10 +1047,8 @@ const mesesSeguintes = [];
 for (let i = 1; i <= 6; i++) {
   mesesSeguintes.push(nomeMeses[(mesAtual + i) % 12]);
 }
-document.getElementById("kpiMes").innerHTML = `(${nomeMeses[mesAtual]})`
-document.getElementById("kpiMes2").innerHTML = `(${nomeMeses[mesAtual]})`
-
-
+document.getElementById("kpiMes").innerHTML = `(${nomeMeses[mesAtual]})`;
+document.getElementById("kpiMes2").innerHTML = `(${nomeMeses[mesAtual]})`;
 
 const chartData = {
   alertas: [3, 5, 6, 8, 10],
@@ -946,14 +1060,27 @@ const chartData = {
     mensal: {
       critico: [4, 7, 3, 8, 2, 10, 3, 7, 6, 5, 10, 20],
       atencao: [5, 2, 7, 2, 4, 2, 8, 2, 1, 2, 11, 12],
-      categorias: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez']
+      categorias: [
+        "Jan",
+        "Fev",
+        "Mar",
+        "Abr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov",
+        "Dez",
+      ],
     },
     semanal: {
       critico: [2, 3],
       atencao: [1, 2],
-      categorias: ['Semana Atual', 'Semana Anterior']
-    }
-  }
+      categorias: ["Semana Atual", "Semana Anterior"],
+    },
+  },
 };
 
 // -----------------------TROCA DE COMPONENTE
@@ -968,58 +1095,57 @@ function atualizarDados() {
   let anoEscolhidoUso = anoVar;
   let mesEscolhidoUso = mesVar;
 
-  let anoEscolhidoAlerta = anoVarAlerta
+  let anoEscolhidoAlerta = anoVarAlerta;
 
   //atualizar nome dos componentes no gráfico
-  const nomesComponente = document.querySelectorAll('.nomeComponente')
-  nomesComponente.forEach(i => {
+  const nomesComponente = document.querySelectorAll(".nomeComponente");
+  nomesComponente.forEach((i) => {
     i.innerHTML = componente.toUpperCase();
   });
 
   //atribuindo que se nao filtrar por padrão puxa o mes e ano atual --USO
   if (!anoEscolhidoUso || !mesEscolhidoUso) {
-    anoEscolhidoUso = data.getFullYear()
-    mesEscolhidoUso = data.getMonth() + 1
+    anoEscolhidoUso = data.getFullYear();
+    mesEscolhidoUso = data.getMonth() + 1;
   }
 
-  //se filtro for anual 
+  //se filtro for anual
   if (!anoEscolhidoAlerta) {
     anoEscolhidoAlerta = data.getFullYear();
   }
 
   if (idMaquina && componente) {
     obterAlertasMes(idMaquina, componente);
-    obterMediaUso(idMaquina, componente)
+    obterMediaUso(idMaquina, componente);
     obterTempoMtbf(idMaquina, componente);
     dadosGraficoUso(idMaquina, componente, anoEscolhidoUso, mesEscolhidoUso);
-    dadosGraficoAlerta(idMaquina, componente, anoEscolhidoAlerta)
-    executarPredicao(idMaquina, componente)
-
+    dadosGraficoAlerta(idMaquina, componente, anoEscolhidoAlerta);
+    executarPredicao(idMaquina, componente);
 
     calcularConfiabilidade(idMaquina, componente)
-      .then(indiceConfiabilidade => {
+      .then((indiceConfiabilidade) => {
         if (indiceConfiabilidade !== null) {
           console.log(`O IC do ${componente} é: ${indiceConfiabilidade}`);
-          document.getElementById('confiabilidade').innerHTML = `${indiceConfiabilidade}/100`
+          document.getElementById(
+            "confiabilidade"
+          ).innerHTML = `${indiceConfiabilidade}/100`;
         } else {
           console.log("calculo do IC falhou.");
         }
 
-        const faixa = document.getElementById('faixaConfiabilidade');
-
+        const faixa = document.getElementById("faixaConfiabilidade");
         if (indiceConfiabilidade < 40) {
-          faixa.innerHTML = "Crítico"
-          faixa.style.color = 'red'
+          faixa.innerHTML = "Crítico";
+          faixa.style.color = "red";
         } else if (indiceConfiabilidade < 70) {
-          faixa.innerHTML = "Atenção"
-          faixa.style.color = '#FFD700'
+          faixa.innerHTML = "Atenção";
+          faixa.style.color = "#FFD700";
         } else {
-          faixa.innerHTML = 'Estável'
-          faixa.style.color = 'limegreen'
+          faixa.innerHTML = "Estável";
+          faixa.style.color = "limegreen";
         }
-
       })
-      .catch(erro => {
+      .catch((erro) => {
         console.error("erro calcularConfiabilidade:", erro);
       });
   }
@@ -1033,5 +1159,177 @@ sltPredicao.addEventListener("change", () => {
   executarPredicao(idMaquina, componente);
 });
 
+var respostas;
 
+async function bobPredicaoRelatorio() {
+  document.getElementById("bobP").classList.add("loader");
+  var agora = new Date();
+  var ano = agora.getFullYear();
+  var mes = String(agora.getMonth() + 1).padStart(2, "0");
+  var dia = String(agora.getDate()).padStart(2, "0");
+  var hora = String(agora.getHours()).padStart(2, "0");
+  var minuto = String(agora.getMinutes()).padStart(2, "0");
+  var pasta = "RelatorioPredição";
+  //<60 é 33 e ruim <240 66 e medio e resto ok
 
+  var tipo = `Predição_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
+  try {
+    var perguntas;
+
+    if (alertaP && alertaR) {
+      perguntas = `Sou a persona de analista de dados, possuo um gráfico de predição tenho uma KPI de cálculo de confiabilidade do componente que mede o desempenho dele com base em dados históricos de forma quantitativa indo de 0 a 100 através de cálculos com as variaveis P1,P2,P3, onde é representado por faixas sendo de 0 a 40 uma faixa que indica que o componente está em situação crítica se estiver entre 40 a 70 em estado de atenção e acima disso indicando que o componente está estável. O cálculo dessa KPI dessa KPI é realizado com base nas outras 3 KPIs que se tratam do Percentual de alertas críticos no mês(P1), a variação da média de uso do componente(P2) em comparação ao mês passado por exemplo +17% indicando que o uso foi maior simbolizando que isso é ruim e -17% mostrando que o uso diminuiu sendo algo bom. A outra KPI é o MTBF que retrata o tempo médio para esse componente ter um alerta(P3), ele é dividido também em faixas dizendo que quanto menor o MTBF pior o desempenho daquele componente as faixas influenciam dentro do cálculo indicando que se o mtbf tiver abaixo que 60 minutos é algo crítico abaixo de 240 é atenção e acima disso é considerado seguro. A execução desse cálculo é feita somando esses valores do P1,P2,P3 e dividindo isso por 3 gerando a média e o índice de confiabilidade que é uma maneira visual de categorizar a segurança daquele componente.De acordo com esse valor do meu índice de confiabilidade: ${icRelatorio}, me explique o desenvolvimento do cálculo e com baise nas faixas dessa KPI me fale como está a situação do meu componente.
+      Abaixo tenho um gráfico que realiza predições dos alertas com base nos dados reais do mês atual, projetando como será no mês seguinte dividido por semanas dentro do mês(Eixo X) podendo ter até 5 semanas, esse calculo é realizado com base nos principios da regressão linear e o gráfico exibe 2 linhas de valores, a linha continua simboliza os dados reais capturados do mês atual, já a linha tracejada indica a previsão do mês seguinte então no gráfico é possível realizar uma comparação e prever como estará os alertas daquele componente se continuar no caminho que está. Com base nesse contexto analise o eixo X que é ${alertaCategorias}, a linha continua de dados reais que é ${alertaR} e a tracejada de previsão sendo ${alertaP} me explique como foi realizado essa previsão, o que ela está indicando(crescimento ou decrescimento) e se isso é preocupante com base no Indice de confiabilidade e nos dados do gráfico.
+      `;
+    } else {
+      perguntas = `Sou a persona de analista de dados, possuo um gráfico de predição tenho uma KPI de cálculo de confiabilidade do componente que mede o desempenho dele com base em dados históricos de forma quantitativa indo de 0 a 100 através de cálculos com as variaveis P1,P2,P3, onde é representado por faixas sendo de 0 a 40 uma faixa que indica que o componente está em situação crítica se estiver entre 40 a 70 em estado de atenção e acima disso indicando que o componente está estável. O cálculo dessa KPI dessa KPI é realizado com base nas outras 3 KPIs que se tratam do Percentual de alertas críticos no mês(P1), a variação da média de uso do componente(P2) em comparação ao mês passado por exemplo +17% indicando que o uso foi maior simbolizando que isso é ruim e -17% mostrando que o uso diminuiu sendo algo bom. A outra KPI é o MTBF que retrata o tempo médio para esse componente ter um alerta(P3), ele é dividido também em faixas dizendo que quanto menor o MTBF pior o desempenho daquele componente as faixas influenciam dentro do cálculo indicando que se o mtbf tiver abaixo que 60 minutos é algo crítico abaixo de 240 é atenção e acima disso é considerado seguro. A execução desse cálculo é feita somando esses valores do P1,P2,P3 e dividindo isso por 3 gerando a média e o índice de confiabilidade que é uma maneira visual de categorizar a segurança daquele componente.De acordo com esse valor do meu índice de confiabilidade: ${icRelatorio}, me explique o desenvolvimento do cálculo e com baise nas faixas dessa KPI me fale como está a situação do meu componente.
+      Abaixo tenho um gráfico que realiza predições da tendência de crescimento de uso do componente com base nos dados reais do mês atual, projetando como será no mês seguinte dividido por semanas dentro do mês(Eixo X) podendo ter até 5 semanas, esse calculo é realizado com base nos principios da regressão linear e o gráfico exibe 1 linha de valor que mostra a média de uso prevista daquele componente. então no gráfico é possível ter uma visualização e prever como estará o uso daquele componente se continuar no caminho que está. Com base nesse contexto analise o eixo X que é ${usoCategorias} e a linha de previsão é ${usoY} me explique como foi realizado essa  previsão, o que ela está indicando(crescimento ou decrescimento) e se isso é preocupante com base no Indice de confiabilidade e nos dados do gráfico.`;
+    }
+  
+    const response = await fetch("http://localhost:5000/perguntar", {
+      method: "POST",
+      headers: {        
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        perguntaServer: perguntas,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro na requisição: " + response.status);
+    }
+    respostas = await response.text();
+    console.log(respostas);
+    pdf(respostas, tipo, pasta);
+  } catch (erro) {
+    console.error(`Erro: ${erro}`);
+    Swal.fire("Erro!", "Erro ao tentar formular relatório", "error");
+  } finally {
+    document.getElementById("bobP").classList.remove("loader");
+  }
+}
+
+async function pdf(respostas, tipo, pasta) {
+  try {
+    const resposta = await fetch("http://localhost:5000/pdf", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        respostaBOB: respostas,
+        nomeArquivo: tipo,
+      }),
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao gerar PDF: " + resposta.status);
+    }
+
+    const blob = await resposta.blob();
+    console.log(blob);
+    relatorioClient(blob, tipo, pasta);
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = url;
+    a.download = `${tipo}`;
+
+    document.body.appendChild(a);
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (erro) {
+    console.error("Erro ao baixar PDF:", erro);
+    Swal.fire("Erro!", "Erro ao baixar PDF", "error");
+  }
+}
+
+async function relatorioClient(blob, tipo, pasta) {
+  const formData = new FormData();
+  formData.append("relatorioCliente", blob, "relatorio.pdf");
+  formData.append("tipo", tipo);
+  formData.append("pasta", pasta);
+
+  try {
+    const resposta = await fetch("http://localhost:5000/aws/relatorioClient", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao enviar relatório para a aws" + resposta.status);
+    }
+  } catch (erro) {
+    console.error("Erro ao enviar relatório:", erro);
+    Swal.fire("Erro!", "Erro ao enviar relatório", "error");
+  }
+}
+
+async function visualizarHistorico() {
+  var pasta = "RelatorioPredição";
+  try {
+    const resposta = await fetch(
+      `http://localhost:5000/aws/visualizarHistorico/${pasta}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao visualizar histórico");
+    }
+
+    var dados = await resposta.json();
+
+    const slt = document.getElementById("select_relatorio");
+    dados.forEach((options) => {
+      var option = document.createElement("option");
+      option.value = options;
+      option.textContent = options;
+      slt.appendChild(option);
+    });
+
+    console.log("estou no visualizarHistorico");
+    console.log(resposta);
+  } catch (erro) {
+    console.error(erro);
+  }
+}
+
+async function baixarHistorico(relatorioNome) {
+  var pasta = "RelatorioPredição";
+  try {
+    const resposta = await fetch(
+      `http://localhost:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/pdf" },
+      }
+    );
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao baixar histórico");
+    }
+    console.log("Estou no baixar histórico");
+    console.log(resposta);
+
+    const blob = await resposta.blob();
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = url;
+    a.download = `${relatorioNome}`;
+    document.body.appendChild(a);
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (erro) {
+    console.error(erro);
+  }
+}

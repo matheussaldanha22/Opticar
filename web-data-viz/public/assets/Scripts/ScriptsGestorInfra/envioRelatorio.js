@@ -1,5 +1,5 @@
 var areaEnvio = document.getElementById('areaEnvio');
-  var inputArquivo = document.getElementById('documentos');
+var inputArquivo = document.getElementById('documentos');
 
   // Eventos para arrastar e passar por cima
   ['dragenter', 'dragover'].forEach(evento => {
