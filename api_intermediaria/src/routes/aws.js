@@ -7,7 +7,7 @@ router.post("/dadosS3", function (req, res) {
   awsController.dadosBucket(req, res)
 })
 
-router.get("/pegarS3", function (req,res) {
+router.get("/pegarS3/:ano/:mes", function (req,res) {
   awsController.pegarS3(req,res)
 })
 

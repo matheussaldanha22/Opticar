@@ -78,6 +78,12 @@
             <version>1.10.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -96,7 +102,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>school.sptech.Main</mainClass>
+                                    <mainClass>br.com.sptech.school.Main</mainClass>
                                 </transformer>
                             </transformers>
                             <filters>

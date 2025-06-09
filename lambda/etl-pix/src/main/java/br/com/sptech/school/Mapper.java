@@ -8,9 +8,11 @@ import java.io.InputStream;
 import java.util.List;
 
 public class Mapper {
-    public List<Transacao> map(InputStream inputStream) throws IOException {
+    public List<TransacaoJsonDTO> map(InputStream inputStream) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(inputStream, new TypeReference<List<Transacao>>() {
+        return mapper.readValue(inputStream, new TypeReference<List<TransacaoJsonDTO>>() {
         });
     }
+
+
 }

@@ -50,13 +50,15 @@ async function enviarParaS3(macAddress, dadosJson, dataP, fabrica) {
 }
 
 async function pegarS3(req,res){
-    var nomeArquivo = "pix"
-
+    var mes = String(req.params.mes).padStart(2, '0');
+    var ano = req.params.ano
+    console.log(ano,mes)
+    
     const s3 = new AWS.S3();
 
     const params = {
         Bucket: process.env.BUCKET_NAME,
-        Key: `${nomeArquivo}/dados.json`,
+        Key: `${ano}/${mes}/data.json`,
     }
 
     try {
@@ -65,7 +67,7 @@ async function pegarS3(req,res){
         var resposta = JSON.parse(conteudo)
         res.status(200).json(resposta)
     }catch (erro){
-        console.error("Erro ao pegar do S3", )
+        console.error("Erro ao pegar do S3")
         res.status(500).json(erro.message)
     }
         

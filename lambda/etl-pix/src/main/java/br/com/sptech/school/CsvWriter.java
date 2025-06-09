@@ -15,13 +15,14 @@ public class CsvWriter {
         BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
 
         CSVPrinter csvPrinter = new CSVPrinter(writer, CSVFormat.DEFAULT.withHeader(
-                "AnoMes","VALOR", "QUANTIDADE"
+                "Ano","Mes" ,"VALOR", "QUANTIDADE"
         ));
 
         // Processar e escrever cada objeto Transacao no CSV
         for (Transacao transacao : transacoes) {
             csvPrinter.printRecord(
-                    transacao.getAnoMes(),
+                    transacao.getAno(),
+                    transacao.getMes(),
                     transacao.getValor(),
                     transacao.getQuantidade()
             );

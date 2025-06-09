@@ -18,7 +18,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>school.sptech.Main</mainClass>
+                  <mainClass>br.com.sptech.school.Main</mainClass>
                 </transformer>
               </transformers>
               <filters>

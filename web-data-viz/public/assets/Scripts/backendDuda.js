@@ -336,7 +336,7 @@ function tabelaProcesso(ano, mes) {
   }).then((resultado) => {
     resultado.json().then((json) => {
       processos = json
-      const tabela = document.querySelector(".componentesContainer table");
+      const tabela = document.getElementById("tabela-alertas");
       tabela.innerHTML = `<thead>
                                 <tr>
                                     <td>Data</td>
@@ -351,13 +351,13 @@ function tabelaProcesso(ano, mes) {
         const linha = document.createElement("tr");
         linha.innerHTML = "";
         linha.innerHTML += `
-                <tbody>
+                
                     <td data-label = "Data">${processo.dataP}</td>
                     <td data-label = "Processo">${processo.processo}</td>
                     <td data-label = "Periodo">${processo.periodo}</td>
                    <td data-label = "prioriodade">${processo.prioridade}</td>
                    <td data-label = "quantidae">${processo.alerta}</td>
-                </tbody>
+  
             `;
         tabela.appendChild(linha);
       });
