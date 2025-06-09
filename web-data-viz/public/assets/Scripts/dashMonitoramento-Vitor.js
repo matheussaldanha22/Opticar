@@ -9,28 +9,299 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 6000)
 })
 
+
+
+let dadosTempoRealFiltrados = []
+
+
+
+// function renderPagina() {
+//   const idFabrica = sessionStorage.getItem("FABRICA_ID")
+
+//   fetch(`/dashMonitoramento/dadosRecebidos/${idFabrica}`)
+//     .then((res) => res.json())
+//     .then((dados) => {
+//       // Para cada servidor recebido
+//       dados.forEach((servidores) => {
+//         servidores.forEach((novoServidor) => {
+//           // Procura se já existe no array
+//           const idx = dadosTempoReal.findIndex(
+//             (arr) => arr[0].CPU.idMaquina === novoServidor.CPU.idMaquina
+//           )
+//           if (idx !== -1) {
+//             // Atualiza o existente
+//             dadosTempoReal[idx][0] = novoServidor
+//           } else {
+//             // Adiciona novo
+//             dadosTempoReal.push([novoServidor])
+//           }
+//         })
+//       })
+
+
+
+
+
+
+
+
+
+
+//       dadosTempoReal.forEach(dados => {
+//         dados.forEach((servidor) => {
+//           // console.log('CPU ' + servidor.CPU.valor)
+//           console.log('Estou no forEach')
+
+//           // Controladores
+//           let controlCpuAtencao = false
+//           let controlRamAtencao = false
+//           let controlDiscoAtencao = false
+
+//           let controlCpuCritico = false
+//           let controlRamCritico = false
+//           let controlDiscoCritico = false
+
+//           // Valor atual cpu, ram e disco
+//           let valorCpu = servidor.CPU.valor
+//           let valorRam = servidor.RAM.valor
+//           let valorDisco = servidor.DISCO.valor
+
+//           // Valores de limiteAtenção e limiteCritico
+//           let valorLimiteACpu = servidor.CPU.limiteAtencao
+//           let valorLimiteCCpu = servidor.CPU.limiteCritico
+
+//           let valorLimiteARam = servidor.RAM.limiteAtencao
+//           let valorLimiteCRam = servidor.RAM.limiteCritico
+
+//           let valorLimiteADisco = servidor.DISCO.limiteAtencao
+//           let valorLimiteCDisco = servidor.DISCO.limiteCritico
+
+//           // Pontos
+//           let pontosCpu = 0
+//           let pontosRam = 0
+//           let pontosDisco = 0
+
+//           let pontosMaquina = 0
+
+
+//           // CPU Atenção
+//           if ((valorCpu > valorLimiteACpu) && !controlCpuAtencao) {
+//             pontosCpu++
+//             controlCpuAtencao = true
+//           } else if ((valorCpu < valorLimiteACpu) && controlCpuAtencao) {
+//             pontosCpu--
+//             controlCpuAtencao = false
+//           }
+//           // CPU Critico
+//           if ((valorCpu > valorLimiteCCpu) && !controlCpuCritico) {
+//             pontosCpu++
+//             controlCpuCritico = true
+//           } else if ((valorCpu < valorLimiteCCpu) && controlCpuCritico) {
+//             pontosCpu--
+//             controlCpuCritico = false
+//           }
+//           /////////////////////////////////////////////////////////////////////////////////////////////////
+
+//           // Ram Atenção
+//           if ((valorRam > valorLimiteARam) && !controlRamAtencao) {
+//             pontosRam++
+//             controlRamAtencao = true
+//           } 
+//            if ((valorRam < valorLimiteARam) && controlRamAtencao) {
+//             pontosRam--
+//             controlRamAtencao = false
+//           }
+//           // Ram Critico
+//           if ((valorRam > valorLimiteCRam) && !controlRamCritico) {
+//             pontosRam++
+//             controlRamCritico = true
+//           } else if ((valorRam < valorLimiteCRam) && controlRamCritico) {
+//             pontosRam--
+//             controlRamCritico = false
+//           }
+//           /////////////////////////////////////////////////////////////////////////////////////////////////
+
+//           // Disco Atenção
+//           if ((valorDisco > valorLimiteADisco) && !controlDiscoAtencao) {
+//             pontosDisco++
+//             controlDiscoAtencao = true
+//           } else if ((valorDisco < valorLimiteADisco) && controlDiscoAtencao) {
+//             pontosDisco--
+//             controlDiscoAtencao = false
+//           }
+//           // Disco Critico
+//           if ((valorDisco > valorLimiteCDisco) && !controlDiscoCritico) {
+//             pontosDisco++
+//             controlDiscoCritico = true
+//           } else if ((valorDisco < valorLimiteCDisco) && controlDiscoCritico) {
+//             pontosDisco--
+//             controlDiscoCritico = false
+//           }
+//           console.log(`Pontos cpu: ${pontosCpu}, pontos ram: ${pontosRam}, pontos disco: ${pontosDisco}`)
+
+//           pontosMaquina += pontosCpu + pontosRam + pontosDisco
+//           console.log(`Pontos maquina: ${pontosMaquina}`)
+//           let estadoMaquina = ""
+
+//           if (pontosMaquina > 1 && pontosMaquina < 4) {
+//             estadoMaquina = "Atenção"
+//             dadosTempoRealFiltrados.push(servidor, { "estadoMaquina": estadoMaquina })
+//             console.log('Dados Filtrados')
+//             console.log(dadosTempoRealFiltrados)
+
+//           } else if (pontosMaquina > 3 && pontosMaquina < 7) {
+//             estadoMaquina = "Critico"
+//             dadosTempoRealFiltrados.push(servidor, { "estadoMaquina": estadoMaquina })
+//             console.log('Dados Filtrados')
+//             console.log(dadosTempoRealFiltrados)
+//           }
+//         })
+//       });
+
+
+
+
+
+
+
+//       renderTabela()
+//     })
+//     .catch((err) => {
+//       console.error("Erro ao carregar servidores:", err)
+//     })
+// }
+
 function renderPagina() {
   const idFabrica = sessionStorage.getItem("FABRICA_ID")
 
   fetch(`/dashMonitoramento/dadosRecebidos/${idFabrica}`)
     .then((res) => res.json())
     .then((dados) => {
+      // Variáveis de controle e pontos devem ser inicializadas fora do loop de servidores
+      let pontosCpu = 0
+      let pontosRam = 0
+      let pontosDisco = 0
+      let pontosMaquina = 0
+      let controlCpuAtencao = false
+      let controlRamAtencao = false
+      let controlDiscoAtencao = false
+      let controlCpuCritico = false
+      let controlRamCritico = false
+      let controlDiscoCritico = false
+
+
       // Para cada servidor recebido
       dados.forEach((servidores) => {
         servidores.forEach((novoServidor) => {
-          // Procura se já existe no array
           const idx = dadosTempoReal.findIndex(
             (arr) => arr[0].CPU.idMaquina === novoServidor.CPU.idMaquina
           )
           if (idx !== -1) {
-            // Atualiza o existente
             dadosTempoReal[idx][0] = novoServidor
           } else {
-            // Adiciona novo
             dadosTempoReal.push([novoServidor])
           }
         })
       })
+      dadosTempoReal.forEach(dados => {
+        dados.forEach((servidor) => {
+          // Atualize os pontos e controles apenas dentro deste loop
+          pontosCpu = 0
+          pontosRam = 0
+          pontosDisco = 0
+
+          let valorCpu = servidor.CPU.valor
+          let valorRam = servidor.RAM.valor
+          let valorDisco = servidor.DISCO.valor
+
+          let valorLimiteACpu = servidor.CPU.limiteAtencao
+          let valorLimiteCCpu = servidor.CPU.limiteCritico
+          let valorLimiteARam = servidor.RAM.limiteAtencao
+          let valorLimiteCRam = servidor.RAM.limiteCritico
+          let valorLimiteADisco = servidor.DISCO.limiteAtencao
+          let valorLimiteCDisco = servidor.DISCO.limiteCritico
+
+          // CPU Atenção
+          if ((valorCpu > valorLimiteACpu) && !controlCpuAtencao) {
+            pontosCpu++
+            controlCpuAtencao = true
+          }
+          if ((valorCpu < valorLimiteACpu) && controlCpuAtencao) {
+            pontosCpu--
+            controlCpuAtencao = false
+          }
+          // CPU Critico
+          if ((valorCpu > valorLimiteCCpu) && !controlCpuCritico) {
+            pontosCpu++
+            controlCpuCritico = true
+          }
+          if ((valorCpu < valorLimiteCCpu) && controlCpuCritico) {
+            pontosCpu--
+            controlCpuCritico = false
+          }
+
+          // Ram Atenção
+          if ((valorRam > valorLimiteARam) && !controlRamAtencao) {
+            pontosRam++
+            controlRamAtencao = true
+          }
+          if ((valorRam < valorLimiteARam) && controlRamAtencao) {
+            pontosRam--
+            controlRamAtencao = false
+          }
+          // Ram Critico
+          if ((valorRam > valorLimiteCRam) && !controlRamCritico) {
+            pontosRam++
+            controlRamCritico = true
+          }
+          if ((valorRam < valorLimiteCRam) && controlRamCritico) {
+            pontosRam--
+            controlRamCritico = false
+          }
+
+          // Disco Atenção
+          if ((valorDisco > valorLimiteADisco) && !controlDiscoAtencao) {
+            pontosDisco++
+            controlDiscoAtencao = true
+          }
+          if ((valorDisco < valorLimiteADisco) && controlDiscoAtencao) {
+            pontosDisco--
+            controlDiscoAtencao = false
+          }
+          // Disco Critico
+          if ((valorDisco > valorLimiteCDisco) && !controlDiscoCritico) {
+            pontosDisco++
+            controlDiscoCritico = true
+          }
+          if ((valorDisco < valorLimiteCDisco) && controlDiscoCritico) {
+            pontosDisco--
+            controlDiscoCritico = false
+          }
+          console.log(`Pontos cpu: ${pontosCpu}, pontos ram: ${pontosRam}, pontos disco: ${pontosDisco}`)
+          pontosMaquina = pontosCpu + pontosRam + pontosDisco
+          console.log(`Pontos maquina: ${pontosMaquina}`)
+
+          let estadoMaquina = ""
+
+
+          if (pontosMaquina > 1 && pontosMaquina < 4) {
+            estadoMaquina = "Atenção"
+            adicionarServidor(servidor, estadoMaquina);
+
+          } else if (pontosMaquina > 3 && pontosMaquina < 7) {
+            estadoMaquina = "Critico"
+            adicionarServidor(servidor, estadoMaquina);
+          }
+        })
+      });
+
+
+
+
+
+
+
+
       renderTabela()
     })
     .catch((err) => {
@@ -38,7 +309,37 @@ function renderPagina() {
     })
 }
 
+function adicionarServidor(servidor, estadoMaquina) {
+  // Procura se já existe um servidor com o mesmo idMaquina
+  const indiceExistente = dadosTempoRealFiltrados.findIndex(item => 
+    item[0].CPU.idMaquina === servidor.CPU.idMaquina
+  );
+
+  if (indiceExistente !== -1) {
+    // Se existe, atualiza o servidor existente
+    dadosTempoRealFiltrados[indiceExistente] = [servidor, { "estadoMaquina": estadoMaquina }];
+    console.log(`Servidor ${servidor.CPU.idMaquina} atualizado no array filtrados`);
+  } else {
+    // Se não existe, adiciona um novo
+    dadosTempoRealFiltrados.push([servidor, { "estadoMaquina": estadoMaquina }]);
+    console.log(`Servidor ${servidor.CPU.idMaquina} adicionado ao array filtrados`);
+  }
+  
+  console.log('Array dadosTempoRealFiltrados atual:');
+  console.log(dadosTempoRealFiltrados);
+}
+
+
+
 function renderTabela() {
+
+  // console.log('Estou percorrendo o array de dadosFiltrados')
+  // dadosTempoRealFiltrados.forEach((dados, index) => {
+  //   console.log(dados[index])
+  // })
+
+
+
   const tabela = document.getElementById("tabela-alertas")
   tabela.innerHTML = `<thead>
                         <tr>
@@ -56,7 +357,7 @@ function renderTabela() {
   dadosTempoReal.forEach((dados) => {
     dados.forEach((tempoReal) => {
       // let tempoReal = dados[0]
-      console.log("Tempo real: " + tempoReal)
+      // console.log("Tempo real: " + tempoReal)
 
       const tr = document.createElement("tr")
       tr.id = `servidor-${tempoReal.CPU.idMaquina}`
@@ -77,8 +378,8 @@ function renderTabela() {
         const idServidor = btnServidor.getAttribute("data-id")
         sessionStorage.setItem("idServidorSelecionado", idServidor)
         console.log("Clicou no botão")
-        setInterval(()=>{
-        window.location.href = "../../dashMonitoramento-vitor-especifico.html"
+        setInterval(() => {
+          window.location.href = "../../dashMonitoramento-vitor-especifico.html"
         }, 2000)
       })
     })
@@ -96,7 +397,7 @@ function renderKpis() {
     .then((res) => res.json())
     .then((dados) => {
       totalServidor.textContent = dados[0].qtdServidores
-      console.log(`QtdServidoresMonitorados: ${dados[0].qtdServidores}`)
+      // console.log(`QtdServidoresMonitorados: ${dados[0].qtdServidores}`)
     })
 }
 

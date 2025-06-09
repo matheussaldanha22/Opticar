@@ -3,10 +3,18 @@ let paginaAtual = 1
 
 
 let dadosTempoReal = []
+let listaDadosPedido = []
+let listaFiltroAplicado = []
+let listaHorarios = []
+let listaHorarios2 = []
 
+let componenteFiltrado = ""
+let medida = ""
+let indicadorPedido = ""
 
 document.addEventListener("DOMContentLoaded", () => {
   renderGraficos()
+
 })
 
 function renderTabela(pagina) {
@@ -112,6 +120,12 @@ let ramData = []
 let downloadData = []
 let uploadData = []
 
+let cpuFiltro = false
+let ramFiltro = false
+let discoFiltro = false
+let redeFiltro = false
+
+
 function renderGraficos() {
   // Crie o gráfico com dados vazios
   var cpu = {
@@ -189,14 +203,12 @@ function renderGraficos() {
 
 
 
-
+let maquinasCritico = []
 
 function renderDados() {
   let maquinaSelecionada = sessionStorage.getItem("idServidorSelecionado");
   const idFabrica = sessionStorage.getItem("FABRICA_ID");
 
-  console.log(`Maquina selecionada:  ${maquinaSelecionada}`)
-
   fetch(`/dashMonitoramento/dadosRecebidos/${idFabrica}`)
     .then((res) => res.json())
     .then((dados) => {
@@ -211,219 +223,230 @@ function renderDados() {
         });
       });
 
-      cpuData = dadosTempoReal.map(arr => arr[0].CPU.valor);
-
-      discoData = [dadosTempoReal[dadosTempoReal.length - 1]?.[0]?.DISCO?.valor || 0]
-
-      console.log(`Dados disco: ${discoData}`)
-
-      ramData = dadosTempoReal.map(arr => arr[0].RAM.valor)
-
-      downloadData = dadosTempoReal.map(arr => arr[0].RedeRecebida.valor)
-      uploadData = dadosTempoReal.map(arr => arr[0].RedeEnviada.valor)
 
 
-      const ultimoDisco = discoData[discoData.length - 1] || 0
+      const agora = new Date();
+      let hora = agora.toLocaleTimeString('pt-BR', { hour12: false });
 
 
-      const cpuHorarios = dadosTempoReal.map(arr => {
-        const agora = new Date();
-        return agora.toLocaleTimeString('pt-BR', { hour12: false });
-      });
+      listaHorarios2.push(hora)
 
-      // Atualize apenas os dados do gráfico
-      chart.updateSeries([{
-        name: "Porcentagem",
-        data: cpuData,
-      }]);
-      chart.updateOptions({
-        xaxis: { categories: cpuHorarios }
-      });
+      if (listaHorarios2.length > 7) {
+        listaHorarios2.shift()
+      }
 
 
-      graficoDisco.updateSeries([ultimoDisco])
+      if (!cpuFiltro) {
+        // Inicio dados da CPU
+        cpuData = dadosTempoReal.map(arr => arr[0].CPU.valor);
+        // Atualize apenas os dados do gráfico
+        chart.updateSeries([{
+          name: "Porcentagem",
+          data: cpuData,
+        }]);
+        chart.updateOptions({
+          xaxis: { categories: listaHorarios2 }
+        });
 
-      graficoDisco.updateOptions({
-        // colors: ["#FF0"],
-        plotOptions: {
-          radialBar: {
-            dataLabels: {
-              name: {
-                show: true,
-                fontSize: '22px',
-                color: '#000'
+        const cpuTexto = cpuData[cpuData.length - 1] || 0;
+        let utilizacaoTexto = document.getElementById('utilizacaoInfo');
+        utilizacaoTexto.textContent = cpuTexto + '%';
+        // Fim dados da CPU
+      } else {
+        renderDadosPedido(medida, componenteFiltrado)
+      }
+
+      if (!ramFiltro) {
+        //  Inicio dados RAM
+        ramData = dadosTempoReal.map(arr => arr[0].RAM.valor)
+        graficoRam.updateSeries([{
+          name: "Porcentagem",
+          data: ramData
+        }])
+        graficoRam.updateOptions({
+          xaxis: { categories: listaHorarios2 }
+        })
+
+        const ramTexto = ramData[ramData.length - 1] || 0;
+        let utilizacaoRam = document.getElementById('utilizacaoInfoRam')
+        utilizacaoRam.textContent = ramTexto + '%'
+
+        // Fim dados RAM
+      } else {
+        renderDadosPedido(medida, componenteFiltrado)
+      }
+
+
+      if (!discoFiltro) {
+        //  Inicio Disco
+        discoData = [dadosTempoReal[dadosTempoReal.length - 1]?.[0]?.DISCO?.valor || 0]
+
+        const ultimoDisco = discoData[discoData.length - 1] || 0
+
+        graficoDisco.updateSeries([ultimoDisco])
+
+        graficoDisco.updateOptions({
+          // colors: ["#FF0"],
+          plotOptions: {
+            radialBar: {
+              dataLabels: {
+                name: {
+                  show: true,
+                  fontSize: '22px',
+                  color: '#000'
+                }
               }
             }
           }
-        }
-      })
+        })
 
-      graficoRam.updateSeries([{
-        name: "Porcentagem",
-        data: ramData
-      }])
-      graficoRam.updateOptions({
-        xaxis: { categories: cpuHorarios }
-      })
+        let utilizacaoDisco = document.getElementById('utilizacaoInfoDisco')
+        utilizacaoDisco.textContent = ultimoDisco + '%'
+        //  Fim Disco
+      }
 
+      if (!redeFiltro) {
+        //  Inicio DOWNLOAD e UPLOAD
+        downloadData = dadosTempoReal.map(arr => arr[0].RedeRecebida.valor)
+        uploadData = dadosTempoReal.map(arr => arr[0].RedeEnviada.valor)
 
+        const downloadTexto = downloadData[downloadData.length - 1] || 0
+        const uploadTexto = uploadData[uploadData.length - 1] || 0
 
+        let dowTexto = document.getElementById('recebida')
+        let upTexto = document.getElementById('enviada')
 
+        dowTexto.textContent = downloadTexto + 'MB/s'
+        upTexto.textContent = uploadTexto + 'MB/s'
 
-
-      // Atualize o texto de utilização
-      const cpuTexto = cpuData[cpuData.length - 1] || 0;
-      let utilizacaoTexto = document.getElementById('utilizacaoInfo');
-      utilizacaoTexto.textContent = cpuTexto + '%';
-
-      let utilizacaoDisco = document.getElementById('utilizacaoInfoDisco')
-      utilizacaoDisco.textContent = ultimoDisco + '%'
-
-      const ramTexto = ramData[ramData.length - 1] || 0;
-      let utilizacaoRam = document.getElementById('utilizacaoInfoRam')
-      utilizacaoRam.textContent = ramTexto + '%'
-
-
-      const downloadTexto = downloadData[downloadData.length - 1] || 0
-      const uploadTexto = uploadData[uploadData.length - 1] || 0
-
-      let dowTexto = document.getElementById('recebida')
-      let upTexto = document.getElementById('enviada')
-
-      dowTexto.textContent = downloadTexto + 'MB/s'
-      upTexto.textContent = uploadTexto + 'MB/s'
-
-
-      console.log(cpuData)
-      console.log(dadosTempoReal)
+        //  Fim DOWNLOAD e UPLOAD
+      }
     });
 }
 
-function renderDadosPedido() {
+let novaMaquina = {}
+
+function adicionarOuSubstituirDados(maquinaId, nomeComponente, dados){
+  // Encontra a máquina existente em listaFiltroAplicado
+  // let maquinaExistente = listaFiltroAplicado.find(item => item[0][nomeComponente]?.idMaquina === maquinaId);
+  // console.log('Estou na funcao de adicionarOuSubstituirDados')
+
+  // if (maquinaExistente) {
+  //     // Se a máquina existe, atualiza o dado do componente
+  //     maquinaExistente[0][nomeComponente] = dados;
+  // } else {
+  // Se a máquina não existe, cria uma nova entrada para a máquina
+  novaMaquina[nomeComponente] = dados
+  listaFiltroAplicado.push([novaMaquina])
+  if (listaFiltroAplicado.length > 7) {
+    listaFiltroAplicado.shift()
+  }
+  // }
+}
+
+
+
+
+
+function renderDadosPedido(medidaSelecionada, filtroComponente) {
   let maquinaSelecionada = sessionStorage.getItem("idServidorSelecionado");
   const idFabrica = sessionStorage.getItem("FABRICA_ID");
-
+  console.log('Estou na funcao renderDadosPedido')
   console.log(`Maquina selecionada:  ${maquinaSelecionada}`)
+  console.log('Cpu esta filtrada')
+  console.log(`MedidaSelecionada dentro da funcao: ${medidaSelecionada}`)
 
-  fetch(`/dashMonitoramento/dadosRecebidos/${idFabrica}`)
+
+  fetch(`/dashMonitoramento/dadosPedidoRecebidos/${idFabrica}/${maquinaSelecionada}`)
     .then((res) => res.json())
     .then((dados) => {
-      dados.forEach((servidores) => {
-        servidores.forEach((novoServidor) => {
-          if (novoServidor.CPU.idMaquina == maquinaSelecionada) {
-            dadosTempoReal.push([novoServidor]);
-            if (dadosTempoReal.length > 7) {
-              dadosTempoReal.shift();
-            }
-          }
-        });
-      });
-
-      cpuData = dadosTempoReal.map(arr => arr[0].CPU.valor);
-
-      discoData = [dadosTempoReal[dadosTempoReal.length - 1]?.[0]?.DISCO?.valor || 0]
-
-      console.log(`Dados disco: ${discoData}`)
-
-      ramData = dadosTempoReal.map(arr => arr[0].RAM.valor)
-
-      downloadData = dadosTempoReal.map(arr => arr[0].RedeRecebida.valor)
-      uploadData = dadosTempoReal.map(arr => arr[0].RedeEnviada.valor)
-
-
-
-
-      const cpuHorarios = dadosTempoReal.map(arr => {
-        const agora = new Date();
-        return agora.toLocaleTimeString('pt-BR', { hour12: false });
-      });
-
-      // Atualize apenas os dados do gráfico
-      chart.updateSeries([{
-        name: "Porcentagem",
-        data: cpuData,
-      }]);
-      chart.updateOptions({
-        xaxis: { categories: cpuHorarios }
-      });
-
-
-      graficoDisco.updateSeries([ultimoDisco])
-
-      graficoDisco.updateOptions({
-        // colors: ["#FF0"],
-        plotOptions: {
-          radialBar: {
-            dataLabels: {
-              name: {
-                show: true,
-                fontSize: '22px',
-                color: '#000'
-              }
-            }
-          }
+      dados.forEach((componente) => {
+        const objComponente = Object.keys(componente)
+        let objeto = componente[objComponente]
+        const nomeComponente = objComponente[0]
+        const idMaquina = objeto.idMaquina
+        // console.log(`Nome componente: ${nomeComponente}`)
+        // console.log(`Componente: ${nomeComponente} | Medida: ${objeto.Medida} | idMaquina: ${idMaquina}`)
+        // console.log(`FiltroComponente: ${filtroComponente} | MedidaSelecionada: ${medidaSelecionada} | idMaquina: ${idMaquina}`)
+        if ((objeto.Medida == medidaSelecionada) && (nomeComponente == filtroComponente)) {
+          console.log(`Componente: ${nomeComponente} | Medida: ${objeto.Medida} | idMaquina: ${idMaquina}`)
+          adicionarOuSubstituirDados(idMaquina, nomeComponente, objeto)
         }
-      })
+      });
+    });
 
+  console.log('Indicador pedido: ' + indicadorPedido)
+
+  const agora = new Date();
+  let hora = agora.toLocaleTimeString('pt-BR', { hour12: false });
+  listaHorarios.push(hora)
+
+  if (listaHorarios.length > 7) {
+    listaHorarios.shift()
+  }
+
+  if (cpuFiltro) {
+    // Inicio dados da CPU
+    cpuData = listaFiltroAplicado.map(arr => arr[0].Cpu.Valor)
+    // Atualize apenas os dados do gráfico
+    chart.updateSeries([{
+      name: `${medidaSelecionada}`,
+      data: cpuData,
+    }]);
+    chart.updateOptions({
+      xaxis: { categories: listaHorarios },
+
+    });
+
+    const cpuTexto = cpuData[cpuData.length - 1] || 0;
+    let utilizacaoTexto = document.getElementById('utilizacaoInfo')
+    utilizacaoTexto.textContent = cpuTexto + `${indicadorPedido}`
+    // Fim dados da CPU
+  }
+
+    if (ramFiltro) {
+      //  Inicio dados RAM
+      ramData = listaFiltroAplicado.map(arr => arr[0].Ram.Valor)
       graficoRam.updateSeries([{
-        name: "Porcentagem",
+        name: `${medidaSelecionada}`,
         data: ramData
       }])
       graficoRam.updateOptions({
-        xaxis: { categories: cpuHorarios }
+        xaxis: { categories: listaHorarios }
       })
-
-      // Atualize o texto de utilização
-      const cpuTexto = cpuData[cpuData.length - 1] || 0;
-      let utilizacaoTexto = document.getElementById('utilizacaoInfo');
-      utilizacaoTexto.textContent = cpuTexto + '%';
-
-      const ultimoDisco = discoData[discoData.length - 1] || 0
-      let utilizacaoDisco = document.getElementById('utilizacaoInfoDisco')
-      utilizacaoDisco.textContent = ultimoDisco + '%'
 
       const ramTexto = ramData[ramData.length - 1] || 0;
       let utilizacaoRam = document.getElementById('utilizacaoInfoRam')
-      utilizacaoRam.textContent = ramTexto + '%'
-
-
-      const downloadTexto = downloadData[downloadData.length - 1] || 0
-      const uploadTexto = uploadData[uploadData.length - 1] || 0
-
-      let dowTexto = document.getElementById('recebida')
-      let upTexto = document.getElementById('enviada')
-
-      dowTexto.textContent = downloadTexto + 'MB/s'
-      upTexto.textContent = uploadTexto + 'MB/s'
-
-
-      console.log(cpuData)
-      console.log(dadosTempoReal)
-    });
+      utilizacaoRam.textContent = ramTexto + `${indicadorPedido}`
+      // Fim dados RAM
+    }
+  //  Adicionar uma variavel que tera mhz, %, etc
 }
 
 
 function modalFiltro(nomeComponente) {
   let maquinaSelecionada = sessionStorage.getItem('idServidorSelecionado')
+  let idFabrica = sessionStorage.getItem('FABRICA_ID')
   let filtroComponente = nomeComponente.dataset.idFiltro
+  let medidaSelecionada = ""
 
   fetch(`dashMonitoramento/filtroMedida/${maquinaSelecionada}`)
     .then((resposta) => resposta.json())
     .then((dados) => {
       // Filtra apenas os itens do componente selecionado
-      const componentesFiltrados = dados.filter(item => 
+      const componentesFiltrados = dados.filter(item =>
         item.componente === filtroComponente
       );
-      console.log(componentesFiltrados)
-      console.log(filtroComponente)
-      
+      // console.log(componentesFiltrados)
+      // console.log(filtroComponente)
+
       if (componentesFiltrados.length > 0) {
         // Cria opções para escolher a medida
         let opcoesHTML = '';
         componentesFiltrados.forEach(item => {
           opcoesHTML += `<option value="${item.medida}">${item.medida}</option>`;
         });
-        
+
         Swal.fire({
           title: `Filtro ${filtroComponente}`,
           html: `
@@ -442,7 +465,7 @@ function modalFiltro(nomeComponente) {
           cancelButtonText: "Fechar",
           customClass: "alertaModal",
           preConfirm: () => {
-            const medidaSelecionada = document.getElementById('selectMedida').value;
+            medidaSelecionada = document.getElementById('selectMedida').value;
             // Aqui você pode fazer algo com os valores selecionados
             console.log(`Filtro aplicado: ${filtroComponente} - ${medidaSelecionada}`);
             return { medida: medidaSelecionada };
@@ -450,6 +473,25 @@ function modalFiltro(nomeComponente) {
         }).then((result) => {
           if (result.isConfirmed) {
             // Faça algo com o resultado após confirmar
+            // renderDadosPedido(result.value.medida, filtroComponente)
+            medida = result.value.medida
+            console.log(`MedidaSelecionada: ${medidaSelecionada}`)
+            componenteFiltrado = filtroComponente
+
+            if(medida == 'Frequência' ){
+              indicadorPedido = 'Mhz'
+            }else if(medida == 'Porcentagem'){
+              indicadorPedido = '%'
+            }
+
+            if (componenteFiltrado == 'Cpu') {
+              cpuFiltro = true
+            }
+
+            if(componenteFiltrado == 'Ram'){
+              ramFiltro = true
+            }
+
           }
         });
       } else {

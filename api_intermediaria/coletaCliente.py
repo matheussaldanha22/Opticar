@@ -62,21 +62,6 @@ def enviarDadosTempoReal(listaTempoReal):
         except Exception as e:
             print(f"Erro ao conectar na rota tempo real: {e}")
 
-
-# def enviarDadosPedidoTempoReal(listaTempoReal):
-#         try:
-#             fetch_tempoReal = "http://localhost:8080/dashMonitoramento/dadosPedidoCliente"
-#             resposta = requests.post(fetch_tempoReal, json=listaTempoReal)
-
-#             if resposta.status_code == 200:
-#                 print("Dados enviados em tempo real")
-#                 print(resposta.json())
-#             else:
-#                 print(f"Erro ao enviar os dados em tempo real: {resposta.status_code}")
-#                 print(resposta.text)
-#         except Exception as e:
-#             print(f"Erro ao conectar na rota tempo real: {e}")
-
 ############################################################################################################################################################################
 
 def enviarDadosPedidoCliente(listaPedidoCliente):
@@ -181,8 +166,8 @@ def pegar_top_processo():
             "ram": 0,
             "disco": 0
         }
-
 ############################################################################################################################################################################
+
 
 def dadosObrigatorios():
     uso_cpu2 = psutil.cpu_percent()
@@ -222,11 +207,11 @@ def monitorar():
             pedidos = obterPedidos(mac_address)
             dados = dadosObrigatorios()
             listaTempoReal = [{
-                            "CPU": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[0]},
-                            "RAM": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[1]},
-                            "DISCO": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[2]},
-                            "RedeEnviada": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[3]},
-                            "RedeRecebida": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[4]}
+                            "CPU": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[0], "limiteCritico": pedidos[0]["limiteCritico"], "limiteAtencao": pedidos[0]["limiteAtencao"], "limiteMaquinaG": pedidos[0]["limiteG"], "limiteMaquinaA": pedidos[0]["limiteA"], "alertasAberto": pedidos[0]["aberto"], "alertasAndamento": pedidos[0]["andamento"]},
+                            "RAM": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[1], "limiteCritico": pedidos[1]["limiteCritico"], "limiteAtencao": pedidos[1]["limiteAtencao"], "limiteMaquinaG": pedidos[0]["limiteG"], "limiteMaquinaA": pedidos[0]["limiteA"], "alertasAberto": pedidos[0]["aberto"], "alertasAndamento": pedidos[0]["andamento"]},
+                            "DISCO": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[2], "limiteCritico": pedidos[2]["limiteCritico"], "limiteAtencao": pedidos[2]["limiteAtencao"], "limiteMaquinaG": pedidos[0]["limiteG"], "limiteMaquinaA": pedidos[0]["limiteA"], "alertasAberto": pedidos[0]["aberto"], "alertasAndamento": pedidos[0]["andamento"]},
+                            "RedeEnviada": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[3], "limiteCritico": pedidos[3]["limiteCritico"], "limiteAtencao": pedidos[3]["limiteAtencao"], "limiteMaquinaG": pedidos[0]["limiteG"], "limiteMaquinaA": pedidos[0]["limiteA"], "alertasAberto": pedidos[0]["aberto"], "alertasAndamento": pedidos[0]["andamento"]},
+                            "RedeRecebida": {"idFabrica": pedidos[0]['fkFabrica'], "idMaquina": pedidos[0]['idMaquina'], "mac_address": mac_address, "valor": dados[4], "limiteCritico": pedidos[4]["limiteCritico"], "limiteAtencao": pedidos[4]["limiteAtencao"], "limiteMaquinaG": pedidos[0]["limiteG"], "limiteMaquinaA": pedidos[0]["limiteA"], "alertasAberto": pedidos[0]["aberto"], "alertasAndamento": pedidos[0]["andamento"]}
                     }]
             enviarDadosTempoReal(listaTempoReal)
 
@@ -237,22 +222,10 @@ def monitorar():
                 idMaquina = pedido_cliente['idMaquina']
                 tipo = pedido_cliente['tipo']
                 medida = pedido_cliente['medida']
+                limiteAtencao = pedido_cliente['limiteAtencao']
+                limiteCritico = pedido_cliente['limiteCritico']
                 pular_processamento = False
 
-                # tipoComponente.append(tipo)
-
-                # if tipo == "Cpu" and medida == "Porcentagem":
-                #     pular_processamento = True
-                # elif tipo == "Ram" and medida == "Porcentagem":
-                #     pular_processamento = True
-                # elif tipo == "Disco" and medida == "Porcentagem":
-                #     pular_processamento = True
-                # elif tipo == "Rede" and (medida == "Upload" or medida == "Download"):
-                #     pular_processamento = True
-
-                # if pular_processamento:
-                #     print(f"--- Pedido pulado: Tipo={tipo}, Medida={medida}")
-                #     continue 
                 try:
                     valor = eval(pedido_cliente['codigo'])
                     idPedido = pedido_cliente['idcomponenteServidor']
@@ -261,20 +234,13 @@ def monitorar():
                         "medida": pedido_cliente['medida'],
                         "idFabrica": pedido_cliente['fkFabrica'],
                         "idMaquina": pedido_cliente['idMaquina'],
-                        "valor": valor
+                        "valor": valor,
                     })
 
-                    # if mac_address not in listaPedidoCliente:
-                    #     listaPedidoCliente[mac_address] = []
-                    # listaPedidoCliente[mac_address].append({
-                    #     "{tipo}":{"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida, "mac_address": mac_address}
-                    # })
-
-
                     listaPedidoCliente.append({
-                            tipo:{"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida, "mac_address": mac_address}
+                            tipo:{"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida,"limiteCritico": limiteCritico, "limiteAtencao": limiteAtencao, "mac_address": mac_address}
                         })
-
+                
 
                     print(f"Valor capturado: {valor} e id: {idPedido}")
                     inserirDados(valor, idPedido)
@@ -316,6 +282,7 @@ def monitorar():
                 dataAtual = datetime.datetime.now().isoformat()
                 dadosBucket(dadosS3, mac_address, dataAtual, idFabrica)
                 ultimo_envio_s3 = datetime.datetime.now()
+                dadosS3["leitura"] = []
 
             enviarDadosPedidoCliente(listaPedidoCliente)
             listaPedidoCliente = []

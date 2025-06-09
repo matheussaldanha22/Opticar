@@ -39,12 +39,31 @@ function pedidosObrigatoriosQuente(valor, servidor) {
 }
 
 function pedidosCliente(macAddress) {
-  var instrucaoSql = `SELECT * FROM componenteServidor 
+  var instrucaoSql = `SELECT 
+                        componenteServidor.idcomponenteServidor,
+                        servidor_maquina.fkFabrica,
+                        servidor_maquina.limiteG,
+                        servidor_maquina.limiteA,
+                        componenteServidor.fkComponente,
+                        componenteServidor.fkMaquina AS idMaquina,
+                        componente.tipo,
+                        componente.medida,
+                        componente.codigo,
+                        componenteServidor.modelo,
+                        componenteServidor.limiteCritico AS limiteCritico,
+                        componenteServidor.limiteAtencao AS limiteAtencao,
+                        COUNT(CASE WHEN alerta.statusAlerta = 'To Do' THEN 1 END) AS aberto,
+                        COUNT(CASE WHEN alerta.statusAlerta = 'In Progress' THEN 1 END) AS andamento,
+                        COUNT(CASE WHEN alerta.statusAlerta = 'Done' THEN 1 END) AS finalizado
+                        FROM componenteServidor
                         JOIN servidor_maquina ON componenteServidor.fkMaquina = servidor_maquina.idMaquina
                         JOIN componente ON componenteServidor.fkComponente = componente.idcomponente
-                        WHERE servidor_maquina.Mac_Address = ${macAddress};`
+                        LEFT JOIN capturaDados ON capturaDados.fkComponenteServidor = componenteServidor.idcomponenteServidor
+                        LEFT JOIN alerta ON alerta.fkCapturaDados = capturaDados.idCapturaDados
+                        WHERE servidor_maquina.Mac_Address = ${macAddress}
+                        GROUP BY componenteServidor.idcomponenteServidor;`
 
-  return database.executarFrio(instrucaoSql)
+  return database.executarQuente(instrucaoSql)
 }
 
 function dadosCapturados(dados, idcomponenteServidor) {

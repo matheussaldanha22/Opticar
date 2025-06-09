@@ -26,8 +26,13 @@ router.post("/dadosPedidoCliente", (req, res) => {
   dashMonitoramentoController.dadosPedidoCliente(req, res)
 })
 
-router.get("/dadosPedidoRecebidos/:idFabrica", (req, res) => {
+router.get("/dadosPedidoRecebidos/:idFabrica/:idMaquina", (req, res) => {
   dashMonitoramentoController.dadosPedidoRecebidos(req, res)
+})
+
+
+router.post("/processosPorMaquina/:idMaquina", (req, res) =>{
+  dashMonitoramentoController.processosPorMaquina(req, res)
 })
 
 router.get("/filtroMedida/:idMaquina", (req, res) =>{
