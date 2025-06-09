@@ -40,7 +40,6 @@ app.post("/perguntar", async (req, res) => {
     try {
         const resultado = await gerarResposta(pergunta);
         
-        // Para retornar HTML puro em vez de JSON
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
         res.send(resultado);
         
@@ -50,13 +49,14 @@ app.post("/perguntar", async (req, res) => {
 });
 
 app.post("/pdf", async (req, res) => {
-    const respostas = req.body.resposta;
+    const respostas = req.body.respostaBOB;
+    const nome = req.body.nomeArquivo
 
     try {
         const pdfBuffer = await htmlParaPdf(respostas);
         
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename=resposta.pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="${nome}"`);
         res.send(pdfBuffer);
         
     } catch (error) {

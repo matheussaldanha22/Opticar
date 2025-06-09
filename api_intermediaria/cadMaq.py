@@ -5,7 +5,7 @@ import requests
 
 def cadastrarMaquinaFrio(so, ip_publico, hostname, mac, fabrica):
     try:
-        fetch_inserirDados = "http://localhost:3333/mysql/cadMaqFrio"
+        fetch_inserirDados = "http://localhost:5000/mysql/cadMaqFrio"
         resposta = requests.post(fetch_inserirDados, json={"so": so,
                                                             "ip_publico": ip_publico,
                                                             "hostname": hostname,
@@ -22,7 +22,7 @@ def cadastrarMaquinaFrio(so, ip_publico, hostname, mac, fabrica):
 
 def cadastrarMaquinaQuente(so, ip_publico, hostname, mac, fabrica):
     try:
-        fetch_inserirDados = "http://localhost:3333/mysql/cadMaqQuente"
+        fetch_inserirDados = "http://localhost:5000/mysql/cadMaqQuente"
         resposta = requests.post(fetch_inserirDados, json={"so": so,
                                                             "ip_publico": ip_publico,
                                                             "hostname": hostname,
@@ -39,7 +39,7 @@ def cadastrarMaquinaQuente(so, ip_publico, hostname, mac, fabrica):
 
 def obterCardapio():
     try:
-        fetch_obterCardapio = "http://localhost:3333/mysql/cardapio"
+        fetch_obterCardapio = "http://localhost:5000/mysql/cardapio"
         resposta = requests.get(fetch_obterCardapio)
 
         if resposta.status_code == 200:
@@ -54,7 +54,7 @@ def obterCardapio():
 
 def obterServidor(mac):
     try:
-        fetch_obterCardapio = f"http://localhost:3333/mysql/obterServidor/{mac}"
+        fetch_obterCardapio = f"http://localhost:5000/mysql/obterServidor/{mac}"
         resposta = requests.get(fetch_obterCardapio)
 
         if resposta.status_code == 200:
@@ -71,7 +71,7 @@ def obterServidor(mac):
 
 def inserirPedidosObrigatorios(idMaquina, valor):
     try:
-        fetch_inserirDados = "http://localhost:3333/mysql/pedidosObrigatorios"
+        fetch_inserirDados = "http://localhost:5000/mysql/pedidosObrigatorios"
         resposta = requests.post(fetch_inserirDados, json={"mac": idMaquina,
                                                             "valor": valor})
         if resposta.status_code == 200:

@@ -14,9 +14,6 @@ function esconder() {
   }
 }
 
-
-
-
 function listarServidores() {
   const servidores = JSON.parse(sessionStorage.SERVIDORES);
   for (let i = 0; i < servidores.length; i++) {

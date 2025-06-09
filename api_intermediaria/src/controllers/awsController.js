@@ -29,12 +29,42 @@ async function dadosBucket(req, res) {
     }
 }
 
+async function relatorioClient(req, res) {
+    try {
+        const arquivo = req.file;
+        const tipo = req.body.tipo;
+
+        console.log("Arquivo recebido:", arquivo);
+        console.log("Tipo recebido:", tipo);
+
+        if (!arquivo) {
+            console.error("Arquivo não fornecido");
+            return res.status(400).json({ 
+                mensagem: "Arquivo não fornecido"
+            });
+        }
+
+        const resultado = await enviarRelatorio(arquivo.buffer, arquivo.originalname, tipo);
+        
+        res.status(200).json({
+            mensagem: "Relatório enviado para AWS com sucesso", 
+            resultado
+        });
+    } catch (erro) {
+        console.error("Erro no relatorioClient:", erro.message);
+        res.status(500).json({
+            mensagem: "Erro ao enviar para AWS",
+            erro: erro.message
+        });
+    }
+}
+
 async function enviarParaS3(macAddress, dadosJson, dataP, fabrica) {
     const s3 = new AWS.S3();
 
     const params = {
         Bucket: process.env.BUCKET_NAME,
-        Key: `fabrica${fabrica}/${macAddress}/${dadtaP}`,
+        Key: `fabrica${fabrica}/${macAddress}/${dataP}`,
         Body: JSON.stringify(dadosJson),
         ContentType: 'application/json'
     };
@@ -46,6 +76,43 @@ async function enviarParaS3(macAddress, dadosJson, dataP, fabrica) {
     } catch (erro) {
         console.error("Erro ao enviar para o S3:", erro.message);
         throw erro;
+    }
+}
+
+async function enviarRelatorio(bufferArquivo, nomeArquivo, tipo) {
+    const s3 = new AWS.S3();
+
+    const params = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: `Relatorios/${tipo}`,
+        Body: bufferArquivo,
+        ContentType: 'application/pdf'  
+    };
+
+    try {
+        const data = await s3.upload(params).promise();
+        console.log("Relatório enviado com sucesso:", data.Location);
+        return data.Location;
+    } catch (erro) {
+        console.error("Erro ao enviar relatório:", erro.message);
+        throw erro;
+    }
+}
+
+async function visualizarHistorico(req, res) {
+    const s3 = new AWS.S3()
+
+    const params = {
+        Bucket: process.env.BUCKET_NAME,
+        Prefix: "Relatorios/"
+    }
+
+    try {
+        const data = await s3.listObjectsV2(params).promise();
+        var conteudo = data.Contents.map(objeto => objeto.Key.split('/').pop());
+        res.status(200).json(conteudo)
+    } catch (erro) {
+        console.error(erro)
     }
 }
 
@@ -70,13 +137,36 @@ async function pegarS3(req,res){
         console.error("Erro ao pegar do S3")
         res.status(500).json(erro.message)
     }
-        
-
 }
+
+async function baixarHistorico(req, res) {
+    var nome = req.params.relatorioNome
+    const s3 = new AWS.S3()
+
+    const params = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: `Relatorios/${nome}`
+    }
+
+    try {
+        const data = await s3.getObject(params).promise()
+        const conteudo = data.Body;
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename=${nome}`);
+        res.status(200).send(conteudo);
+    } catch (erro) {
+        console.error("Erro ao baixar histórico")
+        res.status(500).json(erro.message)
+    }
+}
+
 
 
 
 module.exports = {
     dadosBucket,
-    pegarS3
+    pegarS3,
+    relatorioClient,
+    visualizarHistorico,
+    baixarHistorico
 };
