@@ -1,3 +1,9 @@
+var correlacaoRelatorio = [];
+var kpiCorrelacao = [];
+var kpiImpacto = [];
+var kpiIncremento = [];
+var componenteRelatorio = [];
+var calRegressao = [];
 const bobCorrelacao = document.querySelector(".bobCorrelacao");
 
 bobCorrelacao.addEventListener("click", () => {
@@ -1363,6 +1369,13 @@ var chartPix = new Chart(ctx, {
 
 function plotarGraficoPix(dadosCpu, dadosRam, dadosDisco, dadosRede, dataPix) {
 
+  correlacaoRelatorio = [];
+  kpiCorrelacao = [];
+  kpiImpacto = [];
+  kpiIncremento = [];
+  componenteRelatorio = [];
+  calRegressao = [];
+
   var componente = document.getElementById('slt_componente').value
 
   var arrayUsado;
@@ -1399,6 +1412,7 @@ function plotarGraficoPix(dadosCpu, dadosRam, dadosDisco, dadosRede, dataPix) {
     maior = maior.slice(0, menor.length)
   }
 
+  correlacaoRelatorio = arrayUsado;
   if (chartPix) {
     chartPix.data.datasets[0].data = arrayUsado
     chartPix.update()
@@ -1418,6 +1432,12 @@ function plotarGraficoPix(dadosCpu, dadosRam, dadosDisco, dadosRede, dataPix) {
   const txtCor = document.getElementById('txtCor');
   txtCor.innerHTML = '';
 
+  correlacaoRelatorio.push(arrayUsado);
+  kpiCorrelacao.push(correlacao);
+  kpiImpacto.push(impacto);
+  kpiIncremento.push(incremento);
+  componenteRelatorio.push(componente)
+  calRegressao.push(regressao)
 
   if (correlacao > 0.7) {
     txtKPICor.innerHTML = `Correlação positiva forte entre Volume de PIX e consumo no SCADA. `;
@@ -1445,8 +1465,9 @@ async function bobCorrelacaoRelatorio() {
   var hora = String(agora.getHours()).padStart(2, '0');
   var minuto = String(agora.getMinutes()).padStart(2, '0');
   var tipo = `Correlação_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
+  var pasta = "RelatorioCorrelação";
   try {
-    var perguntas = ``;
+    var perguntas = `Sou a persona de analista de dados e tenho uma dashboard para analisar o impacto do pix no consumo de um componente dentro do meu servidor para que possua informações que me auxiliem na tomada de decisão, e onde eu possa encontrar um certo padrão e se o movimento do pix afeta as fabricas desses servidores. Para realizar essa análise estou fazendo os cálculos com esse componente ${componenteRelatorio}, onde eu realizo o calculo de correlação entre o consumo desse componente e a quantidade de pix realizada no mes, essa kpi esta de acordo com o gráfico de regressão linear que possui esses valores: ${componenteRelatorio}, com esses dados eu realizado o cálculo entre as duas variáveis do ${componenteRelatorio},a partir da regressão liner: ${calRegressao} esse cálculo resulta em uma correlaçao de ${kpiCorrelacao} entre o volume do pix e o consumo entre o ${componenteRelatorio}, nessa kpi informo o impacto que seria se o pix fosse de ${kpiIncremento}, como ele poderia afetaria no Consumo do ${componenteRelatorio} onde o resultado é de ${kpiImpacto}. Por favor apartir desses dados crie um relatório informativo e prático desses dados informados, onde seja fácil a vizualização de acordo com as variáveis e para que seja fácil de compreender as informações do gráfico`;
 
     const response = await fetch("http://localhost:5000/perguntar", {
       method: "POST",
@@ -1463,7 +1484,7 @@ async function bobCorrelacaoRelatorio() {
     }
     respostas = await response.text();
     console.log(respostas);
-    pdf(respostas, tipo);
+    pdf(respostas, tipo, pasta);
   } catch (erro) {
     console.error(`Erro: ${erro}`);
     Swal.fire('Erro!', 'Erro ao tentar formular relatório', 'error')
@@ -1472,7 +1493,7 @@ async function bobCorrelacaoRelatorio() {
   }
 }
 
-async function pdf(respostas, tipo) {
+async function pdf(respostas, tipo, pasta) {
   try {
     const resposta = await fetch("http://localhost:5000/pdf", {
       method: "POST",
@@ -1482,6 +1503,7 @@ async function pdf(respostas, tipo) {
       body: JSON.stringify({
         respostaBOB: respostas,
         nomeArquivo: tipo,
+        pasta: pasta,
       }),
     });
 
@@ -1491,7 +1513,7 @@ async function pdf(respostas, tipo) {
 
     const blob = await resposta.blob();
     console.log(blob);
-    relatorioClient(blob, tipo)
+    relatorioClient(blob, tipo, pasta)
 
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -1510,10 +1532,11 @@ async function pdf(respostas, tipo) {
   }
 }
 
-async function relatorioClient(blob, tipo) {
+async function relatorioClient(blob, tipo, pasta) {
   const formData = new FormData();
   formData.append("relatorioCliente", blob, "relatorio.pdf")
   formData.append("tipo", tipo);
+  formData.append("pasta", pasta);
 
   try {
     const resposta = await fetch("http://localhost:5000/aws/relatorioClient", {
@@ -1531,8 +1554,9 @@ async function relatorioClient(blob, tipo) {
 }
 
 async function visualizarHistorico() {
+  var pasta = "RelatorioCorrelação";
   try {
-    const resposta = await fetch("http://localhost:5000/aws/visualizarHistorico", {
+    const resposta = await fetch(`http://localhost:5000/aws/visualizarHistorico/${pasta}`, {
       method: "GET",
       headers: { "Content-Type": "application/json"}
     });
@@ -1559,8 +1583,9 @@ async function visualizarHistorico() {
 }
 
 async function baixarHistorico(relatorioNome) {
+  var pasta = "RelatorioPredição";
   try {
-    const resposta = await fetch(`http://localhost:5000/aws/baixarHistorico/${relatorioNome}`, {
+    const resposta = await fetch(`http://localhost:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
       method: "GET",
       headers: {"Content-Type": "application/pdf"}
     });
