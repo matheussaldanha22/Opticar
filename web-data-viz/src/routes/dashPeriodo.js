@@ -87,5 +87,8 @@ router.get("/diaServerProcesso/:idFabrica/:idServidor/:ano/:mes/:dia", function 
     dashPeriodoController.diaServerProcesso(req,res)
 })
     
+router.get("/dadosComponentes/:idFabrica/:ano/:mes", function (req,res) {
+    dashPeriodoController.dadosComponentes(req,res)
+})
 
 module.exports = router;

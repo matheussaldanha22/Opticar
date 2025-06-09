@@ -223,6 +223,16 @@ function diaServerProcesso(req,res) {
     })
 }
 
+function dadosComponentes(req,res) {
+    var ano = req.params.ano
+    var mes = req.params.mes
+    var idFabrica = req.params.idFabrica
+
+    dashPeriodoModel.dadosComponentes(ano,mes,idFabrica).then((resultado) =>{
+        res.status(200).send(resultado)
+    })
+}
+
 
 module.exports ={
     obterSemana,
@@ -244,7 +254,8 @@ module.exports ={
     diaServerComp,
     diaServerPeriodo,
     diaServerGrafico,
-    diaServerProcesso
+    diaServerProcesso,
+    dadosComponentes
     
 }
 

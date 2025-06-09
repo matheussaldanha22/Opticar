@@ -554,6 +554,28 @@ function diaServerProcesso(idFabrica, idServidor, ano, mes,dia) {
     // console.log("Executando a instrução SQL: \n" + instrucaoSql)
     return database.executarQUENTE(instrucaoSql)
 }
+
+function dadosComponentes(ano,mes,idFabrica) {
+    var instrucaoSql = `
+     select alerta.valor, componente 
+    from alerta
+    join capturaDados as cap
+    on alerta.fkCapturaDados = cap.idCapturaDados
+    join componenteServidor as comp
+    on cap.fkcomponenteServidor = comp.idcomponenteServidor
+    join servidor_maquina as maq
+    on comp.fkMaquina = maq.idMaquina
+    where 
+    year(dataHora) = ${ano}
+    and month(dataHora) = ${mes}
+    and fkFabrica = ${idFabrica}
+    order by valor;
+    
+    `
+    console.log("Executando a instrução SQL: \n" + instrucaoSql)
+    return database.executarQUENTE(instrucaoSql)
+
+}
 module.exports = {
     obterSemana,
     obterComponente,
@@ -575,6 +597,7 @@ module.exports = {
     diaServerComp,
     diaServerPeriodo,
     diaServerGrafico,
-    diaServerProcesso
+    diaServerProcesso,
+    dadosComponentes
 
 }

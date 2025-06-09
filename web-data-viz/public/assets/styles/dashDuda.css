@@ -316,17 +316,39 @@ body {
   width: 25vw;
   height: 7vw;
   font-size: 18px;
-  color: #04708d;
+  /* color: #04708d; */
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
   font-weight: bold;
 }
 
+.kpiCorrelacao {
+ display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  /* background: linear-gradient(270deg, #012027, #04708d); */
+  border-bottom: 5px solid #04708d;
+  border-radius: 12px;
+  padding: 1vw;
+  width: 30vw;
+  height: 10vw;
+  font-size: 18px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+}
+
+.dadoCor{
+  font-size: 18px;
+}
 .tituloKpi {
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
+
 
 .kpiUso h2 {
   font-size: 17px;
@@ -340,6 +362,12 @@ body {
 
 .dadoKpi {
   font-size: 35px;
+  color: #04708d;
+}
+
+.txtCor{
+  color: #5c5b5b;
+  font-size: 15px;
 }
 /* 
 #graficoAlertaFabricas {
@@ -376,12 +404,12 @@ body {
 
 .containerGraficos {
   display: flex;
-  align-items: center;
+  align-items: top;
   width: 100%;
   gap: 1vw;
-  align-items: center;
   height: 100%;
 }
+
 
 
 .graficoPeriodo{
@@ -399,8 +427,13 @@ body {
   background-color: #ffffff;
   padding: 0.5vw;
   border-radius: 1vw;
-  height: 400px;
+  height: 350px;
   gap: 2vw;
+}
+
+.graficoPix{
+  width: 100%;
+  height: 90%;
 }
 
 .tabelaProcessos{
@@ -606,7 +639,7 @@ div .servidor select{
         width: 100%;
         margin: 1.5vw 0;
     }
-/* 
+
     .botaoGrafico {
         background: linear-gradient(270deg, #012027, #04708d);
         color: white;
@@ -615,14 +648,14 @@ div .servidor select{
         padding: 0.2vw 1vw;
         font-family: 'Montserrat';
         font-weight: bold;
-        font-size: 1.1vw;
+        font-size: 0.9vw;
         cursor: pointer;
         display: flex;
         align-items: center;
         gap: 0.5vw;
         transition: 0.3s;
         box-shadow: 0.3vw 0.3vw 0.7vw rgba(0, 0, 0, 0.2);
-    } */
+    }
 
     input[type="date"]{
         background: linear-gradient(270deg, #012027, #04708d);

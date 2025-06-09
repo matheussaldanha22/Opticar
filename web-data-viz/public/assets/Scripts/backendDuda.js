@@ -1,52 +1,21 @@
-//  document.addEventListener("DOMContentLoaded", function () {
-//   const botao = document.getElementById('btnMostrarGrafico');
+function esconder() {
+  var grafico = document.getElementById('graficoConsumoPix');
+  var texto = document.getElementById('button-cor');
 
-//   const grafico = document.getElementById('graficoConsumoCpuVendas');
-//   //colocar função de plotar o grafico depois
-//   //   const graficoCriado = false;
-
-//   botao.addEventListener('click', function () {
-
-//     if (grafico.style.display === 'none') {
-//       grafico.style.display = 'block';
-
-//       botao.innerHTML = 'Ocultar Gráfico';
-
-//       grafico.scrollIntoView({ behavior: 'smooth' });
-
-//       if (!graficoCriado) {
-//         //colocar função de plotar o grafico depois
-//         graficoCriado = true;
-//       }
-//     }
-//     else {
-
-//       grafico.style.display = 'none';
-//       botao.innerHTML = '<i class="bx bx-line-chart"></i> Mostrar Correlação';
-//     }
-//   });
-// });
+  if (grafico.style.display === 'flex') {
+    grafico.style.display = 'none';
+    texto.innerHTML = 'Mostrar Correlação';
+    
+  } else {
+    grafico.style.display = 'flex';
+    texto.innerHTML = 'Ocultar';
+    grafico.scrollIntoView({ behavior: 'smooth' });
+  
+  }
+}
 
 
-// const switchModal = () => {
-//   const modal = document.querySelector('.modal')
-//   const actualStyle = modal.style.display
-//   if (actualStyle == 'block') {
-//     modal.style.display == 'none'
-//   } else {
-//     modal.style.display = 'block'
-//   }
-// }
 
-// const button = document.querySelector('.iconeFiltro')
-// button.addEventListener('click', switchModal)
-
-// window.onclick = function (event) {
-//   const modal = document.querySelector('.modal')
-//   if (event.target == modal) {
-//     switchModal()
-//   }
-// }
 
 function listarServidores() {
   const servidores = JSON.parse(sessionStorage.SERVIDORES);
@@ -232,25 +201,26 @@ function dadosGrafico(ano, mes) {
     resultado.json().then((json) => {
       if (json.length == 0) {
         chart.updateOptions({
-        series: 0,
+          series: 0,
         });
 
         Swal.fire({
-        title: "Não Possui Alertas",
-        icon: "warning",
-        showClass: {
-        popup: `
+          title: "Não Possui Alertas",
+          icon: "warning",
+          showClass: {
+            popup: `
           animate__animated
          animate__fadeInUp
          animate__faster
         `
-       },hideClass: {
-        popup: `
+          }, hideClass: {
+            popup: `
         animate__animated
         animate__fadeOutDown
         animate__faster
-       `}});
-     
+       `}
+        });
+
       }
       var cpu = {
         "Manhã": 0,
@@ -320,7 +290,8 @@ function dadosGrafico(ano, mes) {
 
 
       var seriesChart = [];
-      var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
+     var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#00BFA6', '#FF6F00'];
+
 
       seriesChart.push({
         name: "CPU",
@@ -407,129 +378,130 @@ function selectServidor(ano, mes) {
     },
   }).then((resultado) => {
     resultado.json().then((json) => {
-      
+
       if (json.length == 0) {
 
-      chart.updateOptions({
-        series: 0,
+        chart.updateOptions({
+          series: 0,
         });
 
 
-      Swal.fire({
-        title: "Não Possui Alertas",
-        icon: "warning",
-        showClass: {
-        popup: `
+        Swal.fire({
+          title: "Não Possui Alertas",
+          icon: "warning",
+          showClass: {
+            popup: `
           animate__animated
          animate__fadeInUp
          animate__faster
         `
-       },hideClass: {
-        popup: `
+          }, hideClass: {
+            popup: `
         animate__animated
         animate__fadeOutDown
         animate__faster
-       `}});
-     
-      }else{   
+       `}
+        });
+
+      } else {
         var cpu = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      var ram = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      var disco = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      var rede = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      for (let i = 0; i < json.length; i++) {
-        var alertaAtual = json[i]
-        console.log(alertaAtual.periodo)
-        var periodo = alertaAtual.periodo
-
-        if (alertaAtual.componente.toLowerCase() == "cpu") {
-          cpu[periodo] += alertaAtual.qtdalertas
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
 
-        if (alertaAtual.componente.toLowerCase() == "ram") {
-          ram[periodo] += alertaAtual.qtdalertas
+        var ram = {
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
 
-        if (alertaAtual.componente.toLowerCase() == "disco") {
-          disco[periodo] += alertaAtual.qtdalertas
+        var disco = {
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
 
-        if (alertaAtual.componente.toLowerCase() == "rede") {
-          rede[periodo] += alertaAtual.qtdalertas
+        var rede = {
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
-      }
 
-      var dataCpu = [];
-      var dataRede = [];
-      var dataRam = [];
-      var dataDisco = [];
-      var categoriesChart = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
+        for (let i = 0; i < json.length; i++) {
+          var alertaAtual = json[i]
+          console.log(alertaAtual.periodo)
+          var periodo = alertaAtual.periodo
+
+          if (alertaAtual.componente.toLowerCase() == "cpu") {
+            cpu[periodo] += alertaAtual.qtdalertas
+          }
+
+          if (alertaAtual.componente.toLowerCase() == "ram") {
+            ram[periodo] += alertaAtual.qtdalertas
+          }
+
+          if (alertaAtual.componente.toLowerCase() == "disco") {
+            disco[periodo] += alertaAtual.qtdalertas
+          }
+
+          if (alertaAtual.componente.toLowerCase() == "rede") {
+            rede[periodo] += alertaAtual.qtdalertas
+          }
+        }
+
+        var dataCpu = [];
+        var dataRede = [];
+        var dataRam = [];
+        var dataDisco = [];
+        var categoriesChart = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
 
 
-      for (let i = 0; i < categoriesChart.length; i++) {
-        var periodo = categoriesChart[i];
+        for (let i = 0; i < categoriesChart.length; i++) {
+          var periodo = categoriesChart[i];
 
-        dataCpu.push(cpu[periodo]);
-        dataRam.push(ram[periodo]);
-        dataDisco.push(disco[periodo]);
-        dataRede.push(rede[periodo]);
-      }
+          dataCpu.push(cpu[periodo]);
+          dataRam.push(ram[periodo]);
+          dataDisco.push(disco[periodo]);
+          dataRede.push(rede[periodo]);
+        }
 
 
-      var seriesChart = [];
-      var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
+        var seriesChart = [];
+        var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
 
-      seriesChart.push({
-        name: "CPU",
-        data: dataCpu
-      }, {
-        name: "RAM",
-        data: dataRam
-      },
-        {
-          name: "DISCO",
-          data: dataDisco
+        seriesChart.push({
+          name: "CPU",
+          data: dataCpu
+        }, {
+          name: "RAM",
+          data: dataRam
         },
-        {
-          name: "REDE",
-          data: dataRede
-        })
+          {
+            name: "DISCO",
+            data: dataDisco
+          },
+          {
+            name: "REDE",
+            data: dataRede
+          })
 
-      chart.updateOptions({
-        series: seriesChart,
-        xaxis: { categories: categoriesChart },
-        colors: coresChart,
-        markers: {
-          size: 5,
+        chart.updateOptions({
+          series: seriesChart,
+          xaxis: { categories: categoriesChart },
           colors: coresChart,
-          strokeColors: "#FFFFFF",
-          strokeWidth: 2,
-        }
-      });
-    }
+          markers: {
+            size: 5,
+            colors: coresChart,
+            strokeColors: "#FFFFFF",
+            strokeWidth: 2,
+          }
+        });
+      }
     })
   })
 }
@@ -587,14 +559,14 @@ function diaServidor(ano, mes) {
     },
   }).then((resultado) => {
     resultado.json().then((json) => {
-      if (json.length == 0 ) {
-          document.getElementById('DiaAlerta').innerHTML = "Sem Alertas"
+      if (json.length == 0) {
+        document.getElementById('DiaAlerta').innerHTML = "Sem Alertas"
         document.getElementById('qtdDiaAlerta').innerHTML = ""
-      }else{
-          document.getElementById('DiaAlerta').innerHTML = json[0].dia
-          document.getElementById('qtdDiaAlerta').innerHTML = json[0].qtdalerta
+      } else {
+        document.getElementById('DiaAlerta').innerHTML = json[0].dia
+        document.getElementById('qtdDiaAlerta').innerHTML = json[0].qtdalerta
       }
-      
+
     })
   }
   )
@@ -614,14 +586,14 @@ function periodoServer(ano, mes) {
   }).then((resultado) => {
     resultado.json().then((json) => {
 
-      if (json.length == 0 ) {
+      if (json.length == 0) {
         document.getElementById('periodoAlerta').innerHTML = "Sem alertas"
         document.getElementById('qtdPeriodoAlerta').innerHTML = ""
-      }else{
-          document.getElementById('periodoAlerta').innerHTML = json[0].periodo
-          document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
+      } else {
+        document.getElementById('periodoAlerta').innerHTML = json[0].periodo
+        document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
       }
-      
+
     })
   })
 }
@@ -638,17 +610,17 @@ function componenteServer(ano, mes) {
     resultado.json().then((json) => { //coloca .then pq é uma funcao precisa ()
       console.log(json)
 
-        if (json.length != 0) {
+      if (json.length != 0) {
         document.getElementById('componente').innerHTML = json[0].componente
         document.getElementById('periodo').innerHTML = json[0].periodo
         document.getElementById('qtdAlertaComp').innerHTML = json[0].alerta
-      }else{
+      } else {
         document.getElementById('componente').innerHTML = `Sem alertas`
-         document.getElementById('periodo').innerHTML = ""
+        document.getElementById('periodo').innerHTML = ""
         document.getElementById('qtdAlertaComp').innerHTML = ""
-       
+
       }
-     
+
     })
   })
 }
@@ -672,20 +644,20 @@ function semanaServer(ano, mes) {
 
       if (semanaAlerta.length == 0) {
         document.getElementById('semanaAlerta').innerHTML = "Sem alertas"
-      document.getElementById('qtdAlerta').innerHTML = ""
-    } else{
+        document.getElementById('qtdAlerta').innerHTML = ""
+      } else {
 
-      for (let i = 0; i < semanaAlerta.length; i++) {
-        semanaAlerta[i].posicaoNoMes = i + 1;
-        if (semanaAlerta[i].quantidadeAlertas > maior) {
-          maior = semanaAlerta[i].quantidadeAlertas;
-          maisAlerta = semanaAlerta[i].posicaoNoMes;
+        for (let i = 0; i < semanaAlerta.length; i++) {
+          semanaAlerta[i].posicaoNoMes = i + 1;
+          if (semanaAlerta[i].quantidadeAlertas > maior) {
+            maior = semanaAlerta[i].quantidadeAlertas;
+            maisAlerta = semanaAlerta[i].posicaoNoMes;
+          }
         }
+        console.log("exibir")
+        document.getElementById('semanaAlerta').innerHTML = `${maisAlerta}° semana`
+        document.getElementById('qtdAlerta').innerHTML = `${maior}`
       }
-      console.log("exibir")
-      document.getElementById('semanaAlerta').innerHTML = `${maisAlerta}° semana`
-      document.getElementById('qtdAlerta').innerHTML = `${maior}`
-    }
 
     })
   })
@@ -708,13 +680,13 @@ function diaComp(dataAno, dataMes, dataDia) {
         document.getElementById('componente').innerHTML = json[0].componente
         document.getElementById('periodo').innerHTML = json[0].periodo
         document.getElementById('qtdAlertaComp').innerHTML = json[0].alerta
-      }else{
+      } else {
         document.getElementById('componente').innerHTML = `Sem alertas`
-         document.getElementById('periodo').innerHTML = ""
+        document.getElementById('periodo').innerHTML = ""
         document.getElementById('qtdAlertaComp').innerHTML = ""
-       
+
       }
-      
+
     })
   })
 }
@@ -733,11 +705,11 @@ function periodoDia(dataAno, dataMes, dataDia) {
       if (json.length != 0) {
         document.getElementById('periodoAlerta').innerHTML = json[0].periodo
         document.getElementById('qtdPeriodoAlerta').innerHTML = json[0].total_alertas
-      }else{
+      } else {
         document.getElementById('periodoAlerta').innerHTML = "Sem alertas"
-       document.getElementById('qtdPeriodoAlerta').innerHTML = ``
+        document.getElementById('qtdPeriodoAlerta').innerHTML = ``
       }
-      
+
     })
   })
 }
@@ -752,124 +724,126 @@ function diaGrafico(dataAno, dataMes, dataDia) {
   }).then((resultado) => {
     resultado.json().then((json) => {
       if (json.length == null) {
-        
+
         chart.updateOptions({
-        series: 0,
+          series: 0,
         });
 
         Swal.fire({
-        title: "Não Possui Alertas no dia de Hoje",
-        icon: "warning",
-        showClass: {
-        popup: `
+          title: "Não Possui Alertas no dia de Hoje",
+          icon: "warning",
+          showClass: {
+            popup: `
           animate__animated
          animate__fadeInUp
          animate__faster
         `
-       },hideClass: {
-        popup: `
+          }, hideClass: {
+            popup: `
         animate__animated
         animate__fadeOutDown
         animate__faster
-       `}});
-      }else{   var cpu = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      var ram = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      var disco = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      var rede = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      for (let i = 0; i < json.length; i++) {
-        var alertaAtual = json[i]
-        console.log(alertaAtual.periodo)
-        var periodo = alertaAtual.periodo
-
-        if (alertaAtual.componente.toLowerCase() == "cpu") {
-          cpu[periodo] += alertaAtual.qtdalertas
+       `}
+        });
+      } else {
+        var cpu = {
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
 
-        if (alertaAtual.componente.toLowerCase() == "ram") {
-          ram[periodo] += alertaAtual.qtdalertas
+        var ram = {
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
 
-        if (alertaAtual.componente.toLowerCase() == "disco") {
-          disco[periodo] += alertaAtual.qtdalertas
+        var disco = {
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
 
-        if (alertaAtual.componente.toLowerCase() == "rede") {
-          rede[periodo] += alertaAtual.qtdalertas
+        var rede = {
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
-      }
 
-      var dataCpu = [];
-      var dataRede = [];
-      var dataRam = [];
-      var dataDisco = [];
-      var categoriesChart = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
+        for (let i = 0; i < json.length; i++) {
+          var alertaAtual = json[i]
+          console.log(alertaAtual.periodo)
+          var periodo = alertaAtual.periodo
+
+          if (alertaAtual.componente.toLowerCase() == "cpu") {
+            cpu[periodo] += alertaAtual.qtdalertas
+          }
+
+          if (alertaAtual.componente.toLowerCase() == "ram") {
+            ram[periodo] += alertaAtual.qtdalertas
+          }
+
+          if (alertaAtual.componente.toLowerCase() == "disco") {
+            disco[periodo] += alertaAtual.qtdalertas
+          }
+
+          if (alertaAtual.componente.toLowerCase() == "rede") {
+            rede[periodo] += alertaAtual.qtdalertas
+          }
+        }
+
+        var dataCpu = [];
+        var dataRede = [];
+        var dataRam = [];
+        var dataDisco = [];
+        var categoriesChart = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
 
 
-      for (let i = 0; i < categoriesChart.length; i++) {
-        var periodo = categoriesChart[i];
+        for (let i = 0; i < categoriesChart.length; i++) {
+          var periodo = categoriesChart[i];
 
-        dataCpu.push(cpu[periodo]);
-        dataRam.push(ram[periodo]);
-        dataDisco.push(disco[periodo]);
-        dataRede.push(rede[periodo]);
-      }
+          dataCpu.push(cpu[periodo]);
+          dataRam.push(ram[periodo]);
+          dataDisco.push(disco[periodo]);
+          dataRede.push(rede[periodo]);
+        }
 
 
-      var seriesChart = [];
-      var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
+        var seriesChart = [];
+        var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
 
-      seriesChart.push({
-        name: "CPU",
-        data: dataCpu
-      }, {
-        name: "RAM",
-        data: dataRam
-      },
-        {
-          name: "DISCO",
-          data: dataDisco
+        seriesChart.push({
+          name: "CPU",
+          data: dataCpu
+        }, {
+          name: "RAM",
+          data: dataRam
         },
-        {
-          name: "REDE",
-          data: dataRede
-        })
+          {
+            name: "DISCO",
+            data: dataDisco
+          },
+          {
+            name: "REDE",
+            data: dataRede
+          })
 
-      chart.updateOptions({
-        series: seriesChart,
-        xaxis: { categories: categoriesChart },
-        colors: coresChart,
-        markers: {
-          size: 5,
+        chart.updateOptions({
+          series: seriesChart,
+          xaxis: { categories: categoriesChart },
           colors: coresChart,
-          strokeColors: "#FFFFFF",
-          strokeWidth: 2,
-        }
-      });
-    }
+          markers: {
+            size: 5,
+            colors: coresChart,
+            strokeColors: "#FFFFFF",
+            strokeWidth: 2,
+          }
+        });
+      }
     })
   })
 }
@@ -930,15 +904,15 @@ function diaServerComp(dataAno, dataMes, dataDia) {
         document.getElementById('componente').innerHTML = json[0].componente
         document.getElementById('periodo').innerHTML = json[0].periodo
         document.getElementById('qtdAlertaComp').innerHTML = json[0].alerta
-      }else{
+      } else {
         document.getElementById('componente').innerHTML = `Sem alertas`
-         document.getElementById('periodo').innerHTML = ""
+        document.getElementById('periodo').innerHTML = ""
         document.getElementById('qtdAlertaComp').innerHTML = ""
-       
+
       }
-      
+
     })
-  }) 
+  })
 }
 
 function diaServerPeriodo(dataAno, dataMes, dataDia) {
@@ -970,126 +944,127 @@ function diaServerGrafico(dataAno, dataMes, dataDia) {
     },
   }).then((resultado) => {
     resultado.json().then((json) => {
-       if (json.length == 0) {
+      if (json.length == 0) {
         chart.updateOptions({
-        series: 0,
+          series: 0,
         });
 
         Swal.fire({
-        title: "Não Possui Alertas",
-        icon: "warning",
-        showClass: {
-        popup: `
+          title: "Não Possui Alertas",
+          icon: "warning",
+          showClass: {
+            popup: `
           animate__animated
          animate__fadeInUp
          animate__faster
         `
-       },hideClass: {
-        popup: `
+          }, hideClass: {
+            popup: `
         animate__animated
         animate__fadeOutDown
         animate__faster
-       `}});
+       `}
+        });
       }
-      else{   
+      else {
         var cpu = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      var ram = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      var disco = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      var rede = {
-        "Manhã": 0,
-        "Tarde": 0,
-        "Noite": 0,
-        "Madrugada": 0
-      }
-
-      for (let i = 0; i < json.length; i++) {
-        var alertaAtual = json[i]
-        console.log(alertaAtual.periodo)
-        var periodo = alertaAtual.periodo
-
-        if (alertaAtual.componente.toLowerCase() == "cpu") {
-          cpu[periodo] += alertaAtual.qtdalertas
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
 
-        if (alertaAtual.componente.toLowerCase() == "ram") {
-          ram[periodo] += alertaAtual.qtdalertas
+        var ram = {
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
 
-        if (alertaAtual.componente.toLowerCase() == "disco") {
-          disco[periodo] += alertaAtual.qtdalertas
+        var disco = {
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
 
-        if (alertaAtual.componente.toLowerCase() == "rede") {
-          rede[periodo] += alertaAtual.qtdalertas
+        var rede = {
+          "Manhã": 0,
+          "Tarde": 0,
+          "Noite": 0,
+          "Madrugada": 0
         }
-      }
 
-      var dataCpu = [];
-      var dataRede = [];
-      var dataRam = [];
-      var dataDisco = [];
-      var categoriesChart = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
+        for (let i = 0; i < json.length; i++) {
+          var alertaAtual = json[i]
+          console.log(alertaAtual.periodo)
+          var periodo = alertaAtual.periodo
+
+          if (alertaAtual.componente.toLowerCase() == "cpu") {
+            cpu[periodo] += alertaAtual.qtdalertas
+          }
+
+          if (alertaAtual.componente.toLowerCase() == "ram") {
+            ram[periodo] += alertaAtual.qtdalertas
+          }
+
+          if (alertaAtual.componente.toLowerCase() == "disco") {
+            disco[periodo] += alertaAtual.qtdalertas
+          }
+
+          if (alertaAtual.componente.toLowerCase() == "rede") {
+            rede[periodo] += alertaAtual.qtdalertas
+          }
+        }
+
+        var dataCpu = [];
+        var dataRede = [];
+        var dataRam = [];
+        var dataDisco = [];
+        var categoriesChart = ['Manhã', 'Tarde', 'Noite', 'Madrugada'];
 
 
-      for (let i = 0; i < categoriesChart.length; i++) {
-        var periodo = categoriesChart[i];
+        for (let i = 0; i < categoriesChart.length; i++) {
+          var periodo = categoriesChart[i];
 
-        dataCpu.push(cpu[periodo]);
-        dataRam.push(ram[periodo]);
-        dataDisco.push(disco[periodo]);
-        dataRede.push(rede[periodo]);
-      }
+          dataCpu.push(cpu[periodo]);
+          dataRam.push(ram[periodo]);
+          dataDisco.push(disco[periodo]);
+          dataRede.push(rede[periodo]);
+        }
 
 
-      var seriesChart = [];
-      var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
+        var seriesChart = [];
+        var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
 
-      seriesChart.push({
-        name: "CPU",
-        data: dataCpu
-      }, {
-        name: "RAM",
-        data: dataRam
-      },
-        {
-          name: "DISCO",
-          data: dataDisco
+        seriesChart.push({
+          name: "CPU",
+          data: dataCpu
+        }, {
+          name: "RAM",
+          data: dataRam
         },
-        {
-          name: "REDE",
-          data: dataRede
-        })
+          {
+            name: "DISCO",
+            data: dataDisco
+          },
+          {
+            name: "REDE",
+            data: dataRede
+          })
 
-      chart.updateOptions({
-        series: seriesChart,
-        xaxis: { categories: categoriesChart },
-        colors: coresChart,
-        markers: {
-          size: 5,
+        chart.updateOptions({
+          series: seriesChart,
+          xaxis: { categories: categoriesChart },
           colors: coresChart,
-          strokeColors: "#FFFFFF",
-          strokeWidth: 2,
-        }
-      });
-    }
+          markers: {
+            size: 5,
+            colors: coresChart,
+            strokeColors: "#FFFFFF",
+            strokeWidth: 2,
+          }
+        });
+      }
     })
   })
 }
@@ -1149,18 +1124,18 @@ function atualizarDados() {
   var mes = valoresMesAno[0]
 
   const nomeMeses = [
-  'Janeiro',
-  'Fevereiro',
-  'Março',
-  'Abril',
-  'Maio',
-  'Junho',
-  'Julho',
-  'Agosto',
-  'Setembro',
-  'Outubro',
-  'Novembro',
-  'Dezembro'
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
   ];
 
 
@@ -1169,10 +1144,10 @@ function atualizarDados() {
 
   var kpiSemana = document.getElementById("kpi_semana")
   var kpiDia = document.getElementById("kpi_dia")
-   var cor = document.getElementById('div-pix')
+  var cor = document.getElementById('div-pix')
 
-   kpiSemana.style.display = 'flex';
-   kpiDia.style.display = 'flex';
+  kpiSemana.style.display = 'flex';
+  kpiDia.style.display = 'flex';
   cor.style.display = 'inline';
   if (sltServidor.value != "todos") {
     idMes.innerHTML = `do mês de ${nomeMeses[mes - 1]}`
@@ -1194,6 +1169,8 @@ function atualizarDados() {
     obterPeriodo(ano, mes) // kpi periodo
     tabelaProcesso(ano, mes) //tabela processos
     dadosGrafico(ano, mes)
+    pegarS3(ano, mes)
+
   }
 }
 
@@ -1209,8 +1186,8 @@ function atualizarDadosDia() {
 
   cor.style.display = 'none';
 
-   kpiSemana.style.display = 'none';
-   kpiDia.style.display = 'none';
+  kpiSemana.style.display = 'none';
+  kpiDia.style.display = 'none';
 
   if (inputData.value != 0) {
     idMes.innerHTML = `do Dia ${dataDia}`
@@ -1221,14 +1198,14 @@ function atualizarDadosDia() {
     periodoDia(dataAno, dataMes, dataDia)
     diaGrafico(dataAno, dataMes, dataDia)
     diaProcesso(dataAno, dataMes, dataDia)
-      if (sltServidor.value != "todos") {
-        idMes.innerHTML = `do Dia ${dataDia}`
-        diaServerComp(dataAno, dataMes, dataDia)
-        diaServerPeriodo(dataAno, dataMes, dataDia)
-        diaServerGrafico(dataAno, dataMes, dataDia)
-        diaServerProcesso(dataAno, dataMes, dataDia)
-        
-      }
+    if (sltServidor.value != "todos") {
+      idMes.innerHTML = `do Dia ${dataDia}`
+      diaServerComp(dataAno, dataMes, dataDia)
+      diaServerPeriodo(dataAno, dataMes, dataDia)
+      diaServerGrafico(dataAno, dataMes, dataDia)
+      diaServerProcesso(dataAno, dataMes, dataDia)
+
+    }
   }
 
 }
@@ -1236,58 +1213,186 @@ function atualizarDadosDia() {
 sltServidor.addEventListener("change", atualizarDados);
 slt_mes.addEventListener("change", atualizarDados)
 
-function pegarS3() {
-  fetch(`http://localhost:80/aws/pegarS3`, {
+async function pegarS3(ano, mes) {
+  const bucket = await fetch(`http://localhost:80/aws/pegarS3/${ano}/${mes}`, {
     method: "GET",
     headers: {
       'Content-Type': 'application/json'
     },
-  }).then((resultado)=>{
-    resultado.json().then((json)=>{
-       console.log(json)                       
-    })
-  })
+  });
+
+  const jsonBucket = await bucket.json()
+  console.log(jsonBucket)
+
+  var dataPix = [];
+
+  for (let i = 0; i < jsonBucket.length; i++) {
+    const jsonAtual = jsonBucket[i];
+    var dadoQtd = jsonAtual.quantidade
+
+    dataPix.push(dadoQtd);
+  }
+
+  console.log(dataPix.sort((a, b) => a - b))
+
+  const idFabrica = sessionStorage.FABRICA_ID;
+  const dadosComponente = await fetch(`/dashPeriodo/dadosComponentes/${idFabrica}/${ano}/${mes}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+  });
+
+  const jsonComponente = await dadosComponente.json()
+
+  console.log(jsonComponente)
+
+
+  var dadosCpu = [];
+  var dadosRam = [];
+  var dadosDisco = [];
+  var dadosRede = [];
+
+  for (let i = 0; i < jsonComponente.length; i++) {
+    var atual = jsonComponente[i];
+    var componenteAtual = atual.componente
+    const dadoValor = atual.valor
+
+    if (componenteAtual.toLowerCase() == "cpu") {
+      dadosCpu.push(dadoValor)
+    }
+
+    if (componenteAtual.toLowerCase() == "ram") {
+      dadosRam.push(dadoValor)
+    }
+
+    if (componenteAtual.toLowerCase() == "disco") {
+      dadosDisco.push(dadoValor)
+    }
+
+    if (componenteAtual.toLowerCase() == "rede") {
+      dadosRede.push(dadoValor)
+    }
+
+  }
+  plotarGraficoPix(dadosCpu, dadosRam, dadosDisco, dadosRede, dataPix)
 }
 
-var chartPix;
 
-function plotarGraficoPix() {
-  var options = {
-      series: [{
-          name: "SAMPLE A",
-          data: [
-          [16.4, 5.4], [21.7, 2], [25.4, 3], [19, 2], [10.9, 1], [13.6, 3.2], [10.9, 7.4], [10.9, 0], [10.9, 8.2], [16.4, 0], [16.4, 1.8], [13.6, 0.3], [13.6, 0], [29.9, 0], [27.1, 2.3], [16.4, 0], [13.6, 3.7], [10.9, 5.2], [16.4, 6.5], [10.9, 0], [24.5, 7.1], [10.9, 0], [8.1, 4.7], [19, 0], [21.7, 1.8], [27.1, 0], [24.5, 0], [27.1, 0], [29.9, 1.5], [27.1, 0.8], [22.1, 2]]
-        },{
-          name: "SAMPLE B",
-          data: [
-          [36.4, 13.4], [1.7, 11], [5.4, 8], [9, 17], [1.9, 4], [3.6, 12.2], [1.9, 14.4], [1.9, 9], [1.9, 13.2], [1.4, 7], [6.4, 8.8], [3.6, 4.3], [1.6, 10], [9.9, 2], [7.1, 15], [1.4, 0], [3.6, 13.7], [1.9, 15.2], [6.4, 16.5], [0.9, 10], [4.5, 17.1], [10.9, 10], [0.1, 14.7], [9, 10], [12.7, 11.8], [2.1, 10], [2.5, 10], [27.1, 10], [2.9, 11.5], [7.1, 10.8], [2.1, 12]]
-        },{
-          name: "SAMPLE C",
-          data: [
-          [21.7, 3], [23.6, 3.5], [24.6, 3], [29.9, 3], [21.7, 20], [23, 2], [10.9, 3], [28, 4], [27.1, 0.3], [16.4, 4], [13.6, 0], [19, 5], [22.4, 3], [24.5, 3], [32.6, 3], [27.1, 4], [29.6, 6], [31.6, 8], [21.6, 5], [20.9, 4], [22.4, 0], [32.6, 10.3], [29.7, 20.8], [24.5, 0.8], [21.4, 0], [21.7, 6.9], [28.6, 7.7], [15.4, 0], [18.1, 0], [33.4, 0], [16.4, 0]]
-        }],
-          chart: {
-          height: 350,
-          type: 'scatter',
-          zoom: {
-            enabled: true,
-            type: 'xy'
-          }
-        },
-        xaxis: {
-          tickAmount: 10,
-          labels: {
-            formatter: function(val) {
-              return parseFloat(val).toFixed(1)
-            }
-          }
-        },
-        yaxis: {
-          tickAmount: 7
+const ctx = document.getElementById('chartPix');
+
+const dadosDispersao = {
+  datasets: [{
+    label: 'Volume Pix x Uso de Componentes',
+    data: { x: 0, y: 0 },
+    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+    trendlineLinear: {
+      style: "rgba(255,99,132,1)",
+      lineStyle: "solid",
+      width: 2
+    }
+  }]
+};
+
+var chartPix = new Chart(ctx, {
+  type: 'scatter',
+  data: dadosDispersao,
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: true }
+    },
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: 'Volume do Pix'
         }
-        };
+      },
+      y: {
+        title: {
+          display: true,
+          text: '% Uso dos Componentes'
+        },
+        min: 60,
+        max: 100
+      }
+    }
+  }
 
-          chartPix = new ApexCharts(document.getElementById("chartPix"), options);
-          chartPix.render()
-  };
+});
+
+function plotarGraficoPix(dadosCpu, dadosRam, dadosDisco, dadosRede, dataPix) {
+
+  var componente = document.getElementById('slt_componente').value
+
+  var arrayUsado;
+
+  if (componente == "cpu") {
+    arrayUsado = dadosCpu;
+  }
+  else if (componente == "ram") {
+    arrayUsado = dadosRam;
+  } else if (componente == "disco") {
+    arrayUsado = dadosDisco;
+  } else {
+    arrayUsado = dadosRede;
+  }
+
+  console.log(dataPix)
+
+  var maior;
+  var menor;
+
+  if (dataPix.length > arrayUsado.length) {
+    maior = dataPix
+    menor = arrayUsado
+
+    arrayUsado = menor.map((menor, i) => ({ x: maior[i], y: menor }))
+    maior = maior.slice(0, menor.length)
+
+  } else {
+    menor = dataPix
+    maior = arrayUsado
+
+    arrayUsado = menor.map((menor, i) => ({ x: menor, y: maior[i] }))
+
+    maior = maior.slice(0, menor.length)
+  }
+
+  if (chartPix) {
+    chartPix.data.datasets[0].data = arrayUsado
+    chartPix.update()
+  }
+
+  const dadosRegressao = arrayUsado.map(p => [p.x, p.y]);
+  const regressao = ss.linearRegression(dadosRegressao);
+  const correlacao = ss.sampleCorrelation(maior, menor);
+  const incremento = 100000;
+  const impacto = (regressao.m * incremento).toFixed(2);
+
+
+  const txtKPICor = document.getElementById('correlacaoDado');
+  txtKPICor.innerHTML = '';
+  const valorCor = document.getElementById('valorCor');
+  valorCor.innerHTML = '';
+  const txtCor = document.getElementById('txtCor');
+  txtCor.innerHTML = '';
+
+
+  if (correlacao > 0.7) {
+    txtKPICor.innerHTML = `Correlação positiva forte entre Volume de PIX e consumo no SCADA. `;
+    valorCor.innerHTML = `(R = ${correlacao.toFixed(2)})`
+    txtCor.innerHTML = `A cada ${incremento.toLocaleString()} PIX a mais, os alertas podem aumentar em média ${impacto}`;
+  } else if (correlacao < 0.3) {
+    txtKPICor.innerHTML += `Correlação fraca (R = ${correlacao.toFixed(2)}): sem relação clara.`;
+  } else {
+    txtKPICor.innerHTML += `Correlação moderada (R = ${correlacao.toFixed(2)}) entre Volume de PIX e Alertas.`;
+  }
+
+};
+
+
+slt_componente.addEventListener("change", atualizarDados)
 
