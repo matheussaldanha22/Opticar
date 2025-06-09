@@ -319,7 +319,6 @@ async function calcularConfiabilidade(idMaquina, componente) {
 
     const ic = ((p1 + p2 + p3) / 3).toFixed(0);
 
-    icRelatorio.push(ic);
 
     console.log(
       `IC calculado: ${ic} (P1=${p1.toFixed(0)} | P2=${p2.toFixed(
@@ -1124,10 +1123,11 @@ function atualizarDados() {
     calcularConfiabilidade(idMaquina, componente)
       .then((indiceConfiabilidade) => {
         if (indiceConfiabilidade !== null) {
+          icRelatorio = []
           console.log(`O IC do ${componente} é: ${indiceConfiabilidade}`);
-          document.getElementById(
-            "confiabilidade"
-          ).innerHTML = `${indiceConfiabilidade}/100`;
+          document.getElementById("confiabilidade").innerHTML = `${indiceConfiabilidade}/100`;
+          icRelatorio.push(indiceConfiabilidade);
+          console.log("AAAAAAAAAAAAA",indiceConfiabilidade)
         } else {
           console.log("calculo do IC falhou.");
         }
