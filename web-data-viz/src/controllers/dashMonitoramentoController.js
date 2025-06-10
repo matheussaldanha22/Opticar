@@ -78,7 +78,7 @@ function dadosPedidoCliente(req, res) {
         const chaveComponente = Object.keys(primeiroItem)[0];
         const idFabrica = primeiroItem[chaveComponente]?.idFabrica;
         const idMaquina = primeiroItem[chaveComponente]?.idMaquina;
-        
+
         const indiceExistente = listaDadosPedido.findIndex(entrada => {
           if (entrada && entrada.length > 0) {
             const primeiroItemExistente = entrada[0];
@@ -90,7 +90,7 @@ function dadosPedidoCliente(req, res) {
           }
           return false;
         });
-        
+
         if (indiceExistente !== -1) {
           listaDadosPedido[indiceExistente] = dados;
           console.log(`Dados atualizados para a máquina ${idMaquina} na fábrica ${idFabrica}`);
@@ -192,26 +192,76 @@ function filtroMedida(req, res) {
 
 }
 
-let listaProcessos = []
 
-function processosPorMaquina(req, res){
-    const processos = req.body
-    listaProcessos = processos
-    res.status(200).send(listaProcessos)
+let processosFiltrados = []
+let processosMaquina = []
+function atualizarProcessos(novosProcessos) {
+  novosProcessos.forEach(novoProcesso => {
+    let idMaquina = novoProcesso[0].idMaquina;
+
+    // Procura se já existe um processo com esse idMaquina
+    let indiceExistente = processosFiltrados.findIndex(processo =>
+      processo[0].idMaquina === idMaquina
+    );
+
+    if (indiceExistente !== -1) {
+      // Se existe, substitui pelo novo (mais recente)
+      processosFiltrados[indiceExistente] = novoProcesso;
+    } else {
+      // Se não existe, adiciona o novo
+      processosFiltrados.push(novoProcesso);
+      console.log(processosFiltrados)
+    }
+  });
 }
 
-function listarProcessos(req, res){
-    const idMaquina = req.params.idMaquina
+function processosPorMaquina(req, res) {
+  const processos = req.body
+  processosMaquina.push(processos)
 
-    try{
-    res.status(200).send(listaProcessos)
+      processosMaquina.forEach(novoProcesso => {
+    let idMaquina = novoProcesso[0].idMaquina;
 
-    }catch (erro){
-      console.error(`Erro no servidor: ${erro}`)
+    // Procura se já existe um processo com esse idMaquina
+    let indiceExistente = processosFiltrados.findIndex(processo =>
+      processo[0].idMaquina === idMaquina
+    );
+
+    if (indiceExistente !== -1) {
+      // Se existe, substitui pelo novo (mais recente)
+      processosFiltrados[indiceExistente] = novoProcesso;
+    } else {
+      // Se não existe, adiciona o novo
+      processosFiltrados.push(novoProcesso);
+      console.log(processosFiltrados)
     }
+  });
+  res.status(200).send(processosFiltrados)
+  processosMaquina = []
 
+}
 
+function listarProcessos(req, res) {
+    const idMaquina = req.params.idMaquina;
 
+    try {
+        // Encontra o array de processos da máquina específica
+        const processosDaMaquina = processosFiltrados.find(processoArray => 
+            processoArray.length > 0 && processoArray[0].idMaquina == idMaquina
+        );
+
+        if (processosDaMaquina) {
+            console.log(`Lista de processos da máquina ${idMaquina}:`,processosDaMaquina);
+            res.status(200).send(processosDaMaquina); // Retorna os 3 processos
+        } else {
+            console.log(`Nenhum processo encontrado para máquina ${idMaquina}`);
+            res.status(200).send([]); // Array vazio se não encontrar
+        }
+
+    } catch (erro) {
+        console.error(`Erro no servidor: ${erro}`);
+        res.status(500).send({ erro: "Erro interno do servidor" });
+    }
 }
 
 module.exports = {

@@ -5,6 +5,8 @@ import json
 import datetime
 import tempfile
 import requests
+import threading
+import platform
 
 def pegando_mac_address():
     return uuid.getnode()
@@ -84,12 +86,32 @@ def enviarDadosPedidoCliente(listaPedidoCliente):
 
 def enviarTopProcessos(listaProcessos):
     try:
+        # Garante que sempre enviamos uma lista com exatamente 3 processos
+        processos_para_enviar = []
+        
+        # Adiciona os processos disponíveis
+        for i in range(3):
+            if i < len(listaProcessos):
+                processos_para_enviar.append(listaProcessos[i])
+            else:
+                # Preenche com processos vazios se necessário
+                processos_para_enviar.append({
+                    "idMaquina": listaProcessos[0]["idMaquina"] if listaProcessos else 0,
+                    "pid": 0,
+                    "nome": "Processo não encontrado",
+                    "cpu": 0,
+                    "ram": 0,
+                    "disco": 0
+                })
+        
+        print(f"[DEBUG] Enviando estrutura: {len(processos_para_enviar)} processos")
+        
         fetch_tempoReal = "http://localhost:8080/dashMonitoramento/processosPorMaquina"
-        resposta = requests.post(fetch_tempoReal, json= listaProcessos)
+        resposta = requests.post(fetch_tempoReal, json=processos_para_enviar)
 
         if resposta.status_code == 200:
             print("Processos enviados com sucesso")
-            print(listaProcessos)
+            print(processos_para_enviar)
             print(resposta.json())
         else:
             print(f"Erro ao enviar os processos da máquina: {resposta.status_code}")
@@ -143,12 +165,34 @@ def dadosBucket(dadosS3, mac_address, dataAtual, idFabrica):
 
 def pegar_top_processo():
     lista = []
-    for processo in psutil.process_iter():
-        try:
-            uso = processo.cpu_percent()
-            lista.append((processo, uso))
-        except Exception as e:
-            continue
+    sistema_operacional = platform.system()
+    
+    # Estratégia diferente baseada no SO
+    if sistema_operacional == "Darwin":  # macOS
+        # Primeira passada para baseline
+        for processo in psutil.process_iter():
+            try:
+                processo.cpu_percent()
+            except Exception as e:
+                continue
+        
+        time.sleep(0.5)  # Aguarda para o macOS calcular
+        
+        # Segunda passada para dados reais
+        for processo in psutil.process_iter():
+            try:
+                uso = processo.cpu_percent()
+                lista.append((processo, uso))
+            except Exception as e:
+                continue
+    else:  # Windows e Linux
+        for processo in psutil.process_iter():
+            try:
+                uso = processo.cpu_percent(interval=0.1)
+                lista.append((processo, uso))
+            except Exception as e:
+                continue
+    
     maior_uso = 0
     processo = None
     for item in lista:
@@ -190,7 +234,14 @@ def pegar_top_processo():
 def dadosObrigatorios():
     uso_cpu2 = psutil.cpu_percent()
     uso_ram2 = psutil.virtual_memory().percent
-    uso_disco2 = psutil.disk_usage('/').percent
+    
+    # Detecção do sistema operacional para uso de disco
+    sistema_operacional = platform.system()
+    if sistema_operacional == "Windows":
+        uso_disco2 = psutil.disk_usage('C:\\').percent
+    else:  # macOS e Linux
+        uso_disco2 = psutil.disk_usage('/').percent
+    
     rede = psutil.net_io_counters()
     time.sleep(1)
     rede2 = psutil.net_io_counters()
@@ -208,43 +259,123 @@ def dadosObrigatorios():
 def pegar_top_3_processos(idMaquina):
     """
     Captura todos os processos do sistema e retorna os 3 com maior consumo de CPU
-    incluindo o idMaquina fornecido
+    incluindo o idMaquina fornecido - Compatível com macOS, Windows e Linux
     """
+    print(f"[DEBUG] Iniciando coleta de processos para máquina {idMaquina}")
+    sistema_operacional = platform.system()
+    print(f"[DEBUG] Sistema operacional detectado: {sistema_operacional}")
+    
     lista_processos = []
     
-    # Coleta informações de todos os processos
-    for processo in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent']):
-        try:
-            # Força o cálculo do CPU percent com intervalo
-            cpu_usage = processo.info['cpu_percent'] or processo.cpu_percent(interval=0.1)
-            
-            # Coleta informações de I/O se disponível
+    # Detecta o sistema operacional para aplicar a estratégia correta
+    if sistema_operacional == "Darwin":  # macOS
+        print("[DEBUG] Aplicando estratégia para macOS...")
+        # Primeira passada: coleta inicial para estabelecer baseline no macOS
+        print("[DEBUG] Fazendo primeira passada para baseline do CPU...")
+        for processo in psutil.process_iter(['pid', 'name']):
             try:
-                io_counters = processo.io_counters()
-                disco_usage = io_counters.read_bytes + io_counters.write_bytes
-            except (psutil.NoSuchProcess, psutil.AccessDenied):
-                disco_usage = 0
-            
-            processo_info = {
-                "idMaquina": idMaquina,
-                "pid": processo.info['pid'],
-                "nome": processo.info['name'],
-                "cpu": round(cpu_usage, 2),
-                "ram": round(processo.info['memory_percent'], 2),
-                "disco": disco_usage
-            }
-            
-            lista_processos.append(processo_info)
-            
-        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-            # Ignora processos que não podem ser acessados
-            continue
-        except Exception as e:
-            # Ignora outros erros
-            continue
+                processo.cpu_percent()  # Chama uma vez para estabelecer baseline
+            except:
+                continue
+        
+        # Aguarda um pouco para o macOS calcular os percentuais
+        time.sleep(0.5)
+        
+        # Segunda passada: coleta os dados reais
+        print("[DEBUG] Coletando dados reais dos processos...")
+        for processo in psutil.process_iter(['pid', 'name', 'memory_percent']):
+            try:
+                # No macOS, precisa chamar cpu_percent() sem cache para ter valores reais
+                cpu_usage = processo.cpu_percent()
+                
+                # Se ainda for 0, tenta mais uma vez
+                if cpu_usage == 0:
+                    cpu_usage = processo.cpu_percent(interval=0.1)
+                
+                # Coleta informações de I/O se disponível
+                try:
+                    io_counters = processo.io_counters()
+                    disco_usage = io_counters.read_bytes + io_counters.write_bytes
+                except (psutil.NoSuchProcess, psutil.AccessDenied, AttributeError):
+                    disco_usage = 0
+                
+                processo_info = {
+                    "idMaquina": idMaquina,
+                    "pid": processo.info['pid'],
+                    "nome": processo.info['name'],
+                    "cpu": round(cpu_usage, 2),
+                    "ram": round(processo.info['memory_percent'], 2),
+                    "disco": disco_usage
+                }
+                
+                lista_processos.append(processo_info)
+                
+                # Print detalhado de cada processo capturado (apenas os primeiros 15)
+                if len(lista_processos) <= 15:
+                    print(f"[DEBUG] Processo capturado: PID:{processo.info['pid']} | Nome:{processo.info['name']} | CPU:{round(cpu_usage, 2)}% | RAM:{round(processo.info['memory_percent'], 2)}%")
+                
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                continue
+            except Exception as e:
+                continue
+    
+    else:  # Windows e Linux
+        print(f"[DEBUG] Aplicando estratégia para {sistema_operacional}...")
+        # Para Windows e Linux, uma única passada com interval funciona melhor
+        for processo in psutil.process_iter(['pid', 'name', 'cpu_percent', 'memory_percent']):
+            try:
+                # No Windows/Linux, cpu_percent(interval=0.1) funciona bem na primeira chamada
+                cpu_usage = processo.info['cpu_percent']
+                if cpu_usage is None or cpu_usage == 0:
+                    cpu_usage = processo.cpu_percent(interval=0.1)
+                
+                # Coleta informações de I/O se disponível
+                try:
+                    io_counters = processo.io_counters()
+                    disco_usage = io_counters.read_bytes + io_counters.write_bytes
+                except (psutil.NoSuchProcess, psutil.AccessDenied, AttributeError):
+                    disco_usage = 0
+                
+                processo_info = {
+                    "idMaquina": idMaquina,
+                    "pid": processo.info['pid'],
+                    "nome": processo.info['name'],
+                    "cpu": round(cpu_usage, 2),
+                    "ram": round(processo.info['memory_percent'], 2),
+                    "disco": disco_usage
+                }
+                
+                lista_processos.append(processo_info)
+                
+                # Print detalhado de cada processo capturado (apenas os primeiros 15)
+                if len(lista_processos) <= 15:
+                    print(f"[DEBUG] Processo capturado: PID:{processo.info['pid']} | Nome:{processo.info['name']} | CPU:{round(cpu_usage, 2)}% | RAM:{round(processo.info['memory_percent'], 2)}%")
+                
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                continue
+            except Exception as e:
+                continue
+    
+    print(f"[DEBUG] Total de processos coletados: {len(lista_processos)}")
+    
+    # Filtra processos com CPU > 0 para debug
+    processos_com_cpu = [p for p in lista_processos if p['cpu'] > 0]
+    print(f"[DEBUG] Processos com CPU > 0: {len(processos_com_cpu)}")
     
     # Ordena por CPU usage (decrescente) e pega os top 3
     top_3_processos = sorted(lista_processos, key=lambda x: x['cpu'], reverse=True)[:3]
+    
+    print(f"[DEBUG] Top 3 processos ordenados:")
+    for i, proc in enumerate(top_3_processos, 1):
+        print(f"[DEBUG] TOP {i}: {proc['nome']} - PID:{proc['pid']} - CPU:{proc['cpu']}% - RAM:{proc['ram']}%")
+    
+    # Se todos os processos têm CPU = 0, usa os com maior RAM
+    if all(proc['cpu'] == 0 for proc in top_3_processos):
+        print("[DEBUG] Todos os processos com CPU = 0, ordenando por RAM...")
+        top_3_processos = sorted(lista_processos, key=lambda x: x['ram'], reverse=True)[:3]
+        print(f"[DEBUG] Top 3 processos por RAM:")
+        for i, proc in enumerate(top_3_processos, 1):
+            print(f"[DEBUG] TOP {i}: {proc['nome']} - PID:{proc['pid']} - RAM:{proc['ram']}%")
     
     # Se não encontrou processos suficientes, preenche com dados vazios
     while len(top_3_processos) < 3:
@@ -259,6 +390,76 @@ def pegar_top_3_processos(idMaquina):
     
     return top_3_processos
 
+processos_atuais = []
+lock_processos= threading.Lock()
+
+def monitorarProcesso():
+    """
+    Função dedicada para monitorar os processos em thread separada
+    Atualiza a variável global processos_atuais a cada 10 segundos
+    """
+    global processos_atuais
+    
+    while True:
+        try:
+            mac_address = pegando_mac_address()
+            pedidos = obterPedidos(mac_address)
+            
+            print(f"[DEBUG] Thread processos - MAC: {mac_address}")
+            print(f"[DEBUG] Thread processos - Pedidos encontrados: {len(pedidos) if pedidos else 0}")
+            
+            if pedidos and len(pedidos) > 0:
+                idMaquina = pedidos[0]['idMaquina']
+                print(f"[DEBUG] Thread processos - ID Máquina: {idMaquina}")
+                
+                novos_processos = pegar_top_3_processos(idMaquina)
+                print(f"[DEBUG] Thread processos - Processos capturados: {len(novos_processos)}")
+                
+                # Debug dos processos
+                for i, proc in enumerate(novos_processos):
+                    print(f"[DEBUG] Processo {i+1}: {proc['nome']} - CPU: {proc['cpu']}%")
+                
+                # Thread-safe update da variável global
+                with lock_processos:
+                    processos_atuais = novos_processos
+                
+                print(f"[DEBUG] Processos atualizados na variável global")
+                
+                # Envia os processos para o dashboard
+                enviarTopProcessos(novos_processos)
+            else:
+                print("[DEBUG] Nenhum pedido encontrado na thread de processos")
+            
+            # Atualiza os processos a cada 10 segundos
+            time.sleep(10)
+            
+        except Exception as e:
+            print(f"[ERRO] Erro no monitoramento de processos: {e}")
+            import traceback
+            traceback.print_exc()
+            time.sleep(15)
+
+
+def obter_processo_atual():
+    """
+    Função auxiliar para obter o processo principal atual de forma thread-safe
+    """
+    global processos_atuais
+    
+    with lock_processos:
+        print(f"[DEBUG] obter_processo_atual - Processos disponíveis: {len(processos_atuais)}")
+        if processos_atuais and len(processos_atuais) > 0:
+            processo = processos_atuais[0]
+            print(f"[DEBUG] Retornando processo: {processo['nome']} - CPU: {processo['cpu']}%")
+            return processo
+        else:
+            print("[DEBUG] Nenhum processo disponível, retornando processo padrão")
+            return {
+                "nome": "Nenhum processo encontrado",
+                "cpu": 0,
+                "ram": 0,
+                "disco": 0
+            }
     
 ############################################################################################################################################################################
 ############################################################################################################################################################################
@@ -271,6 +472,14 @@ def monitorar():
     # tipoComponente = []
     
     print(f"Iniciando monitoramento nesse mac_address: {mac_address}")
+
+        # Inicia a thread de monitoramento de processos
+    thread_processos = threading.Thread(target=monitorarProcesso, daemon=True)
+    thread_processos.start()
+    print("Thread de monitoramento de processos iniciada")
+
+
+
     intervalo_envio_s3 = 5 # 1 hora = 1440
     ultimo_envio_s3 = datetime.datetime.now()
     dadosS3 = {
@@ -317,7 +526,6 @@ def monitorar():
                             tipo:{"idFabrica": idFabrica, "idMaquina": idMaquina, "Valor": valor, "Medida": medida,"limiteCritico": limiteCritico, "limiteAtencao": limiteAtencao, "mac_address": mac_address}
                         })
                     
-                    top_3_processos = pegar_top_3_processos(idMaquina)
                 
 
                     print(f"Valor capturado: {valor} e id: {idPedido}")
@@ -363,7 +571,6 @@ def monitorar():
                 dadosS3["leitura"] = []
 
             enviarDadosPedidoCliente(listaPedidoCliente)
-            enviarTopProcessos(top_3_processos)
             listaPedidoCliente = []
 
 

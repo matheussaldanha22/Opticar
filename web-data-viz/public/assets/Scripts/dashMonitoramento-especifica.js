@@ -16,6 +16,14 @@ let indicadorPedidoRam = ""
 document.addEventListener("DOMContentLoaded", () => {
   renderGraficos()
 
+  setInterval(() => {
+    buscarProcesso()
+    renderTabelaProcessos()
+
+  }, 1000);
+
+
+
 })
 
 function renderTabela(pagina) {
@@ -240,13 +248,38 @@ function renderDados() {
       if (!cpuFiltro) {
         // Inicio dados da CPU
         cpuData = dadosTempoReal.map(arr => arr[0].CPU.valor);
+
+        limiteAtencao = dadosTempoReal.map(arr => arr[0].CPU.limiteAtencao)
+        limiteCritico = dadosTempoReal.map(arr => arr[0].CPU.limiteCritico)
+
+        const valorLimiteAtencao = limiteAtencao[0] || 0;
+        const valorLimiteCritico = limiteCritico[0] || 0;
+
+        const dadosLimiteAtencao = new Array(cpuData.length).fill(valorLimiteAtencao);
+        const dadosLimiteCritico = new Array(cpuData.length).fill(valorLimiteCritico);
+
+
         // Atualize apenas os dados do gráfico
         chart.updateSeries([{
           name: "Porcentagem",
           data: cpuData,
-        }]);
+        },
+        {
+          name: 'Limite Atenção',
+          data: dadosLimiteAtencao,
+          type: 'line'
+        },
+        {
+          name: 'Limite Crítico',
+          data: dadosLimiteCritico,
+          type: 'line'
+        }
+
+
+        ]);
         chart.updateOptions({
-          xaxis: { categories: listaHorarios2 }
+          xaxis: { categories: listaHorarios2 },
+          colors: ['#000', '#FFA500', '#FF0000']
         });
 
         const cpuTexto = cpuData[cpuData.length - 1] || 0;
@@ -260,12 +293,35 @@ function renderDados() {
       if (!ramFiltro) {
         //  Inicio dados RAM
         ramData = dadosTempoReal.map(arr => arr[0].RAM.valor)
+        limiteAtencao = dadosTempoReal.map(arr => arr[0].RAM.limiteAtencao)
+        limiteCritico = dadosTempoReal.map(arr => arr[0].RAM.limiteCritico)
+
+        const valorLimiteAtencao = limiteAtencao[0] || 0;
+        const valorLimiteCritico = limiteCritico[0] || 0;
+
+        const dadosLimiteAtencao = new Array(cpuData.length).fill(valorLimiteAtencao);
+        const dadosLimiteCritico = new Array(cpuData.length).fill(valorLimiteCritico);
+
+
+
         graficoRam.updateSeries([{
           name: "Porcentagem",
           data: ramData
-        }])
+        },
+        {
+          name: 'Limite Atenção',
+          data: dadosLimiteAtencao,
+          type: 'line'
+        },
+        {
+          name: 'Limite Crítico',
+          data: dadosLimiteCritico,
+          type: 'line'
+        }
+        ])
         graficoRam.updateOptions({
-          xaxis: { categories: listaHorarios2 }
+          xaxis: { categories: listaHorarios2 },
+          colors: ['#000', '#FFA500', '#FF0000']
         })
 
         const ramTexto = ramData[ramData.length - 1] || 0;
@@ -327,17 +383,17 @@ function renderDados() {
 
 let novaMaquina = {}
 
-function adicionarOuSubstituirDados(maquinaId, nomeComponente, dados){
+function adicionarOuSubstituirDados(maquinaId, nomeComponente, dados) {
   // Cria um NOVO objeto a cada chamada
   let novaMaquina = {};
   novaMaquina[nomeComponente] = dados;
-  
+
   listaFiltroAplicado.push([novaMaquina]);
-  
+
   if (listaFiltroAplicado.length > 7) {
     listaFiltroAplicado.shift();
   }
-  
+
   console.log('Dados adicionados:', novaMaquina);
   console.log('Lista atual:', listaFiltroAplicado);
 }
@@ -354,20 +410,20 @@ function renderDadosPedido(medidaSelecionada, filtroComponente) {
   console.log('Cpu esta filtrada')
   console.log(`MedidaSelecionada dentro da funcao: ${medidaSelecionada}`)
 
-function adicionarOuSubstituirDados(maquinaId, nomeComponente, dados){
-  // Cria um NOVO objeto a cada chamada
-  let novaMaquina = {};
-  novaMaquina[nomeComponente] = dados;
-  
-  listaFiltroAplicado.push([novaMaquina]);
-  
-  if (listaFiltroAplicado.length > 7) {
-    listaFiltroAplicado.shift();
+  function adicionarOuSubstituirDados(maquinaId, nomeComponente, dados) {
+    // Cria um NOVO objeto a cada chamada
+    let novaMaquina = {};
+    novaMaquina[nomeComponente] = dados;
+
+    listaFiltroAplicado.push([novaMaquina]);
+
+    if (listaFiltroAplicado.length > 7) {
+      listaFiltroAplicado.shift();
+    }
+
+    console.log('Dados adicionados:', novaMaquina);
+    console.log('Lista atual:', listaFiltroAplicado);
   }
-  
-  console.log('Dados adicionados:', novaMaquina);
-  console.log('Lista atual:', listaFiltroAplicado);
-}
   fetch(`/dashMonitoramento/dadosPedidoRecebidos/${idFabrica}/${maquinaSelecionada}`)
     .then((res) => res.json())
     .then((dados) => {
@@ -399,14 +455,33 @@ function adicionarOuSubstituirDados(maquinaId, nomeComponente, dados){
   if (cpuFiltro) {
     // Inicio dados da CPU
     cpuData = listaFiltroAplicado.map(arr => arr[0].Cpu.Valor)
+    limiteAtencao = listaFiltroAplicado.map(arr => arr[0].Cpu.limiteAtencao)
+    limiteCritico = listaFiltroAplicado.map(arr => arr[0].Cpu.limiteCritico)
+
+    const valorLimiteAtencao = limiteAtencao[0] || 0;
+    const valorLimiteCritico = limiteCritico[0] || 0;
+
+    const dadosLimiteAtencao = new Array(cpuData.length).fill(valorLimiteAtencao);
+    const dadosLimiteCritico = new Array(cpuData.length).fill(valorLimiteCritico);
+
     // Atualize apenas os dados do gráfico
     chart.updateSeries([{
       name: `${medidaSelecionada}`,
       data: cpuData,
+    },
+    {
+      name: 'Limite Atenção',
+      data: dadosLimiteAtencao,
+      type: 'line'
+    },
+    {
+      name: 'Limite Crítico',
+      data: dadosLimiteCritico,
+      type: 'line'
     }]);
     chart.updateOptions({
       xaxis: { categories: listaHorarios },
-
+      colors: ['#000', '#FFA500', '#FF0000']
     });
 
     const cpuTexto = cpuData[cpuData.length - 1] || 0;
@@ -415,22 +490,42 @@ function adicionarOuSubstituirDados(maquinaId, nomeComponente, dados){
     // Fim dados da CPU
   }
 
-    if (ramFiltro) {
-      //  Inicio dados RAM
-      ramData = listaFiltroAplicado.map(arr => arr[0].Ram.Valor)
-      graficoRam.updateSeries([{
-        name: `${medidaSelecionada}`,
-        data: ramData
-      }])
-      graficoRam.updateOptions({
-        xaxis: { categories: listaHorarios }
-      })
+  if (ramFiltro) {
+    //  Inicio dados RAM
+    ramData = listaFiltroAplicado.map(arr => arr[0].Ram.Valor)
+    limiteAtencao = listaFiltroAplicado.map(arr => arr[0].Ram.limiteAtencao)
+    limiteCritico = listaFiltroAplicado.map(arr => arr[0].Ram.limiteCritico)
 
-      const ramTexto = ramData[ramData.length - 1] || 0;
-      let utilizacaoRam = document.getElementById('utilizacaoInfoRam')
-      utilizacaoRam.textContent = ramTexto + `${indicadorPedidoRam}`
-      // Fim dados RAM
+    const valorLimiteAtencao = limiteAtencao[0] || 0;
+    const valorLimiteCritico = limiteCritico[0] || 0;
+
+    const dadosLimiteAtencao = new Array(cpuData.length).fill(valorLimiteAtencao);
+    const dadosLimiteCritico = new Array(cpuData.length).fill(valorLimiteCritico);
+
+    graficoRam.updateSeries([{
+      name: `${medidaSelecionada}`,
+      data: ramData
+    },
+    {
+      name: 'Limite Atenção',
+      data: dadosLimiteAtencao,
+      type: 'line'
+    },
+    {
+      name: 'Limite Crítico',
+      data: dadosLimiteCritico,
+      type: 'line'
     }
+    ])
+    graficoRam.updateOptions({
+      xaxis: { categories: listaHorarios }
+    })
+
+    const ramTexto = ramData[ramData.length - 1] || 0;
+    let utilizacaoRam = document.getElementById('utilizacaoInfoRam')
+    utilizacaoRam.textContent = ramTexto + `${indicadorPedidoRam}`
+    // Fim dados RAM
+  }
   //  Adicionar uma variavel que tera mhz, %, etc
 }
 
@@ -491,11 +586,11 @@ function modalFiltro(nomeComponente) {
             componenteFiltrado = filtroComponente
             console.log(`Indicador: ${indicadorPedido}`)
             const medidaLower = medida.toLowerCase()
-            if(medidaLower.includes('fr')){
+            if (medidaLower.includes('fr')) {
               indicadorPedido = 'Mhz'
               indicadorPedidoRam = 'Mhz'
               console.log('Estou no if de frequencia')
-            }else if(medida == 'Porcentagem'){
+            } else if (medida == 'Porcentagem') {
               indicadorPedido = '%'
               indicadorPedidoRam = '%'
             }
@@ -508,7 +603,7 @@ function modalFiltro(nomeComponente) {
               cpuFiltro = true
             }
 
-            if(componenteFiltrado == 'Ram'){
+            if (componenteFiltrado == 'Ram') {
               ramFiltro = true
             }
 
@@ -532,6 +627,66 @@ function modalFiltro(nomeComponente) {
     });
 }
 
+
+let listaProcessos = []
+
+function buscarProcesso() {
+  // ✅ Use idMaquina em vez de idFabrica
+  const idMaquina = sessionStorage.getItem('idServidorSelecionado')
+
+  if (!idMaquina) {
+    console.log("Nenhuma máquina selecionada");
+    return;
+  }
+
+  fetch(`dashMonitoramento/listarProcessos/${idMaquina}`)
+    .then((resposta) => resposta.json())
+    .then((dados) => {
+      console.log("Processos recebidos do backend:", dados);
+
+      // ✅ Simples: substitui a lista inteira pelos novos dados
+      listaProcessos = dados;
+
+      console.log("Lista de processos atualizada:", listaProcessos);
+      console.log("Quantidade de processos:", listaProcessos.length);
+    })
+    .catch(error => {
+      console.error("Erro ao buscar processos:", error);
+    });
+}
+
+function renderTabelaProcessos() {
+  let tbody = document.getElementById('tbody')
+
+  // ✅ Limpa a tabela antes de renderizar
+  tbody.innerHTML = '';
+
+  console.log("Renderizando processos:", listaProcessos);
+  console.log("Quantidade para renderizar:", listaProcessos.length);
+
+  // ✅ Sempre renderiza exatamente 3 linhas
+  for (let i = 0; i < 3; i++) {
+    const processo = listaProcessos[i] || {
+      pid: 0,
+      nome: 'Processo não encontrado',
+      cpu: 0,
+      ram: 0,
+      idMaquina: 0
+    };
+
+    const tr = document.createElement("tr")
+    tr.id = `servidor-${processo.idMaquina}-${i}`
+
+    tr.innerHTML = `
+        <td data-label="ID">${processo.pid || i + 1}</td>
+        <td data-label="Processo">${processo.nome}</td>
+        <td data-label="CPU">${processo.cpu}%</td>
+        <td data-label="RAM">${processo.ram}%</td>
+        <td data-label="Informações"><i class="fa fa-eye" aria-hidden="true" onclick="redirecionarPagina()"></i></td>
+      `
+    tbody.appendChild(tr)
+  }
+}
 
 
 

@@ -85,8 +85,8 @@
                 </div> -->
                 <div class="mainContainerTabela">
                     <h2 class="tituloTabela">Principais processos (alto consumo)</h2>
-                    <table id="tabela-alertas" class="tabelaContainer">
-                        <thead>
+                    <table id="tabelaProcessos" class="tabelaContainer">
+                        <thead id="thead">
                             <tr>
                                 <th>Id</th>
                                 <th>Nome</th>
@@ -95,7 +95,10 @@
                                 <th>Informações</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tbody">
+
+                        </tbody>
+                        <!-- <tbody>
                             <tr>
                                 <td data-label="ID">1</td>
                                 <td data-label="Servidor">SV001</td>
@@ -124,7 +127,20 @@
                                 </td>
                             </tr>
 
-                        </tbody>
+                        </tbody> -->
+
+
+                        <!-- <tbody>
+                            <tr>
+                                <td data-label="ID">1</td>
+                                <td data-label="Servidor">SV001</td>
+                                <td data-label="CPU">80%</td>
+                                <td data-label="RAM">90%</td>
+                                <td data-label="Informações"><i class="fa fa-eye" aria-hidden="true"
+                                        onclick="redirecionarPagina()"></i></td>
+                            </tr>
+
+                        </tbody> -->
 
                     </table>
                     <div class="pagination" id="paginacao"></div>
