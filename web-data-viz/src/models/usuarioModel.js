@@ -32,7 +32,7 @@ function autenticar(email, senha) {
           LEFT JOIN 
             empresa ON (
               fabrica.fkEmpresa = empresa.idempresa
-              OR empresa.fkGestorEmpresa = usuario.idusuario
+              OR empresa.fkGestorAdmin = usuario.idusuario
             )
           WHERE 
             usuario.email = '${email}'

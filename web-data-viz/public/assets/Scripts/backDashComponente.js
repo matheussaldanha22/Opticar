@@ -1169,7 +1169,6 @@ async function bobPredicaoRelatorio() {
   var hora = String(agora.getHours()).padStart(2, "0");
   var minuto = String(agora.getMinutes()).padStart(2, "0");
   var pasta = "RelatorioPredição";
-  //<60 é 33 e ruim <240 66 e medio e resto ok
 
   var tipo = `Predição_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
   try {
@@ -1177,20 +1176,14 @@ async function bobPredicaoRelatorio() {
 
     if (alertaP.length > 0 && alertaR.length > 0) {
       perguntas = `Você é analista de dados da empresa OptiCars, especializada em monitoramento de hardware SCADA em fábricas automotivas. Gere um relatório técnico e visual, com análise e recomendações, sobre o componente ${sltComponente.value} do servidor ${sltServidor.value}, com base nos dados da dashboard de risco.
-
       Na Seção 1, analise o índice de confiabilidade (0 a 100), calculado pela média de três KPIs: P1 (percentual de alertas críticos no mês), P2 (variação do uso médio do componente em relação ao mês anterior – aumento é negativo, redução é positivo) e P3 (MTBF – tempo médio até falha, sendo <60 min crítico, entre 60 e 240 atenção, >240 estável). Use a fórmula (P1 + P2 + P3) / 3 = ${icRelatorio}. Classifique o índice com base nas faixas: 0 a 40 = Crítico 🔴 (vermelho), 41 a 70 = Atenção 🟡 (amarelo), 71 a 100 = Estável 🟢 (verde). Explique a fórmula, os valores usados, destaque a faixa atual com a cor correspondente e identifique o KPI mais problemático. Indique se são necessárias ações corretivas.
-
       Na Seção 2, analise o gráfico de predição de alertas baseado em regressão linear. Ele mostra os dados reais (${alertaR}) do mês com linha contínua, a previsão (${alertaP}) com linha tracejada, e o eixo X com as semanas (${alertaCategorias}). Avalie se há tendência de aumento ou queda nos alertas, relacione com o índice de confiabilidade atual (${icRelatorio}) e indique se o cenário é preocupante ou aceitável. Sugira ações, se necessário.
-
       O objetivo do relatório é apresentar as informações de forma clara, usando cores para indicar o status do componente, explicando a situação com base nos dados históricos e preditivos, e recomendando ações baseadas em evidências para apoiar a tomada de decisão por gestores e técnicos.`;
     } else {
       perguntas = `Você é analista de dados da OptiCars, responsável por monitorar o risco de componentes em servidores SCADA de fábricas automotivas. Atualmente, você está analisando o componente ${sltComponente.value} do servidor ${sltServidor.value}.
-
-Sua dashboard apresenta um índice de confiabilidade (0 a 100) que mede o desempenho do componente com base em três KPIs: P1 – percentual de alertas críticos no mês; P2 – variação da média de uso do componente em relação ao mês anterior (+ indica aumento e risco, - indica redução e melhora); P3 – MTBF (tempo médio até alerta), onde <60 min é crítico, 60 a 240 min é atenção e >240 min é estável. O índice é calculado pela média simples (P1 + P2 + P3) / 3 = ${icRelatorio}, e classificado em faixas: 0-40 Crítico 🔴, 41-70 Atenção 🟡, 71-100 Estável 🟢. Explique o cálculo, destaque a faixa e avalie o status do componente.
-
-Além disso, há um gráfico de predição do uso do componente baseado em regressão linear. O eixo X (${usoCategorias}) representa as semanas do mês (até 5) e a linha de previsão (${usoY}) mostra a média projetada do uso para o próximo mês. Analise como a previsão foi calculada, indique se o uso está crescendo ou diminuindo e avalie se essa tendência é preocupante considerando o índice de confiabilidade atual.
-
-Produza uma análise clara, técnica e visual, com cores para indicar o status do componente, que ajude gestores e técnicos a entender rapidamente o risco e a necessidade de ações.`;
+      Sua dashboard apresenta um índice de confiabilidade (0 a 100) que mede o desempenho do componente com base em três KPIs: P1 – percentual de alertas críticos no mês; P2 – variação da média de uso do componente em relação ao mês anterior (+ indica aumento e risco, - indica redução e melhora); P3 – MTBF (tempo médio até alerta), onde <60 min é crítico, 60 a 240 min é atenção e >240 min é estável. O índice é calculado pela média simples (P1 + P2 + P3) / 3 = ${icRelatorio}, e classificado em faixas: 0-40 Crítico 🔴, 41-70 Atenção 🟡, 71-100 Estável 🟢. Explique o cálculo, destaque a faixa e avalie o status do componente.
+      Além disso, há um gráfico de predição do uso do componente baseado em regressão linear. O eixo X (${usoCategorias}) representa as semanas do mês (até 5) e a linha de previsão (${usoY}) mostra a média projetada do uso para o próximo mês. Analise como a previsão foi calculada, indique se o uso está crescendo ou diminuindo e avalie se essa tendência é preocupante considerando o índice de confiabilidade atual.
+      Produza uma análise clara, técnica e visual, com cores para indicar o status do componente, que ajude gestores e técnicos a entender rapidamente o risco e a necessidade de ações.`;
     }
 
     const response = await fetch("http://localhost:5000/perguntar", {

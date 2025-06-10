@@ -27,7 +27,7 @@ public class Main implements RequestHandler<S3Event, String> {
     private final AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
     private static final Log log = LogFactory.getLog(Main.class);
     // Bucket de destino para o CSV gerado
-    private static final String DESTINATION_BUCKET = "s3-trusted-opticar";
+    private static final String DESTINATION_BUCKET = "s3-trusted-opti";
 
 
     @Override

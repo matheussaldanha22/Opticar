@@ -32,7 +32,7 @@ public class CSVparaJSONLambda implements RequestHandler<S3Event, String> {
 
             // 3. Escrever JSON em outro bucket (ex: trusted)
             String jsonKey = key.replace(".csv", ".json");
-            writeJSONToS3("s3-trusted-opti", jsonKey, jsonContent);
+            writeJSONToS3("s3-trusted-opti/previsao", jsonKey, jsonContent);
 
             return "Transformação concluída: " + jsonKey;
 
