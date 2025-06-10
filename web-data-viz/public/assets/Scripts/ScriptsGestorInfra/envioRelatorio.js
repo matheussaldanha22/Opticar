@@ -1,12 +1,7 @@
 var areaEnvio = document.getElementById('areaEnvio');
 var inputArquivo = document.getElementById('documentos');
 
-  // Eventos para arrastar e passar por cima
-  ['dragenter', 'dragover'].forEach(evento => {
-    areaEnvio.addEventListener(evento, ev => {
-      ev.preventDefault();
-    });
-  });
+ 
 
   // Eventos para sair ou soltar
   ['dragleave', 'drop'].forEach(evento => {
