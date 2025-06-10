@@ -11,8 +11,10 @@ function buscarAlertasCPU() {
         FROM alerta a
         JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
-        LEFT JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
+        JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
         WHERE a.componente = 'CPU'
+        AND MONTH(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = MONTH(CURRENT_DATE())
+        AND YEAR(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = YEAR(CURRENT_DATE())
         GROUP BY dataAlerta
         ORDER BY dataAlerta;
     `;
@@ -32,6 +34,8 @@ function buscarAlertasRAM() {
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
         JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
         WHERE a.componente = 'RAM'
+        AND MONTH(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = MONTH(CURRENT_DATE())
+        AND YEAR(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = YEAR(CURRENT_DATE())
         GROUP BY dataAlerta
         ORDER BY dataAlerta;
     `;
@@ -51,6 +55,8 @@ function buscarAlertasDISCO() {
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
         JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
         WHERE a.componente = 'DISCO'
+        AND MONTH(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = MONTH(CURRENT_DATE())
+        AND YEAR(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = YEAR(CURRENT_DATE())
         GROUP BY dataAlerta
         ORDER BY dataAlerta;
     `;
@@ -61,10 +67,16 @@ function buscarAlertasDISCO() {
 function buscarServidorComMaisCriticosCPU() {
     var instrucaoSql = `
         SELECT sm.idMaquina, COUNT(*) AS totalCriticos
-        FROM alerta a JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
+        FROM alerta a 
+        JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
-        JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina WHERE a.prioridade = 'Crítica'and componente = 'CPU'
-        GROUP BY sm.idMaquina ORDER BY totalCriticos DESC
+        JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina 
+        WHERE a.prioridade = 'Crítica'
+        AND a.componente = 'CPU'
+        AND MONTH(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = MONTH(CURRENT_DATE())
+        AND YEAR(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = YEAR(CURRENT_DATE())
+        GROUP BY sm.idMaquina 
+        ORDER BY totalCriticos DESC;
     `;
     return database.executarQUENTE(instrucaoSql);
 }
@@ -72,10 +84,16 @@ function buscarServidorComMaisCriticosCPU() {
 function buscarServidorComMaisCriticosRAM() {
     var instrucaoSql = `
         SELECT sm.idMaquina, COUNT(*) AS totalCriticos
-        FROM alerta a JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
+        FROM alerta a 
+        JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
-        JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina WHERE a.prioridade = 'Crítica'and componente = 'RAM'
-        GROUP BY sm.idMaquina ORDER BY totalCriticos DESC
+        JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina 
+        WHERE a.prioridade = 'Crítica'
+        AND a.componente = 'CPU'
+        AND MONTH(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = MONTH(CURRENT_DATE())
+        AND YEAR(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = YEAR(CURRENT_DATE())
+        GROUP BY sm.idMaquina 
+        ORDER BY totalCriticos DESC;
     `;
     return database.executarQUENTE(instrucaoSql);
 }
@@ -83,10 +101,16 @@ function buscarServidorComMaisCriticosRAM() {
 function buscarServidorComMaisCriticosDISCO() {
     var instrucaoSql = `
         SELECT sm.idMaquina, COUNT(*) AS totalCriticos
-        FROM alerta a JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
+        FROM alerta a 
+        JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
-        JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina WHERE a.prioridade = 'Crítica'and componente = 'DISCO'
-        GROUP BY sm.idMaquina ORDER BY totalCriticos DESC
+        JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina 
+        WHERE a.prioridade = 'Crítica'
+        AND a.componente = 'DISCO'
+        AND MONTH(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = MONTH(CURRENT_DATE())
+        AND YEAR(CONVERT_TZ(cd.data, '+00:00', '-03:00')) = YEAR(CURRENT_DATE())
+        GROUP BY sm.idMaquina 
+        ORDER BY totalCriticos DESC;
     `;
     return database.executarQUENTE(instrucaoSql);
 }

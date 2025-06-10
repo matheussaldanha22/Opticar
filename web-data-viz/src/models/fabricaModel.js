@@ -10,8 +10,7 @@ function listarFabricasEmpresa(idEmpresa) {
 
 function cadastrarGestorFabrica(idGestor, idFabrica) {
   var instrucaoSql = `
-      UPDATE fabrica SET fkGestorFabrica = ${idGestor} WHERE idfabrica = ${idFabrica}
-  `
+      UPDATE fabrica SET fkGestorInfra = ${idGestor} WHERE idfabrica = ${idFabrica}`
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executarFRIO(instrucaoSql)
 }
@@ -26,23 +25,22 @@ function cadastrar(nome, funcao, limiteA, limiteG) {
 function verificaAlertas() {
   var instrucaoSql = `SELECT 
       servidor.fkFabrica, 
-      COUNT(CASE WHEN alerta.statusAlerta = 'To Do' THEN 1 END) AS qtd_to_do,
-      COUNT(CASE WHEN alerta.statusAlerta = 'In Progress' THEN 1 END) AS qtd_in_progress,
-      COUNT(CASE WHEN alerta.statusAlerta = 'Done' THEN 1 END) AS qtd_done
+      COUNT(CASE WHEN LOWER(alerta.statusAlerta) = 'aberto' THEN 1 END) AS qtd_to_do,
+      COUNT(CASE WHEN LOWER(alerta.statusAlerta) = 'em andamento' THEN 1 END) AS qtd_in_progress,
+      COUNT(CASE WHEN LOWER(alerta.statusAlerta) = 'resolvido' THEN 1 END) AS qtd_done
     FROM servidor_maquina AS servidor
     LEFT JOIN componenteServidor ON servidor.idMaquina = componenteServidor.fkMaquina
     LEFT JOIN capturaDados AS captura ON componenteServidor.idcomponenteServidor = captura.fkComponenteServidor
     LEFT JOIN alerta ON captura.idCapturaDados = alerta.fkCapturaDados
     GROUP BY servidor.fkFabrica
     ORDER BY (qtd_to_do + qtd_in_progress) DESC;`;
-
   return database.executarQUENTE(instrucaoSql);
 }
 
 function verificarAlertasPorId(idFabrica) {
-  var instrucaoSql = `SELECT servidor.fkFabrica, COUNT(CASE WHEN alerta.statusAlerta = 'To Do' THEN 1 END) AS qtd_to_do,
-							   COUNT(CASE WHEN alerta.statusAlerta = 'In Progress' THEN 1 END) AS qtd_in_progress,
-							   COUNT(CASE WHEN alerta.statusAlerta = 'Done' THEN 1 END) AS qtd_done
+  var instrucaoSql = `SELECT servidor.fkFabrica, COUNT(CASE WHEN LOWER(alerta.statusAlerta) = 'aberto' THEN 1 END) AS qtd_to_do,
+							   COUNT(CASE WHEN LOWER(alerta.statusAlerta) = 'em andamento' THEN 1 END) AS qtd_in_progress,
+							   COUNT(CASE WHEN LOWER(alerta.statusAlerta) = 'resolvido' THEN 1 END) AS qtd_done
 								FROM servidor_maquina AS servidor
 								LEFT JOIN componenteServidor ON servidor.idMaquina = componenteServidor.fkMaquina
 								LEFT JOIN capturaDados AS captura ON componenteServidor.idcomponenteServidor = captura.fkComponenteServidor
@@ -55,7 +53,7 @@ function verificarAlertasPorId(idFabrica) {
 
 function listarFabricas() {
   var instrucaoSql = `SELECT f.idfabrica AS idFabrica, f.nome AS nomeFabrica, f.limiteAtencao, f.limiteCritico, u.nome AS nomeGestorFabrica 
-    FROM fabrica AS f LEFT JOIN usuario AS u ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorFabrica';`
+    FROM fabrica AS f LEFT JOIN usuario AS u ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorInfra';`
 
   return database.executarFRIO(instrucaoSql)
 }

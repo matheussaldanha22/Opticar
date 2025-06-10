@@ -263,7 +263,7 @@ body {
   cursor: pointer;
   width: fit-content;
   position: absolute;
-  right: 250px;
+  right: 30px;
   transition: 0.3s;
 }
 

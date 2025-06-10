@@ -58,7 +58,7 @@ function entrar() {
 
           if (sessionStorage.getItem("CARGO") == "GestorAdmin") {
             setTimeout(function () {
-              window.location = "./dashEmpresa.html"
+              window.location = "./dashAdmin.html"
             }, 1000)
           } else if (sessionStorage.getItem("CARGO") == "GestorInfra") {
             setTimeout(function () {
@@ -72,7 +72,7 @@ function entrar() {
             }, 1000) // apenas para exibir o loading
           } else if (sessionStorage.getItem("CARGO") == "AnalistaDados") {
             setTimeout(function () {
-              window.location = "./dashAnalise.html"
+              window.location = "./dashDuda.html"
             }, 1000) // apenas para exibir o loading
           }
         })

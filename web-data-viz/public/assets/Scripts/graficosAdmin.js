@@ -350,9 +350,15 @@ function plotarGraficoAlerta(dadosAlerta) {
         }
       }
 
-      fabricaCriticaLista.sort(
-        (a, b) => b.nivelCriticidade - a.nivelCriticidade
-      );
+      fabricaCriticaLista.sort((a, b) => {
+        const prioridade = { critico: 2, atencao: 1, ok: 0 };
+
+        if (prioridade[b.estado] !== prioridade[a.estado]) {
+          return prioridade[b.estado] - prioridade[a.estado];
+        }
+        return b.nivelCriticidade - a.nivelCriticidade;
+      });
+
       var qtdFabricasCriticas = document.querySelector("#qtdFabricasCriticas");
       if (fabricaCriticaLista.length > 0) {
         var quantidadeCritico = 0;
@@ -466,17 +472,17 @@ function plotarGraficoAlerta(dadosAlerta) {
           series: [
             {
               name: "Alertas em Aberto",
-              data: fabricaCriticaLista.slice(0,5).map((f) => f.qtd_to_do),
+              data: fabricaCriticaLista.slice(0,6).map((f) => f.qtd_to_do),
               color: "#011f4b",
             },
             {
               name: "Alertas em Andamento",
-              data: fabricaCriticaLista.slice(0,5).map((f) => f.qtd_in_progress),
+              data: fabricaCriticaLista.slice(0,6).map((f) => f.qtd_in_progress),
               color: "#0077b6",
             },
           ],
           xaxis: {
-            categories: fabricaCriticaLista.slice(0,5).map((f) => f.nome),
+            categories: fabricaCriticaLista.slice(0,6).map((f) => f.nome),
             color: "#0330fc",
             labels: {
               style: {
@@ -573,7 +579,7 @@ function cardFabricas() {
     
     containerCards.innerHTML = '';
 
-    fabricaCriticaLista.slice(0,5).forEach(fabrica => {
+    fabricaCriticaLista.slice(0,6).forEach(fabrica => {
         var divCard = document.createElement("div");
         var divTitulo = document.createElement("div");
         var cardTitulo = document.createElement("div");

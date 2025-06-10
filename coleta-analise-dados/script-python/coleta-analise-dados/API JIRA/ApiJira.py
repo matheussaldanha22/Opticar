@@ -123,7 +123,7 @@ def get_new_alerts(last_checked_id):
         WHERE 
             a.idAlerta > %(alert_id)s
             AND (a.jira_issue_key IS NULL OR a.jira_issue_key = '')
-            AND (a.statusAlerta = 'Aberto' OR a.statusAlerta = 'To Do')
+            AND (a.statusAlerta = 'ABERTO' OR a.statusAlerta = 'To Do')
         ORDER BY 
             a.idAlerta ASC;
         """
@@ -187,8 +187,6 @@ def get_factory(fabrica_id):
             conn_frio.close()
 
 
-
-
 def create_jira_issue(alert):
     issue_type = ISSUE_TYPE_MAPPING.get(alert["issue_type"], 'Alerta')
     urgency = URGENCY.get(alert["priority"], 'Medium')  # Usa o priority já mapeado
@@ -198,7 +196,7 @@ def create_jira_issue(alert):
     idFabrica = int(fabrica['idfabrica'])
     print(f'Tipo fabrica: {type(idFabrica)}')
     
-    issue_df = {
+    issue_dict = {
         'project': {'key': 'MOT'},
         'summary': f'[Alerta {alert["id"]}] {alert["title"]} - Fábrica: {fabrica["nome"]}({fabrica['idfabrica']})',
         'description': alert["description"] + f"\n\n**Fábrica:** {fabrica['nome']} (ID: {fabrica['idfabrica']})",
@@ -227,7 +225,6 @@ def create_jira_issue(alert):
     except Exception as e:
         print(f"❌ Erro completo: {str(e)}")
         return None
-    
     
 
 def update_alert_with_issue(alert_id, issue_key):
@@ -261,11 +258,10 @@ def alertasBanco():
             conn.close()
 
 
-
 def alertasJira():
     jql_query = 'project = MOT'
     # Explicitamente solicitar os campos necessários, incluindo status
-    issues = jira.search_issues(jql_query, fields="key,summary,status,priority", maxResults=10)
+    issues = jira.search_issues(jql_query, fields="key,summary,status,priority", maxResults=100)
 
     
     return issues
@@ -282,12 +278,14 @@ def atualizar_alertas():
     dadosJira = alertasJira()
     for alerta in dadosJira:
         jira_status = alerta.fields.status.name
+        print("ESTOU NO ATUALIZAR ALERTASSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+        print(jira_status)
         print(f"Ticket {alerta.key} - Status no JIRA: '{jira_status}'")
         for alertaBanco in dadosBanco:
             # print('teste', alertaBanco[10] )
-            if alerta.key == alertaBanco[14]:
-                print(f'O {alerta.key} do JIRA é igual a {alertaBanco[14]} do banco')
-                if alerta.fields.status.name != alertaBanco[8]:
+            if alerta.key == alertaBanco[15]:
+                print(f'O {alerta.key} do JIRA é igual a {alertaBanco[15]} do banco')
+                if alerta.fields.status.name != alertaBanco[9]:
                     conn = mysql.connector.connect(**DB_CONFIG)
                     cursor = conn.cursor()
                     try:
@@ -324,11 +322,9 @@ def main():
             time.sleep(2)  # Espera 5 minutos em caso de erro
 
 
-
-
-
 if __name__ == "__main__":
     main()
 
+# Código de teste - remover em produção
 projects = jira.projects()
 print("Projetos disponíveis:", [p.key for p in projects])
