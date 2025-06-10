@@ -117,7 +117,7 @@ public class Main implements RequestHandler<S3Event, String> {
             }
 
 
-            nomeEnviado = "%s/%s/data.json".formatted(envio.get(0).getAno(), mes);
+            nomeEnviado = "pix/%s/%s/data.json".formatted(envio.get(0).getAno(), mes);
 
             json = gson.toJson(envio);
             ipt = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8));
