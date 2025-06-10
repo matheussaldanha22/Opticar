@@ -56,16 +56,16 @@ function entrar() {
           sessionStorage.FABRICA_NOME = json.fabricaNome
           console.log(`ID Empresa: ${json.empresaId}`)
 
-          if (sessionStorage.getItem("CARGO") == "GestorEmpresa") {
+          if (sessionStorage.getItem("CARGO") == "GestorAdmin") {
             setTimeout(function () {
               window.location = "./dashEmpresa.html"
             }, 1000)
-          } else if (sessionStorage.getItem("CARGO") == "GestorFabrica") {
+          } else if (sessionStorage.getItem("CARGO") == "GestorInfra") {
             setTimeout(function () {
               window.location = "./dashGestaofabrica.html"
             }, 1000) // apenas para exibir o loading
           } else if (
-            sessionStorage.getItem("CARGO") == "EngenheiroManutencao"
+            sessionStorage.getItem("CARGO") == "AnalistaSuporte"
           ) {
             setTimeout(function () {
               window.location = "./dashMonitoramento.html"

@@ -37,7 +37,7 @@ function dashAnalise() {
 
 function dashEmpresa() {
   pagina = 6
-  window.location.href = "./dashEmpresa.html"
+  window.location.href = "./dashAdmin.html"
   document.getElementById("dashEmpresa").className = "li-active"
 }
 
@@ -80,7 +80,7 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
         const cargoUsuario = resultado[0].cargo
 
         let ul_links = document.getElementById("ul_links")
-        if (cargoUsuario === "GestorEmpresa") {
+        if (cargoUsuario === "GestorAdmin") {
           ul_links.innerHTML = `
 
             <li id="dashEmpresa">
@@ -97,7 +97,7 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
             </li>
 
             `
-        } else if (cargoUsuario == "GestorFabrica") {
+        } else if (cargoUsuario == "GestorInfra") {
           ul_links.innerHTML = `
             <li id="dashGestaoFabrica">
               <i class='bx bxs-bar-chart-alt-2' style='color:#ffffff' onclick="dashGestaoFabrica()"></i>
@@ -149,7 +149,7 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
             </li>
 
             `
-        } else if (cargoUsuario === "EngenheiroManutencao") {
+        } else if (cargoUsuario === "AnalistaSuporte") {
           ul_links.innerHTML = `
             <li id="dashMonitoramento">
               <i class='bx bx-desktop' style='color:#ffffff' onclick="dashMonitoramento()"></i>
