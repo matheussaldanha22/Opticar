@@ -15,7 +15,7 @@ AWS.config.update({
 var s3 = new AWS.S3();
 
 // Define o nome do bucket a ser usado, retirado do .env
-var bucket = 'meu-raw';
+var bucket = 's3-raw-opti';
 
 // Exporta a função 
 exports.enviarParaS3 = async (req, res) => {
@@ -46,7 +46,7 @@ exports.enviarParaS3 = async (req, res) => {
   // Define os parâmetros necessários para o envio ao S3
   var parametros = {
     Bucket: bucket, 
-    Key: nomeArquivo, 
+    Key: `previsao/ ${nomeArquivo}`, 
     Body: arquivo.buffer, 
     ContentType: arquivo.mimetype //da biblioteca multer
   };

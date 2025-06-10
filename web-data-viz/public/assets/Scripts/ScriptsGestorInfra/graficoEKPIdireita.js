@@ -104,7 +104,7 @@ bobPredicao.addEventListener("click", () => {
 
 async function atualizarGraficoPrevisao(componente) {
   try {
-    var res = await fetch(`http://localhost:3334/awsGestorinfra/pegar/${componente}`);
+    var res = await fetch(`http://localhost:5000/awsGestorinfra/pegar/${componente}`);
     var dados = await res.json();
 
     console.log("Dados recebidos para o gráfico:", dados); //se num aparecer n ta funfando o fetch
@@ -330,7 +330,7 @@ async function bobPredicaoRelatorio() {
   var minuto = String(agora.getMinutes()).padStart(2, '0');
   var tipo = `Correlação_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
   try {
-    var perguntas = `Você é gestor de infraestrutura da empresa OptiCars, especializada na gestão de componentes de servidores em fábricas automotivas. Gere um relatório técnico e visual com análise e recomendações sobre o componente ${componente}, com base nos dados da dashboard de previsão de gastos.
+    var perguntas = `Você é gestor de infraestrutura da empresa OptiCars, especializada na gestão de componentes de servidores em fábricas automotivas. Gere um relatório técnico e visual com análise e recomendações sobre o componente ${componenteAtual}, com base nos dados da dashboard de previsão de gastos.
 
 O relatório deve considerar os dados fornecidos pelo usuário na aba “Relatório para Predição Mensal”, onde é enviado um arquivo com o histórico de custos do componente. Esse arquivo apresenta os valores totais gastos por mês e ano, englobando despesas com manutenção, trocas e outros serviços relacionados ao componente.
 

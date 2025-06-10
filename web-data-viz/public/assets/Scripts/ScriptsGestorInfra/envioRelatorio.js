@@ -31,7 +31,7 @@ var inputArquivo = document.getElementById('documentos');
     formData.append('arquivo', arquivo);
 
     try {
-      var resposta = await fetch('http://localhost:3334/awsUpload/enviar', {
+      var resposta = await fetch('http://localhost:5000/awsUpload/enviar', {
         method: 'POST',
         body: formData
       });
@@ -46,6 +46,6 @@ var inputArquivo = document.getElementById('documentos');
       }
     } catch (erro) {
       console.error('Erro ao enviar arquivo:', erro);
-      alert('Erro inesperado durante o envio.');
+      alert('Erro  durante o envio.');
     }
   }
