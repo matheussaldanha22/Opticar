@@ -1258,7 +1258,7 @@ sltServidor.addEventListener("change", atualizarDados);
 slt_mes.addEventListener("change", atualizarDados)
 
 async function pegarS3(ano, mes) {
-  const bucket = await fetch(`http://localhost:80/aws/pegarS3/${ano}/${mes}`, {
+  const bucket = await fetch(`http://localhost:5000/aws/pegarS3/${ano}/${mes}`, {
     method: "GET",
     headers: {
       'Content-Type': 'application/json'
@@ -1457,7 +1457,7 @@ slt_componente.addEventListener("change", atualizarDados)
 var respostas;
 
 async function bobCorrelacaoRelatorio() {
-  document.getElementById('bobP').classList.add('loader');
+  document.getElementById('bobC').classList.add('loader');
   var agora = new Date();
   var ano = agora.getFullYear();
   var mes = String(agora.getMonth() + 1).padStart(2, '0');
@@ -1467,7 +1467,22 @@ async function bobCorrelacaoRelatorio() {
   var tipo = `Correlação_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
   var pasta = "RelatorioCorrelação";
   try {
-    var perguntas = `Sou a persona de analista de dados e tenho uma dashboard para analisar o impacto do pix no consumo de um componente dentro do meu servidor para que possua informações que me auxiliem na tomada de decisão, e onde eu possa encontrar um certo padrão e se o movimento do pix afeta as fabricas desses servidores. Para realizar essa análise estou fazendo os cálculos com esse componente ${componenteRelatorio}, onde eu realizo o calculo de correlação entre o consumo desse componente e a quantidade de pix realizada no mes, essa kpi esta de acordo com o gráfico de regressão linear que possui esses valores: ${componenteRelatorio}, com esses dados eu realizado o cálculo entre as duas variáveis do ${componenteRelatorio},a partir da regressão liner: ${calRegressao} esse cálculo resulta em uma correlaçao de ${kpiCorrelacao} entre o volume do pix e o consumo entre o ${componenteRelatorio}, nessa kpi informo o impacto que seria se o pix fosse de ${kpiIncremento}, como ele poderia afetaria no Consumo do ${componenteRelatorio} onde o resultado é de ${kpiImpacto}. Por favor apartir desses dados crie um relatório informativo e prático desses dados informados, onde seja fácil a vizualização de acordo com as variáveis e para que seja fácil de compreender as informações do gráfico`;
+    var perguntas = `Você é analista de dados da empresa OptiCars, especializada em monitoramento de hardware SCADA em fábricas automotivas. Gere um relatório técnico e visual, com análise e recomendações, sobre o impacto do volume de transações via PIX no consumo do componente ${componenteRelatorio}. Use os dados da dashboard analítica para apoiar a tomada de decisão.
+Seção 1 – Análise de Correlação e Cálculo de Impacto
+Analise a relação entre o volume de PIX e o consumo do componente ${componenteRelatorio}, com base no cálculo de correlação entre essas variáveis. A regressão linear utilizada foi:
+Fórmula: ${calRegressao}
+Correlação obtida: ${kpiCorrelacao}
+Explique o que essa correlação indica (positiva/negativa, forte/moderada/fraca), e se há padrão entre o consumo do componente e o volume de transações via PIX. Destaque também a simulação de impacto:
+Variação simulada no PIX: ${kpiIncremento}
+Impacto estimado no consumo do ${componenteRelatorio}: ${kpiImpacto}
+A partir desses valores, interprete o comportamento do componente e avalie se há risco para os servidores monitorados.
+Seção 2 – Análise Gráfica e Tendência
+Com base no gráfico de regressão linear da dashboard, que relaciona consumo do ${componenteRelatorio} e volume de PIX ao longo do tempo, descreva:
+A tendência observada (aumento, queda ou estabilidade)
+Se o padrão identificado representa um cenário preocupante ou aceitável
+Como esse padrão pode impactar o desempenho e a confiabilidade dos sistemas
+Objetivo
+Apresente as informações de forma clara, com destaque visual (cores, ícones, estrutura), interpretando os dados com base em evidências estatísticas. A análise deve ser acessível a gestores e técnicos, com recomendações práticas para suporte à decisão.`;
 
     const response = await fetch("http://localhost:5000/perguntar", {
       method: "POST",
@@ -1489,7 +1504,7 @@ async function bobCorrelacaoRelatorio() {
     console.error(`Erro: ${erro}`);
     Swal.fire('Erro!', 'Erro ao tentar formular relatório', 'error')
   } finally {
-    document.getElementById('bobP').classList.remove('loader');
+    document.getElementById('bobC').classList.remove('loader');
   }
 }
 
@@ -1542,7 +1557,7 @@ async function relatorioClient(blob, tipo, pasta) {
     const resposta = await fetch("http://localhost:5000/aws/relatorioClient", {
       method: "POST",
       body: formData
-    });
+    }); 
 
     if (!resposta.ok) {
       throw new Error("Erro ao enviar relatório para a aws" + resposta.status)
