@@ -1,4 +1,8 @@
- const bobPredicao = document.querySelector(".bobPredicao");
+var eixoX = [];
+var eixoY = [];
+var configLinha = [];
+
+var bobPredicao = document.querySelector(".bobPredicao");
 
 bobPredicao.addEventListener("click", () => {
   Swal.fire({
@@ -28,7 +32,7 @@ bobPredicao.addEventListener("click", () => {
   }).then((result) => {
     if (result.isConfirmed) {
       if (document.getElementById('novo').checked) {
-        bobCorrelacaoRelatorio();
+        bobPredicaoRelatorio();
       } else {
         var relatorioNome = document.getElementById('select_relatorio').value;
         if (relatorioNome) {
@@ -37,163 +41,9 @@ bobPredicao.addEventListener("click", () => {
       }
     }
   });
-});
-
-var respostas;
-
-async function bobPredicaoRelatorio() {
-  document.getElementById('bobP').classList.add('loader');
-  var agora = new Date();
-  var ano = agora.getFullYear();
-  var mes = String(agora.getMonth() + 1).padStart(2, '0');
-  var dia = String(agora.getDate()).padStart(2, '0');
-  var hora = String(agora.getHours()).padStart(2, '0');
-  var minuto = String(agora.getMinutes()).padStart(2, '0');
-  var tipo = `Correlação_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
-  try {
-    var perguntas = ``;
-
-    const response = await fetch("http://localhost:5000/perguntar", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        perguntaServer: perguntas,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error("Erro na requisição: " + response.status);
-    }
-    respostas = await response.text();
-    console.log(respostas);
-    pdf(respostas, tipo);
-  } catch (erro) {
-    console.error(`Erro: ${erro}`);
-    Swal.fire('Erro!', 'Erro ao tentar formular relatório', 'error')
-  } finally {
-    document.getElementById('bobP').classList.remove('loader');
-  }
-}
-
-async function pdf(respostas, tipo) {
-  try {
-    const resposta = await fetch("http://localhost:5000/pdf", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        respostaBOB: respostas,
-        nomeArquivo: tipo,
-      }),
-    });
-
-    if (!resposta.ok) {
-      throw new Error("Erro ao gerar PDF: " + resposta.status);
-    }
-
-    const blob = await resposta.blob();
-    console.log(blob);
-    relatorioClient(blob, tipo)
-
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.style.display = "none";
-    a.href = url;
-    a.download = `${tipo}`;
-
-    document.body.appendChild(a);
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-  } catch (erro) {
-    console.error("Erro ao baixar PDF:", erro);
-    Swal.fire('Erro!', 'Erro ao baixar PDF', 'error')
-  }
-}
-
-async function relatorioClient(blob, tipo) {
-  const formData = new FormData();
-  formData.append("relatorioCliente", blob, "relatorio.pdf")
-  formData.append("tipo", tipo);
-
-  try {
-    const resposta = await fetch("http://localhost:5000/aws/relatorioClient", {
-      method: "POST",
-      body: formData
-    });
-
-    if (!resposta.ok) {
-      throw new Error("Erro ao enviar relatório para a aws" + resposta.status)
-    }
-  } catch (erro) {
-    console.error("Erro ao enviar relatório:", erro);
-    Swal.fire('Erro!', 'Erro ao enviar relatório', 'error')
-  }
-}
-
-async function visualizarHistorico() {
-  try {
-    const resposta = await fetch("http://localhost:5000/aws/visualizarHistorico", {
-      method: "GET",
-      headers: { "Content-Type": "application/json"}
-    });
-
-    if (!resposta.ok) {
-      throw new Error("Erro ao visualizar histórico")
-    }
-
-    var dados = await resposta.json()
-
-    const slt = document.getElementById('select_relatorio');
-    dados.forEach((options) => {
-      var option = document.createElement("option");
-      option.value = options;
-      option.textContent = options;
-      slt.appendChild(option)
-    })
-    
-    console.log("estou no visualizarHistorico")
-    console.log(resposta)
-  } catch (erro) {
-    console.error(erro)
-  }
-}
-
-async function baixarHistorico(relatorioNome) {
-  try {
-    const resposta = await fetch(`http://localhost:5000/aws/baixarHistorico/${relatorioNome}`, {
-      method: "GET",
-      headers: {"Content-Type": "application/pdf"}
-    });
-
-    if (!resposta.ok) {
-      throw new Error("Erro ao baixar histórico")
-    }
-    console.log("Estou no baixar histórico")
-    console.log(resposta)
-
-    const blob = await resposta.blob()
-
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.style.display = "none";
-    a.href = url;
-    a.download = `${relatorioNome}`;
-    document.body.appendChild(a);
-    a.click();
-
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-  } catch (erro) {
-    console.error(erro)
-  }
-}
- 
- document.addEventListener('DOMContentLoaded', function () {
+}); 
+  
+  document.addEventListener('DOMContentLoaded', function () {
         
         var tabs = document.querySelectorAll('.tab');
         var arrowLeft = document.querySelector('.arrow-left');
@@ -285,7 +135,9 @@ async function atualizarGraficoPrevisao(componente) {
     console.log("Categorias:", todasAsCategorias);
     console.log("Dados do gráfico:", previsaoGrafico);
     console.log("R²:", r2Porcentagem);
-
+    eixoX.push(todasAsCategorias)
+    eixoY.push(previsaoGrafico)
+    configLinha.push(dashArrayConfig)
 
     // Atualizar gráfico de linha
     var lineOptions = {
@@ -305,7 +157,7 @@ async function atualizarGraficoPrevisao(componente) {
     }
   },
   forecastDataPoints: { count: 3 },
-  colors: ['#14589c'],
+  colors: ['#14589c'],    
   dataLabels: { enabled: false },
   stroke: {
     curve: 'smooth',
@@ -463,17 +315,178 @@ async function atualizarGraficoPrevisao(componente) {
 document.addEventListener("DOMContentLoaded", () => {
   atualizarGraficoPrevisao("CPU");
 });
-
-
-
-
-
-
-
-
-
-
  //grafico de gauge
+
+var respostas;
+
+async function bobPredicaoRelatorio() {
+  document.getElementById('bobP').classList.add('loader');
+  var pasta = "RelatorioGestorInfra"
+  var agora = new Date();
+  var ano = agora.getFullYear();
+  var mes = String(agora.getMonth() + 1).padStart(2, '0');
+  var dia = String(agora.getDate()).padStart(2, '0');
+  var hora = String(agora.getHours()).padStart(2, '0');
+  var minuto = String(agora.getMinutes()).padStart(2, '0');
+  var tipo = `Correlação_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
+  try {
+    var perguntas = `Você é gestor de infraestrutura da empresa OptiCars, especializada na gestão de componentes de servidores em fábricas automotivas. Gere um relatório técnico e visual com análise e recomendações sobre o componente ${componente}, com base nos dados da dashboard de previsão de gastos.
+
+O relatório deve considerar os dados fornecidos pelo usuário na aba “Relatório para Predição Mensal”, onde é enviado um arquivo com o histórico de custos do componente. Esse arquivo apresenta os valores totais gastos por mês e ano, englobando despesas com manutenção, trocas e outros serviços relacionados ao componente.
+
+O gráfico presente na dashboard utiliza esses dados históricos para realizar uma predição de gastos futuros por meio de regressão linear. A linha do gráfico representa os valores mensais de forma contínua até o mês atual, chamada . A partir daí, os três próximos meses são representados por uma linha tracejada, indicando os valores previstos. Esses pontos de previsão são calculados com base na tendência observada nos dados históricos, e sempre retornam valores positivos. O modelo também calcula o coeficiente de determinação (R²), apresentado em porcentagem, para indicar o quão confiável é a projeção realizada.
+
+No relatório, explique como a predição foi feita, incluindo a lógica do cálculo, a qualidade da regressão (R²), os valores observados e previstos, e os meses correspondentes no eixo X. Destaque se há tendência de aumento, estabilidade ou redução nos gastos do componente, e interprete o que isso representa em termos operacionais e financeiros.
+
+Ao final, indique se o cenário exige ações corretivas ou preventivas, como substituição do componente, revisão de fornecedores, ou ajuste nos ciclos de manutenção. O objetivo do relatório é oferecer uma visão clara, embasada por dados históricos e preditivos, para apoiar decisões estratégicas dos gestores da área técnica e financeira da OptiCars.  Com base neste contexto analise os seguintes dados do meu gráfico e observe padrões como tendencia de crescimento e diminuição dos dados e indique possiveis planos de ação . 
+eixoX = ${eixoX},
+eixoY = ${eixoY},
+configLinha= ${configLinha}
+`;
+
+    const response = await fetch("http://localhost:5000/perguntar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        perguntaServer: perguntas,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Erro na requisição: " + response.status);
+    }
+    respostas = await response.text();
+    console.log(respostas);
+    pdf(respostas, tipo, pasta);
+  } catch (erro) {
+    console.error(`Erro: ${erro}`);
+    Swal.fire('Erro!', 'Erro ao tentar formular relatório', 'error')
+  } finally {
+    document.getElementById('bobP').classList.remove('loader');
+  }
+}
+
+async function pdf(respostas, tipo, pasta) {
+  try {
+    const resposta = await fetch("http://localhost:5000/pdf", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        respostaBOB: respostas,
+        nomeArquivo: tipo,
+        pasta: pasta,
+      }),
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao gerar PDF: " + resposta.status);
+    }
+
+    const blob = await resposta.blob();
+    console.log(blob);
+    relatorioClient(blob, tipo, pasta)
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = url;
+    a.download = `${tipo}`;
+
+    document.body.appendChild(a);
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (erro) {
+    console.error("Erro ao baixar PDF:", erro);
+    Swal.fire('Erro!', 'Erro ao baixar PDF', 'error')
+  }
+}
+
+async function relatorioClient(blob, tipo, pasta) {
+  const formData = new FormData();
+  formData.append("relatorioCliente", blob, "relatorio.pdf")
+  formData.append("tipo", tipo);
+  formData.append("pasta", pasta)
+
+  try {
+    const resposta = await fetch("http://localhost:5000/aws/relatorioClient", {
+      method: "POST",
+      body: formData
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao enviar relatório para a aws" + resposta.status)
+    }
+  } catch (erro) {
+    console.error("Erro ao enviar relatório:", erro);
+    Swal.fire('Erro!', 'Erro ao enviar relatório', 'error')
+  }
+}
+
+async function visualizarHistorico() {
+  var pasta = "RelatorioGestorInfra"
+  try {
+    const resposta = await fetch(`http://localhost:5000/aws/visualizarHistorico/${pasta}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json"}
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao visualizar histórico")
+    }
+
+    var dados = await resposta.json()
+
+    const slt = document.getElementById('select_relatorio');
+    dados.forEach((options) => {
+      var option = document.createElement("option");
+      option.value = options;
+      option.textContent = options;
+      slt.appendChild(option)
+    })
+    
+    console.log("estou no visualizarHistorico")
+    console.log(resposta)
+  } catch (erro) {
+    console.error(erro)
+  }
+}
+
+async function baixarHistorico(relatorioNome) {
+  var pasta = "RelatorioGestorInfra"
+  try {
+    const resposta = await fetch(`http://localhost:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
+      method: "GET",
+      headers: {"Content-Type": "application/pdf"}
+    });
+
+    if (!resposta.ok) {
+      throw new Error("Erro ao baixar histórico")
+    }
+    console.log("Estou no baixar histórico")
+    console.log(resposta)
+
+    const blob = await resposta.blob()
+
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.style.display = "none";
+    a.href = url;
+    a.download = `${relatorioNome}`;
+    document.body.appendChild(a);
+    a.click();
+
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (erro) {
+    console.error(erro)
+  }
+}
 
 
     
