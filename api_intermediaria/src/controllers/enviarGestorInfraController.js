@@ -1,6 +1,4 @@
-// Carrega as variáveis de ambiente definidas no arquivo .env.dev
 require('dotenv').config();
-
 var AWS = require('aws-sdk'); 
 
 // Configura as credenciais temporárias da AWS (tem q trocardireto isso)
@@ -11,13 +9,11 @@ AWS.config.update({
   region: process.env.AWS_REGION 
 });
 
-// Cria uma instância do serviço S3 com as credenciais
+// faze o servico
 var s3 = new AWS.S3();
-
-// Define o nome do bucket a ser usado, retirado do .env
 var bucket = 's3-raw-opti';
 
-// Exporta a função 
+// puxa a função la
 exports.enviarParaS3 = async (req, res) => {
   var arquivo = req.file; // O arquivo enviado virá dentro de req.file (usado com multer)
 
@@ -55,10 +51,10 @@ exports.enviarParaS3 = async (req, res) => {
     // sobe o arquivo pro s3 e deixa pra finalizar 'depois' o jhonis
     await s3.upload(parametros).promise();
 
-    // Se deu tudo certo, envia uma resposta de sucesso ao frontend
+    // Se deu tudo certo, envia o bglh de alerta pro insp
     res.status(200).json({ mensagem: 'Arquivo enviado com sucesso.' });
   } catch (erro) {
-    // Em caso de erro no upload, mostra no console e retorna um erro 500 com detalhes
+  
     console.error('Erro ao enviar para o S3:', erro);
     res.status(500).json({ mensagem: 'Erro pra enviar pro baldin.', erro });
   }

@@ -1,25 +1,25 @@
-const AWS = require("aws-sdk");
+var AWS = require("aws-sdk");
 
 async function pegarS3(req, res) {
-    const componente = req.params.componente?.toLowerCase(); // Ex: CPU, RAM, DISCO
+    var componente = req.params.componente?.toLowerCase(); // Ex: CPU, RAM, DISCO
 
     if (!componente) {
         return res.status(400).json({ erro: "Componente não fornecido" });
     }
 
-    const s3 = new AWS.S3();
+    var s3 = new AWS.S3();
 
-    const params = {
+    var params = {
         Bucket: process.env.BUCKET_NAME,
-        Key: `${componente}-relatorio.json`
+        Key: `previsao/${componente}-relatorio.json`
     };
 
 console.log("Buscando no S3:", params);
 
     try {
-        const data = await s3.getObject(params).promise();
-        const conteudo = data.Body.toString('utf-8');
-        const resposta = JSON.parse(conteudo);
+        var data = await s3.getObject(params).promise();
+        var conteudo = data.Body.toString('utf-8');
+        var resposta = JSON.parse(conteudo);
         res.status(200).json(resposta);
     } catch (erro) {
         console.error(`Erro ao buscar ${params.Key} no S3:`, erro.message);
