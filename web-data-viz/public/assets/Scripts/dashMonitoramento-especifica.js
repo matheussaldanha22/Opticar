@@ -16,6 +16,11 @@ let indicadorPedidoRam = ""
 document.addEventListener("DOMContentLoaded", () => {
   renderGraficos()
 
+  const idMaquina = sessionStorage.getItem('idServidorSelecionado')
+  let servidor = document.getElementById('nomeServidor')
+
+  servidor.textContent = 'SV' + idMaquina  
+
   setInterval(() => {
     buscarProcesso()
     renderTabelaProcessos()
@@ -683,7 +688,7 @@ function renderTabelaProcessos() {
         <td data-label="Processo">${processo.nome}</td>
         <td data-label="CPU">${processo.cpu}%</td>
         <td data-label="RAM">${processo.ram}%</td>
-        <td data-label="Finalizar processo"><i class="fa fa-eye" aria-hidden="true" onclick="finalizarProcesso(${processo.pid}, '${processo.nome}', ${idMaquina})"></i></td>
+        <td data-label="Finalizar processo"><i class="fa-solid fa-trash" aria-hidden="true" onclick="finalizarProcesso(${processo.pid}, '${processo.nome}', ${idMaquina})"></i></td>
       `
     tbody.appendChild(tr)
   }
@@ -691,28 +696,45 @@ function renderTabelaProcessos() {
 
 function finalizarProcesso(pid, nome, idMaquina) {
 
-
-  fetch(`dashMonitoramento/inserirProcesso`, {    
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
+  Swal.fire({
+    title: "Processo",
+    text: "Para confirmar, digite 'matar' no campo abaixo:",
+    input: 'text',
+    inputPlaceholder: 'Digite "matar" para confirmar',
+    showCancelButton: true,
+    confirmButtonText: "Aplicar",
+    cancelButtonText: "Fechar",
+    preConfirm: (value) => {
+      if (value !== 'matar') {
+        Swal.showValidationMessage('Você deve digitar "matar" para confirmar a ação');
+        return false;
+      }
+      return true;
     },
-    body: JSON.stringify({
-      pid: pid,
-      nome: nome,
-      fkServidorMaquina: idMaquina
-    }),
+    allowOutsideClick: false,
+    allowEscapeKey: false
   })
-        .then((res) => {
+  .then((result) => {
+    if (result.isConfirmed) {
+      fetch(`dashMonitoramento/inserirProcesso`, {    
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          pid: pid,
+          nome: nome,
+          fkServidorMaquina: idMaquina
+        }),
+      })
+      .then((res) => {
         if (res.ok) {
           return res.json()
         } else {
           console.log(res.json())
-          // throw new Error("Erro ao cadastrar funcionário")
         }
       })
       .then((res) => {
-        // Se o backend retorna um objeto com sucesso
         if (res) {
           console.log("Processo finalizado com sucesso!")
           Swal.fire({
@@ -721,9 +743,6 @@ function finalizarProcesso(pid, nome, idMaquina) {
             icon: "success",
             confirmButtonText: "OK",
           })
-          // .then(() => {
-          //   window.location.href = "./das.html"
-          // })
         } else {
           console.log("Erro ao finalizar processo")
           Swal.fire({
@@ -734,8 +753,9 @@ function finalizarProcesso(pid, nome, idMaquina) {
           })
         }
       })
+    }
+  })
 }
-
 
 
 

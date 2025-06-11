@@ -217,7 +217,7 @@ function inserirAlerta(req, res) {
 function processoCliente(req, res) {
     var mac = req.params.mac_address
 
-    if (mac == null || mac === undefined) {
+    if (!mac) {
         return res.status(400).json({mensagem: "Bad Request: Dados fornecidos erroneamente"})
     }
     mysqlModel.processoCliente(mac).then((resultado) => {

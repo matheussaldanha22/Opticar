@@ -578,6 +578,7 @@ table i:hover {
   padding: 1%;
   border-radius: 10px;
   justify-content: space-between;
+  border-bottom: 5px solid #04708d;
 }
 
 .textoGrafico {
