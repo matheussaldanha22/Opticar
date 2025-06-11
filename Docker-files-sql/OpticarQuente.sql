@@ -1,4 +1,5 @@
-
+GRANT ALL PRIVILEGES ON opticarQuente.* TO 'admin'@'%';
+FLUSH PRIVILEGES;
 create database opticarQuente;
 use opticarQuente;
 

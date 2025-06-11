@@ -83,7 +83,7 @@ function listarMes() {
 
       var d = new Date();
       var anoAtual = d.getFullYear()
-      var mesAtual = d.getMonth()
+      var mesAtual = d.getMonth()+1
 
 
       for (let i = 0; i < alertaMes.length; i++) {

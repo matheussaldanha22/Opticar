@@ -1,7 +1,6 @@
 var areaEnvio = document.getElementById('areaEnvio');
 var inputArquivo = document.getElementById('documentos');
-
- 
+require('dotenv').config()
 
   // Eventos para sair ou soltar
   ['dragleave', 'drop'].forEach(evento => {
@@ -31,7 +30,7 @@ var inputArquivo = document.getElementById('documentos');
     formData.append('arquivo', arquivo);
 
     try {
-      var resposta = await fetch('http://localhost:5000/awsUpload/enviar', {
+      var resposta = await fetch(`http://${process.env.dev.IP_INSTANCIA}:5000/awsUpload/enviar`, {
         method: 'POST',
         body: formData
       });

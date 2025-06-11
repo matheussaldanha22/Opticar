@@ -57,10 +57,9 @@ function obterAlertasMes(idMaquina, componente) {
         alerta as a
         JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
-        JOIN componente c ON cs.fkComponente = c.idcomponente
         JOIN servidor_maquina ON idMaquina = fkMaquina
     WHERE 
-        c.tipo = '${componente}' AND servidor_maquina.idMaquina = ${idMaquina}
+        a.componente = '${componente}' AND servidor_maquina.idMaquina = ${idMaquina}
         AND YEAR(a.dataHora) = YEAR(CURDATE()) 
         AND MONTH(a.dataHora) = MONTH(CURDATE());
 
@@ -161,13 +160,12 @@ function dadosGraficoAlertaMensal(idMaquina, componente, anoEscolhido) {
     SUM(CASE WHEN prioridade = 'Média' THEN 1 ELSE 0 END) AS alertasMedios,
     SUM(CASE WHEN prioridade = 'Crítica' THEN 1 ELSE 0 END) AS alertasCriticos
 FROM 
-    alerta
+    alerta a
     JOIN capturaDados ON fkCapturaDados = idCapturaDados
     JOIN componenteServidor ON fkComponenteServidor = idComponenteServidor
-	JOIN componente c ON fkComponente = idcomponente
     JOIN servidor_maquina ON idMaquina = fkMaquina
     WHERE 
-    c.tipo = '${componente}' AND servidor_maquina.idMaquina = ${idMaquina}
+    a.componente = '${componente}' AND servidor_maquina.idMaquina = ${idMaquina}
     AND YEAR(dataHora) = ${anoEscolhido}
 GROUP BY 
     MONTH(dataHora)
@@ -184,13 +182,12 @@ function dadosGraficoAlertaAnual(idMaquina, componente) {
     SUM(CASE WHEN prioridade = 'Média' THEN 1 ELSE 0 END) AS alertasMedios,
     SUM(CASE WHEN prioridade = 'Crítica' THEN 1 ELSE 0 END) AS alertasCriticos
 FROM 
-    alerta
+    alerta a
     JOIN capturaDados ON fkCapturaDados = idCapturaDados
     JOIN componenteServidor ON fkComponenteServidor = idComponenteServidor
-	JOIN componente c ON fkComponente = idcomponente
     JOIN servidor_maquina ON idMaquina = fkMaquina
     WHERE 
-    c.tipo = '${componente}' AND servidor_maquina.idMaquina = ${idMaquina}
+     a.componente = '${componente}' AND servidor_maquina.idMaquina = ${idMaquina}
 GROUP BY 
     YEAR(dataHora)
     ORDER BY ano;
@@ -207,10 +204,9 @@ function dadosPredicaoAlertaSemanal(idMaquina, componente) {
 FROM alerta a
 JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
 JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
-JOIN componente c ON cs.fkComponente = c.idcomponente
 JOIN servidor_maquina sm ON cs.fkMaquina = sm.idMaquina
 WHERE
-  c.tipo = '${componente}'
+  a.componente = '${componente}'
   AND sm.idMaquina = ${idMaquina}
   AND YEAR(a.dataHora) = YEAR(CURDATE())
   AND MONTH(a.dataHora) = MONTH(CURDATE()) 

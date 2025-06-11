@@ -1,4 +1,5 @@
-  // Gráfico de Barras Empilhadas - Alertas Resolvidos vs Não Resolvidos por Dia
+
+// Gráfico de Barras Empilhadas - Alertas Resolvidos vs Não Resolvidos por Dia
 
 var barOptions = {
     series: [{
@@ -84,7 +85,7 @@ var grafico = null;
 function carregarComponente(componente) {
     componenteAtual = componente;
 
-    fetch(`http://localhost:3333/gestorInfra/dados-${componente.toUpperCase()}`)//pra n ter q fazer pra cada comp
+    fetch(`/gestorInfra/dados-${componente.toUpperCase()}`)//pra n ter q fazer pra cada comp
         .then(res => res.json())
         .then(dados => {
             if (grafico !== null) {
@@ -116,7 +117,7 @@ function carregarComponente(componente) {
 
 
 function atualizarServidorComMaisCriticos(componente) {
-    fetch(`http://localhost:3333/gestorInfra/servidor-com-mais-criticos/${componente.toLowerCase()}`)//o lower, pq sem ta dando bo, e 
+    fetch(`/gestorInfra/servidor-com-mais-criticos/${componente.toLowerCase()}`)//o lower, pq sem ta dando bo, e 
         .then(res => res.json())
         .then(data => {
             document.querySelector(".textovalor2").textContent = data.mensagem;
