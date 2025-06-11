@@ -661,7 +661,7 @@ function dadosGraficoUso(idMaquina, componente, anoEscolhido, mesEscolhido) {
           .then((res) => res.json())
           .then((informacoes) => {
             informacoes.forEach((item) => {
-              categorias.push(`${nomeMeses[item.mes - 1]}`);
+              categorias.push(`${nomeMeses[item.mes - 1].slice(0,3)}`);
               dados.push(item.media_utilizacao);
             });
             renderGraficoUso(categorias, dados, parametro); // EXECUTA A FUNÇÃO COM OS DADOS E PARAMETRO
@@ -675,7 +675,7 @@ function renderGraficoUso(categorias, dados, parametro) {
   console.log("parametro do componente:", parametro);
 
   const options = {
-    chart: { type: "line", height: 300, toolbar: { show: false } },
+    chart: { type: "line", height: 250, toolbar: { show: false } },
     series: [
       { name: "Uso médio (%)", data: dados },
       {
@@ -706,7 +706,7 @@ function renderGraficoUso(categorias, dados, parametro) {
     },
     colors: ["#000", "#e63946"],
     stroke: { curve: "smooth", width: [3, 2] },
-    legend: { fontSize: "20px" },
+    legend: { fontSize: "15px" },
   };
 
   if (window.chartUso) {
@@ -756,7 +756,7 @@ function dadosGraficoAlerta(idMaquina, componente, anoEscolhido) {
       .then((res) => res.json())
       .then((informacoes) => {
         informacoes.forEach((item) => {
-          categorias.push(`${nomeMeses[item.mes - 1]}`);
+          categorias.push(`${nomeMeses[item.mes - 1].slice(0,3)}`);
           dadosCritico.push(item.alertasCriticos);
           dadosMedio.push(item.alertasMedios);
         });
@@ -772,7 +772,7 @@ function renderGraficoAlerta(categorias, dadosCritico, dadosMedio) {
     chart: {
       type: "bar",
       stacked: true,
-      height: 300,
+      height: 250,
       toolbar: { show: false },
     },
     series: [
@@ -800,7 +800,7 @@ function renderGraficoAlerta(categorias, dadosCritico, dadosMedio) {
       },
     },
     colors: ["#011f4b", "#0077b6"],
-    legend: { fontSize: "20px" },
+    legend: { fontSize: "15px" },
   };
 
   if (window.chartSeveridade) window.chartSeveridade.destroy();
