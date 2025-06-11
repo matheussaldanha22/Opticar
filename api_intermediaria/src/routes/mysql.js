@@ -47,4 +47,12 @@ router.post("/updateIPFRIO", function (req, res) {
   mysqlController.updateIPFRIO(req, res)
 })
 
+router.get("/processoCliente/:mac_address", function (req, res) {
+  mysqlController.obterServidor(req, res)
+})
+
+router.delete(`/excluirProcesso/:mac_address/:idProcesso/:pid`, function (req, res) {
+  mysqlController.excluirProcesso(req, res)
+})
+
 module.exports = router

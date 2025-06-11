@@ -20,7 +20,6 @@ function cadMaqFrio(req, res) {
 }
 
 function cardapio(req, res) {
-
     mysqlModel.cardapio().then((resultado) => {
         res.status(200).json(resultado)
     }).catch((erro) => {
@@ -215,6 +214,39 @@ function inserirAlerta(req, res) {
     });
 }
 
+function processoCliente(req, res) {
+    var mac = req.params.mac_address
+
+    if (!mac) {
+        return res.status(400).json({mensagem: "Bad Request: Dados fornecidos erroneamente"})
+    }
+    mysqlModel.processoCliente(mac).then((resultado) => {
+        res.status(200).json(resultado)
+    }).catch((erro) => {
+        console.error("Erro ao pegar os processos:", erro);
+        res.status(500).json({erro: erro.message})
+    })
+}
+
+function excluirProcesso(req, res) {
+    var mac = req.params.macAddress;
+    var pid = req.params.pid;
+    var idProcesso = req.params.idProcesso;
+
+    if (!idProcesso) {
+        return res.status(400).json({mensagem: "Bad Request: Dados fornecidos erroneamente"})
+    }
+    mysqlModel.excluirProcesso(idProcesso, pid, mac).then((resultado) => {
+        res.status(200).json({
+            mensagem: "Processo excluído com sucesso",
+            resultado: resultado
+        })
+    }).catch((erro) => {
+        console.error("Erro ao excluir processo:", erro);
+        res.status(500).json({ erro: erro.message })
+    })
+}
+
 module.exports = {
   pedidosCliente,
   dadosCapturados,
@@ -226,5 +258,7 @@ module.exports = {
   cadMaqQuente,
   cardapio,
   obterServidor,
-  pedidosObrigatorios
+  pedidosObrigatorios,
+  processoCliente,
+  excluirProcesso
 };

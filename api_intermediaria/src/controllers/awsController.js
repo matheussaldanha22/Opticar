@@ -163,13 +163,57 @@ async function baixarHistorico(req, res) {
     }
 }
 
+async function logProcesso(req, res) {
+    try {
+        var log = req.body.logProcesso;
+        var data = req.body.data
 
+        console.log("Dados recebidos:", req.body);
 
+        if (!log || !data) {
+            console.error("log ou data não fornecidos.");
+            return res.status(400).json({
+                mensagem: "log ou data não fornecidos."
+            });
+        }
+
+        const resultado = await enviarLogS3(log, data);
+        res.status(200).json({
+            mensagem: "Dados enviados com sucesso", local: resultado 
+        });
+    } catch (erro) {
+        console.error("Erro no controller:", erro.message);
+        res.status(500).json({ 
+            mensagem: "Erro ao enviar para o S3", erro: erro.message
+        });
+    }
+}
+
+async function enviarLogS3(log, data) {
+    const s3 = new AWS.S3();
+
+    const params = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: `LogsProcesso/${data}`,
+        Body: JSON.stringify(log),
+        ContentType: 'application/json'
+    };
+
+    try {
+        const data = await s3.upload(params).promise();
+        console.log("Relatório enviado com sucesso:", data.Location);
+        return data.Location;
+    } catch (erro) {
+        console.error("Erro ao enviar relatório:", erro.message);
+        throw erro;
+    }
+}
 
 module.exports = {
     dadosBucket,
     pegarS3,
     relatorioClient,
     visualizarHistorico,
-    baixarHistorico
+    baixarHistorico,
+    logProcesso
 };

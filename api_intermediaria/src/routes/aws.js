@@ -25,4 +25,8 @@ router.get("/baixarHistorico/:relatorioNome/:pasta", function(req, res) {
   awsController.baixarHistorico(req, res)
 });
 
+router.post("/logProcesso", function(req, res) {
+  awsController.logProcesso(req, res)
+});
+
 module.exports = router

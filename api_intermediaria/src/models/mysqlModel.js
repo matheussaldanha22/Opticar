@@ -102,6 +102,19 @@ function updateIPFRIO(mac_address, ip) {
   return database.executarFrio(instrucaoSql);
 }
 
+function processoCliente(mac) {
+  const instrucaoSql = `
+    SELECT * FROM pedidoProcesso join servidor_maquina on fkServidor_maquina = idMaquina WHERE Mac_Address = ${mac}
+  `;
+  return database.executarQuente(instrucaoSql);
+}
+
+function excluirProcesso(mac_address, idProcesso, pid) {
+  const instrucaoSql = `DELETE FROM pedidoProcesso WHERE idPedidoProcesso = ${idProcesso}`
+
+  return database.executarQuente(instrucaoSql);
+}
+
 
 module.exports = {
     pedidosCliente,
@@ -115,5 +128,7 @@ module.exports = {
     cardapio,
     obterServidor,
     pedidosObrigatorios,
-    pedidosObrigatoriosQuente
+    pedidosObrigatoriosQuente,
+    processoCliente,
+    excluirProcesso
 }
