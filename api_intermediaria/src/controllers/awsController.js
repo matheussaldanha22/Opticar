@@ -64,7 +64,7 @@ async function enviarParaS3(macAddress, dadosJson, dataP, fabrica) {
     const s3 = new AWS.S3();
 
     const params = {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: process.env.BUCKET_NAME_RAW,
         Key: `fabrica${fabrica}/${macAddress}/${dataP}`,
         Body: JSON.stringify(dadosJson),
         ContentType: 'application/json'
@@ -84,7 +84,7 @@ async function enviarRelatorio(bufferArquivo, nomeArquivo, tipo, pasta) {
     const s3 = new AWS.S3();
 
     const params = {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: process.env.BUCKET_NAME_CLIENT,
         Key: `${pasta}/${tipo}`,
         Body: bufferArquivo,
         ContentType: 'application/pdf'  
@@ -105,7 +105,7 @@ async function visualizarHistorico(req, res) {
     const s3 = new AWS.S3()
 
     const params = {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: process.env.BUCKET_NAME_CLIENT,
         Prefix: `${pasta}/`
     }
 
@@ -126,8 +126,8 @@ async function pegarS3(req,res){
     const s3 = new AWS.S3();
 
     const params = {
-        Bucket: process.env.BUCKET_NAME,
-        Key: `${ano}/${mes}/data.json`,
+        Bucket: process.env.BUCKET_NAME_TRUSTED,
+        Key: `pix/${ano}/${mes}/data.json`,
     }
 
     try {
@@ -147,7 +147,7 @@ async function baixarHistorico(req, res) {
     const s3 = new AWS.S3()
 
     const params = {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: process.env.BUCKET_NAME_CLIENT,
         Key: `${pasta}/${nome}`
     }
 
@@ -193,7 +193,7 @@ async function enviarLogS3(log, data) {
     const s3 = new AWS.S3();
 
     const params = {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: process.env.BUCKET_NAME_CLIENT,
         Key: `LogsProcesso/${data}`,
         Body: JSON.stringify(log),
         ContentType: 'application/json'

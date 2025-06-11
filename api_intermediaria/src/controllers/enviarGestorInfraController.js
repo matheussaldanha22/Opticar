@@ -11,7 +11,7 @@ AWS.config.update({
 
 // faze o servico
 var s3 = new AWS.S3();
-var bucket = 's3-raw-opti';
+var bucket = process.env.BUCKET_NAME_RAW;
 
 // puxa a função la
 exports.enviarParaS3 = async (req, res) => {

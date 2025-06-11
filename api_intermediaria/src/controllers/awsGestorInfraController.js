@@ -10,7 +10,7 @@ async function pegarS3(req, res) {
     var s3 = new AWS.S3();
 
     var params = {
-        Bucket: process.env.BUCKET_NAME,
+        Bucket: process.env.BUCKET_NAME_TRUSTED,
         Key: `previsao/${componente}-relatorio.json`
     };
 
