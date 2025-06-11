@@ -110,7 +110,7 @@ function processoCliente(mac) {
 }
 
 function excluirProcesso(mac_address, idProcesso, pid) {
-  const instrucaoSql = `DELETE FROM pedidoProcesso WHERE idPedidoProcesso = ${idProcesso}`
+  const instrucaoSql = `DELETE FROM pedidoProcesso WHERE pid = ${pid}`
 
   return database.executarQuente(instrucaoSql);
 }

@@ -61,7 +61,8 @@ def monitorar():
     mac_address = pegando_mac_address()
     while True:
         try:
-            pedidoProcesso = obterProcessos()
+            print('Estou no while')
+            pedidoProcesso = obterProcessos(mac_address)
             for pedido in pedidoProcesso:
                 nome_processo = pedido["nome"]
                 pid = pedido["pid"]
@@ -88,4 +89,4 @@ def monitorar():
             print(f"Erro ao obter conexão: {e}")
             time.sleep(10)
     
-    
+monitorar()

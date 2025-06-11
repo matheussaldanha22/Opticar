@@ -264,6 +264,25 @@ function listarProcessos(req, res) {
     }
 }
 
+function inserirProcesso(req, res){
+  const pid = req.body.pid
+  const nome = req.body.nome
+  const fkServidorMaquina = req.body.fkServidorMaquina
+
+  dashMonitoramentoModel.inserirProcesso(pid, nome, fkServidorMaquina)
+        .then(function (resultado) {
+        res.json(resultado)
+      })
+      .catch(function (erro) {
+        console.log(erro)
+        console.log(
+          "\nHouve um erro ao cadastrar o processo! Erro: ",
+          erro.sqlMessage
+        )
+        res.status(500).json(erro.sqlMessage)
+      })
+}
+
 module.exports = {
   obterSemana,
   dadosTempoReal,
@@ -273,5 +292,6 @@ module.exports = {
   dadosPedidoRecebidos,
   filtroMedida,
   processosPorMaquina,
-  listarProcessos
+  listarProcessos,
+  inserirProcesso
 }

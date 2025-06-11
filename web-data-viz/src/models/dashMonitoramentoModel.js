@@ -32,8 +32,17 @@ function filtroMedida(idMaquina){
   return database.executarQUENTE(instrucaoSql)
 }
 
+function inserirProcesso(pid, nome, fkServidorMaquina){
+  var instrucaoSql = `
+    INSERT INTO pedidoProcesso (pid, nome, fkServidor_maquina) VALUES
+    (${pid}, '${nome}', ${fkServidorMaquina})
+  `
+  return database.executarQUENTE(instrucaoSql)
+}
+
 module.exports = {
   obterParametrosComponente,
   qtdServidoresPorFabrica,
-  filtroMedida
+  filtroMedida,
+  inserirProcesso
 }

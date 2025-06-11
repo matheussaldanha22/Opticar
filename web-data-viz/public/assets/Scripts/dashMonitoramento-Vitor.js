@@ -214,18 +214,8 @@ function renderTabela() {
 }
 
 function renderKpis() {
-  const idFabrica = sessionStorage.getItem("FABRICA_ID")
 
   let totalServidor = document.getElementById("qtdTotalServidores")
-
-  // fetch(`/dashMonitoramento/qtdServidoresPorFabrica/${idFabrica}`, {
-  //   method: "GET",
-  // })
-  //   .then((res) => res.json())
-  //   .then((dados) => {
-  //     totalServidor.textContent = dados[0].qtdServidores
-  //     // console.log(`QtdServidoresMonitorados: ${dados[0].qtdServidores}`)
-  //   })
 
   // Percorrer dadosTempoRealFiltrados para contar servidores por estado
   let qtdServidoresCritico = 0;

@@ -43,4 +43,8 @@ router.get("/filtroMedida/:idMaquina", (req, res) =>{
   dashMonitoramentoController.filtroMedida(req, res)
 })
 
+router.post("/inserirProcesso", (req,res) =>{
+  dashMonitoramentoController.inserirProcesso(req, res)
+})
+
 module.exports = router

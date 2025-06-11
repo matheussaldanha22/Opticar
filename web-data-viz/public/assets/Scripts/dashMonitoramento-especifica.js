@@ -631,7 +631,6 @@ function modalFiltro(nomeComponente) {
 let listaProcessos = []
 
 function buscarProcesso() {
-  // ✅ Use idMaquina em vez de idFabrica
   const idMaquina = sessionStorage.getItem('idServidorSelecionado')
 
   if (!idMaquina) {
@@ -656,7 +655,9 @@ function buscarProcesso() {
 }
 
 function renderTabelaProcessos() {
+  let idMaquina = sessionStorage.getItem('idServidorSelecionado')
   let tbody = document.getElementById('tbody')
+
 
   // ✅ Limpa a tabela antes de renderizar
   tbody.innerHTML = '';
@@ -682,10 +683,57 @@ function renderTabelaProcessos() {
         <td data-label="Processo">${processo.nome}</td>
         <td data-label="CPU">${processo.cpu}%</td>
         <td data-label="RAM">${processo.ram}%</td>
-        <td data-label="Informações"><i class="fa fa-eye" aria-hidden="true" onclick="redirecionarPagina()"></i></td>
+        <td data-label="Finalizar processo"><i class="fa fa-eye" aria-hidden="true" onclick="finalizarProcesso(${processo.pid}, '${processo.nome}', ${idMaquina})"></i></td>
       `
     tbody.appendChild(tr)
   }
+}
+
+function finalizarProcesso(pid, nome, idMaquina) {
+
+
+  fetch(`dashMonitoramento/inserirProcesso`, {    
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      pid: pid,
+      nome: nome,
+      fkServidorMaquina: idMaquina
+    }),
+  })
+        .then((res) => {
+        if (res.ok) {
+          return res.json()
+        } else {
+          console.log(res.json())
+          // throw new Error("Erro ao cadastrar funcionário")
+        }
+      })
+      .then((res) => {
+        // Se o backend retorna um objeto com sucesso
+        if (res) {
+          console.log("Processo finalizado com sucesso!")
+          Swal.fire({
+            title: "Sucesso",
+            text: "Processo finalizado!",
+            icon: "success",
+            confirmButtonText: "OK",
+          })
+          // .then(() => {
+          //   window.location.href = "./das.html"
+          // })
+        } else {
+          console.log("Erro ao finalizar processo")
+          Swal.fire({
+            title: "Erro",
+            text: "Erro ao finalizar processo",
+            icon: "error",
+            confirmButtonText: "OK",
+          })
+        }
+      })
 }
 
 
