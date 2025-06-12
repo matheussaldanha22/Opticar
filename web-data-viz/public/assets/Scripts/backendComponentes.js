@@ -235,7 +235,7 @@ function listarComponente() {
 
             componentes.forEach(componente => {
               if ((componente.tipo == "Cpu" || componente.tipo == "Ram" || componente.tipo == "Disco" || componente.tipo == "Rede")
-                 && (componente.medida == "Porcentagem" || componente.medida == "Upload" || componente.medida == "Download")) {
+                 && (componente.medida == "Porcentagem" || componente.medida == "Recebida" || componente.medida == "Enviada")) {
                 const linha = document.createElement("tr");
                 linha.innerHTML = ""; 
                 linha.innerHTML += `
