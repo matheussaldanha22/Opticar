@@ -1484,7 +1484,7 @@ Como esse padrão pode impactar o desempenho e a confiabilidade dos sistemas
 Objetivo
 Apresente as informações de forma clara, com destaque visual (cores, ícones, estrutura), interpretando os dados com base em evidências estatísticas. A análise deve ser acessível a gestores e técnicos, com recomendações práticas para suporte à decisão.`;
 
-    const response = await fetch("http://localhost:5000/perguntar", {
+    const response = await fetch("http://34.198.19.147:5000/perguntar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1510,7 +1510,7 @@ Apresente as informações de forma clara, com destaque visual (cores, ícones, 
 
 async function pdf(respostas, tipo, pasta) {
   try {
-    const resposta = await fetch("http://localhost:5000/pdf", {
+    const resposta = await fetch("http://34.198.19.147:5000/pdf", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1554,7 +1554,7 @@ async function relatorioClient(blob, tipo, pasta) {
   formData.append("pasta", pasta);
 
   try {
-    const resposta = await fetch("http://localhost:5000/aws/relatorioClient", {
+    const resposta = await fetch("http://34.198.19.147:5000/aws/relatorioClient", {
       method: "POST",
       body: formData
     }); 
@@ -1571,7 +1571,7 @@ async function relatorioClient(blob, tipo, pasta) {
 async function visualizarHistorico() {
   var pasta = "RelatorioCorrelação";
   try {
-    const resposta = await fetch(`http://localhost:5000/aws/visualizarHistorico/${pasta}`, {
+    const resposta = await fetch(`http://34.198.19.147:5000/aws/visualizarHistorico/${pasta}`, {
       method: "GET",
       headers: { "Content-Type": "application/json"}
     });
@@ -1600,7 +1600,7 @@ async function visualizarHistorico() {
 async function baixarHistorico(relatorioNome) {
   var pasta = "RelatorioPredição";
   try {
-    const resposta = await fetch(`http://localhost:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
+    const resposta = await fetch(`http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
       method: "GET",
       headers: {"Content-Type": "application/pdf"}
     });

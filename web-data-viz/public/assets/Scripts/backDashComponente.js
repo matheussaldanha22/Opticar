@@ -1186,7 +1186,7 @@ async function bobPredicaoRelatorio() {
       Produza uma análise clara, técnica e visual, com cores para indicar o status do componente, que ajude gestores e técnicos a entender rapidamente o risco e a necessidade de ações.`;
     }
 
-    const response = await fetch("http://localhost:5000/perguntar", {
+    const response = await fetch("http://34.198.19.147:5000/perguntar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1212,7 +1212,7 @@ async function bobPredicaoRelatorio() {
 
 async function pdf(respostas, tipo, pasta) {
   try {
-    const resposta = await fetch("http://localhost:5000/pdf", {
+    const resposta = await fetch("http://34.198.19.147:5000/pdf", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1255,7 +1255,7 @@ async function relatorioClient(blob, tipo, pasta) {
   formData.append("pasta", pasta);
 
   try {
-    const resposta = await fetch("http://localhost:5000/aws/relatorioClient", {
+    const resposta = await fetch("http://34.198.19.147:5000/aws/relatorioClient", {
       method: "POST",
       body: formData,
     });
@@ -1273,7 +1273,7 @@ async function visualizarHistorico() {
   var pasta = "RelatorioPredição";
   try {
     const resposta = await fetch(
-      `http://localhost:5000/aws/visualizarHistorico/${pasta}`,
+      `http://34.198.19.147:5000/aws/visualizarHistorico/${pasta}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -1305,7 +1305,7 @@ async function baixarHistorico(relatorioNome) {
   var pasta = "RelatorioPredição";
   try {
     const resposta = await fetch(
-      `http://localhost:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`,
+      `http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`,
       {
         method: "GET",
         headers: { "Content-Type": "application/pdf" },

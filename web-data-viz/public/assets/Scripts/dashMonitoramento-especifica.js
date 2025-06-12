@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     buscarProcesso()
     renderTabelaProcessos()
 
-  }, 1000);
+  }, 500);
 
 
 
@@ -212,7 +212,7 @@ function renderGraficos() {
 
   setInterval(() => {
     renderDados()
-  }, 2000);
+  }, 500);
 }
 
 

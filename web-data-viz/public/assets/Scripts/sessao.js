@@ -42,7 +42,7 @@ function dashEmpresa() {
 }
 
 function dashGestaoFabrica() {
-  window.location.href = "./dashGestaoFabrica.html"
+  window.location.href = "./dashGestaofabrica.html"
 }
 
 function listaServidores() {

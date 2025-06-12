@@ -76,7 +76,7 @@ function listarPorEmpresa(idEmpresa) {
     SELECT usuario.idusuario, usuario.nome, usuario.email, usuario.cpf,  usuario.cargo, empresa.nome AS nomeEmpresa, fabrica.nome AS nomeFabrica from usuario
       JOIN fabrica on usuario.fkFabrica = idFabrica
       JOIN empresa on fabrica.fkEmpresa = empresa.idempresa
-    WHERE empresa.idempresa = ${idEmpresa} AND usuario.cargo = 'GestorFabrica';
+    WHERE empresa.idempresa = ${idEmpresa} AND usuario.cargo = 'GestorInfra';
   `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executarFRIO(instrucaoSql)
@@ -87,7 +87,7 @@ function listarPorFabrica(idFabrica) {
     SELECT usuario.idusuario, usuario.nome, usuario.email, usuario.cpf,  usuario.cargo, fabrica.nome AS nomeFabrica from usuario
       JOIN fabrica on usuario.fkFabrica = idFabrica
       JOIN empresa on fabrica.fkEmpresa = empresa.idempresa
-    WHERE fabrica.idFabrica = ${idFabrica} AND usuario.cargo != 'GestorFabrica' AND usuario.cargo != 'GestorEmpresa';
+    WHERE fabrica.idFabrica = ${idFabrica} AND usuario.cargo != 'GestorInfra' AND usuario.cargo != 'GestorAdmin';
   `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executarFRIO(instrucaoSql)

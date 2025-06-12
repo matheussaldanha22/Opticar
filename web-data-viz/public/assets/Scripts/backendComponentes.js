@@ -1,225 +1,262 @@
 function listarTipo() {
-    fetch("/componentes/listarTipo", {
-        method: "GET",
-    })
+  fetch("/componentes/listarTipo", {
+    method: "GET",
+  })
     .then(function (resposta) {
-        if (!resposta.ok) {
-            throw new Error(`Erro na resposta: ${resposta.status}`);
-        }
-        return resposta.json();
+      if (!resposta.ok) {
+        throw new Error(`Erro na resposta: ${resposta.status}`)
+      }
+      return resposta.json()
     })
     .then(function (componentes) {
-        var tipoElement = document.getElementById("sltTipo");
-        tipoElement.innerHTML = "";
-        tipoElement.innerHTML = `<option value="#" selected>Selecione o Componente</option>`
-        if (componentes.length > 0) {
-            componentes.forEach((tipo) => {
-                var option = document.createElement("option");
-                option.textContent = tipo.tipo;
-                tipoElement.appendChild(option);
-            });
-            console.log("Tipos cadastrados com sucesso");
-        } else {
-            var option = document.createElement("option");
-            option.value = "";
-            option.textContent = "Nenhum componente disponível";
-            tipoElement.appendChild(option);
-        }
+      var tipoElement = document.getElementById("sltTipo")
+      tipoElement.innerHTML = ""
+      tipoElement.innerHTML = `<option value="#" selected>Selecione o Componente</option>`
+      if (componentes.length > 0) {
+        componentes.forEach((tipo) => {
+          var option = document.createElement("option")
+          option.textContent = tipo.tipo
+          tipoElement.appendChild(option)
+        })
+        console.log("Tipos cadastrados com sucesso")
+      } else {
+        var option = document.createElement("option")
+        option.value = ""
+        option.textContent = "Nenhum componente disponível"
+        tipoElement.appendChild(option)
+      }
     })
     .catch(function (erro) {
-        console.error(`#ERRO: ${erro}`);
-    });
+      console.error(`#ERRO: ${erro}`)
+    })
 }
 
-
 function listarMedida() {
-    var tipoSelecionadoVar = sltTipo.value;
+  var tipoSelecionadoVar = sltTipo.value
 
-    fetch("/componentes/listarMedida", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-        tipoSelecionadoServer: tipoSelecionadoVar,
-      }),
-    })
+  fetch("/componentes/listarMedida", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      tipoSelecionadoServer: tipoSelecionadoVar,
+    }),
+  })
     .then(function (resposta) {
-        return resposta.json();
-    }).then(function (componentes) {
-        var medidaElement = document.getElementById("sltMedida");
-        medidaElement.innerHTML = "";
-        medidaElement.innerHTML = `<option value="#" selected>Selecione a Medida</option>`;
-        if (componentes.length > 0) {
-            componentes.forEach((tipo) => {
-              if (tipoSelecionadoVar == "Cpu" && tipo.medida == "Porcentagem") {
-                return
-              } else if (tipoSelecionadoVar == "Ram" && tipo.medida == "Porcentagem") {
-                return
-              } else if (tipoSelecionadoVar == "Disco" && tipo.medida == "Porcentagem") {
-                return
-              } else if (tipoSelecionadoVar == "Rede" && tipo.medida == "Upload" || tipo.medida == "Download") {
-                return
-              } else {
-                var option = document.createElement("option");
-                option.textContent = tipo.medida;
-                medidaElement.appendChild(option);
-              }
-            });
-            console.log("Tipos cadastrados com sucesso");
-        } else {
-            var option = document.createElement("option");
-            option.value = "";
-            option.textContent = "Nenhum componente disponível";
-            medidaElement.appendChild(option);
-        }
+      return resposta.json()
+    })
+    .then(function (componentes) {
+      var medidaElement = document.getElementById("sltMedida")
+      medidaElement.innerHTML = ""
+      medidaElement.innerHTML = `<option value="#" selected>Selecione a Medida</option>`
+      if (componentes.length > 0) {
+        componentes.forEach((tipo) => {
+          if (tipoSelecionadoVar == "Cpu" && tipo.medida == "Porcentagem") {
+            return
+          } else if (
+            tipoSelecionadoVar == "Ram" &&
+            tipo.medida == "Porcentagem"
+          ) {
+            return
+          } else if (
+            tipoSelecionadoVar == "Disco" &&
+            tipo.medida == "Porcentagem"
+          ) {
+            return
+          } else if (
+            (tipoSelecionadoVar == "Rede" && tipo.medida == "Upload") ||
+            tipo.medida == "Download"
+          ) {
+            return
+          } else {
+            var option = document.createElement("option")
+            option.textContent = tipo.medida
+            medidaElement.appendChild(option)
+          }
+        })
+        console.log("Tipos cadastrados com sucesso")
+      } else {
+        var option = document.createElement("option")
+        option.value = ""
+        option.textContent = "Nenhum componente disponível"
+        medidaElement.appendChild(option)
+      }
     })
     .catch(function (erro) {
-        console.error(`#ERRO: ${erro}`);
-    });
+      console.error(`#ERRO: ${erro}`)
+    })
 }
 
 function verificaPedido() {
-    console.log("entrei no verifica")
-    var codigoPedido = [];
-    var tipoVar = sltTipo.value
-    var medidaVar = sltMedida.value
-    if (tipoVar === "#" || medidaVar === "#") {
-        Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
-        return;
-    }
+  console.log("entrei no verifica")
+  var codigoPedido = []
+  var tipoVar = sltTipo.value
+  var medidaVar = sltMedida.value
+  if (tipoVar === "#" || medidaVar === "#") {
+    Swal.fire(
+      "Erro!",
+      "Por favor, preencha todos os campos corretamente.",
+      "error"
+    )
+    return
+  }
 
-    fetch("/componentes/verificar", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            tipoServer: tipoVar,
-            medidaServer: medidaVar
-          }),
-      })
-        .then(function (resposta) {
-          resposta.json().then((codigos) => {
-            codigos.forEach((codigo) => {
-                codigoPedido.push(codigo.idcomponente);
-                console.log(codigoPedido)
-                cadastrarPedido(codigoPedido);
-            });
-          });
+  fetch("/componentes/verificar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      tipoServer: tipoVar,
+      medidaServer: medidaVar,
+    }),
+  })
+    .then(function (resposta) {
+      resposta.json().then((codigos) => {
+        codigos.forEach((codigo) => {
+          codigoPedido.push(codigo.idcomponente)
+          console.log(codigoPedido)
+          cadastrarPedido(codigoPedido)
         })
-        .catch(function (resposta) {
-          console.log(`#ERRO: ${resposta}`);
-        });
+      })
+    })
+    .catch(function (resposta) {
+      console.log(`#ERRO: ${resposta}`)
+    })
 }
 
 function cadastrarPedido(codigoPedido) {
-    var codigoVar = codigoPedido[0]
-    var idMaquinaVar = sessionStorage.idMaquinaSelecionada
-    var modeloVar = document.getElementById("iptModelo").value
-    var limiteAVar = document.getElementById("iptLimiteAtencao").value
-    var limiteGVar = document.getElementById("iptLimiteGrave").value
+  var codigoVar = codigoPedido[0]
+  var idMaquinaVar = sessionStorage.idMaquinaSelecionada
+  // var modeloVar = document.getElementById("iptModelo").value
+  var modeloVar = "Intel"
+  // var limiteAVar = document.getElementById("iptLimiteAtencao").value
+  // var limiteGVar = document.getElementById("iptLimiteGrave").value
+  var limiteAVar = 50
+  var limiteGVar = 70
 
-    console.log(codigoVar)
+  console.log(codigoVar)
 
-    if (codigoVar == '' || !modeloVar || !limiteAVar || !limiteGVar) {
-        Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
-        return;
-    }
+  if (codigoVar == "" || !modeloVar || !limiteAVar || !limiteGVar) {
+    Swal.fire(
+      "Erro!",
+      "Por favor, preencha todos os campos corretamente.",
+      "error"
+    )
+    return
+  }
 
-    fetch("/componentes/cadastrar", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-        idMaquinaServer: idMaquinaVar,
-        codigoServer: codigoVar,
-        modeloServer: modeloVar,
-        limiteAServer: limiteAVar,
-        limiteGServer: limiteGVar
-      }),
-      })
-        .then(async function (resposta) {
-          console.log("resposta: ", resposta);
-          var mensagem = await resposta.text();
-          if (resposta.ok) {
-            listarComponente()
-            cadastrarPedidoFrio(codigoPedido)
-            Swal.fire('Sucesso!', 'Componente cadastrado com sucesso!', 'success');
-          } else if (mensagem.includes("Duplicate entry")) {
-            Swal.fire('Erro!', 'Componente já cadastrado para essa máquina!', 'error');
-          } else {
-            Swal.fire('Erro!', 'Falha ao cadastrar o componente.', 'error');
-          }
-        })
-        .catch(function (erro) {
-          console.error("Erro ao enviar dados:", erro);
-        });
-        return false;
+  fetch("/componentes/cadastrar", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      idMaquinaServer: idMaquinaVar,
+      codigoServer: codigoVar,
+      modeloServer: modeloVar,
+      limiteAServer: limiteAVar,
+      limiteGServer: limiteGVar,
+    }),
+  })
+    .then(async function (resposta) {
+      console.log("resposta: ", resposta)
+      var mensagem = await resposta.text()
+      if (resposta.ok) {
+        listarComponente()
+        cadastrarPedidoFrio(codigoPedido)
+        Swal.fire("Sucesso!", "Componente cadastrado com sucesso!", "success")
+      } else if (mensagem.includes("Duplicate entry")) {
+        Swal.fire(
+          "Erro!",
+          "Componente já cadastrado para essa máquina!",
+          "error"
+        )
+      } else {
+        Swal.fire("Erro!", "Falha ao cadastrar o componente.", "error")
+      }
+    })
+    .catch(function (erro) {
+      console.error("Erro ao enviar dados:", erro)
+    })
+  return false
 }
 
 function cadastrarPedidoFrio(codigoPedido) {
-    var idMaquinaVar = sessionStorage.idMaquinaSelecionada
-    var codigoVar = codigoPedido[0]
-    var modeloVar = document.getElementById("iptModelo").value
-    var limiteAVar = document.getElementById("iptLimiteAtencao").value
-    var limiteGVar = document.getElementById("iptLimiteGrave").value
+  var idMaquinaVar = sessionStorage.idMaquinaSelecionada
+  var codigoVar = codigoPedido[0]
+  var idMaquinaVar = sessionStorage.idMaquinaSelecionada
+  // var modeloVar = document.getElementById("iptModelo").value
+  var modeloVar = "Intel"
+  // var limiteAVar = document.getElementById("iptLimiteAtencao").value
+  // var limiteGVar = document.getElementById("iptLimiteGrave").value
+  var limiteAVar = 50
+  var limiteGVar = 70
 
-    console.log(codigoVar)
+  console.log(codigoVar)
 
-    if (codigoVar == '' || !modeloVar || !limiteAVar || !limiteGVar) {
-        Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
-        return;
-    }
+  if (codigoVar == "" || !modeloVar || !limiteAVar || !limiteGVar) {
+    Swal.fire(
+      "Erro!",
+      "Por favor, preencha todos os campos corretamente.",
+      "error"
+    )
+    return
+  }
 
-    fetch("/componentes/cadastrarFrio", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-        idMaquinaServer: idMaquinaVar,
-        codigoServer : codigoVar,
-        modeloServer: modeloVar,
-        limiteAServer: limiteAVar,
-        limiteGServer: limiteGVar
-      }),
-      })
-        .then(async function (resposta) {
-          console.log("resposta: ", resposta);
-          var mensagem = await resposta.text();
-          if (resposta.ok) {
-            Swal.fire('Sucesso!', 'Componente cadastrado com sucesso!', 'success');
-          } else if (mensagem.includes("Duplicate entry")) {
-            Swal.fire('Erro!', 'Componente já cadastrado para essa máquina!', 'error');
-          } else {
-            Swal.fire('Erro!', 'Falha ao cadastrar o componente.', 'error');
-          }
-        })
-        .catch(function (erro) {
-          console.error("Erro ao enviar dados:", erro);
-        });
-        return false;
+  fetch("/componentes/cadastrarFrio", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      idMaquinaServer: idMaquinaVar,
+      codigoServer: codigoVar,
+      modeloServer: modeloVar,
+      limiteAServer: limiteAVar,
+      limiteGServer: limiteGVar,
+    }),
+  })
+    .then(async function (resposta) {
+      console.log("resposta: ", resposta)
+      var mensagem = await resposta.text()
+      if (resposta.ok) {
+        Swal.fire("Sucesso!", "Componente cadastrado com sucesso!", "success")
+      } else if (mensagem.includes("Duplicate entry")) {
+        Swal.fire(
+          "Erro!",
+          "Componente já cadastrado para essa máquina!",
+          "error"
+        )
+      } else {
+        Swal.fire("Erro!", "Falha ao cadastrar o componente.", "error")
+      }
+    })
+    .catch(function (erro) {
+      console.error("Erro ao enviar dados:", erro)
+    })
+  return false
 }
 
 function listarComponente() {
-    var codigoMaquina = document.querySelector("#codigoMaquina");
-    var idMaquinaVar = sessionStorage.idMaquinaSelecionada
-    codigoMaquina.innerHTML = `SV00${idMaquinaVar}`
-    fetch("/componentes/listarComponentes", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          idMaquinaServer: idMaquinaVar
-        }),
-        }).then(resposta => resposta.json())
-          .then(componentes => {
-            const tabela = document.querySelector(".componentesContainer table");
-            tabela.innerHTML = "";
-            tabela.innerHTML = `
+  var codigoMaquina = document.querySelector("#codigoMaquina")
+  var idMaquinaVar = sessionStorage.idMaquinaSelecionada
+  codigoMaquina.innerHTML = `SV00${idMaquinaVar}`
+  fetch("/componentes/listarComponentes", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      idMaquinaServer: idMaquinaVar,
+    }),
+  })
+    .then((resposta) => resposta.json())
+    .then((componentes) => {
+      const tabela = document.querySelector(".componentesContainer table")
+      tabela.innerHTML = ""
+      tabela.innerHTML = `
                               <thead class ="tituloTabela">    
                                 <tr>
                                     <th>ID Componente</th>
@@ -231,14 +268,21 @@ function listarComponente() {
                                     <th>Limite atenção</th>
                                     <th>Ações</th>
                                 </tr>
-                              </thead>`;
+                              </thead>`
 
-            componentes.forEach(componente => {
-              if ((componente.tipo == "Cpu" || componente.tipo == "Ram" || componente.tipo == "Disco" || componente.tipo == "Rede")
-                 && (componente.medida == "Porcentagem" || componente.medida == "Recebida" || componente.medida == "Enviada")) {
-                const linha = document.createElement("tr");
-                linha.innerHTML = ""; 
-                linha.innerHTML += `
+      componentes.forEach((componente) => {
+        if (
+          (componente.tipo == "Cpu" ||
+            componente.tipo == "Ram" ||
+            componente.tipo == "Disco" ||
+            componente.tipo == "Rede") &&
+          (componente.medida == "Porcentagem" ||
+            componente.medida == "Recebida" ||
+            componente.medida == "Enviada")
+        ) {
+          const linha = document.createElement("tr")
+          linha.innerHTML = ""
+          linha.innerHTML += `
                     <tbody>
                       <td data-label = "ID Componente">${componente.idcomponenteServidor}</td>
                       <td data-label = "Tipo componente">${componente.tipo}</td>
@@ -249,17 +293,17 @@ function listarComponente() {
                       <td data-label = "Limite atenção">${componente.limiteAtencao}</td>
                       <td data-label = "Editar"><button class="btn-editar" data-id="${componente.idcomponenteServidor}"><i class='bx bx-edit'></i></button></td>
                     </tbody>
-                `;
-                tabela.appendChild(linha);
+                `
+          tabela.appendChild(linha)
 
-                const botaoEditar = linha.querySelector(".btn-editar")
-                botaoEditar.addEventListener("click", () => {
-                  modalEditar(botaoEditar)
-                })
-                } else {
-                  const linha = document.createElement("tr");
-                linha.innerHTML = ""; 
-                linha.innerHTML += `
+          const botaoEditar = linha.querySelector(".btn-editar")
+          botaoEditar.addEventListener("click", () => {
+            modalEditar(botaoEditar)
+          })
+        } else {
+          const linha = document.createElement("tr")
+          linha.innerHTML = ""
+          linha.innerHTML += `
                     <tbody>
                       <td data-label = "ID Componente">${componente.idcomponenteServidor}</td>
                       <td data-label = "Tipo componente">${componente.tipo}</td>
@@ -271,109 +315,110 @@ function listarComponente() {
                       <td data-label = "Ações"><button class="btn-purple" data-id="${componente.idcomponenteServidor}"><i class='bx bxs-trash'></i></button>
                       <button class="btn-editar" data-id="${componente.idcomponenteServidor}"><i class='bx bx-edit'></i></button></td>
                     </tbody>
-                `;
-                tabela.appendChild(linha);
+                `
+          tabela.appendChild(linha)
 
-                const botaoExcluir = linha.querySelector(".btn-purple");
+          const botaoExcluir = linha.querySelector(".btn-purple")
 
-                botaoExcluir.addEventListener("click", () => {
-                    Swal.fire({
-                        title: "Tem certeza?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#d33",
-                        cancelButtonColor: "#3085d6",
-                        confirmButtonText: "Sim, excluir!"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            excluirComponente(botaoExcluir);
-                        }
-                    });
-                });
-
-                const botaoEditar = linha.querySelector(".btn-editar")
-                botaoEditar.addEventListener("click", () => {
-                  modalEditar(botaoEditar)
-                })
+          botaoExcluir.addEventListener("click", () => {
+            Swal.fire({
+              title: "Tem certeza?",
+              icon: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#d33",
+              cancelButtonColor: "#3085d6",
+              confirmButtonText: "Sim, excluir!",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                excluirComponente(botaoExcluir)
               }
-            });
-    }).catch(erro => {
-        console.error("Erro ao buscar componentes:", erro);
-    });
+            })
+          })
+
+          const botaoEditar = linha.querySelector(".btn-editar")
+          botaoEditar.addEventListener("click", () => {
+            modalEditar(botaoEditar)
+          })
+        }
+      })
+    })
+    .catch((erro) => {
+      console.error("Erro ao buscar componentes:", erro)
+    })
 }
 
 function excluirComponente(botaoExcluir) {
-    var idVar = botaoExcluir.getAttribute("data-id");
+  var idVar = botaoExcluir.getAttribute("data-id")
 
-    fetch("/componentes/excluirComponente", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            idServer: idVar,
-          }),
-      })
-        .then(function (resposta) {
-          if (resposta.ok) {
-            excluirComponenteFrio(idVar)
-            listarComponente()
-            Swal.fire('Excluído', 'Componente excluído com sucesso', 'success')
-          } else {
-            Swal.fire('Erro', 'Componente não foi excluído com sucesso', 'error')
-          }
-        })
-        .catch(function (resposta) {
-          console.log(`#ERRO: ${resposta}`);
-        });     
+  fetch("/componentes/excluirComponente", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      idServer: idVar,
+    }),
+  })
+    .then(function (resposta) {
+      if (resposta.ok) {
+        excluirComponenteFrio(idVar)
+        listarComponente()
+        Swal.fire("Excluído", "Componente excluído com sucesso", "success")
+      } else {
+        Swal.fire("Erro", "Componente não foi excluído com sucesso", "error")
+      }
+    })
+    .catch(function (resposta) {
+      console.log(`#ERRO: ${resposta}`)
+    })
 }
 
 function excluirComponenteFrio(idVar) {
   fetch("/componentes/excluirComponenteFrio", {
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-          idServer: idVar,
-        }),
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      idServer: idVar,
+    }),
+  })
+    .then(function (resposta) {
+      if (resposta.ok) {
+        listarComponente()
+      }
     })
-      .then(function (resposta) {
-        if (resposta.ok) {
-          listarComponente()
-        }
-      })
-      .catch(function (resposta) {
-        console.log(`#ERRO: ${resposta}`);
-      });     
+    .catch(function (resposta) {
+      console.log(`#ERRO: ${resposta}`)
+    })
 }
 
 function verificaIdMaquina() {
   var idMaquinaVar = sessionStorage.idMaquinaSelecionada
   console.log(idMaquinaVar)
   if (idMaquinaVar == undefined) {
-    window.location.href = "/listadeservidores.html";
+    window.location.href = "/listadeservidores.html"
   }
 }
 
 function modalEditar(botaoEditar) {
-  var idVar = botaoEditar.getAttribute("data-id");
+  var idVar = botaoEditar.getAttribute("data-id")
 
   fetch("/componentes/modalUpdate", {
     method: "POST",
     headers: {
-        "Content-Type": "application/json"
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ idServer: idVar }),
   })
-  .then(resposta => {
-    if (!resposta.ok) throw new Error("Erro na resposta da API");
-    return resposta.json();
-  })
-  .then(dados => {
-    const componente = dados[0]; 
-    Swal.fire({
-      html: `
+    .then((resposta) => {
+      if (!resposta.ok) throw new Error("Erro na resposta da API")
+      return resposta.json()
+    })
+    .then((dados) => {
+      const componente = dados[0]
+      Swal.fire({
+        html: `
             <div class="modal-test">
                 <div class="containerCadastroComp">
                     <h3>Editar Pedido</h3>
@@ -385,84 +430,87 @@ function modalEditar(botaoEditar) {
                 </div>
             </div>
       `,
-      showCancelButton: true,
-      cancelButtonText: "Fechar",
-      background: '#fff',
-      confirmButtonColor: '#2C3E50',
-      confirmButtonText: "Salvar",
-      customClass: 'addModal'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        updatePedido(idVar);
-      }
-    });
-  })
-  .catch(function (error) {
-    console.error("Erro ao realizar fetch:", error);
-  });
+        showCancelButton: true,
+        cancelButtonText: "Fechar",
+        background: "#fff",
+        confirmButtonColor: "#2C3E50",
+        confirmButtonText: "Salvar",
+        customClass: "addModal",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          updatePedido(idVar)
+        }
+      })
+    })
+    .catch(function (error) {
+      console.error("Erro ao realizar fetch:", error)
+    })
 }
 
 function updatePedido(idVar) {
-  var modelo = document.getElementById("iptModelo").value;
-  var limiteC = document.getElementById("iptLimiteC").value;
-  var limiteA = document.getElementById("iptLimiteAtencao").value;
+  var modelo = document.getElementById("iptModelo").value
+  var limiteC = document.getElementById("iptLimiteC").value
+  var limiteA = document.getElementById("iptLimiteAtencao").value
 
-  if (modelo == '' || !limiteC || !limiteA) {
-    Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
-    return;
+  if (modelo == "" || !limiteC || !limiteA) {
+    Swal.fire(
+      "Erro!",
+      "Por favor, preencha todos os campos corretamente.",
+      "error"
+    )
+    return
   }
 
   fetch("/componentes/updatePedido", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        idServer: idVar,
-        modeloServer: modelo,
-        limiteCServer: limiteC,
-        limiteAServer: limiteA,
-      }),
-    })
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      idServer: idVar,
+      modeloServer: modelo,
+      limiteCServer: limiteC,
+      limiteAServer: limiteA,
+    }),
+  })
     .then(async function (resposta) {
-      console.log("resposta updatePedido: ", resposta);
+      console.log("resposta updatePedido: ", resposta)
       if (resposta.ok) {
-        return updatePedidoQuente(idVar, modelo, limiteC, limiteA);
+        return updatePedidoQuente(idVar, modelo, limiteC, limiteA)
       } else {
-        throw new Error('Falha na primeira atualização');
+        throw new Error("Falha na primeira atualização")
       }
     })
     .then(() => {
-      listarComponente();
-      Swal.fire('Sucesso!', 'Pedido editado com sucesso!', 'success');
+      listarComponente()
+      Swal.fire("Sucesso!", "Pedido editado com sucesso!", "success")
     })
     .catch(function (erro) {
-      console.error("Erro ao enviar dados:", erro);
-      Swal.fire('Erro!', 'Falha ao editar o Pedido.', 'error');
-    });
+      console.error("Erro ao enviar dados:", erro)
+      Swal.fire("Erro!", "Falha ao editar o Pedido.", "error")
+    })
 }
 
 function updatePedidoQuente(idVar, modelo, limiteC, limiteA) {
-  console.log("UPDATE PEDIDO QUENTE");
-  console.log(idVar, modelo, limiteC, limiteA);
+  console.log("UPDATE PEDIDO QUENTE")
+  console.log(idVar, modelo, limiteC, limiteA)
 
   return fetch("/componentes/updatePedidoQuente", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        idServer: idVar,
-        modeloServer: modelo,
-        limiteCServer: limiteC,
-        limiteAServer: limiteA,
-      }),
-    })
-    .then(async function (resposta) {
-      console.log("resposta updatePedidoQuente: ", resposta);
-      if (!resposta.ok) {
-        throw new Error('Falha na segunda atualização');
-      }
-      return resposta;
-    });
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      idServer: idVar,
+      modeloServer: modelo,
+      limiteCServer: limiteC,
+      limiteAServer: limiteA,
+    }),
+  }).then(async function (resposta) {
+    console.log("resposta updatePedidoQuente: ", resposta)
+    if (!resposta.ok) {
+      throw new Error("Falha na segunda atualização")
+    }
+    return resposta
+  })
 }

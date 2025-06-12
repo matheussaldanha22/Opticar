@@ -6,9 +6,9 @@ let listaFabricas = []
 document.addEventListener("DOMContentLoaded", () => {
   const cargo = sessionStorage.getItem("CARGO")
 
-  if (cargo === "GestorEmpresa") {
+  if (cargo === "GestorAdmin") {
     listarFuncionariosEmpresa()
-  } else if (cargo === "GestorFabrica") {
+  } else if (cargo === "GestorInfra") {
     listarFuncionariosFabrica()
   }
 })
@@ -102,12 +102,12 @@ function abrirModal(id) {
     customClass: "alertaModal",
     didOpen: () => {
       const cargo = sessionStorage.getItem("CARGO")
-      if (cargo === "GestorEmpresa") {
+      if (cargo === "GestorAdmin") {
         const selectCargo = document.getElementById("sltCargo")
         const selectFabrica = document.getElementById("sltFabrica")
         selectCargo.innerHTML = `
           <option value="0">Selecione o cargo</option>
-          <option value="GestorFabrica">Gestor fábrica</option>
+          <option value="GestorInfra">Gestor fábrica</option>
         `
         document.querySelector(
           'select[name="cargo"]'
@@ -132,7 +132,7 @@ function abrirModal(id) {
             })
           }
         })
-      } else if (cargo === "GestorFabrica") {
+      } else if (cargo === "GestorInfra") {
         const selectCargo = document.getElementById("sltCargo")
         const selectFabrica = document.getElementById("fabricaContainer")
         selectFabrica.style.display = "none"
@@ -194,7 +194,7 @@ function abrirModal(id) {
         return Swal.fire("Erro", "Preencha todos os campos!", "error")
       }
 
-      if (sessionStorage.getItem("CARGO") == "GestorFabrica") {
+      if (sessionStorage.getItem("CARGO") == "GestorInfra") {
         fetch(`/usuarios/atualizarUsuario`, {
           method: "PUT",
           headers: {
@@ -229,7 +229,7 @@ function abrirModal(id) {
               listarFuncionariosFabrica()
             }
           })
-      } else if (sessionStorage.getItem("CARGO") == "GestorEmpresa") {
+      } else if (sessionStorage.getItem("CARGO") == "GestorAdmin") {
         fetch(`/usuarios/atualizarUsuarioFabrica`, {
           method: "PUT",
           headers: {
@@ -307,18 +307,18 @@ async function abrirModalCriar() {
       const idEmpresa = sessionStorage.getItem("EMPRESA")
       console.log(`idEmpresa: ${idEmpresa}`)
 
-      if (cargo !== "GestorEmpresa") {
+      if (cargo !== "GestorAdmin") {
         document.querySelectorAll(".registrarFabricas").forEach(function (el) {
           el.style.display = "none"
         })
       }
 
-      if (cargo === "GestorEmpresa") {
+      if (cargo === "GestorAdmin") {
         const selectCargo = document.getElementById("sltCargo")
         const selectFabrica = document.getElementById("sltFabrica")
         selectCargo.innerHTML = `
           <option value="0">Selecione o cargo</option>
-          <option value="GestorFabrica">Gestor fábrica</option>
+          <option value="GestorInfra">Gestor Infra</option>
         `
 
         fetch(`/fabricas/listarFabricasEmpresa/${idEmpresa}`, {
@@ -337,7 +337,7 @@ async function abrirModalCriar() {
             })
           }
         })
-      } else if (cargo === "GestorFabrica") {
+      } else if (cargo === "GestorInfra") {
         const selectCargo = document.getElementById("sltCargo")
         selectCargo.innerHTML = `
           <option value="0">Selecione o cargo</option>
@@ -357,7 +357,7 @@ async function abrirModalCriar() {
     // const fkFabrica = sessionStorage.getItem("FABRICA_ID")
     const cargoAtual = sessionStorage.getItem("CARGO")
 
-    if (cargoAtual === "GestorEmpresa") {
+    if (cargoAtual === "GestorAdmin") {
       fkFabrica = document.getElementById("sltFabrica").value
     } else {
       fkFabrica = sessionStorage.getItem("FABRICA_ID")
