@@ -94,16 +94,17 @@ async function gerarResposta(mensagem) {
     }
 }
 
-async function htmlParaPdf(resposta) {
-    try {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.setContent(resposta);
-        const pdfBuffer = await page.pdf({ format: 'A4' });
-        await browser.close();
-        return pdfBuffer; 
-    } catch (error) {
-        console.error('Erro htmlParaPdf:', error);
-        throw error;
-    }
+async function htmlParaPdf(respostas) {
+    return new Promise((resolve, reject) => {
+        const options = { format: 'A4' };
+
+        pdf.create(respostas, options).toBuffer((erro, buffer) => {
+            if (erro) {
+                console.error('Erro htmlParaPdf:', erro);
+                reject(erro);
+            } else {
+                resolve(buffer);
+            }
+        });
+    });
 }

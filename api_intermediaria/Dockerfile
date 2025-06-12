@@ -1,39 +1,57 @@
-# Usando a imagem do Node.js slim como base
-FROM node:22.11.0-slim AS production
+# 1. Use uma imagem base do Node.js (escolha a versão adequada para seu projeto)
+FROM node:20-slim
 
-# Definir o diretório de trabalho dentro do container
-WORKDIR /app
+# 2. Defina o diretório de trabalho dentro do contêiner
+WORKDIR /usr/src/app
 
-# Instalar as dependências do Chromium e outras bibliotecas necessárias
-RUN apt-get update && apt-get install -y \
-    wget \
-    ca-certificates \
-    fonts-liberation \
-    libappindicator3-1 \
-    libasound2 \
+# 3. Mude para o usuário root TEMPORARIAMENTE para instalar dependências
+USER root
+
+# 4. Instale o Chromium e todas as suas dependências de uma só vez
+#    - '--no-install-recommends' evita instalar pacotes desnecessários
+#    - 'rm -rf /var/lib/apt/lists/*' limpa o cache para manter a imagem menor
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdbus-1-3 \
+    libexpat1 \
+    libfontconfig1 \
+    libgbm1 \
+    libgconf-2-4 \
+    libgdk-pixbuf2.0-0 \
+    libglib2.0-0 \
+    libgtk-3-0 \
+    libnspr4 \
+    libpango-1.0-0 \
+    libx11-6 \
     libx11-xcb1 \
+    libxcb1 \
     libxcomposite1 \
+    libxcursor1 \
     libxdamage1 \
+    libxext6 \
+    libxfixes3 \
+    libxi6 \
     libxrandr2 \
-    xdg-utils \
-    --no-install-recommends
+    libxrender1 \
+    libxss1 \
+    libxtst6 \
+    libasound2 \
+    libnss3 \
+    && rm -rf /var/lib/apt/lists/*
 
-# Baixar e instalar o Chromium (certifique-se de usar a versão mais recente)
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-    && dpkg -i google-chrome-stable_current_amd64.deb \
-    && apt-get -y --fix-broken install
-
-# Copiar o código da aplicação para dentro do container
-COPY . .
-
-# Definir variável de ambiente para produção
-ENV NODE_ENV=production
-
-# Instalar dependências do Node.js
+# 5. Copie os arquivos de dependência do seu projeto e instale-os
+COPY package*.json ./
 RUN npm install
 
-# Expor a porta da aplicação
-EXPOSE 5000
+# 6. Copie o restante do código da sua aplicação para o contêiner
+COPY . .
 
-# Rodar o servidor da aplicação
-CMD ["npm", "start"]
+# 7. Mude de volta para um usuário não-privilegiado por segurança
+#    A imagem 'node' já vem com um usuário 'node' criado para isso.
+USER node
+
+# 8. Comando para iniciar sua aplicação
+CMD [ "node", "seu-arquivo-principal.js" ]
