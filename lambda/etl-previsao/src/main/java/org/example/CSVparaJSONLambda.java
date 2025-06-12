@@ -31,10 +31,11 @@ public class CSVparaJSONLambda implements RequestHandler<S3Event, String> {
             String jsonContent = convertCSVtoJSON(csvContent);
 
             // 3. Escrever JSON em outro bucket (ex: trusted)
-            String jsonKey = key.replace(".csv", ".json");
-            writeJSONToS3("s3-trusted-opticar/previsao", jsonKey, jsonContent);
+            String fileName = key.substring(key.lastIndexOf("/") + 1).replace(".csv", ".json");
 
-            return "Transformação concluída: " + jsonKey;
+
+            writeJSONToS3("opticar-trusted", "previsao/" + fileName, jsonContent);
+            return "Transformação concluída: ";
 
         } catch (Exception e) {
             e.printStackTrace();
