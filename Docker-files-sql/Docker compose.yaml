@@ -1,6 +1,6 @@
 services:
   site-opticar:
-    image: vitoralmeida06/opticar-deploy:site-opticar
+    image: mahducosta/opticar-ec2:site-opticar
     ports:
       - "3333:3333"
     networks:
@@ -8,8 +8,9 @@ services:
     depends_on:
       - opticarFrio
       - opticarQuente
+
   api-jira:
-    image: vitoralmeida06/opticar-deploy:api-jira
+    image: mahducosta/opticar-ec2:api-jira
     networks:
       - rede-opticar
     container_name: api-jira
@@ -18,7 +19,7 @@ services:
       - opticarQuente
 
   api-intermediaria:
-    image: vitoralmeida06/opticar-deploy:api-intermediaria
+    image: mahducosta/opticar-ec2:api-intermediaria
     ports:
       - "5000:5000"
     networks:
@@ -29,7 +30,7 @@ services:
       - opticarQuente
 
   opticarQuente:
-    image: vitoralmeida06/opticar-deploy:mysql-quente
+    image: mahducosta/opticar-ec2:db-quente
     ports:
       - "3307:3306"
     networks:
@@ -39,7 +40,7 @@ services:
       - opticarFrio
 
   opticarFrio:
-    image: vitoralmeida06/opticar-deploy:mysql-frio
+    image: mahducosta/opticar-ec2:db-frio
     ports:
       - "3306:3306"
     networks:
