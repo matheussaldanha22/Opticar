@@ -116,9 +116,9 @@ function verificaPedido() {
 function cadastrarPedido(codigoPedido) {
     var codigoVar = codigoPedido[0]
     var idMaquinaVar = sessionStorage.idMaquinaSelecionada
-    var modeloVar = iptModelo.value
-    var limiteAVar = iptLimiteAtencao.value
-    var limiteGVar = iptLimiteGrave.value
+    var modeloVar = document.getElementById("iptModelo").value
+    var limiteAVar = document.getElementById("iptLimiteAtencao").value
+    var limiteGVar = document.getElementById("iptLimiteGrave").value
 
     console.log(codigoVar)
 
@@ -162,9 +162,9 @@ function cadastrarPedido(codigoPedido) {
 function cadastrarPedidoFrio(codigoPedido) {
     var idMaquinaVar = sessionStorage.idMaquinaSelecionada
     var codigoVar = codigoPedido[0]
-    var modeloVar = iptModelo.value
-    var limiteAVar = iptLimiteAtencao.value
-    var limiteGVar = iptLimiteGrave.value
+    var modeloVar = document.getElementById("iptModelo").value
+    var limiteAVar = document.getElementById("iptLimiteAtencao").value
+    var limiteGVar = document.getElementById("iptLimiteGrave").value
 
     console.log(codigoVar)
 
@@ -403,9 +403,9 @@ function modalEditar(botaoEditar) {
 }
 
 function updatePedido(idVar) {
-  var modelo = iptModelo.value;
-  var limiteC = iptLimiteC.value;
-  var limiteA = iptLimiteAtencao.value;
+  var modelo = document.getElementById("iptModelo").value;
+  var limiteC = document.getElementById("iptLimiteC").value;
+  var limiteA = document.getElementById("iptLimiteAtencao").value;
 
   if (modelo == '' || !limiteC || !limiteA) {
     Swal.fire('Erro!', 'Por favor, preencha todos os campos corretamente.', 'error');
