@@ -104,7 +104,7 @@ bobPredicao.addEventListener("click", () => {
 
 async function atualizarGraficoPrevisao(componente) {
   try {
-    var res = await fetch(`http://${process.env.IP_INSTANCIA}:5000/awsGestorinfra/pegar/${componente}`);
+    var res = await fetch(`http://34.198.19.147:5000/awsGestorinfra/pegar/${componente}`);
     var dados = await res.json();
 
     console.log("Dados recebidos para o gráfico:", dados); //se num aparecer n ta funfando o fetch
@@ -344,7 +344,7 @@ eixoY = ${eixoY},
 configLinha= ${configLinha}
 `;
 
-    const response = await fetch(`http://${process.env.IP_INSTANCIA}:5000/perguntar`, {
+    const response = await fetch(`http://34.198.19.147:5000/perguntar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -370,7 +370,7 @@ configLinha= ${configLinha}
 
 async function pdf(respostas, tipo, pasta) {
   try {
-    const resposta = await fetch(`http://${process.env.IP_INSTANCIA}:5000/pdf`, {
+    const resposta = await fetch(`http://34.198.19.147:5000/pdf`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -414,7 +414,7 @@ async function relatorioClient(blob, tipo, pasta) {
   formData.append("pasta", pasta)
 
   try {
-    const resposta = await fetch(`http://${process.env.IP_INSTANCIA}:5000/aws/relatorioClient`, {
+    const resposta = await fetch(`http://34.198.19.147:5000/aws/relatorioClient`, {
       method: "POST",
       body: formData
     });
@@ -431,7 +431,7 @@ async function relatorioClient(blob, tipo, pasta) {
 async function visualizarHistorico() {
   var pasta = "RelatorioGestorInfra"
   try {
-    const resposta = await fetch(`http://${process.env.IP_INSTANCIA}:5000/aws/visualizarHistorico/${pasta}`, {
+    const resposta = await fetch(`http://34.198.19.147:5000/aws/visualizarHistorico/${pasta}`, {
       method: "GET",
       headers: { "Content-Type": "application/json"}
     });
@@ -460,7 +460,7 @@ async function visualizarHistorico() {
 async function baixarHistorico(relatorioNome) {
   var pasta = "RelatorioGestorInfra"
   try {
-    const resposta = await fetch(`http://${process.env.IP_INSTANCIA}:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
+    const resposta = await fetch(`http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
       method: "GET",
       headers: {"Content-Type": "application/pdf"}
     });

@@ -1258,7 +1258,7 @@ sltServidor.addEventListener("change", atualizarDados);
 slt_mes.addEventListener("change", atualizarDados)
 
 async function pegarS3(ano, mes) {
-  const bucket = await fetch(`http://${process.env.IP_INSTANCIA}:5000/aws/pegarS3/${ano}/${mes}`, {
+  const bucket = await fetch(`http://34.198.19.147:5000/aws/pegarS3/${ano}/${mes}`, {
     method: "GET",
     headers: {
       'Content-Type': 'application/json'
@@ -1279,7 +1279,7 @@ async function pegarS3(ano, mes) {
 
   console.log(dataPix.sort((a, b) => a - b))
 
-  const idFabrica = sessionStorage.FABRICA_ID;
+  const idFabrica = sessionStorage.getItem("FABRICA_ID");
   const dadosComponente = await fetch(`/dashPeriodo/dadosComponentes/${idFabrica}/${ano}/${mes}`, {
     method: 'GET',
     headers: {

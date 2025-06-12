@@ -30,7 +30,7 @@ require('dotenv').config()
     formData.append('arquivo', arquivo);
 
     try {
-      var resposta = await fetch(`http://${process.env.dev.IP_INSTANCIA}:5000/awsUpload/enviar`, {
+      var resposta = await fetch(`http://34.198.19.147:5000/awsUpload/enviar`, {
         method: 'POST',
         body: formData
       });

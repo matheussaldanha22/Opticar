@@ -11,7 +11,7 @@ services:
   api-jira:
     image: vitoralmeida06/opticar-deploy:api-jira
     networks:
-      - rede-opticar
+      - rede-optica
     container_name: api-jira
     depends_on:
       - opticarFrio

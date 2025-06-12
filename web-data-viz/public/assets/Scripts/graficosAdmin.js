@@ -1124,7 +1124,7 @@ async function bobAlertaRelatorio() {
   var tipo = `Alerta_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
   try {
     var perguntas = `Faça essa resposta para a persona administrador, quero um relatório colorido, utilize cores, a respeito do gráfico de alertas que possuo, ele me fala os alertas de cada fábrica, os em andamento e os em aberto, quero saber que ações eu devia tomar para essas fábricas irei te passar aqui os dados do gráfico, aqui estão os nomes das fábricas o eixo X do gráfico ${eixoXAlerta} e respectivamente os alertas delas, o eixo Y do gráfico ${eixoYAlerta} junto com o estado de cada fábrica ${estados}, quero um relatório mais descritivo e visualmente fácil de entender e após analisar, faça um resumo sobre a situação, junto com o que você acha da situação, faça um relatório com cores, colca enfaze nas cores, quero cores, colorido`;
-    const response = await fetch("http://localhost:5000/perguntar", {
+    const response = await fetch("http://34.198.19.147:5000/perguntar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1172,7 +1172,7 @@ async function bobPredicaoRelatorio() {
     O eixo X representa as datas futuras (dias consecutivos), e o eixo Y mostra a quantidade acumulada de alertas prevista para cada uma dessas datas. Cada linha no gráfico representa uma fábrica diferente.
     Aqui estão os dados do gráfico: essas são as fábricas ${nomeFabricaPred} o eixo X ${eixoXPredicao} e aqui o eixo Y ${dataYPredicao}, quero saber que ações eu devia tomar para essas fábricas, quero um relatório que caiba em 1 página e sem gráfico somente os dados e as ações que você acha que eu deveria tomar`;
 
-    const response = await fetch("http://localhost:5000/perguntar", {
+    const response = await fetch("http://34.198.19.147:5000/perguntar", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1198,7 +1198,7 @@ async function bobPredicaoRelatorio() {
 
 async function pdf(respostas, tipo) {
   try {
-    const resposta = await fetch("http://localhost:5000/pdf", {
+    const resposta = await fetch("http://34.198.19.147:5000/pdf", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1240,7 +1240,7 @@ async function relatorioClient(blob, tipo) {
   formData.append("tipo", tipo);
 
   try {
-    const resposta = await fetch("http://localhost:5000/aws/relatorioClient", {
+    const resposta = await fetch("http://34.198.19.147:5000/aws/relatorioClient", {
       method: "POST",
       body: formData
     });
@@ -1256,7 +1256,7 @@ async function relatorioClient(blob, tipo) {
 
 async function visualizarHistorico() {
   try {
-    const resposta = await fetch("http://localhost:5000/aws/visualizarHistorico", {
+    const resposta = await fetch("http://34.198.19.147:5000/aws/visualizarHistorico", {
       method: "GET",
       headers: { "Content-Type": "application/json"}
     });
@@ -1284,7 +1284,7 @@ async function visualizarHistorico() {
 
 async function baixarHistorico(relatorioNome) {
   try {
-    const resposta = await fetch(`http://localhost:5000/aws/baixarHistorico/${relatorioNome}`, {
+    const resposta = await fetch(`http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}`, {
       method: "GET",
       headers: {"Content-Type": "application/pdf"}
     });
