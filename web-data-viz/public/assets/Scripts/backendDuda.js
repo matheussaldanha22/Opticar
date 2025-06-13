@@ -212,6 +212,12 @@ function plotarGraficoPerido() {
     },
     xaxis: {
       categories: [],
+       labels: {
+            style: {
+              fontSize: "16px",
+              fontWeight: "bold"
+            }
+          }
     },
     yaxis: {
       title: {
@@ -220,6 +226,13 @@ function plotarGraficoPerido() {
     },
     fill: {
       opacity: 1
+    },
+    legend: {
+      fontSize:{
+              fontSize: "16px",
+              
+              fontWeight: "bold"
+      }
     },
     tooltip: {
       y: {
@@ -355,7 +368,9 @@ function dadosGrafico(ano, mes) {
 
       chart.updateOptions({
         series: seriesChart,
-        xaxis: { categories: categoriesChart },
+        xaxis: { categories: categoriesChart 
+
+        },
         colors: coresChart,
         markers: {
           size: 5,
@@ -767,7 +782,7 @@ function diaGrafico(dataAno, dataMes, dataDia) {
     },
   }).then((resultado) => {
     resultado.json().then((json) => {
-      if (json.length == null) {
+      if (json.length == 0) {
 
         chart.updateOptions({
           series: 0,
@@ -944,7 +959,7 @@ function diaServerComp(dataAno, dataMes, dataDia) {
     resultado.json().then((json) => { //coloca .then pq é uma funcao precisa ()
       console.log(json)
 
-      if (json.length != null) {
+      if (json.length != 0) {
         document.getElementById('componente').innerHTML = json[0].componente
         document.getElementById('periodo').innerHTML = json[0].periodo
         document.getElementById('qtdAlertaComp').innerHTML = json[0].alerta

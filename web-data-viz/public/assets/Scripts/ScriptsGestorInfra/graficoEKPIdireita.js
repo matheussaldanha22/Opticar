@@ -184,8 +184,9 @@ async function atualizarGraficoPrevisao(componente) {
     categories: todasAsCategorias,
     labels: {
       style: {
-        colors: '#666',
-        fontSize: '12px'
+        colors: 'black',
+        fontSize: '14px',
+        fontWeight: 'bold'
       }
     },
     axisBorder: { show: false },
@@ -196,15 +197,16 @@ async function atualizarGraficoPrevisao(componente) {
       text: 'Valor (R$)',
       style: {
         color: '#666',
-        fontSize: '12px',
-        fontWeight: 400
+        fontSize: '14px',
+        fontWeight: 'bold'
       }
     },
     labels: {
       formatter: val => 'R$ ' + val.toLocaleString('pt-BR'),
       style: {
         colors: '#666',
-        fontSize: '12px'
+        fontSize: '12px',
+        fontWeight: 'bold'
       }
     },
     min: 0,

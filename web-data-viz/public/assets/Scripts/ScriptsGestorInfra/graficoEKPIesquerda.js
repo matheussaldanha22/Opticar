@@ -35,8 +35,9 @@ var barOptions = {
         categories: ['20/05', '21/05', '22/05', '23/05', '24/05'], // mocado, NO fetch desmoca
         labels: {
             style: {
-                colors: '#666',
-                fontSize: '12px'
+                colors: 'black',
+                fontSize: '16px',
+                fontWeight: 'Bold'
             }
         }
     },
@@ -50,8 +51,9 @@ var barOptions = {
         },
         labels: {
             style: {
-                colors: '#666',
-                fontSize: '12px'
+                colors: 'black',
+                fontSize: '14px',
+                fontWeight: 'Bold'
             }
         }
     },
