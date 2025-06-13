@@ -18,7 +18,7 @@ services:
       - opticarQuente
 
   api-intermediaria:
-    image: vitoralmeida06/opticar-deploy:api-intermediaria
+    image: zaqueu/node:api-intermediaria2
     ports:
       - "5000:5000"
     networks:

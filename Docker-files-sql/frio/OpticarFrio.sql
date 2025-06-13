@@ -3,7 +3,9 @@ FLUSH PRIVILEGES;
 
 -- PARTE 1: Estrutura e dados iniciais do banco opticarFrio
 CREATE DATABASE IF NOT EXISTS opticarFrio;
+ALTER DATABASE opticarFrio CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE opticarFrio;
+
 -- Tabelas
 
 CREATE TABLE usuario (
@@ -16,6 +18,7 @@ CREATE TABLE usuario (
     fkFabrica INT
 );
 
+select * from usuario;
 CREATE TABLE empresa (
     idempresa INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(45),
@@ -102,23 +105,22 @@ INSERT INTO usuario (nome, email, senha, cargo, cpf) VALUES
 ('Robson Duarte', 'robson@opticar.com', 'senha123', 'GestorAdmin', '498528590800'),
 ('Roberto Carlos', 'roberto@opticar.com', 'senha123', 'GestorInfra', '12345678909'),
 ('Felipe Brandão', 'felipe@opticar.com', 'senha123', 'GestorInfra', '12345678907'),
-('Roberto Carlos', 'roberto@opticar.com', 'senha123', 'GestorInfra', '12345678909'),
-('Felipe Brandão', 'felipe@opticar.com', 'senha123', 'GestorInfra', '12345678907'),
-('Roberto Carlos', 'roberto@opticar.com', 'senha123', 'GestorInfra', '12345678909');
+('Gustavo Brandão', 'gustavo@opticar.com', 'senha123', 'GestorInfra', '12345678907'),
+('Roberto Brandão', 'robertop@opticar.com', 'senha123', 'GestorInfra', '12345678907'),
+('Vitor Brandão', 'vitor@opticar.com', 'senha123', 'GestorInfra', '12345678907');
 
 INSERT INTO empresa (nome, cnpj, fkGestorAdmin) VALUES
-('MotorsCars', '12345678000100', 4);
+('MotorsCar', '12345678000100', 1);
 
 -- Fábricas com diferentes limites para status
 
 INSERT INTO fabrica (nome, funcao, telefone, limiteAtencao, limiteCritico, fkEmpresa) VALUES
-('Fábrica Alpha', 'Montagem de chassis', '1199999999', 10, 15, 1),
-('Fábrica Beta', 'Pintura de peças', '1198888888', 10, 15, 1),
-('Fábrica Gama', 'Inspeção final', '1197777777', 10, 15, 1),
-('Fábrica Delta', 'Logística', '1196666666', 10, 15, 1),
-('Fábrica Épsilon', 'Soldagem', '1195555555', 10, 15, 1),
-('Fábrica Zeta', 'Montagem Elétrica', '1194444444', 10, 15, 1);
-
+('Fábrica Norte', 'Montagem de chassis', '1199999999', 10, 15, 1),
+('Fábrica Sul', 'Pintura de peças', '1198888888', 10, 15, 1),
+('Fábrica Leste', 'Inspeção final', '1197777777', 10, 15, 1),
+('Fábrica Oeste', 'Logística', '1196666666', 10, 15, 1),
+('Fábrica Sudeste', 'Soldagem', '1195555555', 10, 15, 1),
+('Fábrica Centro-oeste', 'Montagem Elétrica', '1194444444', 10, 15, 1);
 
 -- Relacionar usuários às fábricas
 
@@ -134,12 +136,17 @@ UPDATE usuario SET fkFabrica = 6 WHERE idusuario = 9;
 -- Máquinas por fábrica
 
 INSERT INTO servidor_maquina (sistema_operacional, ip, fkFabrica, Mac_Address, hostname) VALUES
-('Ubuntu', '192.168.1.10', 1, 10101010101, 'alpha-srv01'),
-('Ubuntu', '192.168.1.11', 2, 20202020202, 'beta-srv01'),
-('Ubuntu', '192.168.1.12', 3, 30303030303, 'gama-srv01'),
-('Ubuntu', '192.168.1.13', 4, 10101010102, 'omega-srv01'),
-('Ubuntu', '192.168.1.14', 5, 20202020203, 'brito-srv01'),
-('Ubuntu', '192.168.1.15', 6, 30303030304, 'ovelha-srv01');
+('windows', 'saldanha', 1, 258262364149366, 'alpha-srv01'),
+('mac-os', 'vitor', 1, 134894360200011, 'beta-srv01'),
+('windows', 'duda', 1, 132243600390200, 'gama-srv01'),
+('windows', 'marcelo', 1, 239460606207958, 'omega-srv01'),
+('windows', 'zaqueu', 1, 251776438657434, 'brito-srv01'),
+('Ubuntu', '192.168.1.11', 2, 30303030305, 'ovelha-srv01'),
+('Ubuntu', '192.168.1.15', 3, 30303030306, 'vaca-srv01'),
+('Ubuntu', '192.168.1.15', 4, 30303030307, 'macaco-srv01'),
+('Ubuntu', '192.168.1.15', 5, 30303030308, 'cachorro-srv01'),
+('Ubuntu', '192.168.1.15', 6, 30303030309, 'passaro-srv01');
+
 
 -- ComponenteServidor (os 5 obrigatórios por máquina)
 
@@ -179,5 +186,29 @@ INSERT INTO componenteServidor (fkComponente, fkMaquina, modelo, limiteCritico, 
 (3, 6, 'Modelo RAM', '90', '75'),
 (5, 6, 'Modelo DISCO', '90', '75'),
 (6, 6, 'Modelo REDE RX', '90', '75'),
-(7, 6, 'Modelo REDE TX', '90', '75');
+(7, 6, 'Modelo REDE TX', '90', '75'),
+
+(1, 7, 'Modelo CPU', '90', '75'),
+(3, 7, 'Modelo RAM', '90', '75'),
+(5, 7, 'Modelo DISCO', '90', '75'),
+(6, 7, 'Modelo REDE RX', '90', '75'),
+(7, 7, 'Modelo REDE TX', '90', '75'),
+
+(1, 8, 'Modelo CPU', '90', '75'),
+(3, 8, 'Modelo RAM', '90', '75'),
+(5, 8, 'Modelo DISCO', '90', '75'),
+(6, 8, 'Modelo REDE RX', '90', '75'),
+(7, 8, 'Modelo REDE TX', '90', '75'),
+
+(1, 9, 'Modelo CPU', '90', '75'),
+(3, 9, 'Modelo RAM', '90', '75'),
+(5, 9, 'Modelo DISCO', '90', '75'),
+(6, 9, 'Modelo REDE RX', '90', '75'),
+(7, 9, 'Modelo REDE TX', '90', '75'),
+
+(1, 10, 'Modelo CPU', '90', '75'),
+(3, 10, 'Modelo RAM', '90', '75'),
+(5, 10, 'Modelo DISCO', '90', '75'),
+(6, 10, 'Modelo REDE RX', '90', '75'),
+(7, 10, 'Modelo REDE TX', '90', '75');
 

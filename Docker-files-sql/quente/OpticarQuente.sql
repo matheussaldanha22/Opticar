@@ -2,7 +2,10 @@ GRANT ALL PRIVILEGES ON opticarQuente.* TO 'admin'@'%';
 FLUSH PRIVILEGES;
 
 CREATE DATABASE IF NOT EXISTS opticarQuente;
+ALTER DATABASE opticarQuente CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE opticarQuente;
+
+select * from servidor_maquina;
 
 -- Tabelas
 CREATE TABLE IF NOT EXISTS servidor_maquina (
@@ -83,14 +86,20 @@ INSERT INTO componente (tipo, medida, indicador, codigo) VALUES
 
 -- Insere máquinas
 INSERT INTO servidor_maquina (sistema_operacional, ip, fkFabrica, Mac_Address, hostname) VALUES
-('Ubuntu', '192.168.1.10', 1, 10101010101, 'alpha-srv01'),
-('Ubuntu', '192.168.1.11', 1, 20202020202, 'beta-srv01'),
-('Ubuntu', '192.168.1.12', 1, 30303030303, 'gama-srv01'),
-('Ubuntu', '192.168.1.13', 1, 10101010102, 'omega-srv01'),
-('Ubuntu', '192.168.1.14', 1, 20202020203, 'brito-srv01'),
-('Ubuntu', '192.168.1.15', 1, 30303030304, 'ovelha-srv01');
+('windows', 'saldanha', 1, 258262364149366, 'alpha-srv01'),
+('mac-os', 'vitor', 1, 134894360200011, 'beta-srv01'),
+('windows', 'duda', 1, 132243600390200, 'gama-srv01'),
+('windows', 'marcelo', 1, 239460606207958, 'omega-srv01'),
+('windows', 'zaqueu', 1, 251776438657434, 'brito-srv01'),
+('Ubuntu', '192.168.1.11', 2, 30303030305, 'ovelha-srv01'),
+('Ubuntu', '192.168.1.15', 3, 30303030306, 'vaca-srv01'),
+('Ubuntu', '192.168.1.15', 4, 30303030307, 'macaco-srv01'),
+('Ubuntu', '192.168.1.15', 5, 30303030308, 'cachorro-srv01'),
+('Ubuntu', '192.168.1.15', 6, 30303030309, 'passaro-srv01');
 
--- Insere componenteServidor
+
+-- ComponenteServidor (os 5 obrigatórios por máquina)
+
 INSERT INTO componenteServidor (fkComponente, fkMaquina, modelo, limiteCritico, limiteAtencao) VALUES
 -- Máquina 1 (Alpha)
 (1, 1, 'Modelo CPU', '90', '75'),
@@ -127,7 +136,31 @@ INSERT INTO componenteServidor (fkComponente, fkMaquina, modelo, limiteCritico, 
 (3, 6, 'Modelo RAM', '90', '75'),
 (5, 6, 'Modelo DISCO', '90', '75'),
 (6, 6, 'Modelo REDE RX', '90', '75'),
-(7, 6, 'Modelo REDE TX', '90', '75');
+(7, 6, 'Modelo REDE TX', '90', '75'),
+
+(1, 7, 'Modelo CPU', '90', '75'),
+(3, 7, 'Modelo RAM', '90', '75'),
+(5, 7, 'Modelo DISCO', '90', '75'),
+(6, 7, 'Modelo REDE RX', '90', '75'),
+(7, 7, 'Modelo REDE TX', '90', '75'),
+
+(1, 8, 'Modelo CPU', '90', '75'),
+(3, 8, 'Modelo RAM', '90', '75'),
+(5, 8, 'Modelo DISCO', '90', '75'),
+(6, 8, 'Modelo REDE RX', '90', '75'),
+(7, 8, 'Modelo REDE TX', '90', '75'),
+
+(1, 9, 'Modelo CPU', '90', '75'),
+(3, 9, 'Modelo RAM', '90', '75'),
+(5, 9, 'Modelo DISCO', '90', '75'),
+(6, 9, 'Modelo REDE RX', '90', '75'),
+(7, 9, 'Modelo REDE TX', '90', '75'),
+
+(1, 10, 'Modelo CPU', '90', '75'),
+(3, 10, 'Modelo RAM', '90', '75'),
+(5, 10, 'Modelo DISCO', '90', '75'),
+(6, 10, 'Modelo REDE RX', '90', '75'),
+(7, 10, 'Modelo REDE TX', '90', '75');
 
 -- Procedimento para gerar histórico com ALERTAS DIÁRIOS e VARIEDADE (2020-2024)
 DELIMITER $$
@@ -248,7 +281,6 @@ END$$
 DELIMITER ;
 
 -- Executar geração de histórico
-CALL gerarHistoricoComVariedade();
 
 -- INSERTS ATUAIS - Capturas para referenciar nos alertas manuais
 INSERT INTO capturaDados VALUES
@@ -343,11 +375,23 @@ VALUES ('2025-06-09 17:30:00', 76, "Alerta Disco", "Limpeza recomendada", "Médi
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
 VALUES ('2025-06-10 09:00:00', 87, "Alerta RAM Crítico", "Reinicialização necessária", "Crítica", "Incidente Crítico", "Ram", "Porcentagem", "ABERTO", @base_id + 18, "skype.exe", 24, 52, 18, "JUNE-018");
 
-
-
-
-
-
-
-
-
+SELECT  COUNT(idAlerta) as qtdalertas, 
+		componente,
+		CASE 
+        WHEN HOUR(dataHora) BETWEEN 6 AND 11 THEN 'Manhã'
+        WHEN HOUR(dataHora) BETWEEN 12 AND 17 THEN 'Tarde'
+        WHEN HOUR(dataHora) BETWEEN 18 AND 23 THEN 'Noite'
+        ELSE 'Madrugada'
+		END as periodo
+		FROM alerta
+		JOIN capturaDados as cap 
+        ON alerta.fkCapturaDados = cap.idCapturaDados
+		JOIN componenteServidor as comp 
+        ON cap.fkcomponenteServidor = comp.idcomponenteServidor
+		JOIN servidor_maquina as maq 
+		ON comp.fkMaquina = maq.idMaquina
+		WHERE YEAR(dataHora) = 2025
+		AND MONTH(dataHora) = 6
+		AND fkFabrica = 1
+		GROUP BY componente, periodo
+		ORDER BY periodo;
