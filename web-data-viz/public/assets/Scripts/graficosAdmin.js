@@ -440,7 +440,7 @@ function plotarGraficoAlerta(dadosAlerta) {
         var optionsBar = {
           chart: {
             height: 550,
-            width: 1000,
+            width: 1060,
             type: "bar",
             toolbar: { show: true },
             zoom: { enabled: true },
