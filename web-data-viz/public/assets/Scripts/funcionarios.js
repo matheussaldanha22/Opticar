@@ -122,7 +122,7 @@ function abrirModal(id) {
               console.log(resultado)
               resultado.forEach((fabrica) => {
                 selectFabrica.innerHTML += `
-                <option value="${fabrica.idfabrica}">${fabrica.nome}</option>
+                <option value="${fabrica.idfabrica}">${fabrica.nomeFabrica}</option>
               `
                 // console.log(`ID fabrica: ${fabrica.idfabrica}`)
                 document.querySelector(
