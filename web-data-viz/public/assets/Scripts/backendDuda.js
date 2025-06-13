@@ -1598,7 +1598,7 @@ async function visualizarHistorico() {
 }
 
 async function baixarHistorico(relatorioNome) {
-  var pasta = "RelatorioPredição";
+  var pasta = "RelatorioCorrelação";
   try {
     const resposta = await fetch(`http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
       method: "GET",
