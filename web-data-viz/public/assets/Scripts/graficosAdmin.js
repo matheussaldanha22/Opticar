@@ -304,7 +304,7 @@ function plotarGraficoAlerta(dadosAlerta) {
               estado = "critico";
               fabricaCriticaLista.push({
                 nome: fabrica.nomeFabrica,
-                gestor: fabrica.nome,
+                gestor: fabrica.nomeGestor,
                 atencao: fabrica.limiteAtencao,
                 critico: fabrica.limiteCritico,
                 telefone: fabrica.telefone,
@@ -320,7 +320,7 @@ function plotarGraficoAlerta(dadosAlerta) {
               estado = "atencao";
               fabricaCriticaLista.push({
                 nome: fabrica.nomeFabrica,
-                gestor: fabrica.nome,
+                gestor: fabrica.nomeGestor,
                 atencao: fabrica.limiteAtencao,
                 critico: fabrica.limiteCritico,
                 id: fabrica.idfabrica,
@@ -335,7 +335,7 @@ function plotarGraficoAlerta(dadosAlerta) {
               estado = "ok";
               fabricaCriticaLista.push({
                 nome: fabrica.nomeFabrica,
-                gestor: fabrica.nome,
+                gestor: fabrica.nomeGestor,
                 atencao: fabrica.limiteAtencao,
                 critico: fabrica.limiteCritico,
                 id: fabrica.idfabrica,
