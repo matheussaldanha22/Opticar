@@ -80,8 +80,8 @@ function carregarServidores() {
             linha.innerHTML = ""; 
             linha.innerHTML += `
                 <tbody>
-                    <td data-label = "Servidor">SV00${servidor.idMaquina}</td>
-                    <td data-label = "Componente(s)">${servidor.componentes}<button class='bx bx-plus' data-id="${servidor.idMaquina}" style="cursor:pointer; background:linear-gradient(270deg, #012027, #04708D); border-radius:10px; margin-left: 8px;">
+                    <td data-label = "Servidor">SV${servidor.idMaquina}</td>
+                    <td data-label = "Componente(s)">${servidor.componentes}<button class='bx bx-plus' data-id="${servidor.idMaquina}" style="cursor:pointer; background:linear-gradient(270deg,rgb(0, 114, 140), #04708D); color: #fff; border-radius:10px; margin-left: 8px; border: 1px solid #eee;">
                     </button></td>
                     <td data-label = "IP">${servidor.ip}</td>
                     <button class="btn-purple" data-id="${servidor.idMaquina}"><i class='bx bxs-trash'></i></button></td>

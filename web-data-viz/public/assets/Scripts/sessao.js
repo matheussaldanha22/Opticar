@@ -103,10 +103,6 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
               <i class='bx bxs-bar-chart-alt-2' style='color:#ffffff' onclick="dashGestaoFabrica()"></i>
               <span onclick="dashGestaoFabrica()">Dashboard fábrica</span>
             </li>
-            <li id="dashMonitoramento">
-              <i class='bx bx-desktop' style='color:#ffffff' onclick="dashMonitoramento()"></i>
-              <span onclick="dashMonitoramento()">Dashboard monitoramento</span>
-            </li>
             <li id="alertas">
               <i class='bx bxs-bell-ring' style='color:#ffffff' onclick="alertasPagina()"></i>
               <span onclick="alertasPagina()">Alertas</span>
@@ -118,10 +114,6 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
             <li id="funcionarios">
                 <i class='bx bx-user' style='color:#ffffff' onclick="funcionarios()"></i>
                 <span onclick="funcionarios()">Funcionários</span>
-            </li>
-            <li id="componentes">
-                <i class='bx bx-memory-card' style='color:#ffffff' onclick="componentes()"></i>
-                <span onclick="componentes()">Componentes</span>
             </li>
             <li>
             <i class='bx bx-exit' style='color:#ffffff' onclick="deslogar()"></i>
@@ -162,10 +154,6 @@ fetch(`/usuarios/listarPorId/${idUsuario}`, {
             <li id="servidores">
               <i class='bx bx-server' style='color:#ffffff' onclick="listaServidores()"></i>
               <span onclick="listaServidores()">Servidores</span>
-            </li>
-            <li id="componentes">
-                <i class='bx bx-memory-card' style='color:#ffffff' onclick="componentes()"></i>
-                <span onclick="componentes()">Componentes</span>
             </li>
             <li>
             <i class='bx bx-exit' style='color:#ffffff' onclick="deslogar()"></i>
