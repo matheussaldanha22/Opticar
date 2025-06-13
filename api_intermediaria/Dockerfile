@@ -1,25 +1,34 @@
-# 1. Use uma imagem base do Node.js (escolha a versão adequada para seu projeto)
+# Use uma imagem base do Node.js
 FROM node:20-slim
 
-# 2. Defina o diretório de trabalho dentro do contêiner
+# Defina o diretório de trabalho dentro do contêiner
 WORKDIR /usr/src/app
 
-# 3. Mude para o usuário root TEMPORARIAMENTE para instalar dependências
+# Mude para o usuário root para instalar dependências
 USER root
 
-# 4. Instale o Chromium e todas as suas dependências de uma só vez
-#    - '--no-install-recommends' evita instalar pacotes desnecessários
+# Instale as dependências do sistema necessárias
+RUN apt-get update && apt-get install -y \
+    libfontconfig \
+    libfreetype6 \
+    libx11-6 \
+    libxext6 \
+    libxrender1 \
+    wget \
+    bzip2 \
+    && rm -rf /var/lib/apt/lists/*
 
-# 5. Copie os arquivos de dependência do seu projeto e instale-os
+# Copie os arquivos de dependência
 COPY package*.json ./
+
+# Instale as dependências do Node.js (incluindo phantomjs-prebuilt)
 RUN npm install
 
-# 6. Copie o restante do código da sua aplicação para o contêiner
+# Copie o código da aplicação
 COPY . .
 
-# 7. Mude de volta para um usuário não-privilegiado por segurança
-#    A imagem 'node' já vem com um usuário 'node' criado para isso.
+# Mude para usuário não-privilegiado
 USER node
 
-# 8. Comando para iniciar sua aplicação
+# Comando para iniciar a aplicação
 CMD [ "node", "app.js" ]

@@ -18,8 +18,16 @@ function dadosGraficoAlerta() {
 }
 
 function dadosFabrica() {
-  var instrucaoSql = `select fabrica.idFabrica, fabrica.nome as nomeFabrica, fabrica.telefone, fabrica.limiteAtencao, fabrica.limiteCritico, usuario.nome, usuario.cargo, usuario.fkFabrica
-                        from fabrica JOIN usuario on fkFabrica = idfabrica;`
+  var instrucaoSql = `SELECT 
+                          f.idfabrica,
+                          f.nome AS nomeFabrica,
+                          f.limiteCritico,
+                          f.limiteAtencao,
+                          f.telefone,
+                          u.nome AS nomeGestor
+                      FROM fabrica f
+                      LEFT JOIN usuario u 
+                          ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorInfra';`
 
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executarFRIO(instrucaoSql)

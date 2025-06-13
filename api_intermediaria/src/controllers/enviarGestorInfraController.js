@@ -44,7 +44,6 @@ exports.enviarParaS3 = async (req, res) => {
   try {
     // sobe o arquivo pro s3 e deixa pra finalizar 'depois' o jhonis
     await s3.upload(parametros).promise();
-
     // Se deu tudo certo, envia o bglh de alerta pro insp
     res.status(200).json({ mensagem: 'Arquivo enviado com sucesso.' });
   } catch (erro) {
