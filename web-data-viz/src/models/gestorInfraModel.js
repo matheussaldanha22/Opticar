@@ -5,9 +5,9 @@ function buscarAlertasCPU() {
         SELECT 
             DATE_FORMAT(CONVERT_TZ(cd.data, '+00:00', '-03:00'), '%Y-%m-%d') AS dataAlerta, 
             COUNT(*) AS totalAlertas,
-            SUM(CASE WHEN a.statusAlerta = 'To Do' THEN 1 ELSE 0 END) AS toDoAlertas,
-            SUM(CASE WHEN a.statusAlerta = 'Done' THEN 1 ELSE 0 END) AS DoneAlertas,
-            SUM(CASE WHEN a.statusAlerta = 'In Progress' THEN 1 ELSE 0 END) AS InProgressAlertas
+            SUM(CASE WHEN LOWER(alerta.statusAlerta) = 'aberto' THEN 1 ELSE 0 END) AS toDoAlertas,
+            SUM(CASE WHEN LOWER(alerta.statusAlerta) = 'em andamento' THEN 1 ELSE 0 END) AS DoneAlertas,
+            SUM(CASE WHEN LOWER(alerta.statusAlerta) = 'resolvido' THEN 1 ELSE 0 END) AS InProgressAlertas
         FROM alerta a
         JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
@@ -26,9 +26,9 @@ function buscarAlertasRAM() {
         SELECT 
             DATE_FORMAT(CONVERT_TZ(cd.data, '+00:00', '-03:00'), '%Y-%m-%d') AS dataAlerta, 
             COUNT(*) AS totalAlertas,
-            SUM(CASE WHEN a.statusAlerta = 'To Do' THEN 1 ELSE 0 END) AS toDoAlertas,
-            SUM(CASE WHEN a.statusAlerta = 'Done' THEN 1 ELSE 0 END) AS DoneAlertas,
-            SUM(CASE WHEN a.statusAlerta = 'In Progress' THEN 1 ELSE 0 END) AS InProgressAlertas
+            SUM(CASE WHEN LOWER(alerta.statusAlerta) = 'aberto' THEN 1 ELSE 0 END) AS toDoAlertas,
+            SUM(CASE WHEN LOWER(alerta.statusAlerta) = 'em andamento' THEN 1 ELSE 0 END) AS DoneAlertas,
+            SUM(CASE WHEN LOWER(alerta.statusAlerta) = 'resolvido' THEN 1 ELSE 0 END) AS InProgressAlertas
         FROM alerta a
         JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
@@ -47,9 +47,9 @@ function buscarAlertasDISCO() {
         SELECT 
             DATE_FORMAT(CONVERT_TZ(cd.data, '+00:00', '-03:00'), '%Y-%m-%d') AS dataAlerta, 
             COUNT(*) AS totalAlertas,
-            SUM(CASE WHEN a.statusAlerta = 'To Do' THEN 1 ELSE 0 END) AS toDoAlertas,
-            SUM(CASE WHEN a.statusAlerta = 'Done' THEN 1 ELSE 0 END) AS DoneAlertas,
-            SUM(CASE WHEN a.statusAlerta = 'In Progress' THEN 1 ELSE 0 END) AS InProgressAlertas
+            SUM(CASE WHEN LOWER(alerta.statusAlerta) = 'aberto' THEN 1 ELSE 0 END) AS toDoAlertas,
+            SUM(CASE WHEN LOWER(alerta.statusAlerta) = 'em andamento' THEN 1 ELSE 0 END) AS DoneAlertas,
+            SUM(CASE WHEN LOWER(alerta.statusAlerta) = 'resolvido' THEN 1 ELSE 0 END) AS InProgressAlertas
         FROM alerta a
         JOIN capturaDados cd ON a.fkCapturaDados = cd.idCapturaDados
         JOIN componenteServidor cs ON cd.fkComponenteServidor = cs.idcomponenteServidor
