@@ -438,8 +438,9 @@ tbody tr:nth-child(even) {
   border-bottom: 5px solid #04708d;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
   font-weight: bold;
-  min-height: 9vw;
+  min-height: 6vw;
 }
+
 
 .tempo_atividade p{
   font-size: 500px;
@@ -460,12 +461,12 @@ tbody tr:nth-child(even) {
 
 .tempo_atividade h3 {
   margin-top: 1%;
-  font-size: 2vw;
+  font-size: 1.5vw;
 }
 
 .tempo_atividade p {
   margin-top: 1%;
-  font-size: 3vw;
+  font-size: 2vw;
 }
 
 .mainContainerTabela {
@@ -476,16 +477,13 @@ tbody tr:nth-child(even) {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.mainContainerTabela h2{
-  font-size: 2.5vw;
-}
 
 table th{
   font-size: 1.5vw;
 }
 
 table td{
-  font-size: 1.5vw;
+  font-size: 1vw;
 }
 
 table th,
@@ -512,6 +510,7 @@ table i:hover {
 
 .tituloTabela {
   margin-bottom: 1%;
+  font-size: 2vw;
 }
 
 .containerFiltros {
@@ -544,8 +543,7 @@ table i:hover {
 }
 
 .critico {
-  border: 1px solid #dc2626;
-  background-color: #dc2626;
+  background-color: #c00000e1;
   color: #fff;
 }
 

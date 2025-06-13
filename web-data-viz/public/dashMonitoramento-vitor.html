@@ -92,12 +92,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="containerFiltros">
-                    <div>
-                        <h2>Filtros</h2>
-                        <button>Gravidade <i class="fa fa-filter" aria-hidden="true"></i></button>
-                    </div>
-                </div>
                 <div class="mainContainerTabela">
                     <h2 class="tituloTabela">Servidores em alta utilização (crítico e atenção)</h2>
                     <table id="tabela-alertas" class="tabelaContainer">
@@ -108,11 +102,13 @@
                                 <th>CPU</th>
                                 <th>RAM</th>
                                 <th>Disco</th>
-                                <th>Rede</th>
+                                <th>Download</th>
+                                <th>Upload</th>
+                                <th>Estado</th>
                                 <th>Visualizar</th>
                             </tr>
                         </thead>
-                        <tbody class="atencao">
+                        <!-- <tbody class="critico">
                             <td data-label="ID">1</td>
                             <td data-label="Servidor">SV001
                             </td>
@@ -123,7 +119,7 @@
                             <td data-label="Visualizar"><i class="fa fa-eye" aria-hidden="true"
                                     onclick="abrirModal()"></i>
                             </td>
-                        </tbody>
+                        </tbody> -->
 
                     </table>
                     <div class="pagination" id="paginacao"></div>
