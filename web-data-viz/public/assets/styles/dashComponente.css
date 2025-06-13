@@ -215,7 +215,7 @@
     width: 90vw;
     padding: 10px;
     border-radius: 10px;
-    height: 130vh;
+    height: fit-content;
     box-shadow: 5px 2px 10px rgb(161, 160, 160);
 }
 
@@ -417,7 +417,7 @@ div .servidor {
 }
 
 .kpiIdv h3 {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: bolder;
     display: flex;
     gap: 5px;
@@ -524,6 +524,7 @@ div .servidor {
 
 .grafInferior .grafBox {
     width: 86vw;
+    height: 45vh;
 }
 
 /* MODAL */
