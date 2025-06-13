@@ -297,7 +297,7 @@ function plotarGraficoAlerta(dadosAlerta) {
         var fabrica = dadosFabrica[i];
         for (let j = 0; j < dadosAlerta.length; j++) {
           var alerta = dadosAlerta[j];
-          if (alerta.fkFabrica === fabrica.idFabrica) {
+          if (alerta.fkFabrica === fabrica.idfabrica) {
             var quantidade = alerta.qtd_to_do + alerta.qtd_in_progress;
             if (quantidade >= fabrica.limiteCritico) {
               nivelCriticidade = quantidade - fabrica.limiteCritico;
@@ -308,7 +308,7 @@ function plotarGraficoAlerta(dadosAlerta) {
                 atencao: fabrica.limiteAtencao,
                 critico: fabrica.limiteCritico,
                 telefone: fabrica.telefone,
-                id: fabrica.idFabrica,
+                id: fabrica.idfabrica,
                 qtd_to_do: alerta.qtd_to_do,
                 qtd_in_progress: alerta.qtd_in_progress,
                 quantidade,
@@ -323,7 +323,7 @@ function plotarGraficoAlerta(dadosAlerta) {
                 gestor: fabrica.nome,
                 atencao: fabrica.limiteAtencao,
                 critico: fabrica.limiteCritico,
-                id: fabrica.idFabrica,
+                id: fabrica.idfabrica,
                 qtd_to_do: alerta.qtd_to_do,
                 qtd_in_progress: alerta.qtd_in_progress,
                 quantidade,
@@ -338,7 +338,7 @@ function plotarGraficoAlerta(dadosAlerta) {
                 gestor: fabrica.nome,
                 atencao: fabrica.limiteAtencao,
                 critico: fabrica.limiteCritico,
-                id: fabrica.idFabrica,
+                id: fabrica.idfabrica,
                 qtd_to_do: alerta.qtd_to_do,
                 qtd_in_progress: alerta.qtd_in_progress,
                 quantidade,
@@ -683,7 +683,7 @@ function mostrarFabricas() {
           fabricas.length = 0;
           for (let i = 0; i < dadosAlerta.length; i++) {
             for (let j = 0; j < dadosFabrica.length; j++) {
-              if (dadosFabrica[j].idFabrica == dadosAlerta[i].fkFabrica) {
+              if (dadosFabrica[j].idfabrica == dadosAlerta[i].fkFabrica) {
                 var totalAlertasAgora = dadosAlerta[i].qtd_to_do + dadosAlerta[i].qtd_in_progress;
                 var isCritica = false;
                 var isAtencao = false;
@@ -693,7 +693,7 @@ function mostrarFabricas() {
                   isAtencao = true;
                 }
                 fabricas.push({
-                  id: dadosFabrica[j].idFabrica,
+                  id: dadosFabrica[j].idfabrica,
                   nome: dadosFabrica[j].nomeFabrica,
                   critica: isCritica,
                   atencao: isAtencao,
