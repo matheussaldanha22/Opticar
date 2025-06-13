@@ -2,7 +2,17 @@ var database = require("../database/config")
 
 function listarFabricasEmpresa(idEmpresa) {
   var instrucaoSql = `
-      SELECT * FROM fabrica where fkEmpresa = ${idEmpresa}
+                        SELECT 
+                          f.idfabrica,
+                          f.nome AS nomeFabrica,
+                          f.limiteCritico,
+                          f.limiteAtencao,
+                          f.telefone,
+                          u.nome AS nomeGestor
+                      FROM fabrica f
+                      LEFT JOIN usuario u 
+                          ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorInfra'
+                      WHERE f.fkEmpresa = ${idEmpresa};
     `
   console.log("Executando a instrução SQL: \n" + instrucaoSql)
   return database.executarFRIO(instrucaoSql)

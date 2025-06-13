@@ -113,8 +113,8 @@ function listarFabricas() {
             }
 
             fabricaCriticaLista.push({
-              nome: fabrica.nome,
-              gestor: fabrica.nome,
+              nome: fabrica.nomeFabrica,
+              gestor: fabrica.nomeGestor,
               atencao: fabrica.limiteAtencao,
               critico: fabrica.limiteCritico,
               telefone: fabrica.telefone,

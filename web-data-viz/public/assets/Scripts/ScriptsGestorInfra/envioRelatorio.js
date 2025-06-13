@@ -1,6 +1,5 @@
 var areaEnvio = document.getElementById('areaEnvio');
 var inputArquivo = document.getElementById('documentos');
-require('dotenv').config()
 
   // Eventos para sair ou soltar
   ['dragleave', 'drop'].forEach(evento => {

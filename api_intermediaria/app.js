@@ -5,7 +5,7 @@ var caminho_env = ambiente_processo === "producao" ? ".env" : ".env.dev";
 const { GoogleGenAI } = require("@google/genai");
 const path = require("path");
 const express = require("express");
-const puppeteer = require('puppeteer');
+const pdf = require('html-pdf');
 var cors = require("cors");
 
 require("dotenv").config({ path: caminho_env });

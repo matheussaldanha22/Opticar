@@ -2,12 +2,6 @@ require('dotenv').config();
 var AWS = require('aws-sdk'); 
 
 // Configura as credenciais temporárias da AWS (tem q trocardireto isso)
-AWS.config.update({
-  accessKeyId: process.env.aws_access_key_id, 
-  secretAccessKey: process.env.aws_secret_access_key, 
-  sessionToken: process.env.aws_session_token, 
-  region: process.env.AWS_REGION 
-});
 
 // faze o servico
 var s3 = new AWS.S3();
@@ -42,7 +36,7 @@ exports.enviarParaS3 = async (req, res) => {
   // Define os parâmetros necessários para o envio ao S3
   var parametros = {
     Bucket: bucket, 
-    Key: `previsao/ ${nomeArquivo}`, 
+    Key: `previsao/${nomeArquivo}`, 
     Body: arquivo.buffer, 
     ContentType: arquivo.mimetype //da biblioteca multer
   };
