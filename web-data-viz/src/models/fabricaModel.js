@@ -70,7 +70,7 @@ function listarFabricas() {
 
 function infoFabrica(idFabrica) {
   var instrucaoSql = `SELECT f.idfabrica AS idFabrica, f.nome AS nomeFabrica, f.limiteAtencao, f.limiteCritico, u.nome AS nomeGestorFabrica, f.telefone
-    FROM fabrica AS f LEFT JOIN usuario AS u ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorFabrica' WHERE idfabrica = ${idFabrica};`
+    FROM fabrica AS f LEFT JOIN usuario AS u ON u.fkFabrica = f.idfabrica AND u.cargo = 'GestorInfra' WHERE idfabrica = ${idFabrica};`
 
   return database.executarFRIO(instrucaoSql)
 }

@@ -367,7 +367,7 @@ function plotarGraficoAlerta(dadosAlerta) {
             quantidadeCritico++;
           }
         }
-        qtdFabricasCriticas.innerHTML = `${quantidadeCritico} Fábricas`;
+        qtdFabricasCriticas.innerHTML = `${quantidadeCritico} Fábrica(s)`;
 
         const larguraGrafico = Math.max(fabricaCriticaLista.length * 200, 400);
         var nomeFabricaCritica = fabricaCriticaLista[0].nome;
