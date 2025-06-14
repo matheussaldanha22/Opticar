@@ -52,12 +52,12 @@ function esconder() {
   if (grafico.style.display === 'flex') {
     grafico.style.display = 'none';
     texto.innerHTML = 'Mostrar Correlação';
-    
+
   } else {
     grafico.style.display = 'flex';
     texto.innerHTML = 'Ocultar';
     grafico.scrollIntoView({ behavior: 'smooth' });
-  
+
   }
 }
 
@@ -83,7 +83,7 @@ function listarMes() {
 
       var d = new Date();
       var anoAtual = d.getFullYear()
-      var mesAtual = d.getMonth()+1
+      var mesAtual = d.getMonth() + 1
 
 
       for (let i = 0; i < alertaMes.length; i++) {
@@ -212,12 +212,12 @@ function plotarGraficoPerido() {
     },
     xaxis: {
       categories: [],
-       labels: {
-            style: {
-              fontSize: "16px",
-              fontWeight: "bold"
-            }
-          }
+      labels: {
+        style: {
+          fontSize: "16px",
+          fontWeight: "bold"
+        }
+      }
     },
     yaxis: {
       title: {
@@ -228,16 +228,16 @@ function plotarGraficoPerido() {
       opacity: 1
     },
     legend: {
-      fontSize:{
-              fontSize: "16px",
-              
-              fontWeight: "bold"
+      fontSize: {
+        fontSize: "16px",
+
+        fontWeight: "bold"
       }
     },
     tooltip: {
       y: {
         formatter: function (val) {
-          return  val + " alertas"
+          return val + " alertas"
         }
       }
     }
@@ -257,10 +257,19 @@ function dadosGrafico(ano, mes) {
   }).then((resultado) => {
     resultado.json().then((json) => {
       if (json.length == 0) {
-        chart.updateOptions({
-          series: 0,
-        });
-
+        chart.updateSeries([{
+          name: "CPU",
+          data: [0, 0, 0, 0]
+        }, {
+          name: "RAM",
+          data: [0, 0, 0, 0]
+        }, {
+          name: "DISCO",
+          data: [0, 0, 0, 0]
+        }, {
+          name: "REDE",
+          data: [0, 0, 0, 0]
+        }]);
         Swal.fire({
           title: "Não Possui Alertas",
           icon: "warning",
@@ -347,7 +356,7 @@ function dadosGrafico(ano, mes) {
 
 
       var seriesChart = [];
-     var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#00BFA6', '#FF6F00'];
+      var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#00BFA6', '#FF6F00'];
 
 
       seriesChart.push({
@@ -368,7 +377,8 @@ function dadosGrafico(ano, mes) {
 
       chart.updateOptions({
         series: seriesChart,
-        xaxis: { categories: categoriesChart 
+        xaxis: {
+          categories: categoriesChart
 
         },
         colors: coresChart,
@@ -439,11 +449,19 @@ function selectServidor(ano, mes) {
     resultado.json().then((json) => {
 
       if (json.length == 0) {
-
-        chart.updateOptions({
-          series: 0,
-        });
-
+        chart.updateSeries([{
+          name: "CPU",
+          data: [0, 0, 0, 0]
+        }, {
+          name: "RAM",
+          data: [0, 0, 0, 0]
+        }, {
+          name: "DISCO",
+          data: [0, 0, 0, 0]
+        }, {
+          name: "REDE",
+          data: [0, 0, 0, 0]
+        }]);
 
         Swal.fire({
           title: "Não Possui Alertas",
@@ -531,7 +549,7 @@ function selectServidor(ano, mes) {
 
 
         var seriesChart = [];
-        var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
+        var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#00BFA6', '#FF6F00'];
 
         seriesChart.push({
           name: "CPU",
@@ -784,10 +802,19 @@ function diaGrafico(dataAno, dataMes, dataDia) {
     resultado.json().then((json) => {
       if (json.length == 0) {
 
-        chart.updateOptions({
-          series: 0,
-        });
-
+        chart.updateSeries([{
+          name: "CPU",
+          data: [0, 0, 0, 0]
+        }, {
+          name: "RAM",
+          data: [0, 0, 0, 0]
+        }, {
+          name: "DISCO",
+          data: [0, 0, 0, 0]
+        }, {
+          name: "REDE",
+          data: [0, 0, 0, 0]
+        }]);
         Swal.fire({
           title: "Não Possui Alertas no dia de Hoje",
           icon: "warning",
@@ -873,7 +900,7 @@ function diaGrafico(dataAno, dataMes, dataDia) {
 
 
         var seriesChart = [];
-        var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
+        var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#00BFA6', '#FF6F00'];
 
         seriesChart.push({
           name: "CPU",
@@ -1094,7 +1121,8 @@ function diaServerGrafico(dataAno, dataMes, dataDia) {
 
 
         var seriesChart = [];
-        var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#01232D', '#FF6F00'];
+        
+        var coresChart = ['#41C1E0', '#2C3E50', '#04708D', '#00BFA6', '#FF6F00'];
 
         seriesChart.push({
           name: "CPU",
@@ -1344,7 +1372,8 @@ const dadosDispersao = {
   datasets: [{
     label: 'Volume Pix x Uso de Componentes',
     data: { x: 0, y: 0 },
-    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+    backgroundColor: 'rgba(52, 180, 192, 0.6)',
+    pointRadius: 6,
     trendlineLinear: {
       style: "rgba(255,99,132,1)",
       lineStyle: "solid",
@@ -1360,19 +1389,34 @@ var chartPix = new Chart(ctx, {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: true }
+      legend: { display: true,
+        label:{
+          font:{
+            size: 18
+          },
+          color: '#000'
+        }
+      }
     },
     scales: {
       x: {
         title: {
           display: true,
-          text: 'Volume do Pix'
+          text: 'Volume do Pix',
+          font: {
+            size: 16
+          },
+          color: '#000'
         }
       },
       y: {
         title: {
           display: true,
-          text: '% Uso dos Componentes'
+          text: '% Uso dos Componentes',
+          font: {
+            size: 16
+          },
+          color: '#000'
         },
         min: 60,
         max: 100
@@ -1572,7 +1616,7 @@ async function relatorioClient(blob, tipo, pasta) {
     const resposta = await fetch("http://34.198.19.147:5000/aws/relatorioClient", {
       method: "POST",
       body: formData
-    }); 
+    });
 
     if (!resposta.ok) {
       throw new Error("Erro ao enviar relatório para a aws" + resposta.status)
@@ -1588,7 +1632,7 @@ async function visualizarHistorico() {
   try {
     const resposta = await fetch(`http://34.198.19.147:5000/aws/visualizarHistorico/${pasta}`, {
       method: "GET",
-      headers: { "Content-Type": "application/json"}
+      headers: { "Content-Type": "application/json" }
     });
 
     if (!resposta.ok) {
@@ -1604,7 +1648,7 @@ async function visualizarHistorico() {
       option.textContent = options;
       slt.appendChild(option)
     })
-    
+
     console.log("estou no visualizarHistorico")
     console.log(resposta)
   } catch (erro) {
@@ -1617,7 +1661,7 @@ async function baixarHistorico(relatorioNome) {
   try {
     const resposta = await fetch(`http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
       method: "GET",
-      headers: {"Content-Type": "application/pdf"}
+      headers: { "Content-Type": "application/pdf" }
     });
 
     if (!resposta.ok) {
