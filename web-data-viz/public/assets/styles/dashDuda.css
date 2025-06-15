@@ -619,6 +619,9 @@ tbody tr:nth-child(even) {
 
 }
 
+#select_relatorio option{
+  background-color: #ffffff;
+}
 
 option {
   background-color: #012027;
@@ -759,6 +762,7 @@ input[type="date"] {
   cursor: pointer;
   border-radius: 3%;
 }
+
 
 /* 
     .containerGraficoCpuVendas {

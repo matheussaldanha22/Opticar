@@ -16,7 +16,7 @@ bobCorrelacao.addEventListener("click", () => {
             <label><input type="radio" id="novo" name="opcao" value="novo" checked> Gerar novo</label><br>
             <label><input type="radio" id="antigo" name="opcao" value="antigo"> Baixar anterior</label>
           </div>
-          <select id="select_relatorio" style="width: 100%; padding: 8px; margin-top: 10px;">
+          <select id="select_relatorio" style="width: 100%; padding: 8px; margin-top: 10px; background-color: white;">
             <option value="">Selecione...</option>
           </select>
         </div>
