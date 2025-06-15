@@ -954,7 +954,7 @@ function inicializarGrafico() {
     chart: {
       type: "line",
       height: 350,
-      width: 1300,
+      width: 1150,
       toolbar: {
         show: true,
       },
