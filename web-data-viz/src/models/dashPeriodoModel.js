@@ -22,7 +22,7 @@ function obterSemana(idFabrica, ano, mes){
 }
 
 function obterComponente(idFabrica, ano, mes) {
-    var instrucaoSql = `select componente, count(idAlerta) as alerta, hour(dataHora) as hora,
+    var instrucaoSql = `select componente, count(idAlerta) as alerta,
     case 
 	WHEN HOUR(dataHora) BETWEEN 6 AND 11 THEN 'Manhã'
     WHEN HOUR(dataHora) BETWEEN 12 AND 17 THEN 'Tarde'
@@ -37,9 +37,9 @@ function obterComponente(idFabrica, ano, mes) {
     join servidor_maquina as maq
     on  comp.fkMaquina=maq.idMaquina
     where year(dataHora) = ${ano} 
-    and month(dataHora) = ${mes} 
+    and month(dataHora) = ${mes}
     and fkFabrica = ${idFabrica}
-    group by hora, componente, periodo
+    group by componente, periodo
     order by alerta desc
     limit 1; `
 
