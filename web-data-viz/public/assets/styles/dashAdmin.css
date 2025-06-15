@@ -43,8 +43,8 @@ body {
   overflow-x:hidden;
   background: white;
   border-radius: 12px;
-  height: 66.5vh;
-  width: 35%;
+  height: 400px;
+  width: 40%;
   padding: 20px;
   transform: translateY(-4px);
   box-shadow: 
@@ -605,7 +605,7 @@ body {
   border-radius: 12px;
   padding: 1vw;
   width: 22vw;
-  height: 13.5vh;
+  height: 15vh;
   font-size: 13px;
   color: black;
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);

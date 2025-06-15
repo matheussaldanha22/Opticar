@@ -439,8 +439,8 @@ function plotarGraficoAlerta(dadosAlerta) {
         }
         var optionsBar = {
           chart: {
-            height: 550,
-            width: 1060,
+            height: 350,
+            width: 565,
             type: "bar",
             toolbar: { show: true },
             zoom: { enabled: true },
@@ -1122,6 +1122,7 @@ async function bobAlertaRelatorio() {
   var hora = String(agora.getHours()).padStart(2, '0');
   var minuto = String(agora.getMinutes()).padStart(2, '0');
   var tipo = `Alerta_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
+  var pasta = "RelatorioAdmin";
   try {
     var perguntas = `Faça essa resposta para a persona administrador, quero um relatório colorido, utilize cores, a respeito do gráfico de alertas que possuo, ele me fala os alertas de cada fábrica, os em andamento e os em aberto, quero saber que ações eu devia tomar para essas fábricas irei te passar aqui os dados do gráfico, aqui estão os nomes das fábricas o eixo X do gráfico ${eixoXAlerta} e respectivamente os alertas delas, o eixo Y do gráfico ${eixoYAlerta} junto com o estado de cada fábrica ${estados}, quero um relatório mais descritivo e visualmente fácil de entender e após analisar, faça um resumo sobre a situação, junto com o que você acha da situação, faça um relatório com cores, colca enfaze nas cores, quero cores, colorido`;
     const response = await fetch("http://34.198.19.147:5000/perguntar", {
@@ -1139,7 +1140,7 @@ async function bobAlertaRelatorio() {
     }
     respostas = await response.text();
     console.log(respostas);
-    pdf(respostas, tipo);
+    pdf(respostas, tipo, pasta);
   } catch (erro) {
     console.error(`Erro: ${erro}`);
     Swal.fire('Erro!', 'Erro ao tentar formular relatório', 'error')
@@ -1156,6 +1157,7 @@ async function bobPredicaoRelatorio() {
   var dia = String(agora.getDate()).padStart(2, '0');
   var hora = String(agora.getHours()).padStart(2, '0');
   var minuto = String(agora.getMinutes()).padStart(2, '0');
+  var pasta = "RelatorioAdmin";
   var tipo = `Predição_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
   try {
     var series = chartPred.w.config.series;
@@ -1187,7 +1189,7 @@ async function bobPredicaoRelatorio() {
     }
     respostas = await response.text();
     console.log(respostas);
-    pdf(respostas, tipo);
+    pdf(respostas, tipo, pasta);
   } catch (erro) {
     console.error(`Erro: ${erro}`);
     Swal.fire('Erro!', 'Erro ao tentar formular relatório', 'error');
@@ -1196,7 +1198,7 @@ async function bobPredicaoRelatorio() {
   }
 }
 
-async function pdf(respostas, tipo) {
+async function pdf(respostas, tipo, pasta) {
   try {
     const resposta = await fetch("http://34.198.19.147:5000/pdf", {
       method: "POST",
@@ -1215,7 +1217,7 @@ async function pdf(respostas, tipo) {
 
     const blob = await resposta.blob();
     console.log(blob);
-    relatorioClient(blob, tipo)
+    relatorioClient(blob, tipo, pasta)
 
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -1234,10 +1236,11 @@ async function pdf(respostas, tipo) {
   }
 }
 
-async function relatorioClient(blob, tipo) {
+async function relatorioClient(blob, tipo, pasta) {
   const formData = new FormData();
   formData.append("relatorioCliente", blob, "relatorio.pdf")
   formData.append("tipo", tipo);
+  formData.append("pasta", pasta);
 
   try {
     const resposta = await fetch("http://34.198.19.147:5000/aws/relatorioClient", {
@@ -1255,8 +1258,10 @@ async function relatorioClient(blob, tipo) {
 }
 
 async function visualizarHistorico() {
+  var pasta = "RelatorioAdmin";
+
   try {
-    const resposta = await fetch("http://34.198.19.147:5000/aws/visualizarHistorico", {
+    const resposta = await fetch(`http://34.198.19.147:5000/aws/visualizarHistorico/${pasta}`, {
       method: "GET",
       headers: { "Content-Type": "application/json"}
     });
@@ -1283,8 +1288,10 @@ async function visualizarHistorico() {
 }
 
 async function baixarHistorico(relatorioNome) {
+  var pasta = "RelatorioAdmin";
+
   try {
-    const resposta = await fetch(`http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}`, {
+    const resposta = await fetch(`http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
       method: "GET",
       headers: {"Content-Type": "application/pdf"}
     });
