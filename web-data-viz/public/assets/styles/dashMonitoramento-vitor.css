@@ -441,14 +441,8 @@ tbody tr:nth-child(even) {
   min-height: 6vw;
 }
 
-
-.tempo_atividade p{
-  font-size: 500px;
-}
-
-#qtdTotalServidores{
+#qtdTotalServidores {
   color: #04708d;
-
 }
 
 #qtdServidoresCritico {
@@ -461,12 +455,12 @@ tbody tr:nth-child(even) {
 
 .tempo_atividade h3 {
   margin-top: 1%;
-  font-size: 1.5vw;
+  font-size: 1.2vw;
 }
 
 .tempo_atividade p {
   margin-top: 1%;
-  font-size: 2vw;
+  font-size: 1.5vw;
 }
 
 .mainContainerTabela {
@@ -477,12 +471,11 @@ tbody tr:nth-child(even) {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-
-table th{
-  font-size: 1.5vw;
+table th {
+  font-size: 1vw;
 }
 
-table td{
+table td {
   font-size: 1vw;
 }
 
@@ -510,7 +503,7 @@ table i:hover {
 
 .tituloTabela {
   margin-bottom: 1%;
-  font-size: 2vw;
+  font-size: 1.5vw;
 }
 
 .containerFiltros {
