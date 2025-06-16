@@ -1,5 +1,9 @@
 
 // Gráfico de Barras Empilhadas - Alertas Resolvidos vs Não Resolvidos por Dia
+var totais = [];
+var resolvidos = [];
+var abertos = [];
+var andamento = [];
 
 var barOptions = {
     series: [{
@@ -95,10 +99,10 @@ function carregarComponente(componente) {
             }
 
             barOptions.series = [
-                { name: 'Alertas totais', data: dados.totais.slice(-5) },
-                { name: 'Não Resolvidos', data: dados.toDos.slice(-5) },
-                { name: 'Resolvidos', data: dados.Done.slice(-5) },
-                { name: 'Em progresso', data: dados.InProgress.slice(-5) }
+                { name: 'Alertas totais', data: dados.totais},
+                { name: 'Não Resolvidos', data: dados.toDos},
+                { name: 'Resolvidos', data: dados.Done},
+                { name: 'Em progresso', data: dados.InProgress}
             ];
             barOptions.xaxis.categories = dados.categorias;
 
