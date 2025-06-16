@@ -1298,7 +1298,7 @@ function atualizarDadosDia() {
   kpiDia.style.display = "none"
 
   if (inputData.value != 0) {
-    idMes.innerHTML = `do Dia ${dataDia}`
+    idMes.innerHTML = `do Dia ${dataDia + 1}`
     console.log(dataAno)
     console.log(dataMes)
     console.log(dataDia)
@@ -1307,7 +1307,7 @@ function atualizarDadosDia() {
     diaGrafico(dataAno, dataMes, dataDia)
     diaProcesso(dataAno, dataMes, dataDia)
     if (sltServidor.value != "todos") {
-      idMes.innerHTML = `do Dia ${dataDia}`
+      idMes.innerHTML = `do Dia ${dataDia + 1}`
       diaServerComp(dataAno, dataMes, dataDia)
       diaServerPeriodo(dataAno, dataMes, dataDia)
       diaServerGrafico(dataAno, dataMes, dataDia)
