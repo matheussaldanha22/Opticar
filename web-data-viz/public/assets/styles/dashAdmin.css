@@ -44,7 +44,7 @@ body {
   background: white;
   border-radius: 12px;
   height: 400px;
-  width: 40%;
+  width: 45%;
   padding: 20px;
   transform: translateY(-4px);
   box-shadow: 
@@ -79,7 +79,8 @@ body {
 }
 
 .card {
-  width: 48.3%;
+  height: 25vh;
+  width: 28%;
   padding: 18px;
   border-radius: 10px;
   color: white;
@@ -88,7 +89,7 @@ body {
 }
 
 .card i {
-  font-size: 22px;
+  font-size: 15.5px;
 }
 
 .card:hover {
@@ -129,7 +130,7 @@ body {
 }
 
 .card-info {
-  font-size: 18px;
+  font-size: 15px;
 }
 
 .card-info div {
