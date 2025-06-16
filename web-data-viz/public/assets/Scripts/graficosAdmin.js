@@ -1126,7 +1126,32 @@ async function bobAlertaRelatorio() {
   var tipo = `Alerta_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
   var pasta = "RelatorioAdmin";
   try {
-    var perguntas = `Faça essa resposta para a persona administrador, quero um relatório colorido, utilize cores, a respeito do gráfico de alertas que possuo, ele me fala os alertas de cada fábrica, os em andamento e os em aberto, quero saber que ações eu devia tomar para essas fábricas irei te passar aqui os dados do gráfico, aqui estão os nomes das fábricas o eixo X do gráfico ${eixoXAlerta} e respectivamente os alertas delas, o eixo Y do gráfico ${eixoYAlerta} junto com o estado de cada fábrica ${estados}, quero um relatório mais descritivo e visualmente fácil de entender e após analisar, faça um resumo sobre a situação, junto com o que você acha da situação, faça um relatório com cores, colca enfaze nas cores, quero cores, colorido`;
+    var perguntas = `Esse relatório é para a persona administrador, você é um administrador industrial experiente. Preciso de um relatório EXTREMAMENTE COLORIDO sobre os alertas das minhas fábricas. Use MUITAS CORES em todo o relatório, formatação markdown colorida, tabelas coloridas e destaque visual constante.
+
+DADOS RECEBIDOS:
+- Nomes das fábricas: ${eixoXAlerta}
+- Número de alertas por fábrica: ${eixoYAlerta} 
+- Status de cada fábrica: ${estados}
+
+IMPORTANTE: Os três arrays correspondem pela posição do índice. O primeiro elemento de cada array se refere à mesma fábrica, o segundo elemento à segunda fábrica, e assim sucessivamente.
+
+INSTRUÇÕES PARA O RELATÓRIO:
+
+1. ANÁLISE POR FÁBRICA: Correlacione cada fábrica com seu número de alertas e status atual. Identifique quais fábricas estão críticas baseado na combinação de muitos alertas com status problemático como Em Andamento ou Em Aberto.
+
+2. FORMATAÇÃO VISUAL: Use cores abundantemente. Vermelho para situações críticas, amarelo para atenção necessária, verde para situações controladas. Crie seções bem separadas visualmente com fundos coloridos e destaque números importantes.
+
+3. AÇÕES RECOMENDADAS: Para cada fábrica, sugira ações específicas considerando o número de alertas e o status atual. Priorize fábricas com mais alertas em status Em Andamento ou Em Aberto.
+
+4. ESTRUTURA DO RELATÓRIO:
+   - SITUAÇÃO CRÍTICA: Fábricas com mais alertas e status problemático
+   - ATENÇÃO NECESSÁRIA: Situação intermediária 
+   - SITUAÇÃO CONTROLADA: Fábricas com poucos alertas
+   - RESUMO EXECUTIVO: Sua visão geral da situação e recomendações prioritárias
+
+5. ESTILO: O relatório deve ser visualmente atrativo, bem organizado, com tabelas coloridas e extremamente fácil de entender. Use formatação markdown para criar um documento profissional mas colorido.
+
+Após a análise, apresente sua opinião profissional sobre o cenário geral e quais fábricas precisam de atenção imediata.`;
     const response = await fetch("http://34.198.19.147:5000/perguntar", {
       method: "POST",
       headers: {
