@@ -1480,7 +1480,7 @@ function plotarGraficoPix(dadosCpu, dadosRam, dadosDisco, dadosRede, dataPix) {
   const dadosRegressao = arrayUsado.map(p => [p.x, p.y]);
   const regressao = ss.linearRegression(dadosRegressao);
   const correlacao = ss.sampleCorrelation(maior, menor);
-  const incremento = 100000;
+  const incremento = 100;
   const impacto = (regressao.m * incremento).toFixed(2);
 
 
