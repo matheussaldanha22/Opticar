@@ -1,8 +1,10 @@
-var fabricaCriticaLista = [];
-var fabricasSelecionadas = [];
-var eixoXAlerta = [];
-var eixoYAlerta = [];
-var estados = [];
+var fabricaCriticaLista = []
+var fabricasSelecionadas = []
+var eixoXAlerta = []
+var eixoYAlerta = []
+var estados = []
+
+const API_URL = "http://23.23.103.208"
 
 const nomeDias = [
   "Domingo",
@@ -12,7 +14,7 @@ const nomeDias = [
   "Quinta-Feira",
   "Sexta-Feira",
   "Sábado",
-];
+]
 
 const nomeMeses = [
   "Janeiro",
@@ -27,11 +29,11 @@ const nomeMeses = [
   "Outubro",
   "Novembro",
   "Dezembro",
-];
+]
 
 function openModal(idFabrica) {
-  const modalBody = document.getElementById("modal-body");
-  
+  const modalBody = document.getElementById("modal-body")
+
   fetch(`/jira/listarAlertasPorId/${idFabrica}`, {
     method: "GET",
     headers: {
@@ -40,27 +42,27 @@ function openModal(idFabrica) {
   })
     .then(function (resposta) {
       if (!resposta.ok) {
-        throw new Error(`Erro na resposta: ${resposta.status}`);
+        throw new Error(`Erro na resposta: ${resposta.status}`)
       }
-      return resposta.json();
+      return resposta.json()
     })
     .then(function (dadosTempoResolucao) {
-      var tempoMedio = dadosTempoResolucao.tempoMedioResolucao;
-      var tempoResolucao;
-      
+      var tempoMedio = dadosTempoResolucao.tempoMedioResolucao
+      var tempoResolucao
+
       if (isNaN(tempoMedio)) {
-        tempoResolucao = `Dado inválido`;
+        tempoResolucao = `Dado inválido`
       } else if (tempoMedio >= 1440) {
-        var tempoDias = tempoMedio / 1440;
-        tempoResolucao = `${tempoDias.toFixed(0)}(d)`;
+        var tempoDias = tempoMedio / 1440
+        tempoResolucao = `${tempoDias.toFixed(0)}(d)`
       } else if (tempoMedio >= 60) {
-        var tempoHoras = tempoMedio / 60;
-        tempoResolucao = `${tempoHoras.toFixed(0)}(h)`;
+        var tempoHoras = tempoMedio / 60
+        tempoResolucao = `${tempoHoras.toFixed(0)}(h)`
       } else {
-        tempoResolucao = `${tempoMedio.toFixed(0)}(min)`;
+        tempoResolucao = `${tempoMedio.toFixed(0)}(min)`
       }
-      
-      fabricaCriticaLista.forEach(fabrica => {
+
+      fabricaCriticaLista.forEach((fabrica) => {
         if (fabrica.id == idFabrica) {
           modalBody.innerHTML = `
                 <div class="modal-info">
@@ -91,14 +93,14 @@ function openModal(idFabrica) {
                     <span class="info-label">Tempo médio de resolução:</span>
                     <span>${tempoResolucao}</span>
                 </div>
-            `;
-          document.getElementById("modal").style.display = "block";
+            `
+          document.getElementById("modal").style.display = "block"
         }
-      });
+      })
     })
     .catch(function (erro) {
-      console.error(`#ERRO: ${erro}`);
-      fabricaCriticaLista.forEach(fabrica => {
+      console.error(`#ERRO: ${erro}`)
+      fabricaCriticaLista.forEach((fabrica) => {
         if (fabrica.id == idFabrica) {
           modalBody.innerHTML = `
                 <div class="modal-info">
@@ -129,34 +131,33 @@ function openModal(idFabrica) {
                     <span class="info-label">Tempo médio de resolução:</span>
                     <span>${fabrica.tempoResolucao}</span>
                 </div>
-            `;
-          document.getElementById("modal").style.display = "block";
+            `
+          document.getElementById("modal").style.display = "block"
         }
-      });
-    });
+      })
+    })
 }
 
 function closeModal() {
-  document.getElementById("modal").style.display = "none";
+  document.getElementById("modal").style.display = "none"
 }
 
-
 function obterData() {
-  let dataExibir = new Date();
+  let dataExibir = new Date()
   return `${nomeDias[dataExibir.getDay()]} - ${dataExibir.toLocaleString(
     "pt-BR",
     { timeZone: "America/Sao_Paulo" }
-  )}`;
+  )}`
 }
 
 function mostrarData() {
   setInterval(() => {
-    document.getElementById("dataInfo").innerHTML = obterData();
-  }, 1000);
+    document.getElementById("dataInfo").innerHTML = obterData()
+  }, 1000)
 }
 
-const bobPredicao = document.querySelector(".bobPredicao");
-const bobAlerta = document.querySelector(".bobAlerta");
+const bobPredicao = document.querySelector(".bobPredicao")
+const bobAlerta = document.querySelector(".bobAlerta")
 
 bobAlerta.addEventListener("click", () => {
   Swal.fire({
@@ -181,25 +182,24 @@ bobAlerta.addEventListener("click", () => {
     background: "#fff",
     customClass: "addModal",
     didOpen: () => {
-      visualizarHistorico();
-    }
+      visualizarHistorico()
+    },
   }).then((result) => {
     if (result.isConfirmed) {
-      if (document.getElementById('novo').checked) {
-        bobAlertaRelatorio();
+      if (document.getElementById("novo").checked) {
+        bobAlertaRelatorio()
       } else {
-        var relatorioNome = document.getElementById('select_relatorio').value;
+        var relatorioNome = document.getElementById("select_relatorio").value
         if (relatorioNome) {
-          baixarHistorico(relatorioNome);
+          baixarHistorico(relatorioNome)
         }
       }
     }
-  });
-});
-
+  })
+})
 
 bobPredicao.addEventListener("click", () => {
-   Swal.fire({
+  Swal.fire({
     html: `
       <div class="modal-bob">
         <div class="containerBob">
@@ -221,21 +221,21 @@ bobPredicao.addEventListener("click", () => {
     background: "#fff",
     customClass: "addModal",
     didOpen: () => {
-      visualizarHistorico();
-    }
+      visualizarHistorico()
+    },
   }).then((result) => {
     if (result.isConfirmed) {
-      if (document.getElementById('novo').checked) {
-        bobPredicaoRelatorio();
+      if (document.getElementById("novo").checked) {
+        bobPredicaoRelatorio()
       } else {
-        var relatorioNome = document.getElementById('select_relatorio').value;
+        var relatorioNome = document.getElementById("select_relatorio").value
         if (relatorioNome) {
-          baixarHistorico(relatorioNome);
+          baixarHistorico(relatorioNome)
         }
       }
     }
-  });
-});
+  })
+})
 
 function dadosGraficoAlerta() {
   fetch("/admin/dadosGraficoAlerta", {
@@ -243,65 +243,64 @@ function dadosGraficoAlerta() {
   })
     .then(function (resposta) {
       if (!resposta.ok) {
-        throw new Error(`Erro na resposta: ${resposta.status}`);
+        throw new Error(`Erro na resposta: ${resposta.status}`)
       }
-      return resposta.json();
+      return resposta.json()
     })
     .then(function (dadosAlerta) {
-      plotarGraficoAlerta(dadosAlerta);
+      plotarGraficoAlerta(dadosAlerta)
     })
     .catch(function (erro) {
-      console.error(`#ERRO: ${erro}`);
+      console.error(`#ERRO: ${erro}`)
       let selecionar = document.querySelector("#selecionar")
-      let mediaAlerta = document.querySelector("#mediaAlerta");
-      let nomeFabricaTempo = document.querySelector("#nomeFabricaTempo");
-      var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
-      var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas");
-      var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica");
-      var fabricaCriticaM = document.querySelector("#fabricaCriticaModal");
-      var quantidadeAlertasM = document.querySelector("#quantidadeAlertasModal");
-      var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal");
-      let loader = document.querySelector("#tempo");
+      let mediaAlerta = document.querySelector("#mediaAlerta")
+      let nomeFabricaTempo = document.querySelector("#nomeFabricaTempo")
+      var fabricaCriticaKpi = document.querySelector("#fabricaCritica")
+      var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas")
+      var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica")
+      var fabricaCriticaM = document.querySelector("#fabricaCriticaModal")
+      var quantidadeAlertasM = document.querySelector("#quantidadeAlertasModal")
+      var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal")
+      let loader = document.querySelector("#tempo")
       loader.classList.remove("loader")
       statusKpiCriticaKpi = ""
       selecionar.innerHTML = ""
-      fabricaCriticaKpi.innerHTML = 
-      fabricaCriticaM.innerHTML = "Nenhum alerta";
+      fabricaCriticaKpi.innerHTML = fabricaCriticaM.innerHTML = "Nenhum alerta"
       document.querySelector(
-          "#fabricaCriticaModal"
-        ).innerHTML = `Nenhuma alerta`
-      quantidadeAlertasM.innerHTML = ``;
-      quantidadeAlertasKpi.innerHTML = ``;
-      statusKpiCriticaKpi.innerHTML = ``;
-      nomeFabricaTempo.innerHTML = ``;
-      mediaAlerta.innerHTML = `Nenhum alerta`;
-    });
+        "#fabricaCriticaModal"
+      ).innerHTML = `Nenhuma alerta`
+      quantidadeAlertasM.innerHTML = ``
+      quantidadeAlertasKpi.innerHTML = ``
+      statusKpiCriticaKpi.innerHTML = ``
+      nomeFabricaTempo.innerHTML = ``
+      mediaAlerta.innerHTML = `Nenhum alerta`
+    })
 }
 
 function plotarGraficoAlerta(dadosAlerta) {
-  fabricaCriticaLista = [];
+  fabricaCriticaLista = []
   fetch("/admin/dadosFabrica", {
     method: "GET",
   })
     .then(function (resposta) {
       if (!resposta.ok) {
-        throw new Error(`Erro na resposta: ${resposta.status}`);
+        throw new Error(`Erro na resposta: ${resposta.status}`)
       }
-      return resposta.json();
+      return resposta.json()
     })
     .then(function (dadosFabrica) {
-      var nivelCriticidade;
-      var estado;
+      var nivelCriticidade
+      var estado
 
       for (let i = 0; i < dadosFabrica.length; i++) {
-        var fabrica = dadosFabrica[i];
+        var fabrica = dadosFabrica[i]
         for (let j = 0; j < dadosAlerta.length; j++) {
-          var alerta = dadosAlerta[j];
+          var alerta = dadosAlerta[j]
           if (alerta.fkFabrica === fabrica.idfabrica) {
-            var quantidade = alerta.qtd_to_do + alerta.qtd_in_progress;
+            var quantidade = alerta.qtd_to_do + alerta.qtd_in_progress
             if (quantidade >= fabrica.limiteCritico) {
-              nivelCriticidade = quantidade - fabrica.limiteCritico;
-              estado = "critico";
+              nivelCriticidade = quantidade - fabrica.limiteCritico
+              estado = "critico"
               fabricaCriticaLista.push({
                 nome: fabrica.nomeFabrica,
                 gestor: fabrica.nomeGestor,
@@ -314,10 +313,10 @@ function plotarGraficoAlerta(dadosAlerta) {
                 quantidade,
                 estado,
                 nivelCriticidade,
-              });
+              })
             } else if (quantidade >= fabrica.limiteAtencao) {
-              nivelCriticidade = quantidade - fabrica.limiteAtencao;
-              estado = "atencao";
+              nivelCriticidade = quantidade - fabrica.limiteAtencao
+              estado = "atencao"
               fabricaCriticaLista.push({
                 nome: fabrica.nomeFabrica,
                 gestor: fabrica.nomeGestor,
@@ -330,10 +329,10 @@ function plotarGraficoAlerta(dadosAlerta) {
                 quantidade,
                 estado,
                 nivelCriticidade,
-              });
+              })
             } else {
-              nivelCriticidade = 0;
-              estado = "ok";
+              nivelCriticidade = 0
+              estado = "ok"
               fabricaCriticaLista.push({
                 nome: fabrica.nomeFabrica,
                 gestor: fabrica.nomeGestor,
@@ -346,98 +345,84 @@ function plotarGraficoAlerta(dadosAlerta) {
                 quantidade,
                 estado,
                 nivelCriticidade,
-              });
+              })
             }
           }
         }
       }
 
       fabricaCriticaLista.sort((a, b) => {
-        const prioridade = { critico: 2, atencao: 1, ok: 0 };
+        const prioridade = { critico: 2, atencao: 1, ok: 0 }
 
         if (prioridade[b.estado] !== prioridade[a.estado]) {
-          return prioridade[b.estado] - prioridade[a.estado];
+          return prioridade[b.estado] - prioridade[a.estado]
         }
-        return b.nivelCriticidade - a.nivelCriticidade;
-      });
+        return b.nivelCriticidade - a.nivelCriticidade
+      })
 
-      var qtdFabricasCriticas = document.querySelector("#qtdFabricasCriticas");
+      var qtdFabricasCriticas = document.querySelector("#qtdFabricasCriticas")
       if (fabricaCriticaLista.length > 0) {
-        var quantidadeCritico = 0;
+        var quantidadeCritico = 0
         for (let i = 0; i < fabricaCriticaLista.length; i++) {
           if (fabricaCriticaLista[i].estado == "critico") {
-            quantidadeCritico++;
+            quantidadeCritico++
           }
         }
-        qtdFabricasCriticas.innerHTML = `${quantidadeCritico} Fábrica(s)`;
+        qtdFabricasCriticas.innerHTML = `${quantidadeCritico} Fábrica(s)`
 
-        const larguraGrafico = Math.max(fabricaCriticaLista.length * 200, 400);
-        var nomeFabricaCritica = fabricaCriticaLista[0].nome;
-        var idFabricaCritica = fabricaCriticaLista[0].id;
+        const larguraGrafico = Math.max(fabricaCriticaLista.length * 200, 400)
+        var nomeFabricaCritica = fabricaCriticaLista[0].nome
+        var idFabricaCritica = fabricaCriticaLista[0].id
 
-        kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica);
+        kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica)
 
-        var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
-        var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas");
-        var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica");
-        var fabricaCriticaM = document.querySelector("#fabricaCriticaModal");
-        var quantidadeAlertasM = document.querySelector("#quantidadeAlertasModal");
-        var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal");
+        var fabricaCriticaKpi = document.querySelector("#fabricaCritica")
+        var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas")
+        var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica")
+        var fabricaCriticaM = document.querySelector("#fabricaCriticaModal")
+        var quantidadeAlertasM = document.querySelector(
+          "#quantidadeAlertasModal"
+        )
+        var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal")
 
-        fabricaCriticaKpi.classList.remove(
-          "critico",
-          "atencao",
-          "ok"
-        );
-        statusKpiCriticaKpi.classList.remove(
-          "critico",
-          "atencao",
-          "ok"
-        );
-        fabricaCriticaM.classList.remove(
-          "critico",
-          "atencao",
-          "ok"
-        );
-        statusKpiCriticaM.classList.remove(
-          "critico",
-          "atencao",
-          "ok"
-        );
+        fabricaCriticaKpi.classList.remove("critico", "atencao", "ok")
+        statusKpiCriticaKpi.classList.remove("critico", "atencao", "ok")
+        fabricaCriticaM.classList.remove("critico", "atencao", "ok")
+        statusKpiCriticaM.classList.remove("critico", "atencao", "ok")
 
         if (fabricaCriticaLista[0].estado == "critico") {
-          fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome;
-          quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`;
-          statusKpiCriticaKpi.innerHTML = `Status: Crítico`;
-          fabricaCriticaKpi.classList.add("critico");
-          statusKpiCriticaKpi.classList.add("critico");
-          fabricaCriticaM.innerHTML = fabricaCriticaLista[0].nome;
-          quantidadeAlertasM.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`;
-          statusKpiCriticaM.innerHTML = `Status: Crítico`;
-          fabricaCriticaM.classList.add("critico");
-          statusKpiCriticaM.classList.add("critico");
+          fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome
+          quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+          statusKpiCriticaKpi.innerHTML = `Status: Crítico`
+          fabricaCriticaKpi.classList.add("critico")
+          statusKpiCriticaKpi.classList.add("critico")
+          fabricaCriticaM.innerHTML = fabricaCriticaLista[0].nome
+          quantidadeAlertasM.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+          statusKpiCriticaM.innerHTML = `Status: Crítico`
+          fabricaCriticaM.classList.add("critico")
+          statusKpiCriticaM.classList.add("critico")
         } else if (fabricaCriticaLista[0].estado == "atencao") {
-          fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome;
-          quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`;
-          statusKpiCriticaKpi.innerHTML = `Status: Atenção`;
-          fabricaCriticaKpi.classList.add("atencao");
-          statusKpiCriticaKpi.classList.add("atencao");
-          fabricaCriticaM.innerHTML = fabricaCriticaLista[0].nome;
-          quantidadeAlertasM.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`;
-          statusKpiCriticaM.innerHTML = `Status: Atenção`;
-          fabricaCriticaM.classList.add("atencao");
-          statusKpiCriticaM.classList.add("atencao");
+          fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome
+          quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+          statusKpiCriticaKpi.innerHTML = `Status: Atenção`
+          fabricaCriticaKpi.classList.add("atencao")
+          statusKpiCriticaKpi.classList.add("atencao")
+          fabricaCriticaM.innerHTML = fabricaCriticaLista[0].nome
+          quantidadeAlertasM.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+          statusKpiCriticaM.innerHTML = `Status: Atenção`
+          fabricaCriticaM.classList.add("atencao")
+          statusKpiCriticaM.classList.add("atencao")
         } else {
-          fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome;
-          quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`;
-          statusKpiCriticaKpi.innerHTML = `Status: Ok`;
-          fabricaCriticaKpi.classList.add("ok");
-          statusKpiCriticaKpi.classList.add("ok");
-          fabricaCriticaM.innerHTML = fabricaCriticaLista[0].nome;
-          quantidadeAlertasM.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`;
-          statusKpiCriticaM.innerHTML = `Status: Ok`;
-          fabricaCriticaM.classList.add("ok");
-          statusKpiCriticaM.classList.add("ok");
+          fabricaCriticaKpi.innerHTML = fabricaCriticaLista[0].nome
+          quantidadeAlertasKpi.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+          statusKpiCriticaKpi.innerHTML = `Status: Ok`
+          fabricaCriticaKpi.classList.add("ok")
+          statusKpiCriticaKpi.classList.add("ok")
+          fabricaCriticaM.innerHTML = fabricaCriticaLista[0].nome
+          quantidadeAlertasM.innerHTML = `${fabricaCriticaLista[0].quantidade} Alertas em aberto`
+          statusKpiCriticaM.innerHTML = `Status: Ok`
+          fabricaCriticaM.classList.add("ok")
+          statusKpiCriticaM.classList.add("ok")
         }
         var optionsBar = {
           chart: {
@@ -449,19 +434,19 @@ function plotarGraficoAlerta(dadosAlerta) {
             stacked: false,
             events: {
               dataPointSelection: function (event, chartContext, config) {
-                const serieNome = optionsBar.series[config.seriesIndex].name;
+                const serieNome = optionsBar.series[config.seriesIndex].name
                 const fabricaNome =
-                  optionsBar.xaxis.categories[config.dataPointIndex];
+                  optionsBar.xaxis.categories[config.dataPointIndex]
                 const valorAberto =
-                  optionsBar.series[0].data[config.dataPointIndex];
+                  optionsBar.series[0].data[config.dataPointIndex]
                 const valorAndamento =
-                  optionsBar.series[1].data[config.dataPointIndex];
+                  optionsBar.series[1].data[config.dataPointIndex]
                 informacaoFabrica(
                   fabricaNome,
                   serieNome,
                   valorAberto,
                   valorAndamento
-                );
+                )
               },
             },
           },
@@ -474,74 +459,83 @@ function plotarGraficoAlerta(dadosAlerta) {
           series: [
             {
               name: "Alertas em Aberto",
-              data: fabricaCriticaLista.slice(0,6).map((f) => f.qtd_to_do),
+              data: fabricaCriticaLista.slice(0, 6).map((f) => f.qtd_to_do),
               color: "#011f4b",
             },
             {
               name: "Alertas em Andamento",
-              data: fabricaCriticaLista.slice(0,6).map((f) => f.qtd_in_progress),
+              data: fabricaCriticaLista
+                .slice(0, 6)
+                .map((f) => f.qtd_in_progress),
               color: "#0077b6",
             },
           ],
           xaxis: {
-            categories: fabricaCriticaLista.slice(0,6).map((f) => f.nome),
+            categories: fabricaCriticaLista.slice(0, 6).map((f) => f.nome),
             color: "#0330fc",
             labels: {
               style: {
-                fontSize: '17px', 
-                fontWeight: 'bold', 
-                colors: '#333'      
-              }
-            }
+                fontSize: "17px",
+                fontWeight: "bold",
+                colors: "#333",
+              },
+            },
           },
           legend: {
-            fontSize: '17px',
-            fontWeight: 'bold',
-            position: 'bottom',
-            horizontalAlign: 'center',
+            fontSize: "17px",
+            fontWeight: "bold",
+            position: "bottom",
+            horizontalAlign: "center",
             labels: {
-              colors: '#333'
-            }
+              colors: "#333",
+            },
           },
           fill: {
             opacity: 1,
           },
-        };
+        }
 
-        eixoXAlerta = fabricaCriticaLista.slice(0,5).map((f) => f.nome).join(", ");
-        eixoYAlerta = `Aberto: [${fabricaCriticaLista.slice(0,5).map((f) => f.qtd_to_do).join(", ")}], Andamento: [${fabricaCriticaLista.slice(0,5)
+        eixoXAlerta = fabricaCriticaLista
+          .slice(0, 5)
+          .map((f) => f.nome)
+          .join(", ")
+        eixoYAlerta = `Aberto: [${fabricaCriticaLista
+          .slice(0, 5)
+          .map((f) => f.qtd_to_do)
+          .join(", ")}], Andamento: [${fabricaCriticaLista
+          .slice(0, 5)
           .map((f) => f.qtd_in_progress)
-          .join(", ")}]`;
-        estados = `${fabricaCriticaLista.slice(0,5).map((f) => f.estado)}`;
+          .join(", ")}]`
+        estados = `${fabricaCriticaLista.slice(0, 5).map((f) => f.estado)}`
 
         cardFabricas()
 
         if (window.chartBar) {
-          window.chartBar.destroy();
+          window.chartBar.destroy()
         }
         window.chartBar = new ApexCharts(
           document.querySelector("#graficoAlertaFabricas"),
           optionsBar
-        );
-        window.chartBar.render();
+        )
+        window.chartBar.render()
       } else {
-        qtdFabricasCriticas.innerHTML = `Nenhuma Fábrica em estado crítico`;
+        qtdFabricasCriticas.innerHTML = `Nenhuma Fábrica em estado crítico`
         document.querySelector(
           "#fabricaCritica"
-        ).innerHTML = `Nenhuma fabrica crítica`;
+        ).innerHTML = `Nenhuma fabrica crítica`
         document.querySelector(
           "#quantidadeAlertas"
-        ).innerHTML = `Nenhum alerta encontrado`;
-        document.querySelector("#statusKpiCritica").innerHTML = ``;
+        ).innerHTML = `Nenhum alerta encontrado`
+        document.querySelector("#statusKpiCritica").innerHTML = ``
         document.querySelector(
           "#fabricaCriticaModal"
-        ).innerHTML = `Nenhuma fabrica crítica`;
+        ).innerHTML = `Nenhuma fabrica crítica`
         document.querySelector(
           "#quantidadeAlertasModal"
-        ).innerHTML = `Nenhum alerta encontrado`;
-        document.querySelector("#statusKpiCriticaModal").innerHTML = ``;
+        ).innerHTML = `Nenhum alerta encontrado`
+        document.querySelector("#statusKpiCriticaModal").innerHTML = ``
         if (window.chartBar) {
-          window.chartBar.destroy();
+          window.chartBar.destroy()
           window.chartBar = new ApexCharts(
             document.querySelector("#graficoAlertaFabricas"),
             {
@@ -549,113 +543,113 @@ function plotarGraficoAlerta(dadosAlerta) {
               series: [],
               xaxis: { categories: [] },
             }
-          );
-          window.chartBar.render();
+          )
+          window.chartBar.render()
         }
       }
     })
     .catch(function (erro) {
-      console.error(`#ERRO: ${erro}`);
-      var fabricaCriticaKpi = document.querySelector("#fabricaCritica");
-      var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas");
-      var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica");
-      var fabricaCriticaM = document.querySelector("#fabricaCriticaModal");
-      var quantidadeAlertasM = document.querySelector("#quantidadeAlertasModal");
-      var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal");
-      let loader = document.querySelector("#tempo");
-      loader.classList.remove("loader");
-      fabricaCriticaM.innerHTML = "Nenhum alerta";
+      console.error(`#ERRO: ${erro}`)
+      var fabricaCriticaKpi = document.querySelector("#fabricaCritica")
+      var quantidadeAlertasKpi = document.querySelector("#quantidadeAlertas")
+      var statusKpiCriticaKpi = document.querySelector("#statusKpiCritica")
+      var fabricaCriticaM = document.querySelector("#fabricaCriticaModal")
+      var quantidadeAlertasM = document.querySelector("#quantidadeAlertasModal")
+      var statusKpiCriticaM = document.querySelector("#statusKpiCriticaModal")
+      let loader = document.querySelector("#tempo")
+      loader.classList.remove("loader")
+      fabricaCriticaM.innerHTML = "Nenhum alerta"
       document.querySelector(
-          "#fabricaCriticaModal"
-        ).innerHTML = `Nenhuma fabrica crítica`
-      quantidadeAlertasM.innerHTML = ``;
-      quantidadeAlertasKpi.innerHTML = `Nenhum alerta`;
-      statusKpiCriticaKpi.innerHTML = ``;
-      nomeFabricaTempo.innerHTML = `Nenhum alerta`;
-      mediaAlerta.innerHTML = `Não possui dados o suficiente`;
-    });
+        "#fabricaCriticaModal"
+      ).innerHTML = `Nenhuma fabrica crítica`
+      quantidadeAlertasM.innerHTML = ``
+      quantidadeAlertasKpi.innerHTML = `Nenhum alerta`
+      statusKpiCriticaKpi.innerHTML = ``
+      nomeFabricaTempo.innerHTML = `Nenhum alerta`
+      mediaAlerta.innerHTML = `Não possui dados o suficiente`
+    })
 }
 
 function cardFabricas() {
-    var containerCards = document.querySelector(".cards-container");
-    
-    containerCards.innerHTML = '';
+  var containerCards = document.querySelector(".cards-container")
 
-    fabricaCriticaLista.slice(0,6).forEach(fabrica => {
-        var divCard = document.createElement("div");
-        var divTitulo = document.createElement("div");
-        var cardTitulo = document.createElement("div");
-        var cardInfo = document.createElement("div");
-        var spanTitulo = document.createElement("span");
-        var spanStatus = document.createElement("span");
-        var divNome = document.createElement("div");
-        var divAlertas = document.createElement("div");
-        
-        divCard.classList.add("card");
-        if (fabrica.estado == "critico") {
-            divCard.classList.add("card-critico");
-        }
-        if (fabrica.estado == "atencao") {
-            divCard.classList.add("card-atencao");
-        }
-        if (fabrica.estado == "ok") {
-            divCard.classList.add("card-ok");
-        }
-        
-        divTitulo.classList.add("card-header");
-        spanTitulo.innerHTML = `<i class='bx bxs-business'></i>`;
-        spanStatus.classList.add("status");
-        spanStatus.innerHTML = `${fabrica.estado}`;
-        
-        cardTitulo.classList.add("card-titulo");
-        cardTitulo.innerHTML = `${fabrica.nome}`;
-        
-        cardInfo.classList.add("card-info");
-        divNome.innerHTML = `<i class='bx bxs-user'></i>${fabrica.gestor}`;
-        divAlertas.innerHTML = `⚠️ ${fabrica.quantidade}`;
-        
-        cardInfo.appendChild(divNome);
-        cardInfo.appendChild(divAlertas);
-        
-        divTitulo.appendChild(spanTitulo);
-        divTitulo.appendChild(spanStatus);
-        
-        divCard.appendChild(divTitulo);
-        divCard.appendChild(cardTitulo);
-        divCard.appendChild(cardInfo);
-        
-        containerCards.appendChild(divCard);
-        divCard.addEventListener("click", () => {
-            var idFabrica = fabrica.id;
-            openModal(idFabrica)
-        })
-    });
+  containerCards.innerHTML = ""
+
+  fabricaCriticaLista.slice(0, 6).forEach((fabrica) => {
+    var divCard = document.createElement("div")
+    var divTitulo = document.createElement("div")
+    var cardTitulo = document.createElement("div")
+    var cardInfo = document.createElement("div")
+    var spanTitulo = document.createElement("span")
+    var spanStatus = document.createElement("span")
+    var divNome = document.createElement("div")
+    var divAlertas = document.createElement("div")
+
+    divCard.classList.add("card")
+    if (fabrica.estado == "critico") {
+      divCard.classList.add("card-critico")
+    }
+    if (fabrica.estado == "atencao") {
+      divCard.classList.add("card-atencao")
+    }
+    if (fabrica.estado == "ok") {
+      divCard.classList.add("card-ok")
+    }
+
+    divTitulo.classList.add("card-header")
+    spanTitulo.innerHTML = `<i class='bx bxs-business'></i>`
+    spanStatus.classList.add("status")
+    spanStatus.innerHTML = `${fabrica.estado}`
+
+    cardTitulo.classList.add("card-titulo")
+    cardTitulo.innerHTML = `${fabrica.nome}`
+
+    cardInfo.classList.add("card-info")
+    divNome.innerHTML = `<i class='bx bxs-user'></i>${fabrica.gestor}`
+    divAlertas.innerHTML = `⚠️ ${fabrica.quantidade}`
+
+    cardInfo.appendChild(divNome)
+    cardInfo.appendChild(divAlertas)
+
+    divTitulo.appendChild(spanTitulo)
+    divTitulo.appendChild(spanStatus)
+
+    divCard.appendChild(divTitulo)
+    divCard.appendChild(cardTitulo)
+    divCard.appendChild(cardInfo)
+
+    containerCards.appendChild(divCard)
+    divCard.addEventListener("click", () => {
+      var idFabrica = fabrica.id
+      openModal(idFabrica)
+    })
+  })
 }
 
-const bg = document.querySelector(".bg");
-const modalPredicao = document.querySelector(".modalPredicao");
-const cliqueAqui = document.querySelector("#cliqueAqui");
-const fechar = document.querySelector(".fechar");
-const ancoraFabrica = document.querySelector("#fabricas");
+const bg = document.querySelector(".bg")
+const modalPredicao = document.querySelector(".modalPredicao")
+const cliqueAqui = document.querySelector("#cliqueAqui")
+const fechar = document.querySelector(".fechar")
+const ancoraFabrica = document.querySelector("#fabricas")
 
 ancoraFabrica.addEventListener("click", () => {
-  window.location.href = "./fabricas.html";
-});
+  window.location.href = "./fabricas.html"
+})
 
 cliqueAqui.addEventListener("click", () => {
-  modalPredicao.classList.add("ativo");
-  bg.classList.add("ativoBg");
-});
+  modalPredicao.classList.add("ativo")
+  bg.classList.add("ativoBg")
+})
 
 fechar.addEventListener("click", () => {
-  modalPredicao.classList.remove("ativo");
-  bg.classList.remove("ativoBg");
-});
+  modalPredicao.classList.remove("ativo")
+  bg.classList.remove("ativoBg")
+})
 
-const fabricasPorPagina = 10;
-var paginaAtual = 1;
-var fabricas = [];
-var contadorSelecionado = 0;
+const fabricasPorPagina = 10
+var paginaAtual = 1
+var fabricas = []
+var contadorSelecionado = 0
 
 function mostrarFabricas() {
   fetch("/admin/dadosFabricaModal", {
@@ -666,9 +660,9 @@ function mostrarFabricas() {
   })
     .then(function (resposta) {
       if (resposta.ok) {
-        return resposta.json();
+        return resposta.json()
       }
-      throw new Error("Não foi possivél pegar os dados");
+      throw new Error("Não foi possivél pegar os dados")
     })
     .then((dadosFabrica) => {
       return fetch("/admin/dadosGraficoAlerta", {
@@ -677,136 +671,137 @@ function mostrarFabricas() {
       })
         .then((resposta) => {
           if (resposta.ok) {
-            return resposta.json();
+            return resposta.json()
           }
-          throw new Error("Não foi possível pegar os alertas");
+          throw new Error("Não foi possível pegar os alertas")
         })
         .then((dadosAlerta) => {
-          fabricas.length = 0;
+          fabricas.length = 0
           for (let i = 0; i < dadosAlerta.length; i++) {
             for (let j = 0; j < dadosFabrica.length; j++) {
               if (dadosFabrica[j].idfabrica == dadosAlerta[i].fkFabrica) {
-                var totalAlertasAgora = dadosAlerta[i].qtd_to_do + dadosAlerta[i].qtd_in_progress;
-                var isCritica = false;
-                var isAtencao = false;
+                var totalAlertasAgora =
+                  dadosAlerta[i].qtd_to_do + dadosAlerta[i].qtd_in_progress
+                var isCritica = false
+                var isAtencao = false
                 if (dadosFabrica[j].limiteCritico <= totalAlertasAgora) {
-                  isCritica = true;
+                  isCritica = true
                 } else if (dadosFabrica[j].limiteAtencao <= totalAlertasAgora) {
-                  isAtencao = true;
+                  isAtencao = true
                 }
                 fabricas.push({
                   id: dadosFabrica[j].idfabrica,
                   nome: dadosFabrica[j].nomeFabrica,
                   critica: isCritica,
                   atencao: isAtencao,
-                });
+                })
               }
             }
           }
-          renderizarGrade();
-        });
+          renderizarGrade()
+        })
     })
     .catch(function (error) {
-      qtdFabricasCriticas.innerHTML = `Nenhum alerta`;
-      console.error("Erro ao realizar fetch:", error);
-    });
+      qtdFabricasCriticas.innerHTML = `Nenhum alerta`
+      console.error("Erro ao realizar fetch:", error)
+    })
 }
 
 function renderizarGrade() {
-  const grade = document.getElementById("grade-fabricas");
-  grade.innerHTML = "";
+  const grade = document.getElementById("grade-fabricas")
+  grade.innerHTML = ""
 
-  const inicio = (paginaAtual - 1) * fabricasPorPagina;
-  const fim = inicio + fabricasPorPagina;
+  const inicio = (paginaAtual - 1) * fabricasPorPagina
+  const fim = inicio + fabricasPorPagina
 
   for (let i = inicio; i < fim && i < fabricas.length; i++) {
-    const fabrica = fabricas[i];
+    const fabrica = fabricas[i]
 
-    const divFabrica = document.createElement("div");
-    divFabrica.className = "fabrica";
-    divFabrica.dataset.id = fabrica.id;
-    divFabrica.dataset.nome = fabrica.nome;
+    const divFabrica = document.createElement("div")
+    divFabrica.className = "fabrica"
+    divFabrica.dataset.id = fabrica.id
+    divFabrica.dataset.nome = fabrica.nome
 
     if (fabrica.critica) {
-      divFabrica.classList.add("fabrica-critica");
+      divFabrica.classList.add("fabrica-critica")
     } else if (fabrica.atencao) {
-      divFabrica.classList.add("fabrica-atencao");
+      divFabrica.classList.add("fabrica-atencao")
     }
 
-    const divNome = document.createElement("div");
-    divNome.className = "nome-fabrica";
-    divNome.textContent = fabrica.nome;
-    divFabrica.appendChild(divNome);
+    const divNome = document.createElement("div")
+    divNome.className = "nome-fabrica"
+    divNome.textContent = fabrica.nome
+    divFabrica.appendChild(divNome)
 
-    const divId = document.createElement("div");
-    divId.className = "id-fabrica";
-    divId.textContent = "ID: " + fabrica.id;
-    divFabrica.appendChild(divId);
+    const divId = document.createElement("div")
+    divId.className = "id-fabrica"
+    divId.textContent = "ID: " + fabrica.id
+    divFabrica.appendChild(divId)
 
     divFabrica.addEventListener("click", function () {
-      var idFabrica = divFabrica.getAttribute("data-id");
-      var nomeFabrica = divFabrica.getAttribute("data-nome");
+      var idFabrica = divFabrica.getAttribute("data-id")
+      var nomeFabrica = divFabrica.getAttribute("data-nome")
       if (divFabrica.classList.contains("div-selecionada")) {
         for (let k = 0; k < fabricasSelecionadas.length; k++) {
           if (idFabrica == Number(fabricasSelecionadas[k].idFabrica)) {
-            fabricasSelecionadas.splice(k, 1);
-            dadoFabricaSelecionada();
-            break;
+            fabricasSelecionadas.splice(k, 1)
+            dadoFabricaSelecionada()
+            break
           }
         }
-        divFabrica.classList.remove("div-selecionada");
-        contadorSelecionado--;
+        divFabrica.classList.remove("div-selecionada")
+        contadorSelecionado--
       } else if (contadorSelecionado < 5) {
-        dadoFabricaSelecionada(idFabrica, nomeFabrica);
-        divFabrica.classList.add("div-selecionada");
-        contadorSelecionado++;
+        dadoFabricaSelecionada(idFabrica, nomeFabrica)
+        divFabrica.classList.add("div-selecionada")
+        contadorSelecionado++
       } else {
-        Swal.fire("Erro!", "Por favor, selecione somente 5 fábricas.", "error");
+        Swal.fire("Erro!", "Por favor, selecione somente 5 fábricas.", "error")
       }
-    });
-    grade.appendChild(divFabrica);
+    })
+    grade.appendChild(divFabrica)
   }
-  criarBotoesPaginacao();
+  criarBotoesPaginacao()
 }
 
 function criarBotoesPaginacao() {
-  const paginacao = document.getElementById("paginacao");
-  paginacao.innerHTML = "";
+  const paginacao = document.getElementById("paginacao")
+  paginacao.innerHTML = ""
 
-  const totalPaginas = Math.ceil(fabricas.length / fabricasPorPagina);
+  const totalPaginas = Math.ceil(fabricas.length / fabricasPorPagina)
 
-  const btnAnterior = document.createElement("button");
-  btnAnterior.className = "botao-pagina";
-  btnAnterior.textContent = "Anterior";
-  btnAnterior.disabled = paginaAtual === 1;
+  const btnAnterior = document.createElement("button")
+  btnAnterior.className = "botao-pagina"
+  btnAnterior.textContent = "Anterior"
+  btnAnterior.disabled = paginaAtual === 1
   btnAnterior.addEventListener("click", function () {
-    paginaAtual = paginaAtual - 1;
-    renderizarGrade();
-    criarBotoesPaginacao();
-  });
-  paginacao.appendChild(btnAnterior);
+    paginaAtual = paginaAtual - 1
+    renderizarGrade()
+    criarBotoesPaginacao()
+  })
+  paginacao.appendChild(btnAnterior)
 
-  const textoInfo = document.createElement("span");
-  textoInfo.style.margin = "0 10px";
-  textoInfo.textContent = "Página " + paginaAtual + " de " + totalPaginas;
-  paginacao.appendChild(textoInfo);
+  const textoInfo = document.createElement("span")
+  textoInfo.style.margin = "0 10px"
+  textoInfo.textContent = "Página " + paginaAtual + " de " + totalPaginas
+  paginacao.appendChild(textoInfo)
 
-  const btnProximo = document.createElement("button");
-  btnProximo.className = "botao-pagina";
-  btnProximo.textContent = "Próximo";
-  btnProximo.disabled = paginaAtual === totalPaginas;
+  const btnProximo = document.createElement("button")
+  btnProximo.className = "botao-pagina"
+  btnProximo.textContent = "Próximo"
+  btnProximo.disabled = paginaAtual === totalPaginas
   btnProximo.addEventListener("click", function () {
-    paginaAtual = paginaAtual + 1;
-    renderizarGrade();
-    criarBotoesPaginacao();
-  });
-  paginacao.appendChild(btnProximo);
+    paginaAtual = paginaAtual + 1
+    renderizarGrade()
+    criarBotoesPaginacao()
+  })
+  paginacao.appendChild(btnProximo)
 }
 
 function dadoFabricaSelecionada(idFabrica, nomeFabrica) {
   if (idFabrica == undefined && nomeFabrica == undefined) {
-    predicao();
-    return;
+    predicao()
+    return
   }
   fetch(`/admin/dadosFabricaSelecionada/${idFabrica}`, {
     method: "GET",
@@ -814,9 +809,9 @@ function dadoFabricaSelecionada(idFabrica, nomeFabrica) {
   })
     .then((resposta) => {
       if (resposta.ok) {
-        return resposta.json();
+        return resposta.json()
       }
-      throw new Error("Erro ao buscar dados da fábrica");
+      throw new Error("Erro ao buscar dados da fábrica")
     })
     .then((dadosFabrica) => {
       return fetch(`/admin/mtbf/${idFabrica}`, {
@@ -825,9 +820,9 @@ function dadoFabricaSelecionada(idFabrica, nomeFabrica) {
       })
         .then((resposta) => {
           if (resposta.ok) {
-            return resposta.json();
+            return resposta.json()
           }
-          throw new Error("Erro ao buscar MTBF");
+          throw new Error("Erro ao buscar MTBF")
         })
         .then((dadosMtbf) => {
           return fetch(`/jira/listarAlertasPorId/${idFabrica}`, {
@@ -836,14 +831,18 @@ function dadoFabricaSelecionada(idFabrica, nomeFabrica) {
           })
             .then((resposta) => {
               if (resposta.ok) {
-                return resposta.json();
+                return resposta.json()
               }
-              throw new Error("Erro ao buscar tempo de resolução");
+              throw new Error("Erro ao buscar tempo de resolução")
             })
             .then((dadosJira) => {
-              var mtbf = 0;
-              if (dadosMtbf[0] && dadosMtbf[0].minutos_operacao && dadosMtbf[0].qtd_alertas > 0) {
-                mtbf = dadosMtbf[0].minutos_operacao / dadosMtbf[0].qtd_alertas;
+              var mtbf = 0
+              if (
+                dadosMtbf[0] &&
+                dadosMtbf[0].minutos_operacao &&
+                dadosMtbf[0].qtd_alertas > 0
+              ) {
+                mtbf = dadosMtbf[0].minutos_operacao / dadosMtbf[0].qtd_alertas
               }
               fabricasSelecionadas.push({
                 idFabrica: idFabrica,
@@ -853,15 +852,15 @@ function dadoFabricaSelecionada(idFabrica, nomeFabrica) {
                   (dadosFabrica[0].qtd_to_do || 0) +
                   (dadosFabrica[0].qtd_in_progress || 0),
                 MTBF: mtbf,
-              });
-              console.log(fabricasSelecionadas);
-              predicao();
-            });
-        });
+              })
+              console.log(fabricasSelecionadas)
+              predicao()
+            })
+        })
     })
     .catch((error) => {
-      console.error("Erro ao processar dados da fábrica:", error);
-    });
+      console.error("Erro ao processar dados da fábrica:", error)
+    })
 }
 
 function kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica) {
@@ -873,9 +872,9 @@ function kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica) {
   })
     .then(function (resposta) {
       if (!resposta.ok) {
-        throw new Error(`Erro na resposta: ${resposta.status}`);
+        throw new Error(`Erro na resposta: ${resposta.status}`)
       }
-      return resposta.json();
+      return resposta.json()
     })
     .then(function (dadosTempoResolucao) {
       return fetch(`/admin/mtbf/${idFabricaCritica}`, {
@@ -884,72 +883,79 @@ function kpiTempoMaiorResolucao(nomeFabricaCritica, idFabricaCritica) {
       })
         .then((resposta) => {
           if (resposta.ok) {
-            return resposta.json();
+            return resposta.json()
           }
-          throw new Error("Erro ao buscar MTBF");
+          throw new Error("Erro ao buscar MTBF")
         })
         .then((dadosMtbf) => {
-          var tempoMedio = 0;
-          var mtbf = 0;
-          if (dadosMtbf[0] && dadosMtbf[0].minutos_operacao && dadosMtbf[0].qtd_alertas > 0) {
-            mtbf = Number((dadosMtbf[0].minutos_operacao / dadosMtbf[0].qtd_alertas).toFixed(0));
+          var tempoMedio = 0
+          var mtbf = 0
+          if (
+            dadosMtbf[0] &&
+            dadosMtbf[0].minutos_operacao &&
+            dadosMtbf[0].qtd_alertas > 0
+          ) {
+            mtbf = Number(
+              (
+                dadosMtbf[0].minutos_operacao / dadosMtbf[0].qtd_alertas
+              ).toFixed(0)
+            )
           }
 
-          let mediaAlerta = document.querySelector("#mediaAlerta");
-          let nomeFabricaTempo = document.querySelector("#nomeFabricaTempo");
-          let loader = document.querySelector("#tempo");
+          let mediaAlerta = document.querySelector("#mediaAlerta")
+          let nomeFabricaTempo = document.querySelector("#nomeFabricaTempo")
+          let loader = document.querySelector("#tempo")
           loader.classList.remove("loader")
-          
 
-          mediaAlerta.classList.remove("critico", "ok", "atencao");
+          mediaAlerta.classList.remove("critico", "ok", "atencao")
 
           if (
             dadosTempoResolucao &&
             dadosTempoResolucao.tempoMedioResolucao !== null &&
             dadosTempoResolucao.tempoMedioResolucao !== undefined
           ) {
-            tempoMedio = parseInt(dadosTempoResolucao.tempoMedioResolucao);
-            var tempoResolucao;
+            tempoMedio = parseInt(dadosTempoResolucao.tempoMedioResolucao)
+            var tempoResolucao
 
             if (isNaN(tempoMedio)) {
-              mediaAlerta.innerHTML = `Dado inválido`;
-              nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
-              return;
+              mediaAlerta.innerHTML = `Dado inválido`
+              nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`
+              return
             }
 
             if (tempoMedio >= 1440) {
-              tempoResolucao = (tempoMedio / 1440).toFixed(0);
-              mediaAlerta.innerHTML = `${tempoResolucao}(d)`;
+              tempoResolucao = (tempoMedio / 1440).toFixed(0)
+              mediaAlerta.innerHTML = `${tempoResolucao}(d)`
             } else if (tempoMedio >= 60) {
-              tempoResolucao = (tempoMedio / 60).toFixed(0);
-              mediaAlerta.innerHTML = `${tempoResolucao}(h)`;
+              tempoResolucao = (tempoMedio / 60).toFixed(0)
+              mediaAlerta.innerHTML = `${tempoResolucao}(h)`
             } else {
-              tempoResolucao = tempoMedio.toFixed(0);
-              mediaAlerta.innerHTML = `${tempoResolucao}(min)`;
+              tempoResolucao = tempoMedio.toFixed(0)
+              mediaAlerta.innerHTML = `${tempoResolucao}(min)`
             }
 
             if (mtbf > 0 && tempoMedio < mtbf) {
-              mediaAlerta.classList.add("critico");
+              mediaAlerta.classList.add("critico")
             } else {
-              mediaAlerta.classList.add("ok");
+              mediaAlerta.classList.add("ok")
             }
-            nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
+            nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`
           } else {
-            mediaAlerta.innerHTML = `Não possui dados o suficiente`;
-            nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`;
+            mediaAlerta.innerHTML = `Não possui dados o suficiente`
+            nomeFabricaTempo.innerHTML = `${nomeFabricaCritica}`
           }
-        });
+        })
     })
     .catch(function (erro) {
-      console.error(`#ERRO: ${erro}`);
-      let mediaAlerta = document.querySelector("#mediaAlerta");
-      let nomeFabricaTempo = document.querySelector("#nomeFabricaTempo");
-      nomeFabricaTempo.innerHTML = `Nenhum alerta encontrado`;
-      mediaAlerta.innerHTML = `Não possui dados o suficiente`;
-    });
+      console.error(`#ERRO: ${erro}`)
+      let mediaAlerta = document.querySelector("#mediaAlerta")
+      let nomeFabricaTempo = document.querySelector("#nomeFabricaTempo")
+      nomeFabricaTempo.innerHTML = `Nenhum alerta encontrado`
+      mediaAlerta.innerHTML = `Não possui dados o suficiente`
+    })
 }
 
-var chartPred;
+var chartPred
 
 function inicializarGrafico() {
   var options = {
@@ -1020,82 +1026,84 @@ function inicializarGrafico() {
     theme: {
       mode: "light",
     },
-  };
+  }
 
   if (chartPred) {
-    chartPred.destroy();
+    chartPred.destroy()
   }
   chartPred = new ApexCharts(
     document.querySelector("#graficoPredicao"),
     options
-  );
-  chartPred.render();
+  )
+  chartPred.render()
 }
-var nomeFabricaPred = [];
-var dataYPredicao = [];
-var eixoXPredicao = [];
+var nomeFabricaPred = []
+var dataYPredicao = []
+var eixoXPredicao = []
 
 function predicao() {
-  var filtro = Number(filtroPredicao.value);
+  var filtro = Number(filtroPredicao.value)
   if (fabricasSelecionadas.length > 0) {
-    var seriesPred = [];
-    var categoriesPred = [];
-    var coresPred = ["#41C1E0", "#2C3E50", "#04708D", "#01232D", "#FF6F00"];
-    var hoje = new Date();
+    var seriesPred = []
+    var categoriesPred = []
+    var coresPred = ["#41C1E0", "#2C3E50", "#04708D", "#01232D", "#FF6F00"]
+    var hoje = new Date()
 
     for (var i = 0; i < filtro; i++) {
-      var dia = new Date(hoje);
-      dia.setDate(hoje.getDate() + i);
+      var dia = new Date(hoje)
+      dia.setDate(hoje.getDate() + i)
       var dataFormatada = dia.toLocaleDateString("pt-BR", {
         day: "2-digit",
         month: "2-digit",
-      });
-      categoriesPred.push(dataFormatada);
+      })
+      categoriesPred.push(dataFormatada)
     }
 
     fabricasSelecionadas.forEach((fabrica) => {
-      var dados = [];
-      var totalAlertas = fabrica.quantidadeAlertas;
+      var dados = []
+      var totalAlertas = fabrica.quantidadeAlertas
 
-      var mtbf = fabrica.MTBF;
+      var mtbf = fabrica.MTBF
       if (fabrica.MTBF > 0 && fabrica.MTBF < 1) {
-        mtbf = 1;
+        mtbf = 1
       }
 
-      var alertasPorDia = 0;
+      var alertasPorDia = 0
       if (mtbf > 0) {
-        alertasPorDia = 1440 / mtbf;
+        alertasPorDia = 1440 / mtbf
       }
 
-      var alertasResolvidosPorDia = 0;
+      var alertasResolvidosPorDia = 0
       if (fabrica.tempoResolucao > 0) {
-        alertasResolvidosPorDia = 1440 / fabrica.tempoResolucao;
+        alertasResolvidosPorDia = 1440 / fabrica.tempoResolucao
       }
 
       for (var k = 0; k < filtro; k++) {
-        totalAlertas += alertasPorDia - alertasResolvidosPorDia;
+        totalAlertas += alertasPorDia - alertasResolvidosPorDia
 
         if (totalAlertas < 0) {
-          totalAlertas = 0;
+          totalAlertas = 0
         }
 
         if (alertasResolvidosPorDia > alertasPorDia) {
-          totalAlertas = 0;
+          totalAlertas = 0
         }
 
-        dados.push(Number(totalAlertas.toFixed(0)));
+        dados.push(Number(totalAlertas.toFixed(0)))
       }
 
       seriesPred.push({
         name: fabrica.nome,
         data: dados,
-      });
-    });
-    nomeFabricaPred = seriesPred.map((s) => s.name).join(", ");
-    dataYPredicao = seriesPred.map((s) => {
-        return `${s.name}: ${s.data.join(", ")}`;
-      }).join("\n");
-    eixoXPredicao = categoriesPred;
+      })
+    })
+    nomeFabricaPred = seriesPred.map((s) => s.name).join(", ")
+    dataYPredicao = seriesPred
+      .map((s) => {
+        return `${s.name}: ${s.data.join(", ")}`
+      })
+      .join("\n")
+    eixoXPredicao = categoriesPred
 
     chartPred.updateOptions({
       series: seriesPred,
@@ -1107,26 +1115,55 @@ function predicao() {
         strokeColors: "#FFFFFF",
         strokeWidth: 2,
       },
-    });
+    })
   } else {
-    inicializarGrafico();
+    inicializarGrafico()
   }
 }
 
-var respostas;
+var respostas
 
 async function bobAlertaRelatorio() {
-  document.getElementById('bobA').classList.add('loader');
-  var agora = new Date();
-  var ano = agora.getFullYear();
-  var mes = String(agora.getMonth() + 1).padStart(2, '0');
-  var dia = String(agora.getDate()).padStart(2, '0');
-  var hora = String(agora.getHours()).padStart(2, '0');
-  var minuto = String(agora.getMinutes()).padStart(2, '0');
-  var tipo = `Alerta_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
-  var pasta = "RelatorioAdmin";
+  document.getElementById("bobA").classList.add("loader")
+  var agora = new Date()
+  var ano = agora.getFullYear()
+  var mes = String(agora.getMonth() + 1).padStart(2, "0")
+  var dia = String(agora.getDate()).padStart(2, "0")
+  var hora = String(agora.getHours()).padStart(2, "0")
+  var minuto = String(agora.getMinutes()).padStart(2, "0")
+  var tipo = `Alerta_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`
+  var pasta = "RelatorioAdmin"
   try {
+<<<<<<< Updated upstream
     var perguntas = `Faça essa resposta para a persona administrador, quero um relatório colorido, utilize cores, a respeito do gráfico de alertas que possuo, ele me fala os alertas de cada fábrica, os em andamento e os em aberto, quero saber que ações eu devia tomar para essas fábricas irei te passar aqui os dados do gráfico, aqui estão os nomes das fábricas o eixo X do gráfico ${eixoXAlerta} e respectivamente os alertas delas, o eixo Y do gráfico ${eixoYAlerta} junto com o estado de cada fábrica ${estados}, quero um relatório mais descritivo e visualmente fácil de entender e após analisar, faça um resumo sobre a situação, junto com o que você acha da situação, faça um relatório com cores, colca enfaze nas cores, quero cores, colorido`;
+=======
+    var perguntas = `Esse relatório é para a persona administrador, você é um administrador industrial experiente. Preciso de um relatório EXTREMAMENTE COLORIDO sobre os alertas das minhas fábricas. Use MUITAS CORES em todo o relatório, formatação markdown colorida, tabelas coloridas e destaque visual constante.
+
+DADOS RECEBIDOS:
+- Nomes das fábricas: ${eixoXAlerta}
+- Número de alertas por fábrica: ${eixoYAlerta} 
+- Status de cada fábrica: ${estados}
+
+IMPORTANTE: Os três arrays correspondem pela posição do índice. O primeiro elemento de cada array se refere à mesma fábrica, o segundo elemento à segunda fábrica, e assim sucessivamente.
+
+INSTRUÇÕES PARA O RELATÓRIO:
+
+1. ANÁLISE POR FÁBRICA: Correlacione cada fábrica com seu número de alertas e status atual. Identifique quais fábricas estão críticas baseado na combinação de muitos alertas com status problemático como Em Andamento ou Em Aberto.
+
+2. FORMATAÇÃO VISUAL: Use cores abundantemente. Vermelho para situações críticas, amarelo para atenção necessária, verde para situações controladas. Crie seções bem separadas visualmente com fundos coloridos e destaque números importantes.
+
+3. AÇÕES RECOMENDADAS: Para cada fábrica, sugira ações específicas considerando o número de alertas e o status atual. Priorize fábricas com mais alertas em status Em Andamento ou Em Aberto.
+
+4. ESTRUTURA DO RELATÓRIO:
+   - SITUAÇÃO CRÍTICA: Fábricas com mais alertas e status problemático
+   - ATENÇÃO NECESSÁRIA: Situação intermediária 
+   - SITUAÇÃO CONTROLADA: Fábricas com poucos alertas
+   - RESUMO EXECUTIVO: Sua visão geral da situação e recomendações prioritárias
+
+5. ESTILO: O relatório deve ser visualmente atrativo, bem organizado, com tabelas coloridas e extremamente fácil de entender. Use formatação markdown para criar um documento profissional mas colorido.
+
+Após a análise, apresente sua opinião profissional sobre o cenário geral e quais fábricas precisam de atenção imediata.`
+>>>>>>> Stashed changes
     const response = await fetch("http://34.198.19.147:5000/perguntar", {
       method: "POST",
       headers: {
@@ -1135,38 +1172,38 @@ async function bobAlertaRelatorio() {
       body: JSON.stringify({
         perguntaServer: perguntas,
       }),
-    });
+    })
 
     if (!response.ok) {
-      throw new Error("Erro na requisição: " + response.status);
+      throw new Error("Erro na requisição: " + response.status)
     }
-    respostas = await response.text();
-    console.log(respostas);
-    pdf(respostas, tipo, pasta);
+    respostas = await response.text()
+    console.log(respostas)
+    pdf(respostas, tipo, pasta)
   } catch (erro) {
-    console.error(`Erro: ${erro}`);
-    Swal.fire('Erro!', 'Erro ao tentar formular relatório', 'error')
+    console.error(`Erro: ${erro}`)
+    Swal.fire("Erro!", "Erro ao tentar formular relatório", "error")
   } finally {
-    document.getElementById('bobA').classList.remove('loader');
+    document.getElementById("bobA").classList.remove("loader")
   }
 }
 
 async function bobPredicaoRelatorio() {
-  document.getElementById('bobP').classList.add('loader');
-  var agora = new Date();
-  var ano = agora.getFullYear();
-  var mes = String(agora.getMonth() + 1).padStart(2, '0');
-  var dia = String(agora.getDate()).padStart(2, '0');
-  var hora = String(agora.getHours()).padStart(2, '0');
-  var minuto = String(agora.getMinutes()).padStart(2, '0');
-  var pasta = "RelatorioAdmin";
-  var tipo = `Predição_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`;
+  document.getElementById("bobP").classList.add("loader")
+  var agora = new Date()
+  var ano = agora.getFullYear()
+  var mes = String(agora.getMonth() + 1).padStart(2, "0")
+  var dia = String(agora.getDate()).padStart(2, "0")
+  var hora = String(agora.getHours()).padStart(2, "0")
+  var minuto = String(agora.getMinutes()).padStart(2, "0")
+  var pasta = "RelatorioAdmin"
+  var tipo = `Predição_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`
   try {
-    var series = chartPred.w.config.series;
-    var datas = chartPred.w.config.xaxis.categories;
+    var series = chartPred.w.config.series
+    var datas = chartPred.w.config.xaxis.categories
     if (!chartPred || !series || !datas) {
-      Swal.fire("Erro", "Não possui dados da predição", "error");
-      return;
+      Swal.fire("Erro", "Não possui dados da predição", "error")
+      return
     }
 
     var perguntas = `Esse é um relatório para a persona Administrador. Quero um relatório do gráfico abaixo que mostra uma previsão da quantidade de alertas acumulados ao longo dos dias para cada fábrica selecionada. A previsão considera dois fatores principais: MTBF (Mean Time Between Failures): representa o tempo médio entre falhas em minutos.
@@ -1174,9 +1211,9 @@ async function bobPredicaoRelatorio() {
     Gostaria que no relatório fosse explicado a conta por trás da predição.
     A ideia é estimar, para os próximos dias, quantos alertas irão surgir (com base no MTBF) e quantos serão resolvidos (com base no tempo médio de resolução). Com isso, calculamos o acúmulo previsto de alertas para cada dia.
     O eixo X representa as datas futuras (dias consecutivos), e o eixo Y mostra a quantidade acumulada de alertas prevista para cada uma dessas datas. Cada linha no gráfico representa uma fábrica diferente.
-    Aqui estão os dados do gráfico: essas são as fábricas ${nomeFabricaPred} o eixo X ${eixoXPredicao} e aqui o eixo Y ${dataYPredicao}, quero saber que ações eu devia tomar para essas fábricas, quero um relatório que caiba em 1 página e sem gráfico somente os dados e as ações que você acha que eu deveria tomar`;
+    Aqui estão os dados do gráfico: essas são as fábricas ${nomeFabricaPred} o eixo X ${eixoXPredicao} e aqui o eixo Y ${dataYPredicao}, quero saber que ações eu devia tomar para essas fábricas, quero um relatório que caiba em 1 página e sem gráfico somente os dados e as ações que você acha que eu deveria tomar`
 
-    const response = await fetch("http://34.198.19.147:5000/perguntar", {
+    const response = await fetch(`${API_URL}:5000/perguntar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1184,25 +1221,25 @@ async function bobPredicaoRelatorio() {
       body: JSON.stringify({
         perguntaServer: perguntas,
       }),
-    });
+    })
 
     if (!response.ok) {
-      throw new Error("Erro na requisição: " + response.status);
+      throw new Error("Erro na requisição: " + response.status)
     }
-    respostas = await response.text();
-    console.log(respostas);
-    pdf(respostas, tipo, pasta);
+    respostas = await response.text()
+    console.log(respostas)
+    pdf(respostas, tipo, pasta)
   } catch (erro) {
-    console.error(`Erro: ${erro}`);
-    Swal.fire('Erro!', 'Erro ao tentar formular relatório', 'error');
+    console.error(`Erro: ${erro}`)
+    Swal.fire("Erro!", "Erro ao tentar formular relatório", "error")
   } finally {
-    document.getElementById('bobP').classList.remove('loader');
+    document.getElementById("bobP").classList.remove("loader")
   }
 }
 
 async function pdf(respostas, tipo, pasta) {
   try {
-    const resposta = await fetch("http://34.198.19.147:5000/pdf", {
+    const resposta = await fetch(`${API_URL}:5000/pdf`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1211,62 +1248,65 @@ async function pdf(respostas, tipo, pasta) {
         respostaBOB: respostas,
         nomeArquivo: tipo,
       }),
-    });
+    })
 
     if (!resposta.ok) {
-      throw new Error("Erro ao gerar PDF: " + resposta.status);
+      throw new Error("Erro ao gerar PDF: " + resposta.status)
     }
 
-    const blob = await resposta.blob();
-    console.log(blob);
+    const blob = await resposta.blob()
+    console.log(blob)
     relatorioClient(blob, tipo, pasta)
 
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.style.display = "none";
-    a.href = url;
-    a.download = `${tipo}`;
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.style.display = "none"
+    a.href = url
+    a.download = `${tipo}`
 
-    document.body.appendChild(a);
-    a.click();
+    document.body.appendChild(a)
+    a.click()
 
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(a)
   } catch (erro) {
-    console.error("Erro ao baixar PDF:", erro);
-    Swal.fire('Erro!', 'Erro ao baixar PDF', 'error')
+    console.error("Erro ao baixar PDF:", erro)
+    Swal.fire("Erro!", "Erro ao baixar PDF", "error")
   }
 }
 
 async function relatorioClient(blob, tipo, pasta) {
-  const formData = new FormData();
+  const formData = new FormData()
   formData.append("relatorioCliente", blob, "relatorio.pdf")
-  formData.append("tipo", tipo);
-  formData.append("pasta", pasta);
+  formData.append("tipo", tipo)
+  formData.append("pasta", pasta)
 
   try {
-    const resposta = await fetch("http://34.198.19.147:5000/aws/relatorioClient", {
+    const resposta = await fetch(`${API_URL}:5000/aws/relatorioClient`, {
       method: "POST",
-      body: formData
-    });
+      body: formData,
+    })
 
     if (!resposta.ok) {
       throw new Error("Erro ao enviar relatório para a aws" + resposta.status)
     }
   } catch (erro) {
-    console.error("Erro ao enviar relatório:", erro);
-    Swal.fire('Erro!', 'Erro ao enviar relatório', 'error')
+    console.error("Erro ao enviar relatório:", erro)
+    Swal.fire("Erro!", "Erro ao enviar relatório", "error")
   }
 }
 
 async function visualizarHistorico() {
-  var pasta = "RelatorioAdmin";
+  var pasta = "RelatorioAdmin"
 
   try {
-    const resposta = await fetch(`http://34.198.19.147:5000/aws/visualizarHistorico/${pasta}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json"}
-    });
+    const resposta = await fetch(
+      `${API_URL}:5000/aws/visualizarHistorico/${pasta}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    )
 
     if (!resposta.ok) {
       throw new Error("Erro ao visualizar histórico")
@@ -1274,14 +1314,14 @@ async function visualizarHistorico() {
 
     var dados = await resposta.json()
 
-    const slt = document.getElementById('select_relatorio');
+    const slt = document.getElementById("select_relatorio")
     dados.forEach((options) => {
-      var option = document.createElement("option");
-      option.value = options;
-      option.textContent = options;
+      var option = document.createElement("option")
+      option.value = options
+      option.textContent = options
       slt.appendChild(option)
     })
-    
+
     console.log("estou no visualizarHistorico")
     console.log(resposta)
   } catch (erro) {
@@ -1290,13 +1330,16 @@ async function visualizarHistorico() {
 }
 
 async function baixarHistorico(relatorioNome) {
-  var pasta = "RelatorioAdmin";
+  var pasta = "RelatorioAdmin"
 
   try {
-    const resposta = await fetch(`http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
-      method: "GET",
-      headers: {"Content-Type": "application/pdf"}
-    });
+    const resposta = await fetch(
+      `${API_URL}:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/pdf" },
+      }
+    )
 
     if (!resposta.ok) {
       throw new Error("Erro ao baixar histórico")
@@ -1306,25 +1349,25 @@ async function baixarHistorico(relatorioNome) {
 
     const blob = await resposta.blob()
 
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.style.display = "none";
-    a.href = url;
-    a.download = `${relatorioNome}`;
-    document.body.appendChild(a);
-    a.click();
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.style.display = "none"
+    a.href = url
+    a.download = `${relatorioNome}`
+    document.body.appendChild(a)
+    a.click()
 
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(a)
   } catch (erro) {
     console.error(erro)
   }
 }
 
 window.onload = function () {
-  mostrarData();
-  dadosGraficoAlerta();
-  mostrarFabricas();
-  criarBotoesPaginacao();
-  inicializarGrafico();
-};
+  mostrarData()
+  dadosGraficoAlerta()
+  mostrarFabricas()
+  criarBotoesPaginacao()
+  inicializarGrafico()
+}

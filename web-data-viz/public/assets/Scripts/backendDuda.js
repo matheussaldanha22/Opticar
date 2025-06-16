@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 var correlacaoRelatorio = [];
 var kpiCorrelacao = [];
 var kpiImpacto = [];
@@ -5,6 +6,16 @@ var kpiIncremento = [];
 var componenteRelatorio = [];
 var calRegressao = [];
 const bobCorrelacao = document.querySelector(".bobCorrelacao");
+=======
+var correlacaoRelatorio = []
+var kpiCorrelacao = []
+var kpiImpacto = []
+var kpiIncremento = []
+var componenteRelatorio = []
+var calRegressao = []
+const bobCorrelacao = document.querySelector(".bobCorrelacao")
+const API_URL = "http://23.23.103.208"
+>>>>>>> Stashed changes
 
 bobCorrelacao.addEventListener("click", () => {
   Swal.fire({
@@ -1301,12 +1312,21 @@ sltServidor.addEventListener("change", atualizarDados);
 slt_mes.addEventListener("change", atualizarDados)
 
 async function pegarS3(ano, mes) {
+<<<<<<< Updated upstream
   const bucket = await fetch(`http://34.198.19.147:5000/aws/pegarS3/${ano}/${mes}`, {
     method: "GET",
     headers: {
       'Content-Type': 'application/json'
     },
   });
+=======
+  const bucket = await fetch(`${API_URL}:5000/aws/pegarS3/${ano}/${mes}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+>>>>>>> Stashed changes
 
   const jsonBucket = await bucket.json()
   console.log(jsonBucket)
@@ -1543,7 +1563,7 @@ Como esse padrão pode impactar o desempenho e a confiabilidade dos sistemas
 Objetivo
 Apresente as informações de forma clara, com destaque visual (cores, ícones, estrutura), interpretando os dados com base em evidências estatísticas. A análise deve ser acessível a gestores e técnicos, com recomendações práticas para suporte à decisão.`;
 
-    const response = await fetch("http://34.198.19.147:5000/perguntar", {
+    const response = await fetch(`${API_URL}:5000/perguntar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1569,7 +1589,7 @@ Apresente as informações de forma clara, com destaque visual (cores, ícones, 
 
 async function pdf(respostas, tipo, pasta) {
   try {
-    const resposta = await fetch("http://34.198.19.147:5000/pdf", {
+    const resposta = await fetch(`${API_URL}:5000/pdf`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -1613,10 +1633,17 @@ async function relatorioClient(blob, tipo, pasta) {
   formData.append("pasta", pasta);
 
   try {
+<<<<<<< Updated upstream
     const resposta = await fetch("http://34.198.19.147:5000/aws/relatorioClient", {
       method: "POST",
       body: formData
     });
+=======
+    const resposta = await fetch(`${API_URL}:5000/aws/relatorioClient`, {
+      method: "POST",
+      body: formData,
+    })
+>>>>>>> Stashed changes
 
     if (!resposta.ok) {
       throw new Error("Erro ao enviar relatório para a aws" + resposta.status)
@@ -1630,10 +1657,20 @@ async function relatorioClient(blob, tipo, pasta) {
 async function visualizarHistorico() {
   var pasta = "RelatorioCorrelação";
   try {
+<<<<<<< Updated upstream
     const resposta = await fetch(`http://34.198.19.147:5000/aws/visualizarHistorico/${pasta}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" }
     });
+=======
+    const resposta = await fetch(
+      `${API_URL}:5000/aws/visualizarHistorico/${pasta}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      }
+    )
+>>>>>>> Stashed changes
 
     if (!resposta.ok) {
       throw new Error("Erro ao visualizar histórico")
@@ -1659,10 +1696,20 @@ async function visualizarHistorico() {
 async function baixarHistorico(relatorioNome) {
   var pasta = "RelatorioCorrelação";
   try {
+<<<<<<< Updated upstream
     const resposta = await fetch(`http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
       method: "GET",
       headers: { "Content-Type": "application/pdf" }
     });
+=======
+    const resposta = await fetch(
+      `${API_URL}:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`,
+      {
+        method: "GET",
+        headers: { "Content-Type": "application/pdf" },
+      }
+    )
+>>>>>>> Stashed changes
 
     if (!resposta.ok) {
       throw new Error("Erro ao baixar histórico")

@@ -1,0 +1,44 @@
+services:
+  site-opticar:
+    image: vitoralmeida06/opticar-deployv2:site-opticar-marcelo
+    ports:
+      - "3333:3333"
+    networks:
+      - rede-opticar
+    depends_on:
+      - opticarFrio
+      - opticarQuente
+
+  api-intermediaria:
+    image: vitoralmeida06/opticar-deployv2:api-intermediaria
+    ports:
+      - "5000:5000"
+    networks:
+      - rede-opticar
+    container_name: api-intermediaria
+    depends_on:
+      - opticarFrio
+      - opticarQuente
+
+  opticarQuente:
+    image: vitoralmeida06/opticar-deploy:mysql-quente
+    ports:
+      - "3307:3306"
+    networks:
+      - rede-opticar
+    container_name: opticarQuente
+    depends_on:
+      - opticarFrio
+
+  opticarFrio:
+    image: vitoralmeida06/opticar-deploy:mysql-frio
+    ports:
+      - "3306:3306"
+    networks:
+      - rede-opticar
+    container_name: opticarFrio
+
+networks:
+  rede-opticar:
+    driver: bridge
+    name: rede-opticar

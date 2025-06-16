@@ -8,6 +8,8 @@ import requests
 import threading
 import platform
 
+# APP_PORT = 'http://34.198.19.147'
+
 def pegando_mac_address():
     return uuid.getnode()
 
@@ -15,7 +17,7 @@ def pegando_mac_address():
 
 def obterPedidos(mac_address):
     try:
-        fetch_pedido = "http://34.198.19.147:5000/mysql/pedidosCliente"
+        fetch_pedido = f"{APP_PORT}:5000/mysql/pedidosCliente"
         resposta = requests.post(fetch_pedido, json={"mac_address": mac_address})
 
         if resposta.status_code == 200:
@@ -36,7 +38,7 @@ def obterPedidos(mac_address):
 
 def inserirDados(valor, idPedido):
     try:
-        fetch_inserirDados = "http://34.198.19.147:5000/mysql/dadosCapturados"
+        fetch_inserirDados = f"{APP_PORT}:5000/mysql/dadosCapturados"
         resposta = requests.post(fetch_inserirDados, json={"valor": valor, "idPedido": idPedido})
 
         if resposta.status_code == 200:
@@ -52,7 +54,7 @@ def inserirDados(valor, idPedido):
 
 def enviarDadosTempoReal(listaTempoReal):
         try:
-            fetch_tempoReal = "http://34.198.19.147:3333/dashMonitoramento/dadosTempoReal"
+            fetch_tempoReal = f"{APP_PORT}:3333/dashMonitoramento/dadosTempoReal"
             resposta = requests.post(fetch_tempoReal, json=listaTempoReal)
 
             if resposta.status_code == 200:
@@ -68,7 +70,7 @@ def enviarDadosTempoReal(listaTempoReal):
 
 def enviarDadosPedidoCliente(listaPedidoCliente):
         try:
-            fetch_tempoReal = "http://34.198.19.147:3333/dashMonitoramento/dadosPedidoCliente"
+            fetch_tempoReal = f"{APP_PORT}:3333/dashMonitoramento/dadosPedidoCliente"
             resposta = requests.post(fetch_tempoReal, json=listaPedidoCliente)
 
             if resposta.status_code == 200:
@@ -106,7 +108,7 @@ def enviarTopProcessos(listaProcessos):
         
         print(f"[DEBUG] Enviando estrutura: {len(processos_para_enviar)} processos")
         
-        fetch_tempoReal = "http://34.198.19.147:3333/dashMonitoramento/processosPorMaquina"
+        fetch_tempoReal = f"{APP_PORT}:3333/dashMonitoramento/processosPorMaquina"
         resposta = requests.post(fetch_tempoReal, json=processos_para_enviar)
 
         if resposta.status_code == 200:
@@ -123,7 +125,7 @@ def enviarTopProcessos(listaProcessos):
 
 def inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta, tipo_incidente, fkPedido, componente, processo, processoCPU, processoRAM, processoDISCO):
     try:
-        fetch_inserirAlerta = "http://34.198.19.147:5000/mysql/inserirAlerta"
+        fetch_inserirAlerta = f"{APP_PORT}:5000/mysql/inserirAlerta"
         resposta = requests.post(fetch_inserirAlerta, json={"valor": valor,
                                                             "titulo": titulo,
                                                             "prioridadeAlerta": prioridadeAlerta,
@@ -149,7 +151,7 @@ def inserirAlerta(valor, titulo, prioridadeAlerta, descricaoAlerta, statusAlerta
 
 def dadosBucket(dadosS3, mac_address, dataAtual, idFabrica):
     try:
-        fetch_dadosS3 = "http://34.198.19.147:5000/aws/dadosS3"
+        fetch_dadosS3 = f"{APP_PORT}:5000/aws/dadosS3"
         resposta = requests.post(fetch_dadosS3, json={"mac_address": mac_address, "dadosS3": dadosS3, "dataAtual": dataAtual, "idFabrica": idFabrica})
 
         if resposta.status_code == 200:

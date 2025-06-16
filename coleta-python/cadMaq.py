@@ -3,9 +3,11 @@ import socket
 import uuid
 import requests
 
+APP_PORT = 'http://34.198.19.147'
+
 def cadastrarMaquinaFrio(so, ip_publico, hostname, mac, fabrica):
     try:
-        fetch_inserirDados = "http://44.208.190.196:5000/mysql/cadMaqFrio"
+        fetch_inserirDados = f"{APP_PORT}:5000/mysql/cadMaqFrio"
         resposta = requests.post(fetch_inserirDados, json={"so": so,
                                                             "ip_publico": ip_publico,
                                                             "hostname": hostname,
@@ -22,7 +24,7 @@ def cadastrarMaquinaFrio(so, ip_publico, hostname, mac, fabrica):
 
 def cadastrarMaquinaQuente(so, ip_publico, hostname, mac, fabrica):
     try:
-        fetch_inserirDados = "http://44.208.190.196:5000/mysql/cadMaqQuente"
+        fetch_inserirDados = f"{APP_PORT}:5000/mysql/cadMaqQuente"
         resposta = requests.post(fetch_inserirDados, json={"so": so,
                                                             "ip_publico": ip_publico,
                                                             "hostname": hostname,
@@ -39,7 +41,7 @@ def cadastrarMaquinaQuente(so, ip_publico, hostname, mac, fabrica):
 
 def obterCardapio():
     try:
-        fetch_obterCardapio = "http://44.208.190.196:5000/mysql/cardapio"
+        fetch_obterCardapio = f"{APP_PORT}:5000/mysql/cardapio"
         resposta = requests.get(fetch_obterCardapio)
 
         if resposta.status_code == 200:
@@ -54,7 +56,7 @@ def obterCardapio():
 
 def obterServidor(mac):
     try:
-        fetch_obterCardapio = f"http://44.208.190.196:5000/mysql/obterServidor/{mac}"
+        fetch_obterCardapio = f"{APP_PORT}:5000/mysql/obterServidor/{mac}"
         resposta = requests.get(fetch_obterCardapio)
 
         if resposta.status_code == 200:
@@ -71,7 +73,7 @@ def obterServidor(mac):
 
 def inserirPedidosObrigatorios(idMaquina, valor):
     try:
-        fetch_inserirDados = "http://44.208.190.196:5000/mysql/pedidosObrigatorios"
+        fetch_inserirDados = f"{APP_PORT}:5000/mysql/pedidosObrigatorios"
         resposta = requests.post(fetch_inserirDados, json={"mac": idMaquina,
                                                             "valor": valor})
         if resposta.status_code == 200:
@@ -98,9 +100,9 @@ if cardapio:
             ram = cardapioCliente['idcomponente']
         if cardapioCliente['tipo'] == 'Disco' and cardapioCliente['medida'] == 'Porcentagem':
             disco = cardapioCliente['idcomponente']
-        if cardapioCliente['tipo'] == 'Rede' and cardapioCliente['medida'] == 'Upload':
+        if cardapioCliente['tipo'] == 'Rede' and cardapioCliente['medida'] == 'Enviada':
             download = cardapioCliente['idcomponente']
-        if cardapioCliente['tipo'] == 'Rede' and cardapioCliente['medida'] == 'Download':
+        if cardapioCliente['tipo'] == 'Rede' and cardapioCliente['medida'] == 'Recebida':
             upload = cardapioCliente['idcomponente']
 else:
     print("Cardápio não obtido ou vazio. Componentes não serão configurados a partir dele.")

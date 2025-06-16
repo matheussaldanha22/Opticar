@@ -5,7 +5,7 @@ CREATE DATABASE IF NOT EXISTS opticarQuente;
 ALTER DATABASE opticarQuente CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE opticarQuente;
 
-select * from servidor_maquina;
+
 
 -- Tabelas
 CREATE TABLE IF NOT EXISTS servidor_maquina (
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS servidor_maquina (
 );
 
 CREATE TABLE IF NOT EXISTS pedidoProcesso (
-      idPedidoProcesso INT PRIMARY KEY auto_increment,
+	idPedidoProcesso INT PRIMARY KEY auto_increment,
     pid INT,
     nome VARCHAR(200),
     fkServidor_maquina INT,
@@ -312,68 +312,67 @@ SET @base_id = (SELECT MAX(idCapturaDados) FROM capturaDados) - 35;
 
 -- DIA 01/06/2025 - 3 alertas
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-01 08:15:00', 78, "Alerta CPU Alto", "Verificar processos em execução", "Alta", "Alerta Alto", "Cpu", "Porcentagem", "ABERTO", @base_id + 1, "chrome.exe", 18, 25, 2, "JUNE-001");
+VALUES ('2025-06-01 08:15:00', 78, "Alerta CPU Alto", "Verificar processos em execução", "Alta", "Alerta Alto", "Cpu", "Porcentagem", "ABERTO", 1, "chrome.exe", 18, 25, 2, "JUNE-001");
 
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-01 14:30:00', 82, "Alerta Rede", "Tráfego elevado detectado", "Média", "Alerta Atenção", "Rede", "MB", "RESOLVIDO", @base_id + 2, "firefox.exe", 12, 30, 1, "JUNE-002");
+VALUES ('2025-06-01 14:30:00', 82, "Alerta Rede", "Tráfego elevado detectado", "Média", "Alerta Atenção", "Rede", "MB", "RESOLVIDO", 2, "firefox.exe", 12, 30, 1, "JUNE-002");
 
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-01 19:45:00', 67, "Alerta RAM", "Uso moderado de memória", "Média", "Alerta Atenção", "Ram", "Porcentagem", "ABERTO", @base_id + 3, "java.exe", 15, 28, 0, "JUNE-003");
+VALUES ('2025-06-01 19:45:00', 67, "Alerta RAM", "Uso moderado de memória", "Média", "Alerta Atenção", "Ram", "Porcentagem", "ABERTO", 3, "java.exe", 15, 28, 0, "JUNE-003");
 
 -- DIA 02/06/2025 - 2 alertas
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-02 09:20:00', 91, "Alerta Crítico CPU", "Uso crítico - ação imediata", "Crítica", "Incidente Crítico", "Cpu", "Porcentagem", "ABERTO", @base_id + 4, "python.exe", 25, 40, 8, "JUNE-004");
+VALUES ('2025-06-02 09:20:00', 91, "Alerta Crítico CPU", "Uso crítico - ação imediata", "Crítica", "Incidente Crítico", "Cpu", "Porcentagem", "ABERTO", 4, "python.exe", 25, 40, 8, "JUNE-004");
 
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-02 15:10:00', 73, "Alerta RAM", "Verificar aplicações", "Média", "Alerta Atenção", "Ram", "Porcentagem", "EM_ANDAMENTO", @base_id + 5, "node.exe", 13, 32, 3, "JUNE-005");
+VALUES ('2025-06-02 15:10:00', 73, "Alerta RAM", "Verificar aplicações", "Média", "Alerta Atenção", "Ram", "Porcentagem", "EM_ANDAMENTO", 5, "node.exe", 13, 32, 3, "JUNE-005");
 
 -- DIA 03/06/2025 - 2 alertas
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-03 07:45:00', 86, "Alerta Disco", "Espaço em disco baixo", "Alta", "Alerta Alto", "Disco", "Porcentagem", "ABERTO", @base_id + 6, "mysql.exe", 20, 45, 12, "JUNE-006");
+VALUES ('2025-06-03 07:45:00', 86, "Alerta Disco", "Espaço em disco baixo", "Alta", "Alerta Alto", "Disco", "Porcentagem", "ABERTO", 6, "mysql.exe", 20, 45, 12, "JUNE-006");
 
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-03 16:25:00', 84, "Alerta RAM Alto", "Verificar vazamentos de memória", "Alta", "Alerta Alto", "Ram", "Porcentagem", "ABERTO", @base_id + 7, "apache.exe", 17, 38, 4, "JUNE-007");
+VALUES ('2025-06-03 16:25:00', 84, "Alerta RAM Alto", "Verificar vazamentos de memória", "Alta", "Alerta Alto", "Ram", "Porcentagem", "ABERTO", 7, "apache.exe", 17, 38, 4, "JUNE-007");
 
 -- DIA 04/06/2025 - 2 alertas
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-04 10:30:00', 69, "Alerta Rede", "Monitorar conectividade", "Média", "Alerta Atenção", "Rede", "MB", "RESOLVIDO", @base_id + 8, "nginx.exe", 11, 22, 1, "JUNE-008");
+VALUES ('2025-06-04 10:30:00', 69, "Alerta Rede", "Monitorar conectividade", "Média", "Alerta Atenção", "Rede", "MB", "RESOLVIDO", 8, "nginx.exe", 11, 22, 1, "JUNE-008");
 
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-04 18:15:00', 77, "Alerta CPU", "Pico de processamento", "Média", "Alerta Atenção", "Cpu", "Porcentagem", "ABERTO", @base_id + 9, "docker.exe", 19, 35, 6, "JUNE-009");
+VALUES ('2025-06-04 18:15:00', 77, "Alerta CPU", "Pico de processamento", "Média", "Alerta Atenção", "Cpu", "Porcentagem", "ABERTO", 9, "docker.exe", 19, 35, 6, "JUNE-009");
 
 -- DIA 05/06/2025 - 1 alerta crítico
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-05 11:45:00', 88, "Alerta Crítico RAM", "Memória quase esgotada", "Crítica", "Incidente Crítico", "Ram", "Porcentagem", "ABERTO", @base_id + 10, "kubernetes.exe", 22, 50, 15, "JUNE-010");
+VALUES ('2025-06-05 11:45:00', 88, "Alerta Crítico RAM", "Memória quase esgotada", "Crítica", "Incidente Crítico", "Ram", "Porcentagem", "ABERTO", 10, "kubernetes.exe", 22, 50, 15, "JUNE-010");
 
 -- DIA 06/06/2025 - 4 alertas (vários horários)
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-06 06:00:00', 72, "Alerta Manhã", "Verificar inicialização", "Média", "Alerta Atenção", "Cpu", "Porcentagem", "ABERTO", @base_id + 11, "redis.exe", 14, 26, 2, "JUNE-011");
+VALUES ('2025-06-06 06:00:00', 72, "Alerta Manhã", "Verificar inicialização", "Média", "Alerta Atenção", "Cpu", "Porcentagem", "ABERTO", 11, "redis.exe", 14, 26, 2, "JUNE-011");
 
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-06 12:30:00', 85, "Alerta Meio-dia", "Pico horário comercial", "Alta", "Alerta Alto", "Ram", "Porcentagem", "EM_ANDAMENTO", @base_id + 12, "mongodb.exe", 18, 42, 8, "JUNE-012");
+VALUES ('2025-06-06 12:30:00', 85, "Alerta Meio-dia", "Pico horário comercial", "Alta", "Alerta Alto", "Ram", "Porcentagem", "EM_ANDAMENTO", 12, "mongodb.exe", 18, 42, 8, "JUNE-012");
 
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-06 18:45:00', 79, "Alerta Tarde", "Atividade elevada", "Média", "Alerta Atenção", "Disco", "Porcentagem", "ABERTO", @base_id + 13, "postgres.exe", 16, 33, 9, "JUNE-013");
+VALUES ('2025-06-06 18:45:00', 79, "Alerta Tarde", "Atividade elevada", "Média", "Alerta Atenção", "Disco", "Porcentagem", "ABERTO", 13, "postgres.exe", 16, 33, 9, "JUNE-013");
 
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-06 23:20:00', 74, "Alerta Noite", "Backup em execução", "Média", "Alerta Atenção", "Cpu", "Porcentagem", "RESOLVIDO", @base_id + 14, "code.exe", 13, 29, 5, "JUNE-014");
+VALUES ('2025-06-06 23:20:00', 74, "Alerta Noite", "Backup em execução", "Média", "Alerta Atenção", "Cpu", "Porcentagem", "RESOLVIDO", 14, "code.exe", 13, 29, 5, "JUNE-014");
 
--- Continuar com todos os dias restantes...
 -- DIA 07/06/2025
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-07 08:40:00', 83, "Alerta Rede Alto", "Largura de banda limitada", "Alta", "Alerta Alto", "Rede", "MB", "ABERTO", @base_id + 15, "teams.exe", 21, 36, 3, "JUNE-015");
+VALUES ('2025-06-07 08:40:00', 83, "Alerta Rede Alto", "Largura de banda limitada", "Alta", "Alerta Alto", "Rede", "MB", "ABERTO", 15, "teams.exe", 21, 36, 3, "JUNE-015");
 
 -- DIA 08/06/2025
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-08 13:15:00', 90, "Alerta Crítico", "Sistema sobrecarregado", "Crítica", "Incidente Crítico", "Cpu", "Porcentagem", "ABERTO", @base_id + 16, "zoom.exe", 28, 48, 12, "JUNE-016");
+VALUES ('2025-06-08 13:15:00', 90, "Alerta Crítico", "Sistema sobrecarregado", "Crítica", "Incidente Crítico", "Cpu", "Porcentagem", "ABERTO", 16, "zoom.exe", 28, 48, 12, "JUNE-016");
 
 -- DIA 09/06/2025
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-09 17:30:00', 76, "Alerta Disco", "Limpeza recomendada", "Média", "Alerta Atenção", "Disco", "Porcentagem", "ABERTO", @base_id + 17, "slack.exe", 15, 31, 7, "JUNE-017");
+VALUES ('2025-06-09 17:30:00', 76, "Alerta Disco", "Limpeza recomendada", "Média", "Alerta Atenção", "Disco", "Porcentagem", "ABERTO", 17, "slack.exe", 15, 31, 7, "JUNE-017");
 
 -- DIA 10/06/2025
 INSERT INTO alerta (dataHora, valor, titulo, descricao, prioridade, tipo_incidente, componente, medida, statusAlerta, fkCapturaDados, processo, processoCPU, processoRAM, processoDISCO, jira_issue_key) 
-VALUES ('2025-06-10 09:00:00', 87, "Alerta RAM Crítico", "Reinicialização necessária", "Crítica", "Incidente Crítico", "Ram", "Porcentagem", "ABERTO", @base_id + 18, "skype.exe", 24, 52, 18, "JUNE-018");
+VALUES ('2025-06-10 09:00:00', 87, "Alerta RAM Crítico", "Reinicialização necessária", "Crítica", "Incidente Crítico", "Ram", "Porcentagem", "ABERTO", 18, "skype.exe", 24, 52, 18, "JUNE-018");
 
 SELECT  COUNT(idAlerta) as qtdalertas, 
 		componente,
