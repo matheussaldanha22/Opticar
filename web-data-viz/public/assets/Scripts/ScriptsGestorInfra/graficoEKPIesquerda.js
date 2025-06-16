@@ -12,7 +12,7 @@ var barOptions = {
     }],
     chart: {
         type: 'bar',
-        height: 280,
+        height: 350,
         stacked: true,
         toolbar: { show: false },
         fontFamily: 'Roboto, "Segoe UI", Arial, sans-serif'

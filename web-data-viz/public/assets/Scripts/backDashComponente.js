@@ -990,7 +990,7 @@ function renderGrafPredicao(tipo, valoresReais, valoresPrevistos, categorias) {
       },
       series: [
         {
-          name: `Média do uso em ${nomeMeses[data.getMonth()]}`,
+          name: `Média do uso em ${nomeMeses[data.getMonth() + 1]}`,
           data: valoresPrevistos,
         },
       ],

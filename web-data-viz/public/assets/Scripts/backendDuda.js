@@ -1265,7 +1265,7 @@ function atualizarDadosDia() {
   const data = new Date(inputData.value);
   var dataAno = data.getFullYear()
   var dataMes = data.getMonth() + 1;
-  var dataDia = data.getDate() + 1;
+  var dataDia = data.getDate();
   var idMes = document.getElementById("id_mes")
   var kpiSemana = document.getElementById("kpi_semana")
   var kpiDia = document.getElementById("kpi_dia")
