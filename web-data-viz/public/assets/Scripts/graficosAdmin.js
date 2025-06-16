@@ -1134,9 +1134,6 @@ async function bobAlertaRelatorio() {
   var tipo = `Alerta_${ano}-${mes}-${dia}_${hora}-${minuto}.pdf`
   var pasta = "RelatorioAdmin"
   try {
-<<<<<<< Updated upstream
-    var perguntas = `Faça essa resposta para a persona administrador, quero um relatório colorido, utilize cores, a respeito do gráfico de alertas que possuo, ele me fala os alertas de cada fábrica, os em andamento e os em aberto, quero saber que ações eu devia tomar para essas fábricas irei te passar aqui os dados do gráfico, aqui estão os nomes das fábricas o eixo X do gráfico ${eixoXAlerta} e respectivamente os alertas delas, o eixo Y do gráfico ${eixoYAlerta} junto com o estado de cada fábrica ${estados}, quero um relatório mais descritivo e visualmente fácil de entender e após analisar, faça um resumo sobre a situação, junto com o que você acha da situação, faça um relatório com cores, colca enfaze nas cores, quero cores, colorido`;
-=======
     var perguntas = `Esse relatório é para a persona administrador, você é um administrador industrial experiente. Preciso de um relatório EXTREMAMENTE COLORIDO sobre os alertas das minhas fábricas. Use MUITAS CORES em todo o relatório, formatação markdown colorida, tabelas coloridas e destaque visual constante.
 
 DADOS RECEBIDOS:
@@ -1163,8 +1160,7 @@ INSTRUÇÕES PARA O RELATÓRIO:
 5. ESTILO: O relatório deve ser visualmente atrativo, bem organizado, com tabelas coloridas e extremamente fácil de entender. Use formatação markdown para criar um documento profissional mas colorido.
 
 Após a análise, apresente sua opinião profissional sobre o cenário geral e quais fábricas precisam de atenção imediata.`
->>>>>>> Stashed changes
-    const response = await fetch("http://34.198.19.147:5000/perguntar", {
+    const response = await fetch(`${API_URL}:5000/perguntar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

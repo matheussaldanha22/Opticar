@@ -1,12 +1,3 @@
-<<<<<<< Updated upstream
-var correlacaoRelatorio = [];
-var kpiCorrelacao = [];
-var kpiImpacto = [];
-var kpiIncremento = [];
-var componenteRelatorio = [];
-var calRegressao = [];
-const bobCorrelacao = document.querySelector(".bobCorrelacao");
-=======
 var correlacaoRelatorio = []
 var kpiCorrelacao = []
 var kpiImpacto = []
@@ -15,7 +6,6 @@ var componenteRelatorio = []
 var calRegressao = []
 const bobCorrelacao = document.querySelector(".bobCorrelacao")
 const API_URL = "http://23.23.103.208"
->>>>>>> Stashed changes
 
 bobCorrelacao.addEventListener("click", () => {
   Swal.fire({
@@ -1312,21 +1302,12 @@ sltServidor.addEventListener("change", atualizarDados);
 slt_mes.addEventListener("change", atualizarDados)
 
 async function pegarS3(ano, mes) {
-<<<<<<< Updated upstream
-  const bucket = await fetch(`http://34.198.19.147:5000/aws/pegarS3/${ano}/${mes}`, {
-    method: "GET",
-    headers: {
-      'Content-Type': 'application/json'
-    },
-  });
-=======
   const bucket = await fetch(`${API_URL}:5000/aws/pegarS3/${ano}/${mes}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   })
->>>>>>> Stashed changes
 
   const jsonBucket = await bucket.json()
   console.log(jsonBucket)
@@ -1633,17 +1614,10 @@ async function relatorioClient(blob, tipo, pasta) {
   formData.append("pasta", pasta);
 
   try {
-<<<<<<< Updated upstream
-    const resposta = await fetch("http://34.198.19.147:5000/aws/relatorioClient", {
-      method: "POST",
-      body: formData
-    });
-=======
     const resposta = await fetch(`${API_URL}:5000/aws/relatorioClient`, {
       method: "POST",
       body: formData,
     })
->>>>>>> Stashed changes
 
     if (!resposta.ok) {
       throw new Error("Erro ao enviar relatório para a aws" + resposta.status)
@@ -1657,12 +1631,6 @@ async function relatorioClient(blob, tipo, pasta) {
 async function visualizarHistorico() {
   var pasta = "RelatorioCorrelação";
   try {
-<<<<<<< Updated upstream
-    const resposta = await fetch(`http://34.198.19.147:5000/aws/visualizarHistorico/${pasta}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/json" }
-    });
-=======
     const resposta = await fetch(
       `${API_URL}:5000/aws/visualizarHistorico/${pasta}`,
       {
@@ -1670,7 +1638,6 @@ async function visualizarHistorico() {
         headers: { "Content-Type": "application/json" },
       }
     )
->>>>>>> Stashed changes
 
     if (!resposta.ok) {
       throw new Error("Erro ao visualizar histórico")
@@ -1696,12 +1663,6 @@ async function visualizarHistorico() {
 async function baixarHistorico(relatorioNome) {
   var pasta = "RelatorioCorrelação";
   try {
-<<<<<<< Updated upstream
-    const resposta = await fetch(`http://34.198.19.147:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`, {
-      method: "GET",
-      headers: { "Content-Type": "application/pdf" }
-    });
-=======
     const resposta = await fetch(
       `${API_URL}:5000/aws/baixarHistorico/${relatorioNome}/${pasta}`,
       {
@@ -1709,7 +1670,6 @@ async function baixarHistorico(relatorioNome) {
         headers: { "Content-Type": "application/pdf" },
       }
     )
->>>>>>> Stashed changes
 
     if (!resposta.ok) {
       throw new Error("Erro ao baixar histórico")

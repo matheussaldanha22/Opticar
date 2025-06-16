@@ -8,7 +8,7 @@ import requests
 import threading
 import platform
 
-# APP_PORT = 'http://34.198.19.147'
+APP_PORT = 'http://34.198.19.147'
 
 def pegando_mac_address():
     return uuid.getnode()
