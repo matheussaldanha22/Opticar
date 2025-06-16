@@ -289,7 +289,8 @@ function componenteServer(idFabrica, idServidor,ano, mes) {
     and fkFabrica = ${idFabrica}
     and idMaquina = ${idServidor}
     group by  componente, periodo
-    order by alerta desc;  `
+    order by alerta desc
+    limit 1;  `
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
     return database.executarQUENTE(instrucaoSql)
