@@ -343,7 +343,7 @@ async function abrirModalCriar() {
           <option value="0">Selecione o cargo</option>
           <option value="EngenheiroManutencao">Engenheiro de Manutenção</option>
           <option value="AnalistaDados">Analista de Dados</option>
-          <option value="OperadorMaquina">Operador de Máquina</option>
+          <option value="AnalistaSuporte">Analista de Suporte</option>
         `
       }
     },

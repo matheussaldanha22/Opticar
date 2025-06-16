@@ -48,7 +48,7 @@ function entrar() {
           sessionStorage.EMAIL_USUARIO = json.email
           sessionStorage.NOME_USUARIO = json.nome
           sessionStorage.ID_USUARIO = json.id
-          sessionStorage.SERVIDORES = JSON.stringify(json.servidores) 
+          sessionStorage.SERVIDORES = JSON.stringify(json.servidores)
           sessionStorage.EMPRESA = json.empresaId
           sessionStorage.EMPRESA_NOME = json.empresaNome
           sessionStorage.CARGO = json.cargo
@@ -64,11 +64,9 @@ function entrar() {
             setTimeout(function () {
               window.location = "./dashGestaofabrica.html"
             }, 1000) // apenas para exibir o loading
-          } else if (
-            sessionStorage.getItem("CARGO") == "AnalistaSuporte"
-          ) {
+          } else if (sessionStorage.getItem("CARGO") == "AnalistaSuporte") {
             setTimeout(function () {
-              window.location = "./dashMonitoramento.html"
+              window.location = "./dashMonitoramento-vitor.html"
             }, 1000) // apenas para exibir o loading
           } else if (sessionStorage.getItem("CARGO") == "AnalistaDados") {
             setTimeout(function () {

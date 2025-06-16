@@ -38,6 +38,15 @@ services:
       - rede-opticar
     container_name: opticarFrio
 
+  api-jira:
+    image: vitoralmeida06/opticar-deploy:api-jira
+    networks:
+      - rede-optica
+    container_name: api-jira
+    depends_on:
+      - opticarFrio
+      - opticarQuente
+
 networks:
   rede-opticar:
     driver: bridge

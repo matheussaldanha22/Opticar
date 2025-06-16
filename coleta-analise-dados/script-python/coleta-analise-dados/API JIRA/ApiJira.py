@@ -198,7 +198,7 @@ def create_jira_issue(alert):
     
     issue_dict = {
         'project': {'key': 'MOT'},
-        'summary': f'[Alerta {alert["id"]}] {alert["title"]} - Fábrica: {fabrica["nome"]}({fabrica['idfabrica']})',
+        'summary': f'[Alerta {alert["id"]}] {alert["title"]} - Fábrica: {fabrica["nome"]}({fabrica["idfabrica"]})',
         'description': alert["description"] + f"\n\n**Fábrica:** {fabrica['nome']} (ID: {fabrica['idfabrica']})",
         'issuetype': {'name': issue_type},  # Mude para um tipo da listagem
         'priority': {'name': alert["priority"]},
