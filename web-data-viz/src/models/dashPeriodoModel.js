@@ -270,7 +270,7 @@ function periodoServer(idFabrica,idServidor, ano, mes) {
 }
 
 function componenteServer(idFabrica, idServidor,ano, mes) {
-    var instrucaoSql = `select componente, count(idAlerta) as alerta, hour(dataHora) as hora,
+    var instrucaoSql = ` select componente, count(idAlerta) as alerta,
     case 
     WHEN HOUR(dataHora) BETWEEN 6 AND 11 THEN 'Manhã'
         WHEN HOUR(dataHora) BETWEEN 12 AND 17 THEN 'Tarde'
@@ -284,13 +284,12 @@ function componenteServer(idFabrica, idServidor,ano, mes) {
     on cap.fkcomponenteServidor=comp.idcomponenteServidor
     join servidor_maquina as maq
     on  comp.fkMaquina=maq.idMaquina
-    where year(dataHora) = ${ano} 
-    and month(dataHora) = ${mes} 
+    where year(dataHora) = ${ano}
+    and month(dataHora) = ${mes}
     and fkFabrica = ${idFabrica}
     and idMaquina = ${idServidor}
-    group by hora, componente, periodo
-    order by alerta desc
-    limit 1; `
+    group by  componente, periodo
+    order by alerta desc;  `
 
     console.log("Executando a instrução SQL: \n" + instrucaoSql)
     return database.executarQUENTE(instrucaoSql)
@@ -319,7 +318,7 @@ function semanaServer(idFabrica, idServidor, ano, mes){
 }
 
 function diaComp(idFabrica, ano, mes,dia) {
-    var instrucaoSql = `select componente, count(idAlerta) as alerta, hour(dataHora) as hora,
+    var instrucaoSql = `select componente, count(idAlerta) as alerta,
     case 
 	WHEN HOUR(dataHora) BETWEEN 6 AND 11 THEN 'Manhã'
     WHEN HOUR(dataHora) BETWEEN 12 AND 17 THEN 'Tarde'
@@ -337,7 +336,7 @@ function diaComp(idFabrica, ano, mes,dia) {
     and month(dataHora) = ${mes} 
     and fkFabrica = ${idFabrica}
     and day(dataHora) = ${dia}
-    group by hora, componente, periodo
+    group by componente, periodo
     order by alerta desc
     limit 1; `
 
